@@ -1,0 +1,53 @@
+x-hnsw-environment: &hnsw-environment
+  DATABASE_URL: postgresql://synsc:delphi-r3b-postgres@postgres:5432/synsc
+  SYNSC_API_HOST: "0.0.0.0"
+  SYNSC_API_PORT: "8742"
+  SYNSC_LOG_FORMAT: json
+  SERVER_SECRET: delphi-r3b-session-secret-local-only
+  SYSTEM_PASSWORD: delphi-r3b-admin
+  EMBEDDING_PROVIDER: openai
+  OPENAI_EMBEDDING_MODEL: text-embedding-3-small
+  SYNSC_RATE_LIMIT_SEARCH: 10000/minute
+  SYNSC_RATE_LIMIT_INDEX: 10000/minute
+  SYNSC_ENABLE_RERANKER: "true"
+  SYNSC_USE_CODE_RERANKER: "false"
+  RERANKER_BLEND_ALPHA: "0.4"
+  SYNSC_HYBRID_CANDIDATES: "50"
+  SYNSC_HYBRID_RERANK_K: "30"
+  SYNSC_QUERY_EXPANSION: "true"
+  SYNSC_LISTWISE_RERANK: "true"
+  SYNSC_LISTWISE_RERANK_MODEL: gpt-4o
+  SYNSC_LISTWISE_RERANK_K: "20"
+  SYNSC_LLM_SEED: "1042"
+  SYNSC_LLM_CACHE_ENTRIES: "2048"
+  SYNSC_LLM_CACHE_DB: /home/synsc/.cache/delphi/search-stage.sqlite3
+  SYNSC_VECTOR_EXACT_SCAN: "false"
+
+x-hnsw-service: &hnsw-service
+  image: delphi-r3b-hnsw-eval
+  env_file:
+    - r3-secrets.env
+  depends_on:
+    postgres:
+      condition: service_healthy
+  volumes:
+    - hf-cache-r3b:/home/synsc/.cache/huggingface
+    - llm-cache-r3b:/home/synsc/.cache/delphi
+    - /Users/aayambansal/Desktop/syntheticsciences/delphi/new/round3/corpus/snapshots:/bench/corpus:ro
+
+services:
+  hnsw100:
+    <<: *hnsw-service
+    environment:
+      <<: *hnsw-environment
+      SYNSC_HNSW_EF_SEARCH: "100"
+    ports:
+      - "23742:8742"
+
+  hnsw400:
+    <<: *hnsw-service
+    environment:
+      <<: *hnsw-environment
+      SYNSC_HNSW_EF_SEARCH: "400"
+    ports:
+      - "24742:8742"

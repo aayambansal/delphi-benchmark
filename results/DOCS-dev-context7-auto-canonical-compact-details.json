@@ -1,0 +1,1823 @@
+[
+  {
+    "case_id": "3",
+    "context": "### https://pandas.pydata.org/docs/user_guide/cookbook.html\nCreate a value counts column and reassign back to the DataFrame\n\nUse groupby and transform to calculate the length of each group and assign the result as a new column.\n\nIn [131]: df = pd.DataFrame(\n   .....:     {\"Color\": \"Red Red Red Blue\".split(), \"Value\": [100, 150, 50, 50]}\n   .....: )\n   .....: \n\nIn [132]: df\nOut[132]: \n  Color  Value\n0   Red    100\n1   Red    150\n2   Red     50\n3  Blue     50\n\nIn [133]: df[\"Counts\"] = df.groupby([\"Color\"]).transform(len)\n\nIn [134]: df\nOut[134]: \n  Color  Value  Counts\n0   Red    100       3\n1   Red    150       3\n2   Red     50       3\n3  Blue     50       1\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html\nCount Non-NA Cells in DataFrame Columns (Pandas)\n\nCounts the number of non-NA cells for each column in a pandas DataFrame. This is useful for understanding data completeness. It considers None, NaN, NaT, and pandas.NA as NA values. The default axis is 0 (columns).\n\n>>> df = pd.DataFrame(\n...     {\n...         \"Person\": [\"John\", \"Myla\", \"Lewis\", \"John\", \"Myla\"],\n...         \"Age\": [24.0, np.nan, 21.0, 33, 26],\n...         \"Single\": [False, True, True, True, False],\n...     }\n... )\n>>> df.count()\nPerson    5\nAge       4\nSingle    5\ndtype: int64\n\n### https://pandas.pydata.org/docs/user_guide/basics.html\nCalculate Value Counts for DataFrame Columns\n\nApply `value_counts()` to a DataFrame to count combinations across columns. You can specify a subset of columns to consider.\n\ndata = {\"a\": [1, 2, 3, 4], \"b\": [\"x\", \"x\", \"y\", \"y\"]}\nframe = pd.DataFrame(data)\nframe.value_counts()\n\n### https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html\nHow do I select specific rows and columns from a `DataFrame`?\n\nWhen selecting specific rows and/or columns using either `loc` or `iloc`, you also have the ability to assign new values to the selected data. For instance, to change the values in the first 3 elements of the fourth column to `anonymous`, you would use a command like `titanic.iloc[0:3, 3] = \"anonymous\"`.\n\n### https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html\npandas.api.typing.DataFrameGroupBy.value_counts > Overview\n\nThe DataFrameGroupBy.value_counts method is used to return a Series or DataFrame containing the counts of unique rows within each group. By default, the method omits rows that contain any NA values and returns the results in descending order, ensuring the most frequently occurring row appears first. Users can customize the output by normalizing the counts to proportions instead of frequencies, or by adjusting the sorting behavior to be ascending or descending.",
+    "context_tokens": 713,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.where"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/cookbook.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/cookbook.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/basics.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/basics.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3602.2965000011027,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "51",
+    "context": "### https://pandas.pydata.org/docs/user_guide/basics.html\nApply NumPy Exponential Function\n\nApply the `np.exp` function to compute the element-wise exponential of the DataFrame values.\n\nIn [149]: df.apply(np.exp)\nOut[149]: \n        one       two     three\na  4.034899  5.885648       NaN\nb  1.409244  6.767440  0.950858\nc  2.004201  4.385785  3.412466\nd       NaN  1.322262  0.541630\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.add_prefix.html\nAdd prefix to DataFrame column labels\n\nThis example shows how to add a prefix to the column names of a pandas DataFrame. By default, it operates on columns, resulting in a new DataFrame with modified header labels.\n\nimport pandas as pd\ndf = pd.DataFrame({\"A\": [1, 2, 3, 4], \"B\": [3, 4, 5, 6]})\nprefixed_df = df.add_prefix(\"col_\")\nprint(prefixed_df)\n\n### https://pandas.pydata.org/docs/user_guide/cookbook.html\nDynamically Create New Columns\n\nUse DataFrame.map to apply a mapping dictionary across multiple columns efficiently.\n\nIn [53]: df = pd.DataFrame({\"AAA\": [1, 2, 1, 3], \"BBB\": [1, 1, 2, 2], \"CCC\": [2, 1, 3, 1]})\n\nIn [54]: df\nOut[54]: \n   AAA  BBB  CCC\n0    1    1    2\n1    2    1    1\n2    1    2    3\n3    3    2    1\n\nIn [55]: source_cols = df.columns  # Or some subset would work too\n\nIn [56]: new_cols = [str(x) + \"_cat\" for x in source_cols]\n\nIn [57]: categories = {1: \"Alpha\", 2: \"Beta\", 3: \"Charlie\"}\n\nIn [58]: df[new_cols] = df[source_cols].map(categories.get)\n\nIn [59]: df\nOut[59]: \n   AAA  BBB  CCC  AAA_cat BBB_cat  CCC_cat\n0    1    1    2    Alpha   Alpha     Beta\n1    2    1    1     Beta   Alpha    Alpha\n2    1    2    3    Alpha    Beta  Charlie\n3    3    2    1  Charlie    Beta    Alpha\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html\npandas.DataFrame.assign > Overview\n\nThe assign method returns a new object containing all original columns in addition to any newly specified ones. If you re-assign an existing column name, the original data will be overwritten in the returned DataFrame. This method is particularly useful for chaining operations, as it allows you to create new columns based on existing data without modifying the original DataFrame in place.\n\n### https://pandas.pydata.org/docs/getting_started/intro_tutorials/05_add_columns.html\nHow to create new columns derived from existing columns > Creating new columns\n\nTo create a new column in a pandas DataFrame, you use the square brackets [] with the desired new column name on the left side of an assignment operation. The calculation of values is performed element-wise, meaning that operations are applied to all values in the column simultaneously. This approach eliminates the need to use explicit loops to iterate through individual rows, making data manipulation significantly more efficient and readable.",
+    "context_tokens": 781,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.join"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/basics.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/basics.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.add_prefix.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.add_prefix.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/cookbook.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/cookbook.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/05_add_columns.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/05_add_columns.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3754.1145840659738,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "115",
+    "context": "",
+    "context_tokens": 0,
+    "engine": "context7",
+    "error_type": "no_relevant_snippets",
+    "gold_identifiers": [
+      "df.set_index",
+      "df.div",
+      "res.reset_index"
+    ],
+    "identifier_hit": false,
+    "items": [],
+    "latency_ms": 3790.744374971837,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "no_result"
+  },
+  {
+    "case_id": "123",
+    "context": "### https://pandas.pydata.org/docs/whatsnew/v0.18.0.html\nConcatenate Series with str.cat\n\nShows how str.cat handles NaN values and validates the sep argument.\n\nIn [27]: pd.Series(['a', 'b', np.nan, 'c']).str.cat(sep=' ')\nOut[27]: 'a b c'\n\nIn [28]: pd.Series(['a', 'b', np.nan, 'c']).str.cat(sep=' ', na_rep='?')\nOut[28]: 'a b ? c'\n\nIn [2]: pd.Series(['a', 'b', np.nan, 'c']).str.cat(' ')\nValueError: Did you mean to supply a ``sep`` keyword?\n\n### https://pandas.pydata.org/docs/user_guide/text.html\nConcatenate Series with Indexed Object Alignment (Python)\n\nConcatenates a pandas Series with another Series or DataFrame, aligning indexes before concatenation using the `join` parameter ('left', 'outer', 'inner', 'right'). Missing values can be represented with `na_rep`.\n\nimport pandas as pd\ns = pd.Series([\"a\", \"b\", \"c\", \"d\"], dtype=\"str\")\nu = pd.Series([\"b\", \"d\", \"a\", \"c\"], index=[1, 3, 0, 2], dtype=\"str\")\nv = pd.Series([\"z\", \"a\", \"b\", \"d\", \"e\"], index=[-1, 0, 1, 3, 4], dtype=\"str\")\nd = pd.concat([pd.Series([\"a\", \"b\", np.nan, \"d\"], dtype=\"str\"), s], axis=1)\nprint(s.str.cat(u))\nprint(s.str.cat(u, join=\"left\"))\nprint(s.str.cat(v, join=\"left\", na_rep=\"-\"))\nprint(s.str.cat(v, join=\"outer\", na_rep=\"-\"))\nf = d.loc[[3, 2, 1, 0], :]\nprint(s.str.cat(f, join=\"left\", na_rep=\"-\"))\n\n### https://pandas.pydata.org/docs/user_guide/10min.html\nSelect All Rows with Specific Columns using .loc\n\nUse `.loc[:, [\"A\", \"B\"]]` to select all rows (`:`) and a subset of columns by their labels.\n\nIn [30]: df.loc[:, [\"A\", \"B\"]]\nOut[30]: \n                   A         B\n2013-01-01  0.469112 -0.282863\n2013-01-02  1.212112 -0.173215\n2013-01-03 -0.861849 -2.104569\n2013-01-04  0.721555 -0.706771\n2013-01-05 -0.424972  0.567020\n2013-01-06 -0.673690  0.113648\n\n### https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html\nFilter DataFrame Rows with Non-Null Values (Pandas)\n\nSelects rows where the 'Age' column does not contain null (NaN) values. This is achieved using the `notna()` method, which returns a boolean Series. This is useful for data cleaning and analysis where missing values need to be excluded.\n\nage_no_na = titanic[titanic[\"Age\"].notna()]\nage_no_na.head()\nage_no_na.shape\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html\npandas.DataFrame.fillna\n\nThe `fillna()` method can be used with a dictionary to replace NaN values on a per-column basis. For example, if you have a DataFrame `df` and a dictionary `values = {'A': 0, 'B': 1, 'C': 2, 'D': 3}`, calling `df.fillna(value=values)` will replace NaNs in column 'A' with 0, in 'B' with 1, in 'C' with 2, and in 'D' with 3. This provides a flexible way to impute missing data with column-specific strategies.",
+    "context_tokens": 862,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.apply"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/whatsnew/v0.18.0.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/whatsnew/v0.18.0.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/text.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/text.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3625.762791838497,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "170",
+    "context": "### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.cumsum.html\nPandas DataFrame Cumulative Sum\n\nCalculates the cumulative sum for a pandas DataFrame. By default, it iterates over rows (axis=0) and computes the sum for each column. Setting axis=1 iterates over columns to compute the sum for each row.\n\nimport pandas as pd\n\ndf = pd.DataFrame(\n    [[2.0, 1.0], [3.0, np.nan], [1.0, 0.0]], columns=list(\"AB\")\n)\n\n# Cumulative sum over rows (default axis=0)\nprint(df.cumsum())\n\n# Cumulative sum over columns (axis=1)\nprint(df.cumsum(axis=1))\n\n### https://pandas.pydata.org/docs/user_guide/10min.html\nGroup by Multiple Columns and Sum\n\nGroups the DataFrame by both 'A' and 'B' columns, creating a MultiIndex, and then calculates the sum for 'C' and 'D' columns. This allows for more granular data aggregation.\n\ndf.groupby([\"A\", \"B\"]).sum()\n\n### https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.filter.html\nFilter DataFrame groups using a lambda function\n\nThis example demonstrates how to group a DataFrame by column 'A' and filter out groups where the mean of column 'B' is not greater than 3.0. The resulting DataFrame contains only the rows belonging to groups that satisfied the condition.\n\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"A\": [\"foo\", \"bar\", \"foo\", \"bar\", \"foo\", \"bar\"],\n    \"B\": [1, 2, 3, 4, 5, 6],\n    \"C\": [2.0, 5.0, 8.0, 1.0, 2.0, 9.0],\n})\n\ngrouped = df.groupby(\"A\")\nfiltered_df = grouped.filter(lambda x: x[\"B\"].mean() > 3.0)\nprint(filtered_df)\n\n### https://pandas.pydata.org/docs/reference/api/pandas.Series.sum.html\npandas.Series.sum\n\nThe `axis` parameter for `Series.sum()` is unused and defaults to 0. However, for DataFrames, `axis=None` is deprecated and will change its behavior in future versions to reduce over both axes. To maintain the current behavior of reducing over columns, explicitly pass `axis=0`.\n\n### https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html\nData operations > Operations on columns\n\nPandas enables efficient operations on entire columns, mirroring the way formulas are applied across cells in spreadsheets but without the need for manual dragging. You can perform vectorized operations by selecting individual Series within a DataFrame and assign new columns directly. The `DataFrame.drop()` method is used to remove columns from the DataFrame. These operations are applied to the whole column at once, making data manipulation more streamlined.",
+    "context_tokens": 621,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.sum"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.cumsum.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.cumsum.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.filter.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.filter.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.Series.sum.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.Series.sum.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3292.293749982491,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "190",
+    "context": "### https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html\nCalculate Multiple Aggregations with Pandas Pivot Table\n\nDemonstrates how to use pandas pivot_table to calculate multiple types of aggregations (mean, min, max) for different value columns, indexed by specified columns. This is useful for summarizing data in various ways simultaneously.\n\nimport pandas as pd\n\n# Assuming 'df' is a pre-defined pandas DataFrame\n# Example DataFrame structure for context:\n# data = {'A': ['bar', 'bar', 'foo', 'foo', 'bar', 'foo'],\n#         'B': ['one', 'two', 'one', 'two', 'two', 'one'],\n#         'C': ['large', 'small', 'large', 'small', 'large', 'small'],\n#         'D': [1, 2, 3, 4, 5, 6],\n#         'E': [7, 8, 9, 10, 11, 12]}\n# df = pd.DataFrame(data)\n\ntable = pd.pivot_table(\n    df,\n    values=[\"D\", \"E\"],\n    index=[\"A\", \"C\"],\n    aggfunc={\"D\": \"mean\", \"E\": [\"min\", \"max\", \"mean\"]},\n)\nprint(table)\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html\nCreate Pivot Table with Multiple Value Aggregations (Pandas)\n\nShows how to create a pivot table aggregating multiple value columns ('D' and 'E') with different aggregation functions specified in a dictionary. The index is set to 'A' and 'C'.\n\nimport pandas as pd\ndf = pd.DataFrame({\"A\": [\"foo\", \"foo\", \"foo\", \"foo\", \"foo\",\n                         \"bar\", \"bar\", \"bar\", \"bar\"],\n                   \"B\": [\"one\", \"one\", \"one\", \"two\", \"two\",\n                         \"one\", \"one\", \"two\", \"two\"],\n                   \"C\": [\"small\", \"large\", \"large\", \"small\",\n                         \"small\", \"large\", \"small\", \"small\",\n                         \"large\"],\n                   \"D\": [1, 2, 2, 3, 3, 4, 5, 6, 7],\n                   \"E\": [2, 4, 5, 5, 6, 6, 8, 9, 9]})\ntable = pd.pivot_table(df, values=['D', 'E'], index=['A', 'C'],\n                       aggfunc={'D': \"mean\", 'E': \"mean\"})\nprint(table)\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html\nCalculate Multiple Aggregations with pivot_table\n\nThis snippet demonstrates how to apply different aggregation functions to specific columns in a DataFrame. It uses a dictionary to map column names to their respective aggregation methods.\n\nimport pandas as pd\n\ntable = pd.pivot_table(df, values=['D', 'E'], index=['A', 'C'],\n                       aggfunc={'D': \"mean\",\n                                'E': [\"min\", \"max\", \"mean\"]})\n\n### https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html\npandas.DataFrame.pivot_table > Aggregation Logic\n\nWhen using the aggfunc parameter, you can pass a single function, a list of functions, or a dictionary to perform different aggregations on specific columns. If a list of functions is provided, the resulting pivot table will feature hierarchical columns where the top level consists of the function names. Using a dictionary allows for granular control, mapping specific columns to their respective aggregation functions, which is particularly useful when dealing with diverse data types.\n\n### https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html\nPivot table\n\nThe `pivot_table()` function in pandas is used to rearrange data and aggregate multiple values, such as those from different time steps, by providing an aggregation function like the mean. This is distinct from `pivot()`, which only rearranges data.",
+    "context_tokens": 846,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "pandas.pivot_table"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3638.602166902274,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "229",
+    "context": "### https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html\nPandas DataFrameGroupBy.value_counts() - Basic Usage\n\nDemonstrates the basic usage of DataFrameGroupBy.value_counts() to count unique rows within groups. It shows how to group by a column and then apply value_counts to the grouped object.\n\nimport pandas as pd\ndf = pd.DataFrame({\n    \"gender\": [\"male\", \"male\", \"female\", \"male\", \"female\", \"male\"],\n    \"education\": [\"low\", \"medium\", \"high\", \"low\", \"high\", \"low\"],\n    \"country\": [\"US\", \"FR\", \"US\", \"FR\", \"FR\", \"FR\"],\n})\ndf.groupby(\"gender\").value_counts()\n\n### https://pandas.pydata.org/docs/reference/groupby.html\nDataFrameGroupBy.value_counts\n\nReturn a Series or DataFrame containing counts of unique rows. Accepts subset and other parameters.\n\n## DataFrameGroupBy.value_counts\n\n### Description\nReturn a Series or DataFrame containing counts of unique rows.\n\n### Parameters\n* **subset** (array-like, optional) - Only consider this subset of columns.\n* **...** - Additional parameters.\n\n### https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html\nGET /pandas/DataFrameGroupBy/value_counts\n\nCalculates the frequency or proportion of unique row combinations within a grouped DataFrame.\n\n## GET /pandas/DataFrameGroupBy/value_counts\n\n### Description\nReturns a Series or DataFrame containing counts of unique rows within each group of a DataFrameGroupBy object.\n\n### Method\nGET\n\n### Endpoint\nDataFrameGroupBy.value_counts(subset=None, normalize=False, sort=True, ascending=False, dropna=True)\n\n### Parameters\n#### Query Parameters\n- **subset** (list-like) - Optional - Columns to use when counting unique combinations.\n- **normalize** (bool) - Optional - If True, return proportions rather than frequencies. Default is False.\n- **sort** (bool) - Optional - If True, stable sort by frequencies. Default is True.\n- **ascending** (bool) - Optional - If True, sort in ascending order. Default is False.\n- **dropna** (bool) - Optional - If True, exclude rows containing NA values. Default is True.\n\n### Response\n#### Success Response (200)\n- **result** (Series or DataFrame) - Returns a Series if groupby as_index is True, otherwise a DataFrame.\n\n#### Response Example\n{\n  \"result\": {\n    \"gender\": \"female\",\n    \"education\": \"high\",\n    \"country\": \"US\",\n    \"count\": 1\n  }\n}\n\n### https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html\nBinning and Handling Missing Values with value_counts\n\nShows how to group continuous data into bins and how to include NaN values in the count results.\n\ns = pd.Series([3, 1, 2, 3, 4, np.nan])\n\n# Using bins\nprint(s.value_counts(bins=3))\n\n# Including NaN\nprint(s.value_counts(dropna=False))\n\n### https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html\npandas.api.typing.DataFrameGroupBy.value_counts > Overview\n\nThe DataFrameGroupBy.value_counts method is used to return a Series or DataFrame containing the counts of unique rows within each group. By default, the method omits rows that contain any NA values and returns the results in descending order, ensuring the most frequently occurring row appears first. Users can customize the output by normalizing the counts to proportions instead of frequencies, or by adjusting the sorting behavior to be ascending or descending.",
+    "context_tokens": 765,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.groupby"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/groupby.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/reference/groupby.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.value_counts.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3911.2456671427935,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "277",
+    "context": "### https://pandas.pydata.org/docs/user_guide/basics.html\nSort DataFrame by Index Level with Key\n\nSort a DataFrame with a MultiIndex by a specific level using a key function to transform the index before sorting.\n\ns1 = pd.DataFrame({\"a\": [\"B\", \"a\", \"C\"], \"b\": [1, 2, 3], \"c\": [2, 3, 4]}).set_index(\n    list(\"ab\")\n)\n\ns1.sort_index(level=\"a\")\n\ns1.sort_index(level=\"a\", key=lambda idx: idx.str.lower())\n\n### https://pandas.pydata.org/docs/reference/api/pandas.Series.sort_index.html\nSort Pandas Series by Index\n\nSorts a pandas Series by its index labels. Returns a new sorted Series or modifies the original if inplace=True. Handles ascending/descending order and NaN placement.\n\nimport pandas as pd\nimport numpy as np\n\ns = pd.Series([\"a\", \"b\", \"c\", \"d\"], index=[3, 2, 1, 4])\nprint(s.sort_index())\n\n# Sort Descending\nprint(s.sort_index(ascending=False))\n\n# Handle NaNs\ns_nan = pd.Series([\"a\", \"b\", \"c\", \"d\"], index=[3, 2, 1, np.nan])\nprint(s_nan.sort_index(na_position=\"first\"))\n\n# Sort by MultiIndex level\narrays = [\n    np.array([\"qux\", \"qux\", \"foo\", \"foo\", \"baz\", \"baz\", \"bar\", \"bar\"]),\n    np.array([\"two\", \"one\", \"two\", \"one\", \"two\", \"one\", \"two\", \"one\"]),\n]\ns_multi = pd.Series([1, 2, 3, 4, 5, 6, 7, 8], index=arrays)\nprint(s_multi.sort_index(level=1))\nprint(s_multi.sort_index(level=1, sort_remaining=False))\n\n# Apply a key function\ns_key = pd.Series([1, 2, 3, 4], index=[\"A\", \"b\", \"C\", \"d\"])\nprint(s_key.sort_index(key=lambda x: x.str.lower()))\n\n### https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html\nSort DataFrame by Multiple Columns with Pandas\n\nShows how to sort a pandas DataFrame based on the values in one or more columns using the .sort_values() method. This is essential for organizing and analyzing data in a specific order.\n\ntips = tips.sort_values([\"sex\", \"total_bill\"])\n\n### https://pandas.pydata.org/docs/reference/api/pandas.MultiIndex.sortlevel.html\nSorting MultiIndex levels in Pandas\n\nDemonstrates how to use MultiIndex.sortlevel to organize hierarchical indices. The examples show default sorting, disabling remaining level sorting, and sorting by specific levels with descending order.\n\nimport pandas as pd\nmi = pd.MultiIndex.from_arrays([[0, 0], [2, 1]])\n\n# Default sort\nsorted_idx, indexer = mi.sortlevel()\n\n# Sort without remaining levels\nsorted_idx_no_rem, indexer_no_rem = mi.sortlevel(sort_remaining=False)\n\n# Sort by level 1\nsorted_idx_lvl1, indexer_lvl1 = mi.sortlevel(1)\n\n# Sort by level 1 descending\nsorted_idx_desc, indexer_desc = mi.sortlevel(1, ascending=False)\n\n### https://pandas.pydata.org/docs/user_guide/10min.html\nViewing data\n\nYou can sort a DataFrame by its index using `DataFrame.sort_index()`, specifying the axis (0 for index, 1 for columns) and the order (ascending or descending).",
+    "context_tokens": 755,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.sort_values"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/basics.html",
+        "rank": 1,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/basics.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.Series.sort_index.html",
+        "rank": 2,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.Series.sort_index.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html",
+        "rank": 3,
+        "raw_id": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/reference/api/pandas.MultiIndex.sortlevel.html",
+        "rank": 4,
+        "raw_id": "https://pandas.pydata.org/docs/reference/api/pandas.MultiIndex.sortlevel.html",
+        "score": null
+      },
+      {
+        "path": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "rank": 5,
+        "raw_id": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3498.5259159002453,
+    "library": "Pandas",
+    "provider_metadata": {
+      "library_id": "/websites/pandas_pydata",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "314",
+    "context": "### https://github.com/numpy/numpy/blob/main/linalg/_linalg.py\nDescending argsort via index reversal\n\nFor older NumPy versions, reversing the ascending argsort indices with `[::-1]` yields the descending order indices. This pattern is used internally in the linalg module.\n\nsidx = argsort(s)[..., ::-1]\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/how-to-index.md\nRecover multidimensional indices per slice with unravel_index\n\nReshape an N-dimensional array to 2D, evaluate argmax along axis 1, and use unravel_index with the sub-array shape to recover per-slice coordinate indices.\n\n>>> x = np.arange(2*2*3).reshape(2, 2, 3) % 7  # 3D example array\n>>> x\narray([[[0, 1, 2],\n        [3, 4, 5]],\n\n       [[6, 0, 1],\n        [2, 3, 4]]])\n>>> x_2d = np.reshape(x, (x.shape[0], -1))\n>>> indices_2d = np.argmax(x_2d, axis=1)\n>>> indices_2d\narray([5, 0])\n>>> np.unravel_index(indices_2d, x.shape[1:])\n(array([1, 0]), array([2, 0]))\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md\nFind indices of matching elements using np.nonzero\n\nReturns a tuple of index arrays representing the row and column coordinates where the condition is true.\n\n>>> b = np.nonzero(a < 5)\n>>> print(b)\n(array([0, 0, 0, 0]), array([0, 1, 2, 3]))\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/reference/arrays.classes.md\nIterate with N-dimensional indices using np.ndenumerate in Python\n\nYields coordinate tuple index pairs alongside corresponding array values during iteration. Useful when position coordinates are required for filtering or processing array elements.\n\n>>> import numpy as np\n>>> for i, val in np.ndenumerate(a):\n...     if sum(i)%5 == 0:\n            print(i, val)\n(0, 0, 0) 10\n(1, 1, 3) 25\n(2, 0, 3) 29\n(2, 1, 2) 32\n\n### https://github.com/numpy/numpy/blob/main/doc/source/reference/c-api/array.md\nenum NPY_ORDER\n\nNPY_ORDER defines the element memory layout order used when interpreting or creating arrays. Options include NPY_CORDER (C row-major order), NPY_FORTRANORDER (Fortran column-major order), NPY_ANYORDER (Fortran order if all inputs are Fortran, C otherwise), and NPY_KEEPORDER (preserves memory ordering as close to the input arrays as possible).",
+    "context_tokens": 629,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.unravel_index",
+      "a.min"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/linalg/_linalg.py",
+        "rank": 1,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/linalg/_linalg.py",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/how-to-index.md",
+        "rank": 2,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/how-to-index.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md",
+        "rank": 3,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/reference/arrays.classes.md",
+        "rank": 4,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/reference/arrays.classes.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/source/reference/c-api/array.md",
+        "rank": 5,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/source/reference/c-api/array.md",
+        "score": null
+      }
+    ],
+    "latency_ms": 4412.387709133327,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "316",
+    "context": "### https://github.com/numpy/numpy/blob/main/doc/neps/user/misc.md\nCheck array equality with NaN in NumPy\n\nEquality comparisons with NaN always evaluate to False and return empty index arrays. Do not use direct equality comparison to find or mask NaN elements.\n\n>>> myarr = np.array([1., 0., np.nan, 3.])\n>>> np.nonzero(myarr == np.nan)\n(array([], dtype=int64),)\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md\nFilter non-NaN elements using boolean indexing in NumPy\n\nApply a boolean mask generated by np.isnan to filter out NaN values into a 1D array.\n\n>>> x = np.array([[1., 2.], [np.nan, 3.], [np.nan, np.nan]])\n>>> x[~np.isnan(x)]\narray([1., 2., 3.])\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/misc.md\nReplace NaN values using np.isnan\n\nUse np.isnan as a boolean mask to locate and overwrite NaN values in an array.\n\n>>> myarr[np.isnan(myarr)] = 0. # use this instead find\n>>> myarr\narray([1.,  0.,  0.,  3.])\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md\nFind indices of matching elements using np.nonzero\n\nReturns a tuple of index arrays representing the row and column coordinates where the condition is true.\n\n>>> b = np.nonzero(a < 5)\n>>> print(b)\n(array([0, 0, 0, 0]), array([0, 1, 2, 3]))\n\n### https://github.com/numpy/numpy/blob/main/_core/code_generators/ufunc_docstrings.py\nnp.isfinite — element-wise finiteness test\n\nTrue where input is NOT +inf, -inf, or NaN. Returns boolean ndarray. Works on all numeric dtypes including datetime64/timedelta64 (NaT→False).\n\nadd_newdoc('numpy._core.umath', 'isfinite',\n    \"\"\"\n    Test element-wise for finiteness (not infinity and not Not a Number).\n\n    The result is returned as a boolean array.\n\n    Parameters\n    ----------\n    x : array_like\n        Input values.\n\n    Returns\n    -------\n    y : ndarray, bool\n        True where ``x`` is not positive infinity, negative infinity,\n        or NaN; false otherwise.\n\n    Notes\n    -----\n    Not a Number, positive infinity and negative infinity are considered\n    to be non-finite.\n\n    NumPy uses the IEEE Standard for Binary Floating-Point for Arithmetic\n    (IEEE 754). This means that Not a Number is not equivalent to infinity.\n    Also that positive infinity is not equivalent to negative infinity. But\n    infinity is equivalent to positive infinity.\n\n    Examples\n    --------\n    >>> np.isfinite(1)\n    True\n    >>> np.isfinite(0)\n    True\n    >>> np.isfinite(np.nan)\n    False\n    >>> np.isfinite(np.inf)\n    False\n    >>> np.isfinite(-np.inf)\n    False\n    >>> np.isfinite([np.log(-1.),1.,np.log(0)])\n    array([False,  True, False])\n    \"\"\")",
+    "context_tokens": 694,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.any"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/misc.md",
+        "rank": 1,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/misc.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "rank": 2,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/misc.md",
+        "rank": 3,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/misc.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md",
+        "rank": 4,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/_core/code_generators/ufunc_docstrings.py",
+        "rank": 5,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/_core/code_generators/ufunc_docstrings.py",
+        "score": null
+      }
+    ],
+    "latency_ms": 4208.412500098348,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "335",
+    "context": "### https://numpy.org/doc/stable/reference/generated/numpy.maximum.html\nnumpy.maximum\n\nComputes the element-wise maximum of two arrays. This function is part of NumPy's mathematical functions and is useful for element-wise comparisons and selections.\n\n## numpy.maximum\n\n### Description\nElement-wise maximum of two arrays.\n\n### Parameters\n* **x1, x2** : array_like\n    Input arrays of the same shape, or the shape can be broadcast to a common shape.\n\n### Returns\n* **y** : ndarray\n    An array with the same shape as `x1` or `x2`. This array will contain the element-wise maximum of the elements of the two arrays.\n\n### Examples\n```python\nnumpy.maximum(a, b)\n```\n\n### See Also\n* `numpy.maximum.reduce`\n* `numpy.fmax`\n* `numpy.amax`\n* `numpy.min`\n* `numpy.fmin`\n* `numpy.nanmax`\n\n### https://numpy.org/doc/stable/user/numpy-for-matlab-users.html\nElement-wise Maximum of Two Arrays\n\nCompares two arrays element-wise and returns the maximum value from each pair.\n\nnp.maximum(a, b)\n\n### https://numpy.org/doc/stable/reference/generated/numpy.fmax.html\nBasic Element-wise Maximum\n\nCompares two arrays and returns an array with the element-wise maximum values. This is a fundamental use case for `np.fmax`.\n\nimport numpy as np\nnp.fmax([2, 3, 4], [1, 5, 2])\n\n### https://numpy.org/doc/stable/reference/generated/numpy.fmax.html\nnumpy.fmax\n\nComputes the element-wise maximum of two arrays. It handles NaN values by preferring the non-NaN element. If both elements are NaN, the first is returned. This function supports broadcasting.\n\n## numpy.fmax\n\n### Description\nElement-wise maximum of array elements. Compares two arrays and returns a new array containing the element-wise maxima. If one of the elements being compared is a NaN, then the non-nan element is returned. If both elements are NaNs then the first is returned.\n\n### Parameters\n#### x1, x2\n- **x1, x2** (array_like) - The arrays holding the elements to be compared. If `x1.shape != x2.shape`, they must be broadcastable to a common shape (which becomes the shape of the output).\n\n#### out\n- **out** (ndarray, None, or tuple of ndarray and None, optional) - A location into which the result is stored. If provided, it must have a shape that the inputs broadcast to. If not provided or None, a freshly-allocated array is returned. A tuple (possible only as a keyword argument) must have length equal to the number of outputs.\n\n#### where\n- **where** (array_like, optional) - This condition is broadcast over the input. At locations where the condition is True, the `out` array will be set to the ufunc result. Elsewhere, the `out` array will retain its original value. Note that if an uninitialized `out` array is created via the default `out=None`, locations within it where the condition is False will remain uninitialized.\n\n#### **kwargs\n- For other keyword-only arguments, see the ufunc docs.\n\n### Returns\n- **y** (ndarray or scalar) - The maximum of `x1` and `x2`, element-wise. This is a scalar if both `x1` and `x2` are scalars.\n\n### Examples\n```python\n>>> import numpy as np\n>>> np.fmax([2, 3, 4], [1, 5, 2])\narray([ 2,  5,  4])\n```\n\n```python\n>>> np.fmax(np.eye(2), [0.5, 2])\narray([[ 1. ,  2. ],\n       [ 0.5,  2. ]])\n```\n\n```python\n>>> np.fmax([np.nan, 0, np.nan],[0, np.nan, np.nan])\narray([ 0.,  0., nan])\n```\n\n### https://numpy.org/doc/stable/user/numpy-for-matlab-users.html\nNumPy for MATLAB users > General purpose equivalents\n\nFinding maximum values in NumPy arrays has several options: `a.max()` finds the overall maximum element, `a.max(0)` finds the maximum of each column, and `a.max(1)` finds the maximum of each row. `numpy.nanmax(a)` is useful for ignoring NaN values. For element-wise maximum comparison between two arrays, use `numpy.maximum(a, b)`.",
+    "context_tokens": 966,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.max"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://numpy.org/doc/stable/reference/generated/numpy.maximum.html",
+        "rank": 1,
+        "raw_id": "https://numpy.org/doc/stable/reference/generated/numpy.maximum.html",
+        "score": null
+      },
+      {
+        "path": "https://numpy.org/doc/stable/user/numpy-for-matlab-users.html",
+        "rank": 2,
+        "raw_id": "https://numpy.org/doc/stable/user/numpy-for-matlab-users.html",
+        "score": null
+      },
+      {
+        "path": "https://numpy.org/doc/stable/reference/generated/numpy.fmax.html",
+        "rank": 3,
+        "raw_id": "https://numpy.org/doc/stable/reference/generated/numpy.fmax.html",
+        "score": null
+      },
+      {
+        "path": "https://numpy.org/doc/stable/reference/generated/numpy.fmax.html",
+        "rank": 4,
+        "raw_id": "https://numpy.org/doc/stable/reference/generated/numpy.fmax.html",
+        "score": null
+      },
+      {
+        "path": "https://numpy.org/doc/stable/user/numpy-for-matlab-users.html",
+        "rank": 5,
+        "raw_id": "https://numpy.org/doc/stable/user/numpy-for-matlab-users.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3884.5857919659466,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/websites/numpy_doc_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "339",
+    "context": "### https://github.com/numpy/numpy/blob/main/_core/fromnumeric.py\nGetting the anti-diagonal using fliplr/flipud with diagonal\n\nThe docs for np.diagonal show how to get the anti-diagonal (top-right to bottom-left or bottom-left to top-right) by combining fliplr or flipud with diagonal. This directly answers the user's question about how to get the diagonal ending at bottom-left rather than bottom-right.\n\nThe anti-diagonal can be obtained by reversing the order of elements\nusing either `numpy.flipud` or `numpy.fliplr`.\n\n>>> a = np.arange(9).reshape(3, 3)\n>>> a\narray([[0, 1, 2],\n       [3, 4, 5],\n       [6, 7, 8]])\n>>> np.fliplr(a).diagonal()  # Horizontal flip\narray([2, 4, 6])\n>>> np.flipud(a).diagonal()  # Vertical flip\narray([6, 4, 2])\n\nNote that the order in which the diagonal is retrieved varies depending\non the flip function.\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/numpy-for-matlab-users.md\nExtract diagonal elements in MATLAB and NumPy\n\nReturns a vector containing the diagonal elements of a 2D array.\n\ndiag(a)\n\nnp.diag(a)\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md\nIndex diagonally with 1D index pairs in NumPy\n\nPassing 1D row and column index vectors without broadcasting selects paired diagonal elements rather than a full Cartesian product grid.\n\n>>> x[rows, columns]\narray([ 0, 11])\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md\nInspect array shape using shape in NumPy\n\nReturns a tuple of integers representing the size of the array along each dimension.\n\n>>> a.shape\n(3, 4)\n>>> len(a.shape) == a.ndim\nTrue\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.creation.md\nConstruct and extract diagonal matrices with numpy.diag\n\nBuilds a square 2D diagonal matrix from a 1D input (with optional diagonal offset) or extracts the diagonal from a 2D matrix.\n\n>>> import numpy as np\n>>> np.diag([1, 2, 3])\narray([[1, 0, 0],\n       [0, 2, 0],\n       [0, 0, 3]])\n>>> np.diag([1, 2, 3], 1)\narray([[0, 1, 0, 0],\n       [0, 0, 2, 0],\n       [0, 0, 0, 3],\n       [0, 0, 0, 0]])\n>>> a = np.array([[1, 2], [3, 4]])\n>>> np.diag(a)\narray([1, 4])",
+    "context_tokens": 633,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.vstack"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/_core/fromnumeric.py",
+        "rank": 1,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/_core/fromnumeric.py",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/numpy-for-matlab-users.md",
+        "rank": 2,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/numpy-for-matlab-users.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "rank": 3,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md",
+        "rank": 4,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/absolute_beginners.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.creation.md",
+        "rank": 5,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.creation.md",
+        "score": null
+      }
+    ],
+    "latency_ms": 4176.423749886453,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "381",
+    "context": "### https://github.com/numpy/numpy/blob/main/linalg/_linalg.py\nDescending argsort via index reversal\n\nFor older NumPy versions, reversing the ascending argsort indices with `[::-1]` yields the descending order indices. This pattern is used internally in the linalg module.\n\nsidx = argsort(s)[..., ::-1]",
+    "context_tokens": 72,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.argsort"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/linalg/_linalg.py",
+        "rank": 1,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/linalg/_linalg.py",
+        "score": null
+      }
+    ],
+    "latency_ms": 3879.641250008717,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "444",
+    "context": "### https://github.com/numpy/numpy/blob/main/lib/_arraysetops_impl.py\nnp.isin — Element-wise membership check\n\nReturns a boolean array of the same shape as `element` where True indicates the element is present in `test_elements`. To check if array 'a' contains all numbers in array 'b', use `np.isin(b, a).all()`.\n\ndef isin(element, test_elements, assume_unique=False, invert=False, *,\n         kind=None):\n    \"\"\"\n    Calculates ``element in test_elements``, broadcasting over `element` only.\n    Returns a boolean array of the same shape as `element` that is True\n    where an element of `element` is in `test_elements` and False otherwise.\n\n    Parameters\n    ----------\n    element : array_like\n        Input array.\n    test_elements : array_like\n        The values against which to test each value of `element`.\n        This argument is flattened if it is an array or array_like.\n        See notes for behavior with non-array-like parameters.\n    assume_unique : bool, optional\n        If True, the input arrays are both assumed to be unique, which\n        can speed up the calculation.  Default is False.\n    invert : bool, optional\n        If True, the values in the returned array are inverted, as if\n        calculating `element not in test_elements`. Default is False.\n        ``np.isin(a, b, invert=True)`` is equivalent to (but faster\n        than) ``np.invert(np.isin(a, b))``.\n    kind : {None, 'sort', 'table'}, optional\n        The algorithm to use. This will not affect the final result,\n        but will affect the speed and memory use. The default, None,\n        will select automatically based on memory considerations.\n\n    Returns\n    -------\n    isin : ndarray, bool\n        Has the same shape as `element`. The values `element[isin]`\n        are in `test_elements`.\n\n    Notes\n    -----\n    `isin` is an element-wise function version of the python keyword `in`.\n    ``isin(a, b)`` is roughly equivalent to\n    ``np.array([item in b for item in a])`` if `a` and `b` are 1-D sequences.\n\n    Examples\n    --------\n    >>> import numpy as np\n    >>> element = 2*np.arange(4).reshape((2, 2))\n    >>> element\n    array([[0, 2],\n           [4, 6]])\n    >>> test_elements = [1, 2, 4, 8]\n    >>> mask = np.isin(element, test_elements)\n    >>> mask\n    array([[False,  True],\n           [ True, False]])\n    >>> element[mask]\n    array([2, 4])\n    \"\"\"\n    element = np.asarray(element)\n    return _isin(element, test_elements, assume_unique=assume_unique,\n                 invert=invert, kind=kind).reshape(element.shape)\n\n### https://github.com/numpy/numpy/blob/main/doc/source/user/basics.indexing.rst\nBoolean Array Indexing\n\nDemonstrates boolean array indexing: selecting elements with boolean arrays, filtering with comparison operators, and using boolean indices for assignment. Shown with multiple examples including same-shape indexing, multi-dimensional selection, and combined conditions.\n\n.. _boolean-indexing:\n\nBoolean array indexing\n~~~~~~~~~~~~~~~~~~~~~~\n\nThis advanced indexing occurs when *obj* is an array object of Boolean\ntype, such as may be returned from comparison operators. A single\nboolean index array is practically identical to ``x[obj.nonzero()]`` where,\nas described above, :meth:`obj.nonzero() <ndarray.nonzero>` returns a\ntuple (of length :attr:`obj.ndim <ndarray.ndim>`) of integer index\narrays showing the :py:data:`True` elements of *obj*. However, it is\nfaster when ``obj.shape == x.shape``.\n\nIf ``obj.ndim == x.ndim``, ``x[obj]``\nreturns a 1-dimensional array filled with the elements of *x*\ncorresponding to the :py:data:`True` values of *obj*. The search order\nwill be :term:`row-major`, C-style. An index error will be raised if\nthe shape of *obj* does not match the corresponding dimensions of *x*,\nregardless of whether those values are :py:data:`True` or\n:py:data:`False`.\n\nA common use case for this is filtering for desired element values.\nFor example, one may wish to select all entries from an array which\nare not :const:`numpy.nan`::\n\n    >>> x = np.array([[1., 2.], [np.nan, 3.], [np.nan, np.nan]])\n    >>> x[~np.isnan(x)]\n    array([1., 2., 3.])\n\nOr wish to add a constant to all negative elements::\n\n    >>> x = np.array([1., -1., -2., 3])\n    >>> x[x < 0] += 20\n    >>> x\n    array([ 1., 19., 18., 3.])\n\nIn general if an index includes a Boolean array, the result will be\nidentical to inserting ``obj.nonzero()`` into the same position\nand using the integer array indexing mechanism described above.\n``x[ind_1, boolean_array, ind_2]`` is equivalent to\n``x[(ind_1,) + boolean_array.nonzero() + (ind_2,)]``.\n\nIf there is only one Boolean array and no integer indexing array present,\nthis is straightforward. Care must only be taken to make sure that the\nboolean index has *exactly* as many dimensions as it is supposed to work\nwith.\n\nIn general, when the boolean array has fewer dimensions than the array being\nindexed, this is equivalent to ``x[b, ...]``, which means x is indexed by b\nfollowed by as many ``:`` as are needed to fill out the rank of x. Thus the\nshape of the result is one dimension containing the number of True elements of\nthe boolean array, followed by the remaining dimensions of the array being\nindexed::\n\n    >>> x = np.arange(35).reshape(5, 7)\n    >>> b = x > 20\n    >>> b[:, 5]\n    array([False, False, False,  True,  True])\n    >>> x[b[:, 5]]\n    array([[21, 22, 23, 24, 25, 26, 27],\n           [28, 29, 30, 31, 32, 33, 34]])\n\nHere the 4th and 5th rows are selected from the indexed array and\ncombined to make a 2-D array.\n\n.. rubric:: Example\n\nFrom an array, select all rows which sum up to less or equal two::\n\n    >>> x = np.array([[0, 1], [1, 1], [2, 2]])\n    >>> rowsum = x.sum(-1)\n    >>> x[rowsum <= 2, :]\n    array([[0, 1],\n           [1, 1]])\n\n\nCombining multiple Boolean indexing arrays or a Boolean with an integer\nindexing array can best be understood with the\n:meth:`obj.nonzero() <ndarray.nonzero>` analogy. The function :func:`ix_`\nalso supports boolean arrays and will work without any surprises.\n\n.. rubric:: Example\n\nUse boolean indexing to select all rows adding up to an even\nnumber. At the same time columns 0 and 2 should be selected with an\nadvanced integer index. Using the :func:`ix_` function this can be done\nwith::\n\n    >>> x = np.array([[ 0,  1,  2],\n    ...               [ 3,  4,  5],\n    ...               [ 6,  7,  8],\n    ...               [ 9, 10, 11]])\n    >>> rows = (x.sum(-1) % 2) == 0\n    >>> rows\n    array([False,  True, False,  True])\n    >>> columns = [0, 2]\n    >>> x[np.ix_(rows, columns)]\n    array([[ 3,  5],\n           [ 9, 11]])",
+    "context_tokens": 1740,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.logical_and"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/lib/_arraysetops_impl.py",
+        "rank": 1,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/lib/_arraysetops_impl.py",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/source/user/basics.indexing.rst",
+        "rank": 2,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/source/user/basics.indexing.rst",
+        "score": null
+      }
+    ],
+    "latency_ms": 3793.6821249313653,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "482",
+    "context": "",
+    "context_tokens": 0,
+    "engine": "context7",
+    "error_type": "no_relevant_snippets",
+    "gold_identifiers": [
+      "numpy.polyfit"
+    ],
+    "identifier_hit": false,
+    "items": [],
+    "latency_ms": 6137.65020808205,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "no_result"
+  },
+  {
+    "case_id": "501",
+    "context": "### https://github.com/numpy/numpy/blob/main/doc/neps/user/quickstart.md\nIndex Multiple Dimensions with Index Arrays in NumPy\n\nIndex multi-dimensional arrays using separate index arrays for each dimension. Arrays of indices for each dimension must share the same shape.\n\n>>> a = np.arange(12).reshape(3, 4)\n>>> a\narray([[ 0,  1,  2,  3],\n       [ 4,  5,  6,  7],\n       [ 8,  9, 10, 11]])\n>>> i = np.array([[0, 1],  # indices for the first dim of `a`\n...               [1, 2]])\n>>> j = np.array([[2, 1],  # indices for the second dim\n...               [3, 3]])\n>>>\n>>> a[i, j]  # i and j must have equal shape\narray([[ 2,  5],\n       [ 7, 11]])\n>>>\n>>> a[i, 2]\narray([[ 2,  6],\n       [ 6, 10]])\n>>>\n>>> a[:, j]\narray([[[ 2,  1],\n        [ 3,  3]],\n\n       [[ 6,  5],\n        [ 7,  7]],\n\n       [[10,  9],\n        [11, 11]]])\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md\nIndex 2D Array with Equal-Length Coordinate Arrays\n\nPairs corresponding elements from each index array to select coordinates (y[0,0], y[2,1], y[4,2]).\n\n>>> y = np.arange(35).reshape(5, 7)\n>>> y\narray([[ 0,  1,  2,  3,  4,  5,  6],\n       [ 7,  8,  9, 10, 11, 12, 13],\n       [14, 15, 16, 17, 18, 19, 20],\n       [21, 22, 23, 24, 25, 26, 27],\n       [28, 29, 30, 31, 32, 33, 34]])\n>>> y[np.array([0, 2, 4]), np.array([0, 1, 2])]\narray([ 0, 15, 30])\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md\nSelect Specific Elements per Row Using Advanced Indexing\n\nUses paired lists for row and column indices to pick exact row-element coordinates from a 2D array.\n\n>>> x = np.array([[1, 2], [3, 4], [5, 6]])\n>>> x[[0, 1, 2], [0, 1, 0]]\narray([1, 4, 5])\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/nep-0021-advanced-indexing.md\nBackground > Existing indexing operations\n\nNumPy arrays currently support a flexible range of indexing operations:\n- “Basic” indexing involving only slices, integers, `np.newaxis` and ellipsis (`...`), e.g., `x[0, :3, np.newaxis]` for selecting the first element from the 0th axis, the first three elements from the 1st axis and inserting a new axis of size 1 at the end. Basic indexing always return a view of the indexed array’s data.\n- “Advanced” indexing, also called “fancy” indexing, includes all cases where arrays are indexed by other arrays. Advanced indexing always makes a copy:\n  - “Boolean” indexing by boolean arrays, e.g., `x[x > 0]` for selecting positive elements.\n  - “Vectorized” indexing by one or more integer arrays, e.g., `x[[0, 1]]` for selecting the first two elements along the first axis. With multiple arrays, vectorized indexing uses broadcasting rules to combine indices along multiple dimensions. This allows for producing a result of arbitrary shape with arbitrary elements from the original arrays.\n  - “Mixed” indexing involving any combinations of the other advancing types. This is no more powerful than vectorized indexing, but is sometimes more convenient.\nFor clarity, we will refer to these existing rules as “legacy indexing”. This is only a high-level summary; for more details, see NumPy’s documentation and Examples below.\n\n### https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md\nDealing with variable numbers of indices within programs\n\nTo handle arrays with variable numbers of dimensions dynamically, indexing can be performed using tuples, which are interpreted as a sequence of indices across dimensions. Slices can be specified programmatically within these tuples using Python's slice() function, and ellipses can be specified using the Ellipsis object. Functions such as np.nonzero() return tuples of index arrays, allowing their output to be used directly as indices. Unlike lists, tuples receive special treatment and are not automatically converted into arrays.",
+    "context_tokens": 1092,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.take_along_axis"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/quickstart.md",
+        "rank": 1,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/quickstart.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "rank": 2,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "rank": 3,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/nep-0021-advanced-indexing.md",
+        "rank": 4,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/nep-0021-advanced-indexing.md",
+        "score": null
+      },
+      {
+        "path": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "rank": 5,
+        "raw_id": "https://github.com/numpy/numpy/blob/main/doc/neps/user/basics.indexing.md",
+        "score": null
+      }
+    ],
+    "latency_ms": 4074.9071249738336,
+    "library": "Numpy",
+    "provider_metadata": {
+      "library_id": "/numpy/numpy",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "538",
+    "context": "### https://matplotlib.org/stable/gallery/subplots_axes_and_figures/axis_labels_demo.html\nSetting Axis Label Position\n\nUse the 'loc' parameter in set_xlabel, set_ylabel, and cbar.set_label to specify label positions (e.g., 'top', 'bottom', 'left', 'right').\n\nimport matplotlib.pyplot as plt\n\nfig, ax = plt.subplots()\n\nsc = ax.scatter([1, 2], [1, 2], c=[1, 2])\nax.set_ylabel('YLabel', loc='top')\nax.set_xlabel('XLabel', loc='left')\ncbar = fig.colorbar(sc)\ncbar.set_label(\"ZLabel\", loc='top')\n\nplt.show()\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html\nmatplotlib.axes.Axes.set_xlabel\n\nSets the label for the x-axis of the current axes. This method allows customization of the label's text and appearance.\n\n## matplotlib.axes.Axes.set_xlabel\n\n### Description\n\nSet the x-axis label.\n\n### Method\n\n`set_xlabel(self, xlabel, fontdict=None, labelpad=None, *, loc=None, **kwargs)`\n\n### Parameters\n\n*   **xlabel** (str or `~.text.Text` instance)\n    The label to set for the x-axis.\n*   **fontdict** (dict, optional, default: None)\n    A dictionary controlling the appearance of the x-axis label. The following keys are supported: 'fontsize', 'fontfamily', 'color', etc.\n*   **labelpad** (float, optional, default: None)\n    The distance between the x-axis and the label in points.\n*   **loc** ({'left', 'center', 'right'}, optional, default: None)\n    The horizontal alignment of the label. If None, the default alignment is used.\n*   **\b\bkwargs**\n    Additional keyword arguments are used to pass control to the `~.Text.update` method of the Text instance.\n\n### Returns\n\n*   **xlabel** (`~.text.Text`)\n    The x-axis label instance.\n\n### https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html\nReposition axis labels to top and right\n\nTo reposition the x-axis label to the top and the y-axis label to the right, use `ax.xaxis.set_label_position(\"top\")` and `ax.yaxis.set_label_position(\"right\")` respectively.\n\nax.xaxis.set_label_position(\"top\")\nax.yaxis.set_label_position(\"right\")\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html\nmatplotlib.pyplot.xlabel\n\nThe xlabel function is a pyplot wrapper for the axes.Axes.set_xlabel method. It allows users to define the text for the x-axis label, adjust the spacing from the axes bounding box using labelpad, and specify the horizontal alignment position as left, center, or right.\n\n### https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html\nMove x/y-axis ticks and labels on top and right\n\nTo reposition the axes labels (xlabel/ylabel), use `Axes.xaxis.set_label_position` and `Axes.yaxis.set_label_position` respectively.",
+    "context_tokens": 649,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.gca",
+      "ax.set_xlabel",
+      "ax.set_label_coords"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/gallery/subplots_axes_and_figures/axis_labels_demo.html",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/gallery/subplots_axes_and_figures/axis_labels_demo.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3157.307499786839,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "582",
+    "context": "### https://matplotlib.org/stable/_downloads/d01c7d053fc3d2443351f3c855406dce/gridspec_customization.ipynb\nControl subplot sizes with width_ratios and height_ratios\n\nUses GridSpec to define a 2x2 grid with specific relative width and height ratios for subplots.\n\nimport matplotlib.pyplot as plt\n\nfrom matplotlib.gridspec import GridSpec\n\n\ndef annotate_axes(fig):\n    for i, ax in enumerate(fig.axes):\n        ax.text(0.5, 0.5, \"ax%d\" % (i+1), va=\"center\", ha=\"center\")\n        ax.tick_params(labelbottom=False, labelleft=False)\n\n\nfig = plt.figure()\nfig.suptitle(\"Controlling subplot sizes with width_ratios and height_ratios\")\n\ngs = GridSpec(2, 2, width_ratios=[1, 2], height_ratios=[4, 1])\nax1 = fig.add_subplot(gs[0])\nax2 = fig.add_subplot(gs[1])\nax3 = fig.add_subplot(gs[2])\nax4 = fig.add_subplot(gs[3])\n\nannotate_axes(fig)\n\n### https://matplotlib.org/stable/release/prev_whats_new/whats_new_3.6.0.html\nConfigure subplot ratios\n\nUse height_ratios and width_ratios directly in subplots or subplot_mosaic to control row and column sizing.\n\nfig = plt.figure()\naxs = fig.subplots(3, 1, sharex=True, height_ratios=[3, 1, 1])\n\nfig = plt.figure()\naxs = fig.subplots(3, 1, sharex=True,\n                   gridspec_kw=dict(height_ratios=[3, 1, 1]))\n\n### https://matplotlib.org/stable/gallery/pyplots/pyplot_two_subplots.html\nCreate Two Subplots Side-by-Side\n\nUse `plt.subplots(1, 2)` to create a figure with one row and two columns of subplots. This is useful for comparing two related plots directly next to each other.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Create data for the plots\nx = np.linspace(0, 2 * np.pi, 400)\ny = np.sin(x ** 2)\n\n# Create a figure and a set of subplots\n# nrows=1, ncols=2 means 1 row, 2 columns\nfig, axs = plt.subplots(1, 2)\n\n# Plot on the first subplot (left)\naxs[0].plot(x, y)\naxs[0].set_title('Subplot 1')\n\n# Plot on the second subplot (right)\naxs[1].plot(x, -y, 'tab:orange')\naxs[1].set_title('Subplot 2')\n\n# Adjust layout to prevent overlapping titles\nfig.tight_layout()\n\n# Display the plots\nplt.show()\n\n### https://matplotlib.org/stable/gallery/subplots_axes_and_figures/gridspec_multicolumn.html\nGridspec: Multiple columns\n\nThe `GridSpec` class is initialized with the number of rows and columns for the grid. Individual subplots are then created by indexing this `GridSpec` object. For instance, `gs[0, 0]` refers to the subplot in the first row and first column. To make a subplot span multiple columns, you can use slicing like `gs[0, 0:2]`, which would make the subplot in the first row occupy the first two columns.\n\n### https://matplotlib.org/stable/gallery/pyplots/pyplot_two_subplots.html\nPyplot two subplots\n\nWhen using `plt.subplots()`, you can specify the number of rows and columns to arrange your subplots. For instance, `plt.subplots(2, 1)` creates two subplots stacked vertically, while `plt.subplots(1, 2)` creates two subplots side-by-side horizontally.",
+    "context_tokens": 805,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "a1.plot",
+      "plt.subplots"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/_downloads/d01c7d053fc3d2443351f3c855406dce/gridspec_customization.ipynb",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/_downloads/d01c7d053fc3d2443351f3c855406dce/gridspec_customization.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/release/prev_whats_new/whats_new_3.6.0.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/release/prev_whats_new/whats_new_3.6.0.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/pyplots/pyplot_two_subplots.html",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/gallery/pyplots/pyplot_two_subplots.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/subplots_axes_and_figures/gridspec_multicolumn.html",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/gallery/subplots_axes_and_figures/gridspec_multicolumn.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/pyplots/pyplot_two_subplots.html",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/gallery/pyplots/pyplot_two_subplots.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3689.1371249221265,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "592",
+    "context": "### https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb\nPlotting a line with color values at points\n\nDefines a custom function to create a LineCollection where color is mapped to each (x, y) coordinate.\n\nimport warnings\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nfrom matplotlib.collections import LineCollection\n\n\ndef colored_line(x, y, c, ax=None, **lc_kwargs):\n    \"\"\"\n    Plot a line with a color specified along the line by a third value.\n\n    It does this by creating a collection of line segments. Each line segment is\n    made up of two straight lines each connecting the current (x, y) point to the\n    midpoints of the lines connecting the current point with its two neighbors.\n    This creates a smooth line with no gaps between the line segments.\n\n    Parameters\n    ----------\n    x, y : array-like\n        The horizontal and vertical coordinates of the data points.\n    c : array-like\n        The color values, which should be the same size as x and y.\n    ax : matplotlib.axes.Axes, optional\n        The axes to plot on. If not provided, the current axes will be used.\n    **lc_kwargs\n        Any additional arguments to pass to matplotlib.collections.LineCollection\n        constructor. This should not include the array keyword argument because\n        that is set to the color argument. If provided, it will be overridden.\n\n    Returns\n    -------\n    matplotlib.collections.LineCollection\n        The generated line collection representing the colored line.\n    \"\"\"\n    if \"array\" in lc_kwargs:\n        warnings.warn(\n            'The provided \"array\" keyword argument will be overridden',\n            UserWarning,\n            stacklevel=2,\n        )\n\n    xy = np.stack((x, y), axis=-1)\n    xy_mid = np.concat(\n        (xy[0, :][None, :], (xy[:-1, :] + xy[1:, :]) / 2, xy[-1, :][None, :]), axis=0\n    )\n    segments = np.stack((xy_mid[:-1, :], xy, xy_mid[1:, :]), axis=-2)\n    # Note that\n    # segments[0, :, :] is [xy[0, :], xy[0, :], (xy[0, :] + xy[1, :]) / 2]\n    # segments[i, :, :] is [(xy[i - 1, :] + xy[i, :]) / 2, xy[i, :],\n    #     (xy[i, :] + xy[i + 1, :]) / 2] if i not in {0, len(x) - 1}\n    # segments[-1, :, :] is [(xy[-2, :] + xy[-1, :]) / 2, xy[-1, :], xy[-1, :]]\n\n    lc_kwargs[\"array\"] = c\n    lc = LineCollection(segments, **lc_kwargs)\n\n    # Plot the line collection to the axes\n    ax = ax or plt.gca()\n    ax.add_collection(lc)\n\n    return lc\n\n\n# -------------- Create and show plot --------------\n# Some arbitrary function that gives x, y, and color values\nt = np.linspace(-7.4, -0.5, 200)\nx = 0.9 * np.sin(t)\ny = 0.9 * np.cos(1.6 * t)\ncolor = np.linspace(0, 2, t.size)\n\n# Create a figure and plot the line on it\nfig1, ax1 = plt.subplots()\nlines = colored_line(x, y, color, ax1, linewidth=10, cmap=\"plasma\")\nfig1.colorbar(lines)  # add a color legend\n\nax1.set_title(\"Color at each point\")\n\nplt.show()\n\n### https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb\nVisualizing segmentation with colored lines\n\nIllustrates the segmentation mechanism by plotting a line with sparse data points.\n\nx = [0, 1, 2, 3, 4]\ny = [0, 1, 2, 1, 1]\nc = [1, 2, 3, 4, 5]\nfig, ax = plt.subplots()\nax.scatter(x, y, c=c, cmap='rainbow')\ncolored_line(x, y, c=c, ax=ax, cmap='rainbow')\n\nplt.show()\n\n### https://matplotlib.org/stable/_downloads/0017d0c84e03d6c5e463e23d8e570671/line_collection.ipynb\nPlotting multiple lines with individual colors\n\nCreates a series of arcs with distinct colors by passing a list to the colors parameter. Note that axes limits must be set manually.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nfrom matplotlib.collections import LineCollection\n\ncolors = [\"indigo\", \"blue\", \"green\", \"yellow\", \"orange\", \"red\"]\n\n# create a list of half-circles with varying radii\ntheta = np.linspace(0, np.pi, 36)\nradii = np.linspace(4, 5, num=len(colors))\narcs = [np.column_stack([r * np.cos(theta), r * np.sin(theta)]) for r in radii]\n\nfig, ax = plt.subplots(figsize=(6.4, 3.2))\n# set axes limits manually because Collections do not take part in autoscaling\nax.set_xlim(-6, 6)\nax.set_ylim(0, 6)\nax.set_aspect(\"equal\")  # to make the arcs look circular\n\n# create a LineCollection with the half-circles\n# its properties can be set per line by passing a sequence (here used for *colors*)\n# or they can be set for all lines by passing a scalar (here used for *linewidths*)\nline_collection = LineCollection(arcs, colors=colors, linewidths=4)\nax.add_collection(line_collection)\n\nplt.show()\n\n### https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb\nMulticolored lines > Color values at points\n\nTo plot a line with color specified by a third value, one can create a collection of line segments. This approach generates a smooth line by connecting each point to the midpoints of the lines connecting it to its neighbors, effectively eliminating gaps between segments.\n\n### https://matplotlib.org/stable/gallery/lines_bars_and_markers/multicolored_line.html\nMulticolored lines\n\nThere are two primary methods for plotting a line with varying colors. The first method defines color values at each specific (x, y) coordinate, while the second method defines colors for the segments between pairs of points, resulting in a color list length one less than the coordinate list length.",
+    "context_tokens": 1449,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.plot"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/0017d0c84e03d6c5e463e23d8e570671/line_collection.ipynb",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/_downloads/0017d0c84e03d6c5e463e23d8e570671/line_collection.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/_downloads/45d5685f3e8405991417776a213850fc/multicolored_line.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/lines_bars_and_markers/multicolored_line.html",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/gallery/lines_bars_and_markers/multicolored_line.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3866.374291945249,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "596",
+    "context": "### https://matplotlib.org/stable/gallery/lines_bars_and_markers/categorical_variables.html\nCategorical Line Plot with Markers\n\nShows a line plot with categorical data on the x-axis and markers at each data point. Useful for showing trends across categories.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Sample data\nlabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May']\nvalues = [12, 15, 13, 18, 20]\n\nplt.figure(figsize=(8, 6))\nplt.plot(labels, values, marker='o', linestyle='-', color='purple')\nplt.xlabel('Month')\nplt.ylabel('Temperature (°C)')\nplt.title('Monthly Temperature Trend')\nplt.grid(True)\nplt.show()\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html\nmatplotlib.pyplot.plot(x, y, [fmt], *, data=None, **kwargs)\n\nPlots y versus x as lines and/or markers. Supports multiple datasets, format strings for quick styling, and keyword arguments for detailed Line2D property control.\n\n## matplotlib.pyplot.plot\n\n### Description\nPlot y versus x as lines and/or markers. The coordinates are defined by x and y, with optional format strings for basic styling and keyword arguments for advanced Line2D property configuration.\n\n### Parameters\n- **x, y** (array-like or float) - Required - The horizontal and vertical coordinates of the data points. x is optional and defaults to range(len(y)).\n- **fmt** (str) - Optional - A format string for basic formatting (e.g., 'ro' for red circles).\n- **data** (indexable object) - Optional - An object with labelled data. If provided, x and y should be the label names.\n- **scalex, scaley** (bool) - Optional - Default: True. Determines if the view limits are adapted to the data limits.\n- **kwargs** (Line2D properties) - Optional - Keyword arguments for further control over line appearance.\n\n### Returns\n- **list of Line2D** - A list of lines representing the plotted data.\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html\nAxes.plot\n\nPlots y versus x as lines and/or markers. This is a fundamental method for visualizing data in matplotlib.\n\n## Axes.plot\n\n### Description\nPlots y versus x as lines and/or markers. This is a fundamental method for visualizing data in matplotlib.\n\n### Method\nplot\n\n### Endpoint\nAxes.plot(_* args_, _scalex =True_, _scaley =True_, _data =None_, _** kwargs_)\n\n### Parameters\n#### Path Parameters\n- **x, y** (array-like or float) - Required - The horizontal / vertical coordinates of the data points. _x_ values are optional and default to `range(len(y))`. Commonly, these parameters are 1D arrays. They can also be scalars, or two-dimensional (in that case, the columns represent separate data sets). These arguments cannot be passed as keywords.\n- **fmt** (str, optional) - Optional - A format string, e.g. 'ro' for red circles. See the _Notes_ section for a full description of the format strings. Format strings are just an abbreviation for quickly setting basic line properties. All of these and more can also be controlled by keyword arguments. This argument cannot be passed as keyword.\n- **data** (indexable object, optional) - Optional - An object with labelled data. If given, provide the label names to plot in _x_ and _y_.\n\n### Request Example\n```python\n# Example 1: Basic plot\nplot(x, y)\n\n# Example 2: Plot with markers\nplot(x, y, 'bo')\n\n# Example 3: Plotting y with default x\nplot(y)\n\n# Example 4: Plotting y with default x and custom markers\nplot(y, 'r+')\n\n# Example 5: Using Line2D properties\nplot(x, y, 'go--', linewidth=2, markersize=12)\n\n# Example 6: Plotting labelled data\nplot('xlabel', 'ylabel', data=obj)\n```\n\n### Response\nThis method does not return a value in the context of API documentation, but modifies the Axes object by adding a line plot.\n\n### Notes\n- When conflicting with _fmt_, keyword arguments take precedence.\n- There's a convenient way for plotting objects with labelled data (i.e. data that can be accessed by index `obj['y']`). Instead of giving the data in _x_ and _y_, you can provide the object in the _data_ parameter and just give the labels for _x_ and _y_.\n- All indexable objects are supported. This could e.g. be a `dict`, a `pandas.DataFrame` or a structured numpy array.\n- There are various ways to plot multiple sets of data:\n  - Call `plot` multiple times.\n  - If _x_ and/or _y_ are 2D arrays, a separate data set will be drawn for every column.\n  - Specify multiple sets of _[x]_ , _y_ , _[fmt]_ groups.\n- By default, each line is assigned a different style specified by a 'style cycle'. The _fmt_ and line property parameters are only necessary if you want explicit deviations from these defaults. Alternatively, you can also change the style cycle using `rcParams[\"axes.prop_cycle\"]`.\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html\nmatplotlib.pyplot.plot()\n\nThe plot function is used to plot lines and/or markers to the axes. It is the standard method for creating 2D line plots in Matplotlib.\n\n## matplotlib.pyplot.plot(*args, scalex=True, scaley=True, data=None, **kwargs)\n\n### Description\nPlot y versus x as lines and/or markers.\n\n### Parameters\n- **x, y** (array-like or scalar) - The horizontal and vertical coordinates of the data points. x values are optional and default to range(len(y)).\n- **fmt** (str, optional) - A format string (e.g., 'ro' for red circles) to define the basic format of the plot.\n- **data** (indexable object, optional) - An object with labeled data that can be accessed via string indexing (e.g., a pandas DataFrame or a structured numpy array).\n- ****kwargs** (Line2D properties) - Additional keyword arguments to control line appearance such as color, linestyle, linewidth, and marker.\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html\nBasic Plotting with Custom Properties\n\nDemonstrates plotting two lines with different styles and labels using the plot function. The first line is green with circle markers and a solid line, labeled 'line 1'. The second line is red with square markers and no connecting line, labeled 'line 2'.\n\n>>> plot([1, 2, 3], [1, 2, 3], 'go-', label='line 1', linewidth=2)\n>>> plot([1, 2, 3], [1, 4, 9], 'rs', label='line 2')",
+    "context_tokens": 1503,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "l.set_color",
+      "l.set_markerfacecolor"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/gallery/lines_bars_and_markers/categorical_variables.html",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/gallery/lines_bars_and_markers/categorical_variables.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3735.1605829317123,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "599",
+    "context": "### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xticklabels.html\nmatplotlib.axes.Axes.set_xticklabels\n\nSets the x-axis tick labels. This method is discouraged and users should prefer `Axes.set_[x/y/z]ticks(positions, labels)` or `Axes.set_xticks` for better control and predictability. It's crucial to fix tick positions before applying labels to avoid unexpected placement.\n\n## matplotlib.axes.Axes.set_xticklabels\n\n### Description\nDiscouraged: Sets the xaxis' tick labels with a list of string labels. This method is dependent on tick positions and is generally superseded by `Axes.set_[x/y/z]ticks(positions, labels)` or `Axes.set_xticks`.\n\n### Method\n`Axes.set_xticklabels(_labels_ , _*_, _minor =False_, _fontdict =None_, _** kwargs_)\n\n### Parameters\n#### labels\n- **labels** (sequence of str or of `Text`) - Required - Texts for labeling each tick location in the sequence set by `Axes.set_xticks`; the number of labels must match the number of locations. The labels are used as is, via a `FixedFormatter` (without further formatting).\n\n#### minor\n- **minor** (bool) - Optional - If True, set minor ticks instead of major ticks.\n\n#### fontdict\n- **fontdict** (dict) - Optional - Discouraged: A dictionary controlling the appearance of the ticklabels. Parameters should be passed as individual keyword arguments or using dictionary-unpacking `set_ticklabels(..., **fontdict)`. The default _fontdict_ is:\n```\n{'fontsize': rcParams['axes.titlesize'],\n 'fontweight': rcParams['axes.titleweight'],\n 'verticalalignment': 'baseline',\n 'horizontalalignment': loc}\n```\n\n#### **kwargs\n- **kwargs** - Text properties.\n\n### Warning\nThis only sets the properties of the current ticks, which is only sufficient for static plots. Ticks are not guaranteed to be persistent. Various operations can create, delete and modify the Tick instances. There is an imminent risk that these settings can get lost if you work on the figure further (including also panning/zooming on a displayed figure). Use `set_tick_params` instead if possible.\n\n### Returns\n- **list of `Text`s** - For each tick, includes `tick.label1` if it is visible, then `tick.label2` if it is visible, in that order.\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.get_xticklabels.html\nAxes.get_xticklabels(minor=False, which=None)\n\nRetrieves the x-axis tick labels. Note that tick objects are not persistent and may be modified by other operations.\n\n## Axes.get_xticklabels(minor=False, which=None)\n\n### Description\nGet the xaxis' tick labels. Note that ticks and their constituent parts are not persistent and may be modified by various operations.\n\n### Parameters\n- **minor** (bool) - Optional - Whether to return the minor or the major ticklabels.\n- **which** (None, 'minor', 'major', 'both') - Optional - Overrides minor. Selects which ticklabels to return.\n\n### Returns\n- **list of Text** - The list of tick label objects.\n\n### https://matplotlib.org/stable/gallery/ticks/tick_labels_from_values.html\nSet Tick Labels from Values\n\nUse `Axes.set_major_formatter` with a custom function to dynamically set tick labels based on their values. `MaxNLocator(integer=True)` ensures ticks are at integer positions. This is useful when you want to display custom labels (e.g., letters) at specific tick values.\n\nimport matplotlib.pyplot as plt\n\nfrom matplotlib.ticker import MaxNLocator\n\nfig, ax = plt.subplots()\nxs = range(26)\nys = range(26)\nlabels = list('abcdefghijklmnopqrstuvwxyz')\n\n\ndef format_fn(tick_val, tick_pos):\n    if int(tick_val) in xs:\n        return labels[int(tick_val)]\n    else:\n        return ''\n\n\n# A FuncFormatter is created automatically.\na.xaxis.set_major_formatter(format_fn)\na.xaxis.set_major_locator(MaxNLocator(integer=True))\na.plot(xs, ys)\nplt.show()",
+    "context_tokens": 877,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "ax.set_xticklabels"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xticklabels.html",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xticklabels.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.get_xticklabels.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.get_xticklabels.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/gallery/ticks/tick_labels_from_values.html",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/gallery/ticks/tick_labels_from_values.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 4028.0850410927087,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "601",
+    "context": "### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xticks.html\nmatplotlib.axes.Axes.set_xticks\n\nSets the x-axis tick locations and optionally tick labels. The view limits of the Axis are expanded if necessary to ensure all ticks are visible.\n\n## Axes.set_xticks\n\n### Description\nSet the xaxis' tick locations and optionally tick labels. If necessary, the view limits of the Axis are expanded so that all given ticks are visible.\n\n### Parameters\n#### ticks\n1D array-like: Array of tick locations (either floats or in axis units). The axis `Locator` is replaced by a `FixedLocator`. Pass an empty list (`set_xticks([])`) to remove all ticks. Some tick formatters will not label arbitrary tick positions; e.g. log formatters only label decade ticks by default. In such a case you can set a formatter explicitly on the axis using `Axis.set_major_formatter` or provide formatted _labels_ yourself.\n\n#### labels (optional)\nlist of str: Tick labels for each location in _ticks_; must have the same length as _ticks_. If set, the labels are used as is, via a `FixedFormatter`. If not set, the labels are generated using the axis tick `Formatter`.\n\n#### minor\nbool, default: False: If `False`, set only the major ticks; if `True`, only the minor ticks.\n\n#### **kwargs\n`Text` properties for the labels. Using these is only allowed if you pass _labels_. In other cases, please use `tick_params`.\n\n### Notes\nThe mandatory expansion of the view limits is an intentional design choice to prevent the surprise of a non-visible tick. If you need other limits, you should set the limits explicitly after setting the ticks.\n\n### https://matplotlib.org/stable/release/prev_whats_new/whats_new_3.6.0.html\nSet minor ticks with plt.xticks\n\nUse the minor=True keyword argument to configure minor tick positions and labels.\n\nplt.figure()\nplt.plot([1, 2, 3, 3.5], [2, 1, 0, -0.5])\nplt.xticks([1, 2, 3], [\"One\", \"Zwei\", \"Trois\"])\nplt.xticks([np.sqrt(2), 2.5, np.pi],\n           [r\"$\\sqrt{2}$\", r\"$\\frac{5}{2}$\", r\"$\\pi$\"], minor=True)\n\n### https://matplotlib.org/stable/_downloads/5eb4aaff231bef8113c11e23f16047b1/axes_ticks.ipynb\nAdding minor ticks manually\n\nDemonstrates adding minor ticks by setting the minor parameter to True in set_yticks.\n\nfig, axs = plt.subplots(2, 1, figsize=(5.4, 5.4), layout='constrained')\nx = np.arange(100)\nfor nn, ax in enumerate(axs):\n    ax.plot(x, x)\n    if nn == 1:\n        ax.set_title('Manual ticks')\n        ax.set_yticks(np.arange(0, 100.1, 100/3))\n        ax.set_yticks(np.arange(0, 100.1, 100/30), minor=True)\n    else:\n        ax.set_title('Automatic ticks')\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.get_xticks.html\nAxes.get_xticks\n\nReturns the x-axis tick locations in data coordinates. The returned locations are not clipped to the axis limits and may include points outside the visible range.\n\n## Axes.get_xticks\n\n### Description\nReturns the xaxis' tick locations in data coordinates. The locations are not clipped to the current axis limits and hence may contain locations that are not visible in the output.\n\n### Method\n`get_xticks(_*_, _minor=False_)`\n\n### Parameters\n#### Keyword Arguments\n* **minor** (bool, default: False) - True to return the minor tick directions, False to return the major tick directions.\n\n### Returns\n* array of tick locations\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tick_params.html\nmatplotlib.pyplot.tick_params(axis='both', **kwargs)\n\nChange the appearance of ticks, tick labels, and gridlines.\n\n## matplotlib.pyplot.tick_params\n\n### Description\nChange the appearance of ticks, tick labels, and gridlines. Tick properties that are not explicitly set using the keyword arguments remain unchanged unless reset is True.\n\n### Parameters\n- **axis** {'x', 'y', 'both'} (default: 'both') - The axis to which the parameters are applied.\n- **which** {'major', 'minor', 'both'} (default: 'major') - The group of ticks to which the parameters are applied.\n- **reset** bool (default: False) - Whether to reset the ticks to defaults before updating them.\n- **direction** {'in', 'out', 'inout'} - Puts ticks inside the Axes, outside the Axes, or both.\n- **length** float - Tick length in points.\n- **width** float - Tick width in points.\n- **color** color - Tick color.\n- **pad** float - Distance in points between tick and label.\n- **labelsize** float or str - Tick label font size in points or as a string.\n- **labelcolor** color - Tick label color.\n- **labelfontfamily** str - Tick label font.\n- **colors** color - Tick color and label color.\n- **zorder** float - Tick and label zorder.\n- **bottom, top, left, right** bool - Whether to draw the respective ticks.\n- **labelbottom, labeltop, labelleft, labelright** bool - Whether to draw the respective tick labels.\n- **labelrotation** float - Tick label rotation angle in degrees.\n- **labelrotation_mode** {'default', 'anchor', 'xtick', 'ytick'} - Tick label rotation mode.\n- **grid_color** color - Gridline color.\n- **grid_alpha** float - Transparency of gridlines: 0 (transparent) to 1 (opaque).\n- **grid_linewidth** float - Width of gridlines in points.\n- **grid_linestyle** str - Any valid Line2D line style spec.",
+    "context_tokens": 1302,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.xticks"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xticks.html",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xticks.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/release/prev_whats_new/whats_new_3.6.0.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/release/prev_whats_new/whats_new_3.6.0.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/5eb4aaff231bef8113c11e23f16047b1/axes_ticks.ipynb",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/_downloads/5eb4aaff231bef8113c11e23f16047b1/axes_ticks.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.get_xticks.html",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.get_xticks.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tick_params.html",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tick_params.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3949.958417098969,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "635",
+    "context": "### https://matplotlib.org/stable/_downloads/19637872c4a7dbe872e23f74038df260/quick_start.ipynb\nCreate a line plot with markers\n\nPlots multiple data series with distinct markers and includes a legend.\n\nfig, ax = plt.subplots(figsize=(5, 2.7))\nax.plot(data1, 'o', label='data1')\nax.plot(data2, 'd', label='data2')\nax.plot(data3, 'v', label='data3')\nax.plot(data4, 's', label='data4')\nax.legend()\n\n### https://matplotlib.org/stable/users/explain/quick_start.html\nAdd a legend to a plot\n\nUses the label parameter in plot calls to identify lines and markers in a legend.\n\nfig, ax = plt.subplots(figsize=(5, 2.7))\nax.plot(np.arange(len(data1)), data1, label='data1')\nax.plot(np.arange(len(data2)), data2, label='data2')\nax.plot(np.arange(len(data3)), data3, 'd', label='data3')\nax.legend()\n\n### https://matplotlib.org/stable/_downloads/9771ec3f070b014893afe3648c2fe085/legend_guide.ipynb\nCustomize legend markers with HandlerLine2D\n\nDemonstrates how to map a specific line instance to a HandlerLine2D with a custom number of points.\n\nfrom matplotlib.legend_handler import HandlerLine2D\n\nfig, ax = plt.subplots()\nline1, = ax.plot([3, 2, 1], marker='o', label='Line 1')\nline2, = ax.plot([1, 2, 3], marker='o', label='Line 2')\n\nax.legend(handler_map={line1: HandlerLine2D(numpoints=4)}, handlelength=4)\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html\nBasic Plotting with Custom Properties\n\nDemonstrates plotting two lines with different styles and labels using the plot function. The first line is green with circle markers and a solid line, labeled 'line 1'. The second line is red with square markers and no connecting line, labeled 'line 2'.\n\n>>> plot([1, 2, 3], [1, 2, 3], 'go-', label='line 1', linewidth=2)\n>>> plot([1, 2, 3], [1, 4, 9], 'rs', label='line 2')\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html\nmatplotlib.axes.Axes.legend\n\nParameters like `numpoints`, `scatterpoints`, and `scatteryoffsets` control the appearance of markers in the legend for line and scatter plot entries. `markerscale` adjusts the relative size of legend markers.",
+    "context_tokens": 598,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.legend"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/_downloads/19637872c4a7dbe872e23f74038df260/quick_start.ipynb",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/_downloads/19637872c4a7dbe872e23f74038df260/quick_start.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/users/explain/quick_start.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/users/explain/quick_start.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/9771ec3f070b014893afe3648c2fe085/legend_guide.ipynb",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/_downloads/9771ec3f070b014893afe3648c2fe085/legend_guide.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3481.578500010073,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "637",
+    "context": "### https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.subplots.html\nCreate a single subplot\n\nThis snippet demonstrates how to create a figure and a single subplot using `fig.subplots()`. It then plots some data and sets a title for the subplot.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# First create some toy data:\nx = np.linspace(0, 2*np.pi, 400)\ny = np.sin(x**2)\n\n# Create a figure\nfig = plt.figure()\n\n# Create a subplot\nax = fig.subplots()\nax.plot(x, y)\nax.set_title('Simple plot')\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html\nBasic Plotting with x and y\n\nPlots y versus x using default line style and color. Requires x and y data arrays.\n\n>>> plot(x, y)        # plot x and y using default line style and color\n\n### https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html\nmatplotlib.pyplot.plot(x, y, [fmt], *, data=None, **kwargs)\n\nPlots y versus x as lines and/or markers. Supports multiple datasets, format strings for quick styling, and keyword arguments for detailed Line2D property control.\n\n## matplotlib.pyplot.plot\n\n### Description\nPlot y versus x as lines and/or markers. The coordinates are defined by x and y, with optional format strings for basic styling and keyword arguments for advanced Line2D property configuration.\n\n### Parameters\n- **x, y** (array-like or float) - Required - The horizontal and vertical coordinates of the data points. x is optional and defaults to range(len(y)).\n- **fmt** (str) - Optional - A format string for basic formatting (e.g., 'ro' for red circles).\n- **data** (indexable object) - Optional - An object with labelled data. If provided, x and y should be the label names.\n- **scalex, scaley** (bool) - Optional - Default: True. Determines if the view limits are adapted to the data limits.\n- **kwargs** (Line2D properties) - Optional - Keyword arguments for further control over line appearance.\n\n### Returns\n- **list of Line2D** - A list of lines representing the plotted data.\n\n### https://matplotlib.org/stable/_downloads/5802fa629e7e4209a281a26b2d799dde/text_commands.ipynb\nAdding and styling text in Matplotlib\n\nDemonstrates the use of suptitle, set_title, set_xlabel, set_ylabel, text, and annotate to customize plot text.\n\nimport matplotlib.pyplot as plt\n\nfig = plt.figure()\nfig.suptitle('bold figure suptitle', fontsize=14, fontweight='bold')\n\nax = fig.add_subplot()\nfig.subplots_adjust(top=0.85)\nax.set_title('axes title')\n\nax.set_xlabel('xlabel')\nax.set_ylabel('ylabel')\n\nax.text(3, 8, 'boxed italics text in data coords', style='italic',\n        bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})\n\nax.text(2, 6, r'an equation: $E=mc^2$', fontsize=15)\n\nax.text(3, 2, 'Unicode: Institut f\\374r Festk\\366rperphysik')\n\nax.text(0.95, 0.01, 'colored text in axes coords',\n        verticalalignment='bottom', horizontalalignment='right',\n        transform=ax.transAxes,\n        color='green', fontsize=15)\n\n\nax.plot([2], [1], 'o')\nax.annotate('annotate', xy=(2, 1), xytext=(3, 4),\n            arrowprops=dict(facecolor='black', shrink=0.05))\n\nax.set(xlim=(0, 10), ylim=(0, 10))\n\nplt.show()\n\n### https://matplotlib.org/stable/_downloads/d0d8ff965c8915500c57be0a60da41d2/text_intro.ipynb\nSet x- and y-axis labels\n\nThis example demonstrates how to apply labels to the x and y axes of a plot using the set_xlabel and set_ylabel methods.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nx1 = np.linspace(0.0, 5.0, 100)\ny1 = np.cos(2 * np.pi * x1) * np.exp(-x1)\n\nfig, ax = plt.subplots(figsize=(5, 3))\nfig.subplots_adjust(bottom=0.15, left=0.2)\nax.plot(x1, y1)\nax.set_xlabel('Time (s)')\nax.set_ylabel('Damped oscillation (V)')\n\nplt.show()",
+    "context_tokens": 990,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.plot",
+      "plt.title"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.subplots.html",
+        "rank": 1,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.subplots.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "rank": 2,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html",
+        "rank": 3,
+        "raw_id": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/5802fa629e7e4209a281a26b2d799dde/text_commands.ipynb",
+        "rank": 4,
+        "raw_id": "https://matplotlib.org/stable/_downloads/5802fa629e7e4209a281a26b2d799dde/text_commands.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://matplotlib.org/stable/_downloads/d0d8ff965c8915500c57be0a60da41d2/text_intro.ipynb",
+        "rank": 5,
+        "raw_id": "https://matplotlib.org/stable/_downloads/d0d8ff965c8915500c57be0a60da41d2/text_intro.ipynb",
+        "score": null
+      }
+    ],
+    "latency_ms": 3581.093416083604,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "library_id": "/websites/matplotlib_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "669",
+    "context": "### https://github.com/tensorflow/docs/blob/master/site/en/tutorials/customization/custom_training_walkthrough.ipynb\nGet predicted class index\n\nUse tf.math.argmax to find the index of the class with the highest probability. Note that predictions will be inaccurate before the model is trained.\n\nprint(\"Prediction: {}\".format(tf.math.argmax(predictions, axis=1)))\nprint(\"    Labels: {}\".format(labels))\n\n### https://github.com/tensorflow/docs/blob/master/site/en/tutorials/images/transfer_learning_with_hub.ipynb\nFind the predicted class ID\n\nDetermines the class with the highest probability from the model's output logits using `tf.math.argmax`.\n\npredicted_class = tf.math.argmax(result[0], axis=-1)\npredicted_class\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/tensor.ipynb\nCreate a Scalar Tensor\n\nCreates a rank-0 tensor (scalar) with an integer value. By default, TensorFlow assigns `int32` dtype.\n\n# This will be an int32 tensor by default; see \"dtypes\" below.\nrank_0_tensor = tf.constant(4)\nprint(rank_0_tensor)\n\n### https://github.com/tensorflow/docs/blob/master/site/en/hub/tutorials/bangla_article_classifier.ipynb\nConvert Predictions to Class Labels\n\nConverts the probability outputs from `model.predict` into discrete class labels by selecting the index with the highest probability for each sample. Requires numpy and the `y_pred` array.\n\ny_pred = np.argmax(y_pred, axis=1)\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/tensor.ipynb\nMore on DTypes\n\nWhen creating a tf.Tensor from a Python object, you can optionally specify the datatype. If not provided, TensorFlow selects a datatype that can represent the data. Python integers are converted to tf.int32, and floating-point numbers to tf.float32. For other types, TensorFlow follows NumPy's conversion rules.",
+    "context_tokens": 403,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.one_hot"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/customization/custom_training_walkthrough.ipynb",
+        "rank": 1,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/customization/custom_training_walkthrough.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/images/transfer_learning_with_hub.ipynb",
+        "rank": 2,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/images/transfer_learning_with_hub.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/tensor.ipynb",
+        "rank": 3,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/tensor.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/hub/tutorials/bangla_article_classifier.ipynb",
+        "rank": 4,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/hub/tutorials/bangla_article_classifier.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/tensor.ipynb",
+        "rank": 5,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/tensor.ipynb",
+        "score": null
+      }
+    ],
+    "latency_ms": 3778.173833852634,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/tensorflow/docs",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "670",
+    "context": "",
+    "context_tokens": 0,
+    "engine": "context7",
+    "error_type": "no_relevant_snippets",
+    "gold_identifiers": [
+      "t.numpy",
+      "tf.one_hot",
+      "tf.constant"
+    ],
+    "identifier_hit": false,
+    "items": [],
+    "latency_ms": 4596.83687495999,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/websites/tensorflow_api_docs_python",
+      "resolution": "automatic"
+    },
+    "status": "no_result"
+  },
+  {
+    "case_id": "673",
+    "context": "### https://www.tensorflow.org/api_docs/python/tf/data/Dataset\nFlatten Dataset with flat_map\n\nMaps a function over a dataset and flattens the resulting datasets. This preserves the order of elements and is useful for flattening nested structures like batches into individual elements.\n\ndataset = tf.data.Dataset.from_tensor_slices(\n    [[1, 2, 3], [4, 5, 6], [7, 8, 9]])\ndataset = dataset.flat_map(tf.data.Dataset.from_tensor_slices)\nlist(dataset.as_numpy_iterator())\n# Expected output:\n# [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n### https://www.tensorflow.org/api_docs/python/tf/experimental/dtensor/DTensorDataset\ntf.data.Dataset.interleave\n\nMaps each element of the input dataset to a new dataset, and interleaves the elements of these datasets into one dataset.\n\nThis transformation is a generalization of `flat_map`. It is useful for loading data from multiple files, and for combining multiple sources of data.\n\n## tf.data.Dataset.interleave\n\n### Description\nMaps each element of the input dataset to a new dataset, and interleaves the elements of these datasets into one dataset. This transformation is a generalization of `flat_map`. It is useful for loading data from multiple files, and for combining multiple sources of data.\n\nThe order of elements yielded by this transformation is deterministic, as long as `map_func` is a pure function and `deterministic=True`. If `map_func` contains any stateful operations, the order in which that state is accessed is undefined.\n\nPerformance can often be improved by setting `num_parallel_calls` so that `interleave` will use multiple threads to fetch elements. If determinism isn't required, it can also improve performance to set `deterministic=False`.\n\n### Method\n`interleave`\n\n### Parameters\n#### Path Parameters\nNone\n\n#### Query Parameters\nNone\n\n#### Request Body\nNone\n\n### Parameters\n* `map_func`: A function that takes a dataset element and returns a `tf.data.Dataset`.\n* `cycle_length`: (Optional.) The number of input elements that will be processed concurrently. If not set, the tf.data runtime decides what it should be based on available CPU. If `num_parallel_calls` is set to `tf.data.AUTOTUNE`, the `cycle_length` argument identifies the maximum degree of parallelism.\n* `block_length`: (Optional.) The number of consecutive elements to produce from each input element before cycling to another input element. If not set, defaults to 1.\n* `num_parallel_calls`: (Optional.) If specified, the implementation creates a threadpool, which is used to fetch inputs from cycle elements asynchronously and in parallel. The default behavior is to fetch inputs from cycle elements synchronously with no parallelism. If the value `tf.data.AUTOTUNE` is used, then the number of parallel calls is set dynamically based on available CPU.\n* `deterministic`: (Optional.) When `num_parallel_calls` is specified, if this boolean is specified (`True` or `False`), it controls the order in which the transformation produces elements. If set to `False`, the transformation is allowed to yield elements out of order to trade determinism for performance. If not specified, the `tf.data.Options.deterministic` option (`True` by default) controls the behavior.\n* `name`: (Optional.) A name for the tf.data operation.\n\n### Returns\nA new `Dataset` with the transformation applied as described above.\n\n### https://www.tensorflow.org/api_docs/python/tf/data/TFRecordDataset\nMap Function: Returning Multiple Tensors\n\nShows how `map_func` can return multiple values, which form the `element_spec` of the resulting dataset. Python primitives, lists, and NumPy arrays are implicitly converted to `tf.Tensor`.\n\ndataset = tf.data.Dataset.range(3)\n# `map_func` returns two `tf.Tensor` objects.\ndef g(x):\n  return tf.constant(37.0), tf.constant([\"Foo\", \"Bar\", \"Baz\"])\nresult = dataset.map(g)\nresult.element_spec\n(TensorSpec(shape=(), dtype=tf.float32, name=None), TensorSpec(shape=(3,), dtype=tf.string, name=None))\n\n# Python primitives, lists, and NumPy arrays are implicitly converted to\n# `tf.Tensor`.\ndef h(x):\n  return 37.0, [\"Foo\", \"Bar\"], np.array([1.0, 2.0], dtype=np.float64)\nresult = dataset.map(h)\nresult.element_spec\n(TensorSpec(shape=(), dtype=tf.float32, name=None), TensorSpec(shape=(2,), dtype=tf.string, name=None), TensorSpec(shape=(2,), dtype=tf.float64, name=None))\n\n### https://www.tensorflow.org/api_docs/python/tf/data/experimental/CsvDataset\ntf.data.Dataset.map\n\nApplies a function to each element of the dataset. This function can transform elements, accept nested structures, and leverage Python code through `tf.py_function` or `tf.numpy_function` for custom logic. Performance can be optimized using `num_parallel_calls` and `deterministic` options.\n\n## tf.data.Dataset.map\n\n### Description\nApplies a transformation to each element of the dataset. The `map` transformation is a key building block for many dataset pipelines.\n\n### Method\n`map(map_func, num_parallel_calls=None, deterministic=None, name=None)`\n\n### Parameters\n#### `map_func`\nA function mapping a dataset element to another dataset element.\n\n#### `num_parallel_calls`\n(Optional.) A `tf.int64` scalar `tf.Tensor`, representing the number elements to process asynchronously in parallel. If not specified, elements will be processed sequentially. If the value `tf.data.AUTOTUNE` is used, then the number of parallel calls is set dynamically based on available CPU.\n\n#### `deterministic`\n(Optional.) When `num_parallel_calls` is specified, if this boolean is specified (`True` or `False`), it controls the order in which the transformation produces elements. If set to `False`, the transformation is allowed to yield elements out of order to trade determinism for performance. If not specified, the `tf.data.Options.deterministic` option (`True` by default) controls the behavior.\n\n#### `name`\n(Optional.) A name for the tf.data operation.\n\n### Returns\nA new `Dataset` with the transformation applied as described above.\n\n### Example\n```python\ndataset = Dataset.range(1, 6)  # ==> [ 1, 2, 3, 4, 5 ]\ndataset = dataset.map(lambda x: x + 1,\n    num_parallel_calls=tf.data.AUTOTUNE,\n    deterministic=False)\n```\n\n### Note on Python Functions\n`map_func` can accept as arguments and return any type of dataset element. To use Python code inside the function:\n1. Rely on AutoGraph for Python code conversion.\n2. Use `tf.py_function` for arbitrary Python code (may impact performance).\n3. Use `tf.numpy_function` for arbitrary Python code accepting numpy arrays.\n\nNote that the use of `tf.numpy_function` and `tf.py_function` in general precludes the possibility of executing user-defined transformations in parallel (because of Python GIL).\n\n### Determinism Considerations\nThe order of elements yielded by this transformation is deterministic if `deterministic=True`. If `map_func` contains stateful operations and `num_parallel_calls > 1`, the order in which that state is accessed is undefined, so the values of output elements may not be deterministic regardless of the `deterministic` flag value.\n\n### https://www.tensorflow.org/api_docs/python/tf/experimental/dtensor/DTensorDataset\nDTensorDataset API > flat_map\n\nThe `flat_map` transformation maps a function across this dataset and then flattens the resulting datasets into a single dataset. This transformation is useful for maintaining the order of elements, such as flattening a dataset of batches into a dataset of individual elements. `tf.data.Dataset.interleave(cycle_length=1)` is a generalization of `flat_map`.",
+    "context_tokens": 1680,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "<ast.name object at 0x7f3f04a97ee0>.session"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/data/Dataset",
+        "rank": 1,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/data/Dataset",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/experimental/dtensor/DTensorDataset",
+        "rank": 2,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/experimental/dtensor/DTensorDataset",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/data/TFRecordDataset",
+        "rank": 3,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/data/TFRecordDataset",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/data/experimental/CsvDataset",
+        "rank": 4,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/data/experimental/CsvDataset",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/experimental/dtensor/DTensorDataset",
+        "rank": 5,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/experimental/dtensor/DTensorDataset",
+        "score": null
+      }
+    ],
+    "latency_ms": 3687.6312911044806,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/websites/tensorflow_api_docs_python",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "675",
+    "context": "### https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/full\ntf.experimental.numpy.full\n\nCreates a tensor of a given shape and type, filled with a specified value. This is a TensorFlow variant of NumPy's `full` function.\n\n## tf.experimental.numpy.full\n\n### Description\nCreates a tensor of a given shape and type, filled with a specified value. This is a TensorFlow variant of NumPy's `full` function.\n\n### Method\n`tf.experimental.numpy.full(shape, fill_value, dtype=None)`\n\n### Parameters\n* **shape**: The shape of the output tensor.\n* **fill_value**: The value to fill the output tensor with.\n* **dtype**: Optional. The data type of the output tensor. If not provided, the dtype will be inferred from `fill_value`.\n\n### Notes\nUnsupported arguments: `order`, `like`.\nSee the NumPy documentation for `numpy.full`.\n\n### https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/zeros\nCreate a tensor of zeros\n\nUse tf.experimental.numpy.zeros to create a tensor filled with zeros. This function mirrors the behavior of numpy.zeros.\n\ntf.experimental.numpy.zeros(shape, dtype=float)\n\n### https://www.tensorflow.org/api_docs/python/tf/image/pad_to_bounding_box\nPad Image to Bounding Box\n\nThis snippet demonstrates how to use `tf.image.pad_to_bounding_box` to add zero padding to an image. It adds specified rows and columns of zeros to the top and left, respectively, and pads the bottom and right until the target dimensions are met. The op does nothing if offsets are zero and the image already matches the target size.\n\nx = [[[1., 2., 3.],\n      [4., 5., 6.]],\n      [[7., 8., 9.],\n      [10., 11., 12.]]]\npadded_image = tf.image.pad_to_bounding_box(x, 1, 1, 4, 4)\npadded_image\n\n### https://www.tensorflow.org/api_docs/python/tf/RaggedTensor\ntf.RaggedTensor.from_tensor\n\nThe `tf.RaggedTensor.from_tensor` method converts a Tensor to a RaggedTensor. It can optionally take `lengths` to specify row lengths for each dimension, or `padding` to exclude trailing padding values. If `lengths` is provided, it must be a 1-D integer Tensor with a length equal to the number of rows in the input tensor. Nested lists or tuples of lengths can be provided to construct ragged tensors with multiple ragged dimensions. The `ragged_rank` argument specifies the desired ragged rank of the output RaggedTensor, which must be greater than zero. This method raises a `ValueError` if both `lengths` and `padding` are specified, or if the input tensor's rank is 0 or 1.\n\n### https://www.tensorflow.org/api_docs/python/tf/RaggedTensor\ntf.RaggedTensor\n\nA RaggedTensor is a tensor with one or more ragged dimensions, which are dimensions whose slices may have different lengths. Dimensions whose slices all have the same length are called uniform dimensions. The outermost dimension of a RaggedTensor is always uniform. The total number of dimensions is its rank, and the number of ragged dimensions is its ragged-rank. A RaggedTensor's ragged-rank is fixed at graph creation time.",
+    "context_tokens": 706,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.less",
+      "tf.where",
+      "tf.expand_dims",
+      "tf.range"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/full",
+        "rank": 1,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/full",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/zeros",
+        "rank": 2,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/zeros",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/image/pad_to_bounding_box",
+        "rank": 3,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/image/pad_to_bounding_box",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/RaggedTensor",
+        "rank": 4,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/RaggedTensor",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/RaggedTensor",
+        "rank": 5,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/RaggedTensor",
+        "score": null
+      }
+    ],
+    "latency_ms": 3516.3548751734197,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/websites/tensorflow_api_docs_python",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "680",
+    "context": "",
+    "context_tokens": 0,
+    "engine": "context7",
+    "error_type": "no_relevant_snippets",
+    "gold_identifiers": [
+      "tf.tile",
+      "tf.expand_dims",
+      "tf.concat"
+    ],
+    "identifier_hit": false,
+    "items": [],
+    "latency_ms": 4455.27149992995,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/tensorflow/docs",
+      "resolution": "automatic"
+    },
+    "status": "no_result"
+  },
+  {
+    "case_id": "687",
+    "context": "### https://www.tensorflow.org/api_docs/python/tf/Tensor\nGet Tensor Shape\n\nRetrieves the static shape of a tf.Tensor using the .shape attribute.\n\nt = tf.constant([1,2,3,4,5])\nt.shape\nTensorShape([5])\n\n### https://www.tensorflow.org/api_docs/python/tf/Tensor\nGet Tensor Shape (Eager Execution)\n\nRetrieves the shape of a tensor as a tf.TensorShape object. In eager execution, the shape is always fully known.\n\na = tf.constant([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nprint(a.shape)\n\n### https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/array\nCreate TensorFlow Tensor from NumPy array\n\nUse `tf.experimental.numpy.array` to create a TensorFlow Tensor from a NumPy array. Note that Tensors are immutable, so a copy is made only if the Tensor is placed on a different device. Even if `copy` is False, a new Tensor may be built to satisfy `dtype` and `ndim`.\n\ntf.experimental.numpy.array(\n    val,\n    dtype=None,\n    copy=True,\n    ndmin=0\n)\n\n### https://www.tensorflow.org/api_docs/python/tf/convert_to_tensor\nTensorFlow > API > tf.convert_to_tensor\n\nThe tf.convert_to_tensor function is used to convert various Python objects, including Tensor objects, numpy arrays, Python lists, and Python scalars, into TensorFlow Tensor objects. It is particularly useful when composing new operations in Python, as it allows these operations to accept diverse input types similarly to standard Python op constructors.\n\n### https://www.tensorflow.org/api_docs/python/tf/Tensor\nTensorFlow API\n\nThe `tf.Tensor.shape` attribute returns a `tf.TensorShape` representing the tensor's shape. This shape is determined at build-time and may be partially unknown within `tf.function`s. `tf.TensorShape` is not a tensor; use `tf.shape(t)` to get a tensor containing the shape calculated at runtime.",
+    "context_tokens": 432,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.reciprocal"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/Tensor",
+        "rank": 1,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/Tensor",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/Tensor",
+        "rank": 2,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/Tensor",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/array",
+        "rank": 3,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/array",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/convert_to_tensor",
+        "rank": 4,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/convert_to_tensor",
+        "score": null
+      },
+      {
+        "path": "https://www.tensorflow.org/api_docs/python/tf/Tensor",
+        "rank": 5,
+        "raw_id": "https://www.tensorflow.org/api_docs/python/tf/Tensor",
+        "score": null
+      }
+    ],
+    "latency_ms": 3322.2470830660313,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/websites/tensorflow_api_docs_python",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "701",
+    "context": "### https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb\nTF1.x vs TF2.x Session Execution\n\nIllustrates the difference in executing a function with input between TensorFlow 1.x (using session.run) and TensorFlow 2.x (direct function call).\n\n# TF1.x\noutputs = session.run(f(placeholder), feed_dict={placeholder: input})\n# TF2\noutputs = f(input)\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/function.ipynb\nPerformance Comparison: Eager vs. tf.function\n\nCompares the performance of a Conv2D layer executed eagerly versus within a `tf.function`. Note that for computationally intensive operations like convolutions, the performance difference might be minimal.\n\nimport timeit\nconv_layer = tf.keras.layers.Conv2D(100, 3)\n\n@tf.function\ndef conv_fn(image):\n  return conv_layer(image)\n\nimage = tf.zeros([1, 200, 200, 100])\n# Warm up\nconv_layer(image); conv_fn(image)\nprint(\"Eager conv:\", timeit.timeit(lambda: conv_layer(image), number=10))\nprint(\"Function conv:\", timeit.timeit(lambda: conv_fn(image), number=10))\nprint(\"Note how there's not much difference in performance for convolutions\")\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/intro_to_modules.ipynb\nDefine a TensorFlow Module with a Graph Function\n\nUse the @tf.function decorator to indicate that a method should be traced and compiled into a TensorFlow graph. This allows the model to be run without the original Python code.\n\nclass MySequentialModule(tf.Module):\n  def __init__(self, name=None):\n    super().__init__(name=name)\n\n    self.dense_1 = Dense(in_features=3, out_features=3)\n    self.dense_2 = Dense(in_features=3, out_features=2)\n\n  @tf.function\n  def __call__(self, x):\n    x = self.dense_1(x)\n    return self.dense_2(x)\n\n# You have made a model with a graph!\nmy_model = MySequentialModule(name=\"the_model\")\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb\nTensorFlow 1.x vs TensorFlow 2 - Behaviors and APIs > High-level summary of major changes\n\nTensorFlow 2 prefers functions over sessions and integrates better with the Python runtime with Eager execution enabled by default along with `tf.function` that provides automatic control dependencies for graphs and compilation.\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb\nAdapting to TF 2.x Behavior Changes > Functions, not sessions\n\nIn TensorFlow 2.x, the `session.run` paradigm is replaced by a more Pythonic function-call style. By decorating Python functions with `tf.function`, they can be Just-In-Time (JIT) compiled into a single TensorFlow graph. This graph execution offers benefits such as performance optimizations (node pruning, kernel fusion) and portability, allowing functions to be exported and reimported as SavedModels. This enables code reuse across different platforms like mobile, C++, and JavaScript.",
+    "context_tokens": 683,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.set_seed",
+      "tf.reduce_sum",
+      "tf.normal"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb",
+        "rank": 1,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/function.ipynb",
+        "rank": 2,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/function.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/intro_to_modules.ipynb",
+        "rank": 3,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/intro_to_modules.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb",
+        "rank": 4,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb",
+        "rank": 5,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/migrate/tf1_vs_tf2.ipynb",
+        "score": null
+      }
+    ],
+    "latency_ms": 3726.422249805182,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/tensorflow/docs",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "706",
+    "context": "### https://github.com/tensorflow/docs/blob/master/site/en/tutorials/keras/save_and_load.ipynb\nSave and Reload Model in SavedModel Format\n\nSave the entire model in the SavedModel format, which is a directory containing a protobuf binary and TensorFlow checkpoints. This format is suitable for TFLite/TFServing. Reload using tf.saved_model.load.\n\n# Save the entire model as a SavedModel.\n!mkdir -p saved_model\ntf.saved_model.save(model, 'saved_model/my_model')\n\n# my_model directory\n!ls saved_model\n\n# Contains an assets folder, saved_model.pb, and variables folder.\n!ls saved_model/my_model\n\nsaved_model = tf.saved_model.load('saved_model/my_model')\nsaved_model\n\n### https://github.com/tensorflow/docs/blob/master/site/en/hub/tutorials/tf2_image_retraining.ipynb\nSave the trained model\n\nSaves the trained Keras model to a specified path in the SavedModel format, making it ready for deployment to platforms like TF Serving or TFLite. The `model` and `model_name` variables must be defined.\n\nsaved_model_path = f\"/tmp/saved_flowers_model_{model_name}\"\ntf.saved_model.save(model, saved_model_path)\n\n### https://github.com/tensorflow/docs/blob/master/site/en/guide/intro_to_modules.ipynb\nSave a TensorFlow Model as SavedModel\n\nSaves the trained TensorFlow model, including its functions and weights, into the SavedModel format. This is the recommended way to share trained models.\n\ntf.saved_model.save(my_model, \"the_saved_model\")\n\n### https://github.com/tensorflow/docs/blob/master/site/en/tutorials/distribute/save_and_load.ipynb\nSave and load the model\n\nTensorFlow offers two primary sets of APIs for saving and loading models: the high-level Keras API (`Model.save` and `tf.keras.models.load_model`) which uses the `.keras` zip archive format, and the low-level SavedModel API (`tf.saved_model.save` and `tf.saved_model.load`) which uses the TF SavedModel format.\n\n### https://github.com/tensorflow/docs/blob/master/site/en/hub/tf2_saved_model.md\nCreating SavedModels for TF Hub > Saving from Keras\n\nStarting with TensorFlow 2, `tf.keras.Model.save()` and `tf.keras.models.save_model()` default to the SavedModel format. These SavedModels are compatible with `hub.load()`, `hub.KerasLayer`, and similar adapters for other high-level APIs. To share a complete Keras Model, save it with `include_optimizer=False`.",
+    "context_tokens": 531,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.save"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/keras/save_and_load.ipynb",
+        "rank": 1,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/keras/save_and_load.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/hub/tutorials/tf2_image_retraining.ipynb",
+        "rank": 2,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/hub/tutorials/tf2_image_retraining.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/guide/intro_to_modules.ipynb",
+        "rank": 3,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/guide/intro_to_modules.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/distribute/save_and_load.ipynb",
+        "rank": 4,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/tutorials/distribute/save_and_load.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://github.com/tensorflow/docs/blob/master/site/en/hub/tf2_saved_model.md",
+        "rank": 5,
+        "raw_id": "https://github.com/tensorflow/docs/blob/master/site/en/hub/tf2_saved_model.md",
+        "score": null
+      }
+    ],
+    "latency_ms": 4114.6809589117765,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "library_id": "/tensorflow/docs",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "840",
+    "context": "### https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_predict.html\nUsing cross_val_predict for Probabilities\n\nIllustrates how to use cross_val_predict to obtain cross-validated predicted probabilities for a classifier. This is useful when the 'method' parameter is set to 'predict_proba'.\n\n>>> from sklearn import datasets, linear_model\n>>> from sklearn.model_selection import cross_val_predict\n>>> from sklearn.metrics import mean_absolute_error\n>>> from sklearn.linear_model import LogisticRegression\n>>> from sklearn.preprocessing import label_binarize\n>>> iris = datasets.load_iris()\n>>> X, y = iris.data, iris.target\n>>> logreg = LogisticRegression(max_iter=1000)\n>>> predicted_probas = cross_val_predict(logreg, X, y, cv=3, method='predict_proba')\n>>> label_binarize(y, classes=[0, 1, 2])[:3]\narray([[1, 0, 0],\n       [1, 0, 0],\n       [0, 1, 0]])\n>>> predicted_probas[:3]\narray([[0.91..., 0.08..., 0.00...],\n       [0.91..., 0.08..., 0.00...],\n       [0.08..., 0.88..., 0.02...]])\n\n### https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegressionCV.html\nLogisticRegressionCV Example\n\nDemonstrates fitting a LogisticRegressionCV model with cross-validation and predicting probabilities. It uses the Iris dataset and specifies parameters like cv, random_state, use_legacy_attributes, l1_ratios, and scoring.\n\nfrom sklearn.datasets import load_iris\nfrom sklearn.linear_model import LogisticRegressionCV\nX, y = load_iris(return_X_y=True)\nclf = LogisticRegressionCV(\n    cv=5, random_state=0,\n    use_legacy_attributes=False,\n    l1_ratios=(0,),\n    scoring=\"neg_log_loss\",\n).fit(X, y)\nclf.predict(X[:2, :])\nclf.predict_proba(X[:2, :]).shape\nclf.score(X, y)\n\n### https://scikit-learn.org/stable/modules/generated/sklearn.metrics.d2_tweedie_score.html\nd2_tweedie_score\n\nD2 regression score function, fraction of Tweedie deviance explained. Best possible score is 1.0 and it can be negative (because the model can be arbitrarily worse). A model that always uses the empirical mean of `y_true` as constant prediction, disregarding the input features, gets a D^2 score of 0.0.\n\n## d2_tweedie_score\n\n### Description\nCalculates the D2 regression score, representing the fraction of Tweedie deviance explained. The score can be negative and a score of 0.0 indicates a model that predicts the empirical mean.\n\n### Method\n`d2_tweedie_score(_y_true_, _y_pred_, *_ , _sample_weight =None_, _power =0_)`\n\n### Parameters\n#### Path Parameters\n- **y_true** (array-like of shape (n_samples,)) - Ground truth (correct) target values.\n- **y_pred** (array-like of shape (n_samples,)) - Estimated target values.\n- **sample_weight** (array-like of shape (n_samples,), default=None) - Sample weights.\n- **power** (float, default=0) - Tweedie power parameter. Either power <= 0 or power >= 1. The higher `p` the less weight is given to extreme deviations between true and predicted targets.\n  * power < 0: Extreme stable distribution. Requires: y_pred > 0.\n  * power = 0 : Normal distribution, output corresponds to r2_score. y_true and y_pred can be any real numbers.\n  * power = 1 : Poisson distribution. Requires: y_true >= 0 and y_pred > 0.\n  * 1 < p < 2 : Compound Poisson distribution. Requires: y_true >= 0 and y_pred > 0.\n  * power = 2 : Gamma distribution. Requires: y_true > 0 and y_pred > 0.\n  * power = 3 : Inverse Gaussian distribution. Requires: y_true > 0 and y_pred > 0.\n  * otherwise : Positive stable distribution. Requires: y_true > 0 and y_pred > 0.\n\n### Returns\n#### z (float)\n- The D^2 score.\n\n### Notes\nThis is not a symmetric function. Like R^2, D^2 score may be negative (it need not actually be the square of a quantity D). This metric is not well-defined for single samples and will return a NaN value if n_samples is less than two.\n\n### Examples\n```python\n>>> from sklearn.metrics import d2_tweedie_score\n>>> y_true = [0.5, 1, 2.5, 7]\n>>> y_pred = [1, 1, 5, 3.5]\n>>> d2_tweedie_score(y_true, y_pred)\n0.285...\n>>> d2_tweedie_score(y_true, y_pred, power=1)\n0.487...\n>>> d2_tweedie_score(y_true, y_pred, power=2)\n0.630...\n>>> d2_tweedie_score(y_true, y_true, power=2)\n1.0\n```\n\n### https://scikit-learn.org/stable/auto_examples/model_selection/plot_tuned_decision_threshold.html\nTrain Logistic Regression and predict probabilities\n\nTrains a Logistic Regression model and predicts the probability of the positive class for each sample. This is a prerequisite for tuning the decision threshold.\n\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)\n\n# Train a logistic regression model\nmodel = LogisticRegression(solver='liblinear', random_state=42)\nmodel.fit(X_train, y_train)\n\n# Predict probabilities on the test set\n# The probability of the positive class is the second column\ny_scores = model.predict_proba(X_test)[:, 1]\n\n### https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_predict.html\nCross-validation with different estimators\n\nCompares the performance of different estimators (e.g., Decision Tree and Logistic Regression) using cross-validation. This helps in selecting the best model for a given task.\n\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import cross_val_score\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.linear_model import LogisticRegression\n\niris = load_iris()\nX, y = iris.data, iris.target\n\nclf_tree = DecisionTreeClassifier(random_state=0)\nscores_tree = cross_val_score(clf_tree, X, y, cv=5)\nprint(f\"Decision Tree Classifier Accuracy: {scores_tree.mean():.2f} +/- {scores_tree.std():.2f}\")\n\nclf_lr = LogisticRegression(solver='liblinear', random_state=0)\nscores_lr = cross_val_score(clf_lr, X, y, cv=5)\nprint(f\"Logistic Regression Accuracy: {scores_lr.mean():.2f} +/- {scores_lr.std():.2f}\")",
+    "context_tokens": 1529,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "cross_val_predict"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_predict.html",
+        "rank": 1,
+        "raw_id": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_predict.html",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegressionCV.html",
+        "rank": 2,
+        "raw_id": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegressionCV.html",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.d2_tweedie_score.html",
+        "rank": 3,
+        "raw_id": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.d2_tweedie_score.html",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_tuned_decision_threshold.html",
+        "rank": 4,
+        "raw_id": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_tuned_decision_threshold.html",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_predict.html",
+        "rank": 5,
+        "raw_id": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_predict.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3594.56520806998,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/websites/scikit-learn_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "850",
+    "context": "### https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst\nFitting and predicting: estimator basics\n\nThe minimal scikit-learn example: import an estimator, create data, fit a model, and predict. This is the first code a beginner should run.\n\n>>> from sklearn.ensemble import RandomForestClassifier\n>>> clf = RandomForestClassifier(random_state=0)\n>>> X = [[ 1,  2,  3],  # 2 samples, 3 features\n...      [11, 12, 13]]\n>>> y = [0, 1]  # classes of each sample\n>>> clf.fit(X, y)\nRandomForestClassifier(random_state=0)\n\n>>> clf.predict(X)  # predict classes of the training data\narray([0, 1])\n>>> clf.predict([[4, 5, 6], [14, 15, 16]])  # predict classes of new data\narray([0, 1])\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/ensemble.rst\nFitting a RandomForestClassifier\n\nInitialize and fit a RandomForestClassifier with training samples and target class labels.\n\n>>> from sklearn.ensemble import RandomForestClassifier\n>>> X = [[0, 0], [1, 1]]\n>>> Y = [0, 1]\n>>> clf = RandomForestClassifier(n_estimators=10)\n>>> clf = clf.fit(X, Y)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/naive_bayes.py\nfit(X, y, sample_weight) method\n\nFits the Gaussian Naive Bayes model. Accepts training vectors X of shape (n_samples, n_features), target values y of shape (n_samples,), and optional sample_weight. Delegates to _partial_fit after validating y.\n\n    @_fit_context(prefer_skip_nested_validation=True)\n    def fit(self, X, y, sample_weight=None):\n        \"\"\"Fit Gaussian Naive Bayes according to X, y.\n\n        Parameters\n        ----------\n        X : array-like of shape (n_samples, n_features)\n            Training vectors, where `n_samples` is the number of samples\n            and `n_features` is the number of features.\n\n        y : array-like of shape (n_samples,)\n            Target values.\n\n        sample_weight : array-like of shape (n_samples,), default=None\n            Weights applied to individual samples (1. for unweighted).\n\n            .. versionadded:: 0.17\n               Gaussian Naive Bayes supports fitting with *sample_weight*.\n\n        Returns\n        -------\n        self : object\n            Returns the instance itself.\n        \"\"\"\n        y = validate_data(self, y=y)\n        xp_y, _ = get_namespace(y)\n        return self._partial_fit(\n            X, y, xp_y.unique_values(y), _refit=True, sample_weight=sample_weight\n        )\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst\nGetting Started > Fitting and predicting: estimator basics\n\nScikit-learn provides dozens of built-in machine learning algorithms known as estimators. Each estimator is fitted to data using a fit method, which typically accepts a samples matrix X and target values y. The samples matrix X is expected to be in the format (n_samples, n_features), where rows represent samples and columns represent features. Once an estimator is fitted, it can be used to predict target values for new data without the need for re-training.\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/v0.16.rst\nProject > Updates > Error Handling\n\nTo ensure robust model training, estimators now consistently raise a ValueError when they are fitted on empty data. This applies to datasets containing fewer than one sample or, in the case of 2D input, fewer than one feature.",
+    "context_tokens": 808,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "RandomForestRegressor"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst",
+        "rank": 1,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/ensemble.rst",
+        "rank": 2,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/ensemble.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/naive_bayes.py",
+        "rank": 3,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/naive_bayes.py",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst",
+        "rank": 4,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/v0.16.rst",
+        "rank": 5,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/v0.16.rst",
+        "score": null
+      }
+    ],
+    "latency_ms": 3875.674500130117,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/scikit-learn/scikit-learn",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "875",
+    "context": "### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nConvert dicts to NumPy/SciPy arrays with DictVectorizer\n\nThe DictVectorizer class converts feature arrays represented as lists of Python dict objects into the NumPy/SciPy representation used by scikit-learn. It handles categorical features using one-hot coding and supports features with multiple string values. By default, it outputs a sparse matrix for memory efficiency.\n\nfrom sklearn.feature_extraction import DictVectorizer\n\nmeasurements = [\n    {'city': 'Dubai', 'temperature': 33.},\n    {'city': 'London', 'temperature': 12.},\n    {'city': 'San Francisco', 'temperature': 18.},\n]\n\nvec = DictVectorizer()\nvec.fit_transform(measurements).toarray()\nvec.get_feature_names_out()\n\nmovie_entry = [{'category': ['thriller', 'drama'], 'year': 2003},\n               {'category': ['animation', 'family'], 'year': 2011},\n               {'year': 1974}]\nvec.fit_transform(movie_entry).toarray()\nvec.get_feature_names_out()\nvec.transform({'category': ['thriller'],\n               'unseen_feature': '3'}).toarray()\n\npos_window = [\n    {\n        'word-2': 'the',\n        'pos-2': 'DT',\n        'word-1': 'cat',\n        'pos-1': 'NN',\n        'word+1': 'on',\n        'pos+1': 'PP',\n    },\n]\nvec = DictVectorizer()\npos_vectorized = vec.fit_transform(pos_window)\npos_vectorized.toarray()\nvec.get_feature_names_out()\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst\nOne-Hot Encoding of Categorical Features (Scikit-learn)\n\nTransforms categorical features into a one-hot representation using `OneHotEncoder`. Each category is converted into a binary feature column. It can infer categories automatically or accept a predefined list of categories. The output is typically a sparse matrix, which can be converted to a dense array using `.toarray()`.\n\nfrom sklearn.preprocessing import OneHotEncoder\n\nX = [['male', 'from US', 'uses Safari'], ['female', 'from Europe', 'uses Firefox']]\nenc = OneHotEncoder()\nenc.fit(X)\nprint(enc.transform([['female', 'from US', 'uses Safari'],\n                   ['male', 'from Europe', 'uses Safari']]).toarray())\n# Output:\n# [[1. 0. 0. 1. 0. 1.]\n#  [0. 1. 1. 0. 0. 1.]]\n\nprint(enc.categories_)\n# Output:\n# [array(['female', 'male'], dtype=object), array(['from Europe', 'from US'], dtype=object), array(['uses Firefox', 'uses Safari'], dtype=object)]\n\n# Specifying categories explicitly\ngenders = ['female', 'male']\nlocations = ['from Africa', 'from Asia', 'from Europe', 'from US']\nbrowsers = ['uses Chrome', 'uses Firefox', 'uses IE', 'uses Safari']\nenc_explicit = OneHotEncoder(categories=[genders, locations, browsers])\nX_explicit = [['male', 'from US', 'uses Safari'], ['female', 'from Europe', 'uses Firefox']]\nenc_explicit.fit(X_explicit)\nprint(enc_explicit.transform(X_explicit).toarray())\n# Output:\n# [[0. 1. 0. 0. 1. 0. 0. 1.]\n#  [1. 0. 0. 0. 1. 0. 1. 0.]]\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst\nL1-based feature selection using LinearSVC\n\nSelect non-zero coefficients from an L1-penalized LinearSVC model. The C parameter controls the sparsity of the selected features.\n\n>>> from sklearn.svm import LinearSVC\n>>> from sklearn.datasets import load_iris\n>>> from sklearn.feature_selection import SelectFromModel\n>>> X, y = load_iris(return_X_y=True)\n>>> X.shape\n(150, 4)\n>>> lsvc = LinearSVC(C=0.01, penalty=\"l1\", dual=False).fit(X, y)\n>>> model = SelectFromModel(lsvc, prefit=True)\n>>> X_new = model.transform(X)\n>>> X_new.shape\n(150, 3)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst\nSelect top features using SelectKBest in Python\n\nSelect the top k features based on univariate statistical tests like ANOVA F-value (f_classif).\n\n>>> from sklearn.datasets import load_iris\n>>> from sklearn.feature_selection import SelectKBest\n>>> from sklearn.feature_selection import f_classif\n>>> X, y = load_iris(return_X_y=True)\n>>> X.shape\n(150, 4)\n>>> X_new = SelectKBest(f_classif, k=2).fit_transform(X, y)\n>>> X_new.shape\n(150, 2)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst\nTree-based feature selection using SelectFromModel\n\nUse tree-based estimators to compute impurity-based feature importances and discard irrelevant features.\n\n>>> from sklearn.ensemble import ExtraTreesClassifier\n>>> from sklearn.datasets import load_iris\n>>> from sklearn.feature_selection import SelectFromModel\n>>> X, y = load_iris(return_X_y=True)\n>>> X.shape\n(150, 4)\n>>> clf = ExtraTreesClassifier(n_estimators=50)\n>>> clf = clf.fit(X, y)\n>>> clf.feature_importances_  # doctest: +SKIP\narray([ 0.04,  0.05,  0.4,  0.4])\n>>> model = SelectFromModel(clf, prefit=True)\n>>> X_new = model.transform(X)\n>>> X_new.shape               # doctest: +SKIP\n(150, 2)",
+    "context_tokens": 1282,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "MultiLabelBinarizer.fit_transform"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 1,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "rank": 2,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst",
+        "rank": 3,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst",
+        "rank": 4,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst",
+        "rank": 5,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_selection.rst",
+        "score": null
+      }
+    ],
+    "latency_ms": 3993.0088340770453,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/scikit-learn/scikit-learn",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "887",
+    "context": "### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst\nStandardize features using StandardScaler\n\nDemonstrates how to use the StandardScaler class to center features by removing the mean and scaling to unit variance. This process is essential for models like SVMs and linear models that assume normally distributed data.\n\nfrom sklearn import preprocessing\nimport numpy as np\n\nX_train = np.array([[ 1., -1.,  2.],\n                    [ 2.,  0.,  0.],\n                    [ 0.,  1., -1.]])\nscaler = preprocessing.StandardScaler().fit(X_train)\nX_scaled = scaler.transform(X_train)\n\n# Verify zero mean and unit variance\nprint(X_scaled.mean(axis=0))\nprint(X_scaled.std(axis=0))\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst\nMap data to Gaussian distribution using PowerTransformer\n\nDemonstrates the use of the PowerTransformer class with the Box-Cox method to transform lognormal data into a Gaussian distribution. The standardize parameter controls whether the output is scaled to zero-mean and unit-variance.\n\nfrom sklearn import preprocessing\nimport numpy as np\n\npt = preprocessing.PowerTransformer(method='box-cox', standardize=False)\nX_lognormal = np.random.RandomState(616).lognormal(size=(3, 3))\nX_transformed = pt.fit_transform(X_lognormal)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst\nData Transformation with Pre-processors\n\nShows how to use transformer objects to scale or modify data. Transformers implement a transform method to output a modified feature matrix.\n\nfrom sklearn.preprocessing import StandardScaler\nX = [[0, 15], [1, -10]]\n# Scale data according to computed scaling values\ntransformed_X = StandardScaler().fit(X).transform(X)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/common_pitfalls.rst\nInconsistent Preprocessing: Using Pipeline for Scaling and Regression - Python\n\nDemonstrates the recommended practice of using scikit-learn's Pipeline to chain preprocessing steps (like StandardScaler) with estimators (like LinearRegression). This simplifies the workflow and reduces the risk of forgetting transformations, ensuring consistent application to training and test data.\n\nfrom sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_squared_error\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LinearRegression\n\nrandom_state = 42\nX, y = make_regression(random_state=random_state, n_features=1, noise=1)\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.4, random_state=random_state)\n\nmodel = make_pipeline(StandardScaler(), LinearRegression())\nmodel.fit(X_train, y_train)\nprint(mean_squared_error(y_test, model.predict(X_test)))\n# Expected output: 0.90...\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst\nPreprocessing data > Standardization, or mean removal and variance scaling\n\n**Standardization** of datasets is a **common requirement for many machine learning estimators** implemented in scikit-learn; they might behave badly if the individual features do not more or less look like standard normally distributed data: Gaussian with **zero mean and unit variance**.\n\nIn practice we often ignore the shape of the distribution and just transform the data to center it by removing the mean value of each feature, then scale it by dividing non-constant features by their standard deviation.\n\nFor instance, many elements used in the objective function of a learning algorithm (such as the RBF kernel of Support Vector Machines or the l1 and l2 regularizers of linear models) may assume that all features are centered around zero or have variance in the same order. If a feature has a variance that is orders of magnitude larger than others, it might dominate the objective function and make the estimator unable to learn from other features correctly as expected.\n\nThis class implements the ``Transformer`` API to compute the mean and standard deviation on a training set so as to be able to later re-apply the same transformation on the testing set. This class is hence suitable for use in the early steps of a :class:`~sklearn.pipeline.Pipeline`.",
+    "context_tokens": 910,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "preprocessing.scale"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "rank": 1,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "rank": 2,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst",
+        "rank": 3,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/common_pitfalls.rst",
+        "rank": 4,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/common_pitfalls.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "rank": 5,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst",
+        "score": null
+      }
+    ],
+    "latency_ms": 3834.4432078301907,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/scikit-learn/scikit-learn",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "892",
+    "context": "### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nCombine CountVectorizer and TfidfTransformer using TfidfVectorizer\n\nThis example shows how to use TfidfVectorizer, which combines the functionality of CountVectorizer and TfidfTransformer into a single step. This is a convenient way to directly obtain TF-IDF features from raw text corpus.\n\nfrom sklearn.feature_extraction.text import TfidfVectorizer\n\n# Assuming 'corpus' is a list of text documents\n# Example: corpus = ['This is the first document.', 'This document is the second document.', ...]\n\nvectorizer = TfidfVectorizer()\nvectorizer.fit_transform(corpus)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/v0.23.rst\nWhat's new in scikit-learn 0.23\n\n``scikit-learn`` now works seamlessly with ``mypy``, the static type checker for Python, without raising any errors. This improves the experience for developers using type hints and static analysis.\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nFeature Extraction > Text Vectorization > Customizing Vectorizers\n\nScikit-learn's text vectorizers like CountVectorizer can be extended by customizing the tokenizer or analyzer to support advanced text processing tasks. While built-in features do not include specific linguistic operations like lemmatization or stemming, users can inject these capabilities by defining custom classes or functions. For example, one can integrate NLTK's lemmatizer into a custom tokenizer class or use regex-based transformations within a custom vectorizer to normalize text, such as converting British spelling to American spelling. These techniques are essential for handling complex linguistic requirements or specific language structures, such as Asian languages that lack explicit whitespace word separators.\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nText feature extraction > Handling text encoding\n\nThe text feature extractors in scikit-learn can decode text files, but require the encoding to be specified. The :class:`CountVectorizer` has an ``encoding`` parameter for this. UTF-8 is the default encoding for modern text files. If the text is not UTF-8 encoded, a ``UnicodeDecodeError`` will occur. To handle decoding errors, the ``decode_error`` parameter can be set to ``\"ignore\"`` or ``\"replace\"``, which will either skip or substitute erroneous characters. For more details on Python's byte decoding, refer to the `bytes.decode` documentation.\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nFeature Extraction > Text Vectorization > Common Vectorizer usage\n\nThe CountVectorizer class is a primary tool for text processing that handles both tokenization and occurrence counting. During the fitting process, the vectorizer assigns a unique integer index to each term, which corresponds to a specific column in the output matrix. Users can inspect the vocabulary mapping via the vocabulary_ attribute or retrieve feature names using get_feature_names_out. It is important to note that words not present in the training corpus are ignored during subsequent transformations, and the default configuration typically filters out tokens shorter than two letters.",
+    "context_tokens": 665,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "CountVectorizer"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 1,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/v0.23.rst",
+        "rank": 2,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/v0.23.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 3,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 4,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 5,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      }
+    ],
+    "latency_ms": 3979.148417012766,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/scikit-learn/scikit-learn",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "896",
+    "context": "### https://scikit-learn.org/stable/_downloads/ff3bc184e1a2d8d99b77058ba52b764f/plot_causal_interpretation.ipynb\nSplit Data for Training and Testing\n\nSplits the dataset into training and testing sets for model evaluation. The target variable 'hourly wage' is separated from the features. A random state is used for reproducibility.\n\nfrom sklearn.model_selection import train_test_split\n\ntarget_name = \"hourly wage\"\nX, y = df.drop(columns=target_name), df[target_name]\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)\n\n### https://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_multiclass.html\nSplit Dataset for Training and Testing\n\nSplits the generated dataset into training and testing sets. 70% of the data is used for training and 30% for testing to evaluate model performance.\n\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, train_size=0.7, random_state=42\n)\n\n### https://scikit-learn.org/stable/lite/lab/index.html?path=auto_examples%2Fpreprocessing%2Fplot_discretization.ipynb\nSplit data into training and testing sets\n\nPartitions the input features and labels into training and testing subsets with a specified test size.\n\n# Split data into train partition and test partition\nX_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0, test_size=0.7)\n\n### https://scikit-learn.org/stable/_downloads/f4a89bf823d814fee03a693df158d83a/plot_grid_search_digits.ipynb\nSplit data into training and testing sets\n\nSplits the preprocessed data into training and testing sets of equal size using `train_test_split`.\n\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)\n\n### https://scikit-learn.org/stable/_downloads/0837676cf643e44f0684e848d0967551/plot_compare_cross_decomposition.ipynb\nGenerate and Split Datasets\n\nGenerates two multivariate datasets (X and Y) with underlying latent variables and splits them into training and testing sets. This setup is used to evaluate cross-decomposition models.\n\nimport numpy as np\n\nfrom sklearn.model_selection import train_test_split\n\nrng = np.random.default_rng(42)\n\nn = 500\n# 2 latents vars:\nl1 = rng.normal(size=n)\nl2 = rng.normal(size=n)\n\nlatents = np.array([l1, l1, l2, l2]).T\nX = latents + rng.normal(size=(n, 4))\nY = latents + rng.normal(size=(n, 4))\n\nX_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.5, shuffle=False)\n\nprint(\"Corr(X)\")\nprint(np.round(np.corrcoef(X.T), 2))\nprint(\"Corr(Y)\")\nprint(np.round(np.corrcoef(Y.T), 2))",
+    "context_tokens": 710,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "train_test_split"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://scikit-learn.org/stable/_downloads/ff3bc184e1a2d8d99b77058ba52b764f/plot_causal_interpretation.ipynb",
+        "rank": 1,
+        "raw_id": "https://scikit-learn.org/stable/_downloads/ff3bc184e1a2d8d99b77058ba52b764f/plot_causal_interpretation.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_multiclass.html",
+        "rank": 2,
+        "raw_id": "https://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_multiclass.html",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/lite/lab/index.html?path=auto_examples%2Fpreprocessing%2Fplot_discretization.ipynb",
+        "rank": 3,
+        "raw_id": "https://scikit-learn.org/stable/lite/lab/index.html?path=auto_examples%2Fpreprocessing%2Fplot_discretization.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/_downloads/f4a89bf823d814fee03a693df158d83a/plot_grid_search_digits.ipynb",
+        "rank": 4,
+        "raw_id": "https://scikit-learn.org/stable/_downloads/f4a89bf823d814fee03a693df158d83a/plot_grid_search_digits.ipynb",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/_downloads/0837676cf643e44f0684e848d0967551/plot_compare_cross_decomposition.ipynb",
+        "rank": 5,
+        "raw_id": "https://scikit-learn.org/stable/_downloads/0837676cf643e44f0684e848d0967551/plot_compare_cross_decomposition.ipynb",
+        "score": null
+      }
+    ],
+    "latency_ms": 4034.2214580159634,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/websites/scikit-learn_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "902",
+    "context": "### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nVectorizing text with CountVectorizer\n\nDemonstrates initializing a CountVectorizer, fitting it to a corpus, and transforming text into a sparse matrix of token counts.\n\nfrom sklearn.feature_extraction.text import CountVectorizer\n\ncorpus = [\n    'This is the first document.',\n    'This is the second second document.',\n    'And the third one.',\n    'Is this the first document?',\n]\n\nvectorizer = CountVectorizer()\nX = vectorizer.fit_transform(corpus)\n\n# Retrieve feature names and vocabulary mapping\nfeature_names = vectorizer.get_feature_names_out()\nindex = vectorizer.vocabulary_.get('document')\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nConfiguring n-gram extraction\n\nShows how to configure CountVectorizer to extract n-grams (e.g., bigrams) to preserve local word ordering information.\n\nfrom sklearn.feature_extraction.text import CountVectorizer\n\n# Configure vectorizer for 1-grams and 2-grams\nbigram_vectorizer = CountVectorizer(ngram_range=(1, 2), token_pattern=r'\\b\\w+\\b', min_df=1)\nanalyze = bigram_vectorizer.build_analyzer()\n\n# Example output: ['bi', 'grams', 'are', 'cool', 'bi grams', 'grams are', 'are cool']\nresult = analyze('Bi-grams are cool!')\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nTransform Corpus to Bigram Features (Python)\n\nTransforms a corpus of text documents into a matrix of bigram features using a fitted CountVectorizer. The output is a dense NumPy array representing the frequency of each bigram in each document. This is useful for preparing text data for machine learning models.\n\nfrom sklearn.feature_extraction.text import CountVectorizer\n\ncorpus = [\n    \"This is the first document.\",\n    \"This document is the second document.\",\n    \"And this is the third one.\",\n    \"Is this the first document?\"\n]\nbigram_vectorizer = CountVectorizer(ngram_range=(2, 2))\nX_2 = bigram_vectorizer.fit_transform(corpus).toarray()\nprint(X_2)\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nText Feature Extraction > Vectorizing a large text corpus with the hashing trick\n\nStandard vectorization schemes like CountVectorizer rely on an in-memory mapping from string tokens to integer feature indices, known as the vocabulary. While simple, this approach faces significant challenges with large datasets, including high memory consumption, the need for a full pass over the data, and difficulties with parallelization. Because the vocabulary mapping depends on the order of first occurrences, it acts as a shared state that hinders concurrent processing. To address these limitations, the HashingVectorizer utilizes the 'hashing trick' to provide a stateless, memory-efficient alternative that is compatible with large-scale, online learning tasks.\n\n### https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst\nFeature Extraction > Text Vectorization > Common Vectorizer usage\n\nThe CountVectorizer class is a primary tool for text processing that handles both tokenization and occurrence counting. During the fitting process, the vectorizer assigns a unique integer index to each term, which corresponds to a specific column in the output matrix. Users can inspect the vocabulary mapping via the vocabulary_ attribute or retrieve feature names using get_feature_names_out. It is important to note that words not present in the training corpus are ignored during subsequent transformations, and the default configuration typically filters out tokens shorter than two letters.",
+    "context_tokens": 764,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "CountVectorizer"
+    ],
+    "identifier_hit": true,
+    "items": [
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 1,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 2,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 3,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 4,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      },
+      {
+        "path": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "rank": 5,
+        "raw_id": "https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/feature_extraction.rst",
+        "score": null
+      }
+    ],
+    "latency_ms": 3935.82187499851,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/scikit-learn/scikit-learn",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  },
+  {
+    "case_id": "912",
+    "context": "### https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html\nNormalizer\n\nNormalize samples individually to unit norm. Each sample (i.e. each row of the data matrix) with at least one non zero component is rescaled independently of other samples so that its norm (l1, l2 or inf) equals one. This transformer is able to work both with dense numpy arrays and scipy.sparse matrix (use CSR format if you want to avoid the burden of a copy / conversion). Scaling inputs to unit norms is a common operation for text classification or clustering for instance. For an example visualization, refer to Compare Normalizer with other scalers.\n\n## Normalizer\n\n### Description\nNormalize samples individually to unit norm. Each sample (i.e. each row of the data matrix) with at least one non zero component is rescaled independently of other samples so that its norm (l1, l2 or inf) equals one. This transformer is able to work both with dense numpy arrays and scipy.sparse matrix (use CSR format if you want to avoid the burden of a copy / conversion). Scaling inputs to unit norms is a common operation for text classification or clustering for instance. For an example visualization, refer to Compare Normalizer with other scalers.\n\n### Parameters\n#### norm\n{‘l1’, ‘l2’, ‘max’}, default=’l2’\nThe norm to use to normalize each non zero sample. If norm=’max’ is used, values will be rescaled by the maximum of the absolute values.\n#### copy\nbool, default=True\nSet to False to perform inplace row normalization and avoid a copy (if the input is already a numpy array or a scipy.sparse CSR matrix).\n\n### Attributes\n#### n_features_in_\nint\nNumber of features seen during fit.\nAdded in version 0.24.\n#### feature_names_in_\nndarray of shape (`n_features_in_`,)\nNames of features seen during fit. Defined only when `X` has feature names that are all strings.\nAdded in version 1.0.\n\n### Methods\n#### fit(X, y=None)\nOnly validates estimator’s parameters. This method allows to: (i) validate the estimator’s parameters and (ii) be consistent with the scikit-learn transformer API.\n##### Parameters\n* **X** {array-like, sparse matrix} of shape (n_samples, n_features)\nThe data to estimate the normalization parameters.\n* **y** Ignored\nNot used, present here for API consistency by convention.\n##### Returns\n* **self** object\nFitted transformer.\n\n#### fit_transform(X, y=None, **fit_params)\nFit to data, then transform it. Fits transformer to `X` and `y` with optional parameters `fit_params` and returns a transformed version of `X`.\n##### Parameters\n* **X** array-like of shape (n_samples, n_features)\nInput samples.\n* **y** array-like of shape (n_samples,) or (n_samples, n_outputs), default=None\nTarget values (None for unsupervised transformations).\n* **fit_params** dict\nAdditional fit parameters. Pass only if the estimator accepts additional params in its `fit` method.\n##### Returns\n* **X_new** ndarray array of shape (n_samples, n_features_new)\nTransformed array.\n\n#### get_feature_names_out(input_features=None)\nGet output feature names for transformation.\n##### Parameters\n* **input_features** array-like of str or None, default=None\nInput features.\n* If `input_features` is `None`, then `feature_names_in_` is used as feature names in. If `feature_names_in_` is not defined, then the following input feature names are generated: `[\"x0\", \"x1\", ..., \"x(n_features_in_ - 1)\"]`.\n* If `input_features` is an array-like, then `input_features` must match `feature_names_in_` if `feature_names_in_` is defined.\n##### Returns\n* **feature_names_out** ndarray of str objects\nSame as input features.\n\n#### get_metadata_routing()\nGet metadata routing of this object. Please check User Guide on how the routing mechanism works.\n##### Returns\n* **routing** MetadataRequest\nA `MetadataRequest` encapsulating routing information.\n\n#### get_params(deep=True)\nGet parameters for this estimator.\n##### Parameters\n* **deep** bool, default=True\nIf True, will return the parameters for this estimator and contained subobjects that are estimators.\n##### Returns\n* **params** dict\nParameter names mapped to their values.\n\n#### set_output(**transform=None)\nSet output container. Refer to the user guide for more details and Introducing the set_output API for an example on how to use the API.\n##### Parameters\n* **transform** {“default”, “pandas”, “polars”}, default=None\nConfigure output of `transform` and `fit_transform`.\n* \"default\": Default output format of a transformer\n* \"pandas\": DataFrame output\n* \"polars\": Polars output\n\n### Examples\n```python\n>>> from sklearn.preprocessing import Normalizer\n>>> X = [[4, 1, 2, 2],\n...      [1, 3, 9, 3],\n...      [5, 7, 5, 1]]\n>>> transformer = Normalizer().fit(X)  # fit does nothing.\n>>> transformer\nNormalizer()\n>>> transformer.transform(X)\narray([[0.8, 0.2, 0.4, 0.4],\n       [0.1, 0.3, 0.9, 0.3],\n       [0.5, 0.7, 0.5, 0.1]])\n```\n\n### https://scikit-learn.org/stable/api/sklearn.preprocessing.html\nnormalize\n\nScale input vectors individually to unit norm (vector length).\n\n## normalize\n\n### Description\nScale input vectors individually to unit norm (vector length).\n\n### Parameters\n* **X** (array-like of shape (n_samples, n_features) or (n_samples,) or (n_features,))\n* **norm** ({‘l1’, ‘l2’, ‘max’}, default=’l2’) - Each sample vector will be normalized if norm is equal to ‘l1’ or ‘l2’.\n* **axis** (int or None, default=1) - The axis which will be normalized. axis=0 corresponds to features and axis=1 corresponds to samples.\n* **copy** (bool, default=True) - Set to False to avoid a copy and inplace modification of `X`.\n* **return_norm** (bool, default=False) - Whether to return the norm along with the normalized vectors.\n\n### Returns\n* **X_normalized** (ndarray of shape (n_samples, n_features) or (n_samples,) or (n_features,)) - The normalized data.\n* **norms** (ndarray of shape (n_samples,) or (n_features,)) - The norms of the samples or features, if `return_norm` is True.\n\n### Example\n```python\nfrom sklearn.preprocessing import normalize\nimport numpy as np\n\nX = np.array([[-1., -2.], [-3., -4.]])\nprint(normalize(X, norm='l2'))\n# Output: [[-0.4472136  -0.89442719]\n#          [-0.6       -0.8       ]]\n```",
+    "context_tokens": 1540,
+    "engine": "context7",
+    "error_type": null,
+    "gold_identifiers": [
+      "MinMaxScaler"
+    ],
+    "identifier_hit": false,
+    "items": [
+      {
+        "path": "https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html",
+        "rank": 1,
+        "raw_id": "https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html",
+        "score": null
+      },
+      {
+        "path": "https://scikit-learn.org/stable/api/sklearn.preprocessing.html",
+        "rank": 2,
+        "raw_id": "https://scikit-learn.org/stable/api/sklearn.preprocessing.html",
+        "score": null
+      }
+    ],
+    "latency_ms": 3676.5661251265556,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "library_id": "/websites/scikit-learn_stable",
+      "resolution": "automatic"
+    },
+    "status": "ok"
+  }
+]

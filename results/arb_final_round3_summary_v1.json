@@ -1,0 +1,401 @@
+{
+  "claim": {
+    "blocker": "Nia repository comparator unavailable at 0/68 required sources; independent-final and Track D pending",
+    "broad_sota_supported": false,
+    "supported_scope": "strongest tested reproducible engine on ARB round-3 final among Delphi, whole-file BM25, canonical lexical, and frozen lexical/BM25 RRF"
+  },
+  "code_commit": "91d76c153ef655f6bf78dc75cc04963ddc08851a",
+  "comparators": {
+    "A-final-bm25-generated-policy-v1": {
+      "BCY@8k": 0.07462121212121213,
+      "MRR": 0.12761477908994093,
+      "Recall@20": 0.4246212121212121,
+      "Recall@5": 0.17727272727272728,
+      "failures": 0,
+      "n": 220
+    },
+    "A-final-lexical-bm25-generated-policy-v1": {
+      "BCY@8k": 0.12424242424242424,
+      "MRR": 0.1601620678552145,
+      "Recall@20": 0.5178030303030303,
+      "Recall@5": 0.2037878787878788,
+      "failures": 0,
+      "n": 220
+    },
+    "A-final-lexical-generated-policy-v1": {
+      "BCY@8k": 0.13825757575757577,
+      "MRR": 0.14397788919495927,
+      "Recall@20": 0.4776515151515151,
+      "Recall@5": 0.21477272727272728,
+      "failures": 0,
+      "n": 220
+    }
+  },
+  "delphi": {
+    "BCY@8k": 0.29583333333333334,
+    "MRR": 0.3318967891413712,
+    "Recall@20": 0.6478030303030303,
+    "Recall@5": 0.47613636363636364,
+    "failures": 0,
+    "n": 220
+  },
+  "input_hashes": {
+    "A-final-bm25-generated-policy-v1-summary.json": "d8b373717cdd1e1d1957cdbb231b52f2926e6ca8f64e0b1a08d7a5081ca62c40",
+    "A-final-delphi-generated-source-exact-top20-v1-summary.json": "ecdd0744ca1de733f0f8fce6442219f21b2220dba07932dfd9d1bceb3badd6f7",
+    "A-final-lexical-bm25-generated-policy-v1-summary.json": "74b1cc273ba2118d21360920cd24db0ea2fc9640d652630f3ac19d562d7dcaa2",
+    "A-final-lexical-generated-policy-v1-summary.json": "4b6f695aecc82f2e72e15ffc206ef3964c317ea98ef67e185339cd4e7b12ce01"
+  },
+  "paired": {
+    "bm25": {
+      "BCY@8k": {
+        "delta": 0.2212121212121212,
+        "repo_cluster_bootstrap_95_ci": [
+          0.1292413168315775,
+          0.30327879201854613
+        ]
+      },
+      "MRR": {
+        "delta": 0.20428201005143026,
+        "repo_cluster_bootstrap_95_ci": [
+          0.11125859423333699,
+          0.2772905205166326
+        ]
+      },
+      "Recall@20": {
+        "delta": 0.22318181818181818,
+        "repo_cluster_bootstrap_95_ci": [
+          0.1111111111111111,
+          0.3100181106925527
+        ]
+      },
+      "Recall@5": {
+        "delta": 0.2988636363636364,
+        "repo_cluster_bootstrap_95_ci": [
+          0.15719464108296075,
+          0.43349358974358976
+        ]
+      },
+      "any_gold_at_20": {
+        "baseline_cases": 113,
+        "both": 100,
+        "candidate_cases": 163,
+        "lost": 13,
+        "lost_case_ids": [
+          "01323034afde8983e978b8d2",
+          "117ee2d955a751ce27afa1e9",
+          "35154a761b37d4f5767d1cfa",
+          "874789dba71301e49e64f97c",
+          "8d19ca90da7a3f1ce81d3654",
+          "9473ef1be3ba59f1a4183a0d",
+          "a1ced6614a88236ca95d50df",
+          "a5663509f3a348043512b15b",
+          "bb9cf609f8e5521ab080803e",
+          "c81f5402632894aee445eef6",
+          "c859445c6efbe83774341f1d",
+          "d42e82da45418756a38691fc",
+          "fd824e5a0cecb1d3d2ab7bf2"
+        ],
+        "mcnemar_exact_p": 5.044923721823652e-09,
+        "metric": "Recall@20",
+        "neither": 44,
+        "recovered": 63,
+        "recovered_case_ids": [
+          "03428c61dae79a4f9a8bf8dc",
+          "051a22c7b9ec33a412400b9b",
+          "0765b7d2a08dd5736ac91857",
+          "0f4d4723a06149a5172fed0a",
+          "120f8ebe03b4feba2ac74c51",
+          "12951fd6d477e49ce706a14b",
+          "15959167576a87987d8f9f1f",
+          "17ed1867ee5224ae7952b5df",
+          "1dd2bdfdcf7092e1c69f50d6",
+          "210bcbf1622401f32d9f8c8e",
+          "24b8f50a23a0e2ebcf4b7067",
+          "2ab29030d7f263704018f085",
+          "399f735b329d5c11913ac4ab",
+          "3a9ae9c1d49cc6b262e3cab7",
+          "3e3c5349d79cbfd3366c746f",
+          "445f0e5cb04c0403b28b2294",
+          "44eb66d77e310e55a71d007d",
+          "46cbbb206ba9c760f4550ec1",
+          "4859c611ffd0c874827b2e28",
+          "4af738a83e9f45b8aec78341",
+          "4eb8d03198ff006b7a39c280",
+          "5f4c149c9f7dac47ebcf685d",
+          "63104a1841c8cb80a25ba9de",
+          "654844880c35105f5cd15e55",
+          "660e1d8e595766b0b1d334ee",
+          "6d3773a91bd26a4977aa45af",
+          "725dd77bdee89b3e125bd7e5",
+          "7ae166d7364fe6e5c438dc2c",
+          "7f2b7ed09afc0e1e57683529",
+          "810b8fe144165198bc8de283",
+          "813d94498e2857e40587f5a5",
+          "8882930f15d1cd0966e4ff81",
+          "896a5d9f9bfa6cb68a4775ee",
+          "8a1219475ef9f0e5271d7bd9",
+          "8ccd4fc7cb2c41bf69717b6c",
+          "8e5f31c02cbb5bd1563ea5d1",
+          "9151d23c9630aed754b3355b",
+          "933cf220419f1e5d45d8304f",
+          "9a326250f0d9b6336a9cf026",
+          "a29f65fcb9622959ff46d6c5",
+          "a69837e52fea4b05cbedcb9f",
+          "a7c7ef59d68f723d79d9c7b5",
+          "aab82f381a4ad9fca153446a",
+          "b2bcc7a9cd02595dccde4bb0",
+          "bf0ff8578398a3db3e0fcad4",
+          "c5186727aa0268eb514ee57c",
+          "c7ea7d6fe8de97695a6c286e",
+          "c7f3b6917b991258d6cd1ba3",
+          "cdca9bf2d9c3acf91f505d3a",
+          "ce7c3a91b303d6ce15a685e0",
+          "d0551ed5a2d63c99e3bbfcd5",
+          "d65a03b1febee94c93435793",
+          "d7a097e10a28d74d388f9a1c",
+          "d837c1ef083893fbc9f88e61",
+          "d9073750309233ee1f19776d",
+          "dfa7089d7bf0b3dad96e2bb8",
+          "e0a0b8ad2d50c7660fb64a40",
+          "e271598f05638161b8b0fbdc",
+          "e2d0725fea18663dc8608d5e",
+          "e50d9d504a467c632442042e",
+          "e843a55e790138194506b76a",
+          "f39b3eb29d5ba2f6c18b0555",
+          "fbf9c4f79a3bad9970904209"
+        ]
+      }
+    },
+    "lexical": {
+      "BCY@8k": {
+        "delta": 0.15757575757575756,
+        "repo_cluster_bootstrap_95_ci": [
+          0.07553034293071162,
+          0.2551820107858241
+        ]
+      },
+      "MRR": {
+        "delta": 0.18791889994641192,
+        "repo_cluster_bootstrap_95_ci": [
+          0.10602526510693228,
+          0.246094886911137
+        ]
+      },
+      "Recall@20": {
+        "delta": 0.17015151515151514,
+        "repo_cluster_bootstrap_95_ci": [
+          0.08817144563918758,
+          0.22619090752242924
+        ]
+      },
+      "Recall@5": {
+        "delta": 0.26136363636363635,
+        "repo_cluster_bootstrap_95_ci": [
+          0.13995697463768117,
+          0.361192032407747
+        ]
+      },
+      "any_gold_at_20": {
+        "baseline_cases": 123,
+        "both": 107,
+        "candidate_cases": 163,
+        "lost": 16,
+        "lost_case_ids": [
+          "01323034afde8983e978b8d2",
+          "1e7cac8cfdead734e7e51ad6",
+          "23a2b9be96f7a7fd29d64e25",
+          "262ecc80fa3618111feb4987",
+          "2f39489dd27f283deb0f7fae",
+          "35154a761b37d4f5767d1cfa",
+          "73fc2431777934774483cb2a",
+          "7d661ed7231eb85fa0e44073",
+          "874789dba71301e49e64f97c",
+          "8d19ca90da7a3f1ce81d3654",
+          "9473ef1be3ba59f1a4183a0d",
+          "b09afd5adcd28d23a8142452",
+          "c859445c6efbe83774341f1d",
+          "d42e82da45418756a38691fc",
+          "d58f6487e6e2721dd5266c21",
+          "db9648de45cff4b6700ae278"
+        ],
+        "mcnemar_exact_p": 2.397319809534421e-06,
+        "metric": "Recall@20",
+        "neither": 41,
+        "recovered": 56,
+        "recovered_case_ids": [
+          "03428c61dae79a4f9a8bf8dc",
+          "051a22c7b9ec33a412400b9b",
+          "0f4d4723a06149a5172fed0a",
+          "120f8ebe03b4feba2ac74c51",
+          "154523e8d0af9b78d3138dd4",
+          "15959167576a87987d8f9f1f",
+          "17ed1867ee5224ae7952b5df",
+          "1dd2bdfdcf7092e1c69f50d6",
+          "210bcbf1622401f32d9f8c8e",
+          "224dd1f1e8aaa1653bb1fbec",
+          "3025e4292fbebc1b7bdc3329",
+          "3a9ae9c1d49cc6b262e3cab7",
+          "3e3c5349d79cbfd3366c746f",
+          "3e57030fb6c9956e0c83cd5f",
+          "46cbbb206ba9c760f4550ec1",
+          "4859c611ffd0c874827b2e28",
+          "5f4c149c9f7dac47ebcf685d",
+          "63104a1841c8cb80a25ba9de",
+          "654844880c35105f5cd15e55",
+          "725dd77bdee89b3e125bd7e5",
+          "7ae166d7364fe6e5c438dc2c",
+          "810b8fe144165198bc8de283",
+          "813d94498e2857e40587f5a5",
+          "8882930f15d1cd0966e4ff81",
+          "896a5d9f9bfa6cb68a4775ee",
+          "8a1219475ef9f0e5271d7bd9",
+          "8ccd4fc7cb2c41bf69717b6c",
+          "933cf220419f1e5d45d8304f",
+          "9a326250f0d9b6336a9cf026",
+          "9dec25e4fbdd806e9efbc9a0",
+          "a29f65fcb9622959ff46d6c5",
+          "a5ef6228e76da22ccdcf6687",
+          "a7470b074620e51373b7a6ad",
+          "aab82f381a4ad9fca153446a",
+          "b2bcc7a9cd02595dccde4bb0",
+          "ba14e2bd566818e73329006b",
+          "bad03d80181bdf9b9d667638",
+          "bf0ff8578398a3db3e0fcad4",
+          "c3931963a24dd965a4ebb50c",
+          "c5186727aa0268eb514ee57c",
+          "c60a8891f2e4fc1229f51fa7",
+          "c7ea7d6fe8de97695a6c286e",
+          "c7f3b6917b991258d6cd1ba3",
+          "cdca9bf2d9c3acf91f505d3a",
+          "d0551ed5a2d63c99e3bbfcd5",
+          "d7a097e10a28d74d388f9a1c",
+          "d9073750309233ee1f19776d",
+          "dfa7089d7bf0b3dad96e2bb8",
+          "e0a0b8ad2d50c7660fb64a40",
+          "e2d0725fea18663dc8608d5e",
+          "e45d17f09b4ecbc9c61e2aff",
+          "e50d9d504a467c632442042e",
+          "e843a55e790138194506b76a",
+          "eb7fc5c7b88aeb04667b3a6d",
+          "f39b3eb29d5ba2f6c18b0555",
+          "fbf9c4f79a3bad9970904209"
+        ]
+      }
+    },
+    "lexical_bm25": {
+      "BCY@8k": {
+        "delta": 0.1715909090909091,
+        "repo_cluster_bootstrap_95_ci": [
+          0.09773989114680391,
+          0.26349567099567067
+        ]
+      },
+      "MRR": {
+        "delta": 0.1717347212861567,
+        "repo_cluster_bootstrap_95_ci": [
+          0.08251214317787778,
+          0.23543397626800486
+        ]
+      },
+      "Recall@20": {
+        "delta": 0.13,
+        "repo_cluster_bootstrap_95_ci": [
+          0.02427963562267769,
+          0.1995193864855493
+        ]
+      },
+      "Recall@5": {
+        "delta": 0.27234848484848484,
+        "repo_cluster_bootstrap_95_ci": [
+          0.14777777777777779,
+          0.37171432936396515
+        ]
+      },
+      "any_gold_at_20": {
+        "baseline_cases": 131,
+        "both": 112,
+        "candidate_cases": 163,
+        "lost": 19,
+        "lost_case_ids": [
+          "01323034afde8983e978b8d2",
+          "117ee2d955a751ce27afa1e9",
+          "1e7cac8cfdead734e7e51ad6",
+          "23a2b9be96f7a7fd29d64e25",
+          "262ecc80fa3618111feb4987",
+          "2f39489dd27f283deb0f7fae",
+          "35154a761b37d4f5767d1cfa",
+          "72a10b942f9f9905d29ff222",
+          "7d661ed7231eb85fa0e44073",
+          "874789dba71301e49e64f97c",
+          "8d19ca90da7a3f1ce81d3654",
+          "9473ef1be3ba59f1a4183a0d",
+          "b09afd5adcd28d23a8142452",
+          "c81f5402632894aee445eef6",
+          "c859445c6efbe83774341f1d",
+          "d42e82da45418756a38691fc",
+          "d58f6487e6e2721dd5266c21",
+          "db9648de45cff4b6700ae278",
+          "fd824e5a0cecb1d3d2ab7bf2"
+        ],
+        "mcnemar_exact_p": 0.00016604182060301758,
+        "metric": "Recall@20",
+        "neither": 38,
+        "recovered": 51,
+        "recovered_case_ids": [
+          "03428c61dae79a4f9a8bf8dc",
+          "051a22c7b9ec33a412400b9b",
+          "0f4d4723a06149a5172fed0a",
+          "120f8ebe03b4feba2ac74c51",
+          "15959167576a87987d8f9f1f",
+          "17ed1867ee5224ae7952b5df",
+          "1dd2bdfdcf7092e1c69f50d6",
+          "210bcbf1622401f32d9f8c8e",
+          "224dd1f1e8aaa1653bb1fbec",
+          "3a9ae9c1d49cc6b262e3cab7",
+          "3e3c5349d79cbfd3366c746f",
+          "3e57030fb6c9956e0c83cd5f",
+          "46cbbb206ba9c760f4550ec1",
+          "4859c611ffd0c874827b2e28",
+          "4eb8d03198ff006b7a39c280",
+          "5f4c149c9f7dac47ebcf685d",
+          "63104a1841c8cb80a25ba9de",
+          "654844880c35105f5cd15e55",
+          "725dd77bdee89b3e125bd7e5",
+          "7ae166d7364fe6e5c438dc2c",
+          "810b8fe144165198bc8de283",
+          "813d94498e2857e40587f5a5",
+          "8882930f15d1cd0966e4ff81",
+          "896a5d9f9bfa6cb68a4775ee",
+          "8a1219475ef9f0e5271d7bd9",
+          "8ccd4fc7cb2c41bf69717b6c",
+          "9151d23c9630aed754b3355b",
+          "9a326250f0d9b6336a9cf026",
+          "9dec25e4fbdd806e9efbc9a0",
+          "a29f65fcb9622959ff46d6c5",
+          "a5ef6228e76da22ccdcf6687",
+          "aab82f381a4ad9fca153446a",
+          "b2bcc7a9cd02595dccde4bb0",
+          "ba14e2bd566818e73329006b",
+          "bf0ff8578398a3db3e0fcad4",
+          "c3931963a24dd965a4ebb50c",
+          "c5186727aa0268eb514ee57c",
+          "c7ea7d6fe8de97695a6c286e",
+          "c7f3b6917b991258d6cd1ba3",
+          "cdca9bf2d9c3acf91f505d3a",
+          "d0551ed5a2d63c99e3bbfcd5",
+          "d7a097e10a28d74d388f9a1c",
+          "d9073750309233ee1f19776d",
+          "dfa7089d7bf0b3dad96e2bb8",
+          "e0a0b8ad2d50c7660fb64a40",
+          "e2d0725fea18663dc8608d5e",
+          "e45d17f09b4ecbc9c61e2aff",
+          "e50d9d504a467c632442042e",
+          "e843a55e790138194506b76a",
+          "f39b3eb29d5ba2f6c18b0555",
+          "fbf9c4f79a3bad9970904209"
+        ]
+      }
+    }
+  },
+  "schema": "delphi_round3_arb_final_summary_v1"
+}

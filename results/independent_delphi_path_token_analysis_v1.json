@@ -1,0 +1,114 @@
+{
+  "comparisons": {
+    "current__vs__path_token": {
+      "any_gold_at_20": {
+        "baseline_cases": 40,
+        "both": 40,
+        "candidate_cases": 41,
+        "lost": 0,
+        "mcnemar_exact_p": 1.0,
+        "metric": "Recall@20",
+        "neither": 7,
+        "recovered": 1
+      },
+      "baseline_run": "I-dev-delphi-native-current-top20-attested-r3",
+      "bootstrap_samples": 100000,
+      "bootstrap_seed": 20260824,
+      "bootstrap_unit": "repository",
+      "by_workflow": {
+        "commit2files": {
+          "BCY@8k": {
+            "baseline_mean": 0.517361111111111,
+            "candidate_mean": 0.5284722222222222,
+            "losses": 0,
+            "mean_delta": 0.011111111111111112,
+            "n": 48,
+            "wins": 2
+          },
+          "MRR": {
+            "baseline_mean": 0.5966652742968532,
+            "candidate_mean": 0.6223638523391813,
+            "losses": 3,
+            "mean_delta": 0.025698578042328044,
+            "n": 48,
+            "wins": 2
+          },
+          "Recall@20": {
+            "baseline_mean": 0.7638888888888888,
+            "candidate_mean": 0.775,
+            "losses": 0,
+            "mean_delta": 0.011111111111111112,
+            "n": 48,
+            "wins": 2
+          },
+          "Recall@5": {
+            "baseline_mean": 0.6458333333333334,
+            "candidate_mean": 0.6465277777777777,
+            "losses": 1,
+            "mean_delta": 0.0006944444444444443,
+            "n": 48,
+            "wins": 2
+          }
+        }
+      },
+      "candidate_run": "I-dev-delphi-native-pathtoken10-top20-r1",
+      "cases": 48,
+      "metrics": {
+        "BCY@8k": {
+          "baseline_mean": 0.517361111111111,
+          "candidate_mean": 0.5284722222222222,
+          "losses": 0,
+          "mean_delta": 0.011111111111111112,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.02777777777777778
+          ],
+          "ties": 46,
+          "wins": 2
+        },
+        "MRR": {
+          "baseline_mean": 0.5966652742968532,
+          "candidate_mean": 0.6223638523391813,
+          "losses": 3,
+          "mean_delta": 0.025698578042328044,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.02259011243386243,
+            0.08648726851851853
+          ],
+          "ties": 43,
+          "wins": 2
+        },
+        "Recall@20": {
+          "baseline_mean": 0.7638888888888888,
+          "candidate_mean": 0.775,
+          "losses": 0,
+          "mean_delta": 0.011111111111111112,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.027777777777777776
+          ],
+          "ties": 46,
+          "wins": 2
+        },
+        "Recall@5": {
+          "baseline_mean": 0.6458333333333334,
+          "candidate_mean": 0.6465277777777777,
+          "losses": 1,
+          "mean_delta": 0.0006944444444444443,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.027083333333333334,
+            0.024999999999999998
+          ],
+          "ties": 45,
+          "wins": 2
+        }
+      },
+      "ranking_agreement": {
+        "exact_top20_rate": 0.1875,
+        "mean_top20_set_jaccard": 0.9248176642198381
+      },
+      "repositories": 16
+    }
+  },
+  "schema": "arb_sweep_analysis_v1"
+}

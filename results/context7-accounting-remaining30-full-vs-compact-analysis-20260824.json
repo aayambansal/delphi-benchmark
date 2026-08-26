@@ -1,0 +1,1071 @@
+{
+  "accounting": {
+    "actual_new_hosted_requests": 120,
+    "budget_unit": "outbound hosted HTTP request attempt",
+    "compact_arm_requests": 60,
+    "context_requests": 120,
+    "endpoint_counts": {
+      "/api/v2/context": 120
+    },
+    "error_type_counts": {
+      "no_relevant_snippets": 7
+    },
+    "full_arm_requests": 60,
+    "max_new_hosted_requests": 120,
+    "method_counts": {
+      "GET": 120
+    },
+    "recorded_observations": 120,
+    "resolution_requests": 0,
+    "response_count": 120,
+    "response_status_counts": {
+      "200": 113,
+      "404": 7
+    },
+    "retry_requests": 0,
+    "scheduled_observations": 120,
+    "status_counts": {
+      "no_result": 7,
+      "ok": 113
+    },
+    "warmup_requests": 0
+  },
+  "balanced_order_diagnostic": {
+    "compact_then_full": {
+      "compact_identifier_hit_rate": 0.36666666666666664,
+      "compact_mean_latency_ms": 2061.91413475511,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.36666666666666664,
+      "full_mean_latency_ms": 2075.845190292845,
+      "pairs": 30
+    },
+    "full_then_compact": {
+      "compact_identifier_hit_rate": 0.36666666666666664,
+      "compact_mean_latency_ms": 2027.140456950292,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.36666666666666664,
+      "full_mean_latency_ms": 2144.2145596724004,
+      "pairs": 30
+    }
+  },
+  "design": {
+    "all_documentation_development_case_count": 40,
+    "case_ids_execution_order": [
+      "582",
+      "314",
+      "3",
+      "840",
+      "669",
+      "316",
+      "115",
+      "875",
+      "673",
+      "592",
+      "123",
+      "892",
+      "675",
+      "596",
+      "335",
+      "896",
+      "687",
+      "599",
+      "381",
+      "170",
+      "701",
+      "601",
+      "444",
+      "190",
+      "902",
+      "637",
+      "501",
+      "229",
+      "912",
+      "706"
+    ],
+    "case_ids_source_order": [
+      "3",
+      "115",
+      "123",
+      "170",
+      "190",
+      "229",
+      "314",
+      "316",
+      "335",
+      "381",
+      "444",
+      "501",
+      "582",
+      "592",
+      "596",
+      "599",
+      "601",
+      "637",
+      "669",
+      "673",
+      "675",
+      "687",
+      "701",
+      "706",
+      "840",
+      "875",
+      "892",
+      "896",
+      "902",
+      "912"
+    ],
+    "case_selection": "all 40 quality-guided documentation development cases minus the 10 pre-existing determinism-ablation cases",
+    "cases_per_library": {
+      "Matplotlib": 6,
+      "Numpy": 6,
+      "Pandas": 6,
+      "Sklearn": 6,
+      "Tensorflow": 6
+    },
+    "context_budget_tokens": 8000,
+    "development_only": true,
+    "disjoint_from_prior": true,
+    "extension_case_count": 30,
+    "final_split_touched": false,
+    "inter_request_delay_seconds": 0,
+    "output_type": "json",
+    "prior_case_count": 10,
+    "prior_case_ids": [
+      "538",
+      "635",
+      "339",
+      "482",
+      "277",
+      "51",
+      "887",
+      "850",
+      "680",
+      "670"
+    ],
+    "query_transforms": {
+      "compact": "existing deterministic _compact_docs_query(max_chars=2000)",
+      "full": "verbatim DS-1000 development prompt"
+    },
+    "repeats_per_arm": 2,
+    "retrieval_limit": 5,
+    "retry_policy": "Context7Adapter max_attempts=1; HTTPTransport(retries=0); redirects disabled; no application retry",
+    "schedule": "two rounds over all 30 cases; libraries interleaved in rotating order; calls paired within case; each round has 15 full-first and 15 compact-first pairs; every case receives each arm order once",
+    "source": "new/delphi-evaluation-2026-07-29-round2/samples/ds1000/development.jsonl",
+    "source_sha256": "a2d3e3a2cf727418d039f84fb7e38d90ecf380aee77aba7313879a018b9cded6",
+    "warmup_requests": 0
+  },
+  "extension_arms": {
+    "compact": {
+      "complete_case_repeats": 30,
+      "hosted_requests": 60,
+      "identifier_hit_rate": 0.36666666666666664,
+      "identifier_hits": 22,
+      "mean_context_bytes": 3277.65,
+      "mean_context_tokens": 845.45,
+      "mean_latency_ms": 2044.527295852701,
+      "mean_query_chars": 305.1333333333333,
+      "median_context_tokens": 745.0,
+      "median_latency_ms": 1993.3055629953742,
+      "no_result_count": 4,
+      "rows": 60,
+      "run_identifier_hit_rates": [
+        0.36666666666666664,
+        0.36666666666666664
+      ],
+      "status_counts": {
+        "no_result": 4,
+        "ok": 56
+      },
+      "technical_failure_count": 0,
+      "within_arm_exact_context_rate": 0.26666666666666666,
+      "within_arm_exact_list_rate": 0.26666666666666666,
+      "within_arm_identifier_hit_agreement_rate": 1.0,
+      "within_arm_mean_item_set_jaccard": 0.7253968253968254,
+      "within_arm_pairwise_comparisons": 30
+    },
+    "full": {
+      "complete_case_repeats": 30,
+      "hosted_requests": 60,
+      "identifier_hit_rate": 0.36666666666666664,
+      "identifier_hits": 22,
+      "mean_context_bytes": 3034.4166666666665,
+      "mean_context_tokens": 770.5333333333333,
+      "mean_latency_ms": 2110.029874982623,
+      "mean_query_chars": 805.3666666666667,
+      "median_context_tokens": 705.0,
+      "median_latency_ms": 2096.175937447697,
+      "no_result_count": 3,
+      "rows": 60,
+      "run_identifier_hit_rates": [
+        0.36666666666666664,
+        0.36666666666666664
+      ],
+      "status_counts": {
+        "no_result": 3,
+        "ok": 57
+      },
+      "technical_failure_count": 0,
+      "within_arm_exact_context_rate": 0.43333333333333335,
+      "within_arm_exact_list_rate": 0.4666666666666667,
+      "within_arm_identifier_hit_agreement_rate": 1.0,
+      "within_arm_mean_item_set_jaccard": 0.7309523809523809,
+      "within_arm_pairwise_comparisons": 30
+    }
+  },
+  "extension_cost_changes": {
+    "full_context_byte_change_percent_vs_compact": -7.420967258045663,
+    "full_context_token_change_percent_vs_compact": -8.861158751749565,
+    "full_latency_change_percent_vs_compact": 3.2038006664324437
+  },
+  "extension_paired_transform": {
+    "compact_only_hit_count": 2,
+    "compact_only_hits": [
+      {
+        "case_id": "314",
+        "repeat": 1
+      },
+      {
+        "case_id": "314",
+        "repeat": 2
+      }
+    ],
+    "exact_context_rate": 0.016666666666666666,
+    "exact_list_rate": 0.016666666666666666,
+    "full_only_hit_count": 2,
+    "full_only_hits": [
+      {
+        "case_id": "902",
+        "repeat": 1
+      },
+      {
+        "case_id": "902",
+        "repeat": 2
+      }
+    ],
+    "identifier_hit_agreement_rate": 0.9333333333333333,
+    "identifier_hit_rate_delta_full_minus_compact": 0.0,
+    "mean_context_byte_delta_full_minus_compact": -243.23333333333358,
+    "mean_context_token_delta_full_minus_compact": -74.91666666666674,
+    "mean_item_set_jaccard": 0.39279761904761906,
+    "mean_latency_ms_delta_full_minus_compact": 65.50257912992197,
+    "paired_case_repeats": 60
+  },
+  "extension_per_case": [
+    {
+      "case_id": "582",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Matplotlib",
+      "library_id": "/websites/matplotlib_stable"
+    },
+    {
+      "case_id": "314",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": -1.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Numpy",
+      "library_id": "/websites/numpy_doc_stable"
+    },
+    {
+      "case_id": "3",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Pandas",
+      "library_id": "/websites/pandas_pydata"
+    },
+    {
+      "case_id": "840",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Sklearn",
+      "library_id": "/websites/scikit-learn_stable"
+    },
+    {
+      "case_id": "669",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Tensorflow",
+      "library_id": "/tensorflow/docs"
+    },
+    {
+      "case_id": "316",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Numpy",
+      "library_id": "/websites/numpy_doc_stable"
+    },
+    {
+      "case_id": "115",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Pandas",
+      "library_id": "/websites/pandas_pydata"
+    },
+    {
+      "case_id": "875",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Sklearn",
+      "library_id": "/websites/scikit-learn_stable"
+    },
+    {
+      "case_id": "673",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Tensorflow",
+      "library_id": "/tensorflow/docs"
+    },
+    {
+      "case_id": "592",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Matplotlib",
+      "library_id": "/websites/matplotlib_stable"
+    },
+    {
+      "case_id": "123",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Pandas",
+      "library_id": "/websites/pandas_pydata"
+    },
+    {
+      "case_id": "892",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Sklearn",
+      "library_id": "/websites/scikit-learn_stable"
+    },
+    {
+      "case_id": "675",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Tensorflow",
+      "library_id": "/tensorflow/docs"
+    },
+    {
+      "case_id": "596",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Matplotlib",
+      "library_id": "/websites/matplotlib_stable"
+    },
+    {
+      "case_id": "335",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Numpy",
+      "library_id": "/websites/numpy_doc_stable"
+    },
+    {
+      "case_id": "896",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Sklearn",
+      "library_id": "/websites/scikit-learn_stable"
+    },
+    {
+      "case_id": "687",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Tensorflow",
+      "library_id": "/tensorflow/docs"
+    },
+    {
+      "case_id": "599",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Matplotlib",
+      "library_id": "/websites/matplotlib_stable"
+    },
+    {
+      "case_id": "381",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Numpy",
+      "library_id": "/websites/numpy_doc_stable"
+    },
+    {
+      "case_id": "170",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Pandas",
+      "library_id": "/websites/pandas_pydata"
+    },
+    {
+      "case_id": "701",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Tensorflow",
+      "library_id": "/tensorflow/docs"
+    },
+    {
+      "case_id": "601",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Matplotlib",
+      "library_id": "/websites/matplotlib_stable"
+    },
+    {
+      "case_id": "444",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Numpy",
+      "library_id": "/websites/numpy_doc_stable"
+    },
+    {
+      "case_id": "190",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Pandas",
+      "library_id": "/websites/pandas_pydata"
+    },
+    {
+      "case_id": "902",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 1.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Sklearn",
+      "library_id": "/websites/scikit-learn_stable"
+    },
+    {
+      "case_id": "637",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Matplotlib",
+      "library_id": "/websites/matplotlib_stable"
+    },
+    {
+      "case_id": "501",
+      "compact_identifier_hit_rate": 0.0,
+      "compact_identifier_hits": 0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "full_identifier_hits": 0,
+      "library": "Numpy",
+      "library_id": "/websites/numpy_doc_stable"
+    },
+    {
+      "case_id": "229",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Pandas",
+      "library_id": "/websites/pandas_pydata"
+    },
+    {
+      "case_id": "912",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Sklearn",
+      "library_id": "/websites/scikit-learn_stable"
+    },
+    {
+      "case_id": "706",
+      "compact_identifier_hit_rate": 1.0,
+      "compact_identifier_hits": 2,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "full_identifier_hits": 2,
+      "library": "Tensorflow",
+      "library_id": "/tensorflow/docs"
+    }
+  ],
+  "extension_per_repository_cluster": [
+    {
+      "cases": 6,
+      "compact_case_macro_identifier_hit_rate": 0.3333333333333333,
+      "delta_full_minus_compact": 0.0,
+      "full_case_macro_identifier_hit_rate": 0.3333333333333333,
+      "repository_cluster": "Matplotlib"
+    },
+    {
+      "cases": 6,
+      "compact_case_macro_identifier_hit_rate": 0.3333333333333333,
+      "delta_full_minus_compact": -0.16666666666666666,
+      "full_case_macro_identifier_hit_rate": 0.16666666666666666,
+      "repository_cluster": "Numpy"
+    },
+    {
+      "cases": 6,
+      "compact_case_macro_identifier_hit_rate": 0.3333333333333333,
+      "delta_full_minus_compact": 0.0,
+      "full_case_macro_identifier_hit_rate": 0.3333333333333333,
+      "repository_cluster": "Pandas"
+    },
+    {
+      "cases": 6,
+      "compact_case_macro_identifier_hit_rate": 0.6666666666666666,
+      "delta_full_minus_compact": 0.16666666666666666,
+      "full_case_macro_identifier_hit_rate": 0.8333333333333334,
+      "repository_cluster": "Sklearn"
+    },
+    {
+      "cases": 6,
+      "compact_case_macro_identifier_hit_rate": 0.16666666666666666,
+      "delta_full_minus_compact": 0.0,
+      "full_case_macro_identifier_hit_rate": 0.16666666666666666,
+      "repository_cluster": "Tensorflow"
+    }
+  ],
+  "extension_primary_effect": {
+    "bootstrap_samples": 100000,
+    "case_bootstrap_seed": 20260824,
+    "case_cluster_bootstrap_95_ci": [
+      -0.1,
+      0.1
+    ],
+    "case_level_exact_sign_test_p": 1.0,
+    "cases": 30,
+    "cases_compact_better": 1,
+    "cases_full_better": 1,
+    "cases_tied": 28,
+    "compact_identifier_hit_rate": 0.36666666666666664,
+    "delta_full_minus_compact": 0.0,
+    "estimand": "case-macro mean identifier-hit probability over two hosted repetitions per arm",
+    "full_identifier_hit_rate": 0.36666666666666664,
+    "repository_bootstrap_seed": 20260825,
+    "repository_cluster_bootstrap_95_ci": [
+      -0.1,
+      0.1
+    ],
+    "repository_clusters": 5,
+    "warning": "Repeated calls stay inside case clusters. The repository interval has only five distinct documentation-library clusters and is therefore coarse."
+  },
+  "interpretation": {
+    "extension_winner": "none",
+    "methodological_result": "Fixed library identities and balanced paired requests isolate query shape, but Context7 remains nondeterministic and query shape materially changes the returned lists.",
+    "pooled_winner": "none",
+    "summary": "The disjoint 30-case extension tied on identifier hit. Both case- and repository-cluster intervals include zero in the extension and compatible pooled 40-case analysis, so neither query transform is a supported quality winner."
+  },
+  "pooled_40_case_primary_effect": {
+    "attempt_weighted_compact_identifier_hit_rate_descriptive": 0.35454545454545455,
+    "attempt_weighted_delta_descriptive": 0.018181818181818188,
+    "attempt_weighted_full_identifier_hit_rate_descriptive": 0.37272727272727274,
+    "bootstrap_samples": 100000,
+    "case_bootstrap_seed": 20260826,
+    "case_cluster_bootstrap_95_ci": [
+      -0.085,
+      0.11000000000000001
+    ],
+    "case_level_exact_sign_test_p": 1.0,
+    "cases": 40,
+    "cases_compact_better": 3,
+    "cases_full_better": 3,
+    "cases_tied": 34,
+    "compact_case_macro_identifier_hit_rate": 0.36,
+    "compatibility_basis": "same 40-case development frame, exact prior pinned library IDs, query transforms, retrieval limit=5, context ceiling=8000 tokens, JSON output, no resolver calls; extension adds the disjoint 30 cases",
+    "delta_full_minus_compact": 0.01,
+    "estimand": "case-macro mean identifier-hit probability; each of 40 cases has equal weight despite differing repeat counts",
+    "extension_cases_with_two_repeats_per_arm": 30,
+    "full_case_macro_identifier_hit_rate": 0.37,
+    "hosted_context_requests": 220,
+    "prior_cases_with_five_repeats_per_arm": 10,
+    "repository_bootstrap_seed": 20260827,
+    "repository_cluster_bootstrap_95_ci": [
+      -0.08,
+      0.1
+    ],
+    "repository_clusters": 5,
+    "warning": "The repository interval has only five clusters. The case-cluster interval is primary for development-case generalization; neither interval supports declaring a winner if it crosses zero."
+  },
+  "pooled_per_case": [
+    {
+      "case_id": "538",
+      "compact_identifier_hit_rate": 0.6,
+      "delta_full_minus_compact": 0.4,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "635",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "339",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "482",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "277",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 1.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Pandas",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "51",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Pandas",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "887",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": -0.19999999999999996,
+      "full_identifier_hit_rate": 0.8,
+      "library": "Sklearn",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "850",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "680",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "670",
+      "compact_identifier_hit_rate": 0.8,
+      "delta_full_minus_compact": -0.8,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 5
+    },
+    {
+      "case_id": "582",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "314",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": -1.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "3",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Pandas",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "840",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "669",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "316",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "115",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Pandas",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "875",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "673",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "592",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "123",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Pandas",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "892",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "675",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "596",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "335",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Numpy",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "896",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "687",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "599",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "381",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "170",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Pandas",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "701",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "601",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "444",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "190",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Pandas",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "902",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 1.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "637",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Matplotlib",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "501",
+      "compact_identifier_hit_rate": 0.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 0.0,
+      "library": "Numpy",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "229",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Pandas",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "912",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Sklearn",
+      "repeats_per_arm": 2
+    },
+    {
+      "case_id": "706",
+      "compact_identifier_hit_rate": 1.0,
+      "delta_full_minus_compact": 0.0,
+      "full_identifier_hit_rate": 1.0,
+      "library": "Tensorflow",
+      "repeats_per_arm": 2
+    }
+  ],
+  "pooled_per_repository_cluster": [
+    {
+      "cases": 8,
+      "compact_case_macro_identifier_hit_rate": 0.325,
+      "delta_full_minus_compact": 0.05,
+      "full_case_macro_identifier_hit_rate": 0.375,
+      "repository_cluster": "Matplotlib"
+    },
+    {
+      "cases": 8,
+      "compact_case_macro_identifier_hit_rate": 0.25,
+      "delta_full_minus_compact": -0.125,
+      "full_case_macro_identifier_hit_rate": 0.125,
+      "repository_cluster": "Numpy"
+    },
+    {
+      "cases": 8,
+      "compact_case_macro_identifier_hit_rate": 0.25,
+      "delta_full_minus_compact": 0.125,
+      "full_case_macro_identifier_hit_rate": 0.375,
+      "repository_cluster": "Pandas"
+    },
+    {
+      "cases": 8,
+      "compact_case_macro_identifier_hit_rate": 0.75,
+      "delta_full_minus_compact": 0.1,
+      "full_case_macro_identifier_hit_rate": 0.85,
+      "repository_cluster": "Sklearn"
+    },
+    {
+      "cases": 8,
+      "compact_case_macro_identifier_hit_rate": 0.225,
+      "delta_full_minus_compact": -0.1,
+      "full_case_macro_identifier_hit_rate": 0.125,
+      "repository_cluster": "Tensorflow"
+    }
+  ],
+  "prior_artifact": {
+    "path": "new/round3/results/context7-accounting-fixed-guided-full-vs-compact.json",
+    "sha256": "1c5f8218e8098d38a06a7b0db5c02ab03d4698c0846e9cf3170ce44d89e1a5bd"
+  },
+  "raw_artifact": {
+    "bytes": 1638580,
+    "immutable_policy": "created with exclusive mode and never rewritten; this analysis pins its SHA-256",
+    "path": "new/round3/results/context7-accounting-remaining30-full-vs-compact-raw-20260824.json",
+    "sha256": "dca06f7624ff5a6bbc3dab663158e2ca3df9b15c86d3ae25dd77fed0aa198c25"
+  },
+  "resolution": {
+    "canonical_names": {
+      "Matplotlib": "matplotlib",
+      "Numpy": "numpy",
+      "Pandas": "pandas",
+      "Sklearn": "scikit-learn",
+      "Tensorflow": "tensorflow"
+    },
+    "fixed_library_ids": {
+      "Matplotlib": "/websites/matplotlib_stable",
+      "Numpy": "/websites/numpy_doc_stable",
+      "Pandas": "/websites/pandas_pydata",
+      "Sklearn": "/websites/scikit-learn_stable",
+      "Tensorflow": "/tensorflow/docs"
+    },
+    "prior_ablation": "new/round3/results/context7-accounting-fixed-guided-full-vs-compact.json",
+    "prior_ablation_sha256": "1c5f8218e8098d38a06a7b0db5c02ab03d4698c0846e9cf3170ce44d89e1a5bd",
+    "quality_guided_provenance": "new/round3/results/DOCS-dev-context7-guided-compact-details.json",
+    "quality_guided_provenance_sha256": "44581be2bc4eb1a79e30b5ae2a90252ffe0fae0ae6f6859f1cf80e09537c5bbf",
+    "resolution_requests": 0,
+    "strategy": "pre-resolved and pinned to the exact IDs used by the prior 10-case ablation",
+    "tensorflow_identity_note": "Pinned to /tensorflow/docs to preserve direct comparability with the prior ablation; no live resolver was called."
+  },
+  "schema": "context7_remaining30_query_shape_analysis_v1",
+  "verification": {
+    "checks": {
+      "balanced_order": true,
+      "coverage": true,
+      "development_source": true,
+      "development_source_hash_matches_prior_manifest": true,
+      "equal_arms": true,
+      "no_credentials_in_raw": true,
+      "no_technical_failures": true,
+      "one_attempt_per_row": true,
+      "partition": true,
+      "pinned_ids": true,
+      "query_determinism": true,
+      "raw_response_hashes": true,
+      "raw_response_json": true,
+      "raw_validity_flag": true,
+      "request_accounting": true,
+      "schema": true,
+      "two_repeats_per_arm": true
+    },
+    "raw_body_bytes": 472497,
+    "raw_http_bodies": 120,
+    "raw_rows": 120,
+    "valid": true
+  }
+}

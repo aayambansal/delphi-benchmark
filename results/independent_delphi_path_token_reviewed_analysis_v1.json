@@ -1,0 +1,441 @@
+{
+  "comparisons": {
+    "current__vs__reviewed": {
+      "any_gold_at_20": {
+        "baseline_cases": 40,
+        "both": 40,
+        "candidate_cases": 42,
+        "lost": 0,
+        "mcnemar_exact_p": 0.5,
+        "metric": "Recall@20",
+        "neither": 6,
+        "recovered": 2
+      },
+      "baseline_run": "I-dev-delphi-native-current-top20-attested-r3",
+      "bootstrap_samples": 100000,
+      "bootstrap_seed": 20260834,
+      "bootstrap_unit": "repository",
+      "by_workflow": {
+        "commit2files": {
+          "BCY@8k": {
+            "baseline_mean": 0.517361111111111,
+            "candidate_mean": 0.5284722222222222,
+            "losses": 0,
+            "mean_delta": 0.011111111111111112,
+            "n": 48,
+            "wins": 2
+          },
+          "MRR": {
+            "baseline_mean": 0.5966652742968532,
+            "candidate_mean": 0.6288844814241487,
+            "losses": 4,
+            "mean_delta": 0.03221920712729536,
+            "n": 48,
+            "wins": 3
+          },
+          "Recall@20": {
+            "baseline_mean": 0.7638888888888888,
+            "candidate_mean": 0.7930555555555556,
+            "losses": 1,
+            "mean_delta": 0.029166666666666664,
+            "n": 48,
+            "wins": 3
+          },
+          "Recall@5": {
+            "baseline_mean": 0.6458333333333334,
+            "candidate_mean": 0.6673611111111111,
+            "losses": 1,
+            "mean_delta": 0.021527777777777774,
+            "n": 48,
+            "wins": 3
+          }
+        }
+      },
+      "candidate_run": "I-dev-delphi-native-pathtoken10-reviewed-top20-r4",
+      "cases": 48,
+      "metrics": {
+        "BCY@8k": {
+          "baseline_mean": 0.517361111111111,
+          "candidate_mean": 0.5284722222222222,
+          "losses": 0,
+          "mean_delta": 0.011111111111111112,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.027777777777777776
+          ],
+          "ties": 46,
+          "wins": 2
+        },
+        "MRR": {
+          "baseline_mean": 0.5966652742968532,
+          "candidate_mean": 0.6288844814241487,
+          "losses": 4,
+          "mean_delta": 0.03221920712729536,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.017177287581699344,
+            0.09263587379396203
+          ],
+          "ties": 41,
+          "wins": 3
+        },
+        "Recall@20": {
+          "baseline_mean": 0.7638888888888888,
+          "candidate_mean": 0.7930555555555556,
+          "losses": 1,
+          "mean_delta": 0.029166666666666664,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.006944444444444444,
+            0.07916666666666666
+          ],
+          "ties": 44,
+          "wins": 3
+        },
+        "Recall@5": {
+          "baseline_mean": 0.6458333333333334,
+          "candidate_mean": 0.6673611111111111,
+          "losses": 1,
+          "mean_delta": 0.021527777777777774,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.020833333333333332,
+            0.07361111111111111
+          ],
+          "ties": 44,
+          "wins": 3
+        }
+      },
+      "ranking_agreement": {
+        "exact_top20_rate": 0.1875,
+        "mean_top20_set_jaccard": 0.8847273197816676
+      },
+      "repositories": 16
+    },
+    "lexical__vs__reviewed": {
+      "any_gold_at_20": {
+        "baseline_cases": 39,
+        "both": 38,
+        "candidate_cases": 42,
+        "lost": 1,
+        "mcnemar_exact_p": 0.375,
+        "metric": "Recall@20",
+        "neither": 5,
+        "recovered": 4
+      },
+      "baseline_run": "I-dev-lexical-v3",
+      "bootstrap_samples": 100000,
+      "bootstrap_seed": 20260844,
+      "bootstrap_unit": "repository",
+      "by_workflow": {
+        "commit2files": {
+          "BCY@8k": {
+            "baseline_mean": 0.4395833333333334,
+            "candidate_mean": 0.5284722222222222,
+            "losses": 4,
+            "mean_delta": 0.08888888888888889,
+            "n": 48,
+            "wins": 11
+          },
+          "MRR": {
+            "baseline_mean": 0.461866353067011,
+            "candidate_mean": 0.6288844814241487,
+            "losses": 7,
+            "mean_delta": 0.16701812835713767,
+            "n": 48,
+            "wins": 20
+          },
+          "Recall@20": {
+            "baseline_mean": 0.7319444444444444,
+            "candidate_mean": 0.7930555555555556,
+            "losses": 3,
+            "mean_delta": 0.06111111111111111,
+            "n": 48,
+            "wins": 6
+          },
+          "Recall@5": {
+            "baseline_mean": 0.5125000000000001,
+            "candidate_mean": 0.6673611111111111,
+            "losses": 4,
+            "mean_delta": 0.15486111111111112,
+            "n": 48,
+            "wins": 15
+          }
+        }
+      },
+      "candidate_run": "I-dev-delphi-native-pathtoken10-reviewed-top20-r4",
+      "cases": 48,
+      "metrics": {
+        "BCY@8k": {
+          "baseline_mean": 0.4395833333333334,
+          "candidate_mean": 0.5284722222222222,
+          "losses": 4,
+          "mean_delta": 0.08888888888888889,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.004166666666666665,
+            0.18263888888888888
+          ],
+          "ties": 33,
+          "wins": 11
+        },
+        "MRR": {
+          "baseline_mean": 0.461866353067011,
+          "candidate_mean": 0.6288844814241487,
+          "losses": 7,
+          "mean_delta": 0.16701812835713767,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0695249152292496,
+            0.27662156402965227
+          ],
+          "ties": 21,
+          "wins": 20
+        },
+        "Recall@20": {
+          "baseline_mean": 0.7319444444444444,
+          "candidate_mean": 0.7930555555555556,
+          "losses": 3,
+          "mean_delta": 0.06111111111111111,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.008333333333333333,
+            0.13749999999999998
+          ],
+          "ties": 39,
+          "wins": 6
+        },
+        "Recall@5": {
+          "baseline_mean": 0.5125000000000001,
+          "candidate_mean": 0.6673611111111111,
+          "losses": 4,
+          "mean_delta": 0.15486111111111112,
+          "repo_cluster_bootstrap_95_ci": [
+            0.03819444444444444,
+            0.2798611111111111
+          ],
+          "ties": 29,
+          "wins": 15
+        }
+      },
+      "ranking_agreement": {
+        "exact_top20_rate": 0.0,
+        "mean_top20_set_jaccard": 0.24646136911015126
+      },
+      "repositories": 16
+    },
+    "lexical_rrf__vs__reviewed": {
+      "any_gold_at_20": {
+        "baseline_cases": 39,
+        "both": 38,
+        "candidate_cases": 42,
+        "lost": 1,
+        "mcnemar_exact_p": 0.375,
+        "metric": "Recall@20",
+        "neither": 5,
+        "recovered": 4
+      },
+      "baseline_run": "I-dev-lexical-bm25-rrf70-v1",
+      "bootstrap_samples": 100000,
+      "bootstrap_seed": 20260854,
+      "bootstrap_unit": "repository",
+      "by_workflow": {
+        "commit2files": {
+          "BCY@8k": {
+            "baseline_mean": 0.43263888888888885,
+            "candidate_mean": 0.5284722222222222,
+            "losses": 5,
+            "mean_delta": 0.09583333333333333,
+            "n": 48,
+            "wins": 12
+          },
+          "MRR": {
+            "baseline_mean": 0.46913930976430973,
+            "candidate_mean": 0.6288844814241487,
+            "losses": 8,
+            "mean_delta": 0.15974517165983884,
+            "n": 48,
+            "wins": 19
+          },
+          "Recall@20": {
+            "baseline_mean": 0.7319444444444444,
+            "candidate_mean": 0.7930555555555556,
+            "losses": 3,
+            "mean_delta": 0.06111111111111111,
+            "n": 48,
+            "wins": 6
+          },
+          "Recall@5": {
+            "baseline_mean": 0.5506944444444445,
+            "candidate_mean": 0.6673611111111111,
+            "losses": 5,
+            "mean_delta": 0.11666666666666665,
+            "n": 48,
+            "wins": 14
+          }
+        }
+      },
+      "candidate_run": "I-dev-delphi-native-pathtoken10-reviewed-top20-r4",
+      "cases": 48,
+      "metrics": {
+        "BCY@8k": {
+          "baseline_mean": 0.43263888888888885,
+          "candidate_mean": 0.5284722222222222,
+          "losses": 5,
+          "mean_delta": 0.09583333333333333,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.00972222222222222,
+            0.20694444444444446
+          ],
+          "ties": 31,
+          "wins": 12
+        },
+        "MRR": {
+          "baseline_mean": 0.46913930976430973,
+          "candidate_mean": 0.6288844814241487,
+          "losses": 8,
+          "mean_delta": 0.15974517165983884,
+          "repo_cluster_bootstrap_95_ci": [
+            0.04497244438711157,
+            0.2874447601010101
+          ],
+          "ties": 21,
+          "wins": 19
+        },
+        "Recall@20": {
+          "baseline_mean": 0.7319444444444444,
+          "candidate_mean": 0.7930555555555556,
+          "losses": 3,
+          "mean_delta": 0.06111111111111111,
+          "repo_cluster_bootstrap_95_ci": [
+            -0.008333333333333333,
+            0.13749999999999998
+          ],
+          "ties": 39,
+          "wins": 6
+        },
+        "Recall@5": {
+          "baseline_mean": 0.5506944444444445,
+          "candidate_mean": 0.6673611111111111,
+          "losses": 5,
+          "mean_delta": 0.11666666666666665,
+          "repo_cluster_bootstrap_95_ci": [
+            0.005555555555555559,
+            0.21875
+          ],
+          "ties": 29,
+          "wins": 14
+        }
+      },
+      "ranking_agreement": {
+        "exact_top20_rate": 0.0,
+        "mean_top20_set_jaccard": 0.2573789688795856
+      },
+      "repositories": 16
+    },
+    "previous_path_token__vs__reviewed": {
+      "any_gold_at_20": {
+        "baseline_cases": 42,
+        "both": 42,
+        "candidate_cases": 42,
+        "lost": 0,
+        "mcnemar_exact_p": 1.0,
+        "metric": "Recall@20",
+        "neither": 6,
+        "recovered": 0
+      },
+      "baseline_run": "I-dev-delphi-native-pathtoken10-novel-top20-r3",
+      "bootstrap_samples": 100000,
+      "bootstrap_seed": 20260824,
+      "bootstrap_unit": "repository",
+      "by_workflow": {
+        "commit2files": {
+          "BCY@8k": {
+            "baseline_mean": 0.5284722222222222,
+            "candidate_mean": 0.5284722222222222,
+            "losses": 0,
+            "mean_delta": 0.0,
+            "n": 48,
+            "wins": 0
+          },
+          "MRR": {
+            "baseline_mean": 0.6288844814241487,
+            "candidate_mean": 0.6288844814241487,
+            "losses": 0,
+            "mean_delta": 0.0,
+            "n": 48,
+            "wins": 0
+          },
+          "Recall@20": {
+            "baseline_mean": 0.7930555555555556,
+            "candidate_mean": 0.7930555555555556,
+            "losses": 0,
+            "mean_delta": 0.0,
+            "n": 48,
+            "wins": 0
+          },
+          "Recall@5": {
+            "baseline_mean": 0.6673611111111111,
+            "candidate_mean": 0.6673611111111111,
+            "losses": 0,
+            "mean_delta": 0.0,
+            "n": 48,
+            "wins": 0
+          }
+        }
+      },
+      "candidate_run": "I-dev-delphi-native-pathtoken10-reviewed-top20-r4",
+      "cases": 48,
+      "metrics": {
+        "BCY@8k": {
+          "baseline_mean": 0.5284722222222222,
+          "candidate_mean": 0.5284722222222222,
+          "losses": 0,
+          "mean_delta": 0.0,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "ties": 48,
+          "wins": 0
+        },
+        "MRR": {
+          "baseline_mean": 0.6288844814241487,
+          "candidate_mean": 0.6288844814241487,
+          "losses": 0,
+          "mean_delta": 0.0,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "ties": 48,
+          "wins": 0
+        },
+        "Recall@20": {
+          "baseline_mean": 0.7930555555555556,
+          "candidate_mean": 0.7930555555555556,
+          "losses": 0,
+          "mean_delta": 0.0,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "ties": 48,
+          "wins": 0
+        },
+        "Recall@5": {
+          "baseline_mean": 0.6673611111111111,
+          "candidate_mean": 0.6673611111111111,
+          "losses": 0,
+          "mean_delta": 0.0,
+          "repo_cluster_bootstrap_95_ci": [
+            0.0,
+            0.0
+          ],
+          "ties": 48,
+          "wins": 0
+        }
+      },
+      "ranking_agreement": {
+        "exact_top20_rate": 1.0,
+        "mean_top20_set_jaccard": 1.0
+      },
+      "repositories": 16
+    }
+  },
+  "schema": "arb_sweep_analysis_v1"
+}

@@ -1,0 +1,160 @@
+{
+  "audited_artifacts": [
+    {
+      "path": "new/round3/results/nia-accounting-repository-readiness-20260824.json",
+      "role": "repository readiness",
+      "sha256": "ae9ae58d72c2316fad00c49638a5d205d537a78e5f02bd3579106351b7562dc8"
+    },
+    {
+      "path": "new/round3/results/nia-accounting-docs-compact-determinism-20260824.json",
+      "role": "historical compact-query determinism",
+      "sha256": "92b0411c6355a4478d2884ec95c604b08c1184e343d098a345045f596412ffa0"
+    },
+    {
+      "path": "new/round3/results/nia-accounting-docs-full-citation-audit-20260824.json",
+      "role": "retrospective full-query citation audit",
+      "sha256": "89954748355a926cc29d8471d7c2d59793a717effa5f91f488da0fc2f8e34663"
+    },
+    {
+      "path": "new/round3/results/nia-accounting-docs-query-transform-comparison-20260824.json",
+      "role": "historical full-versus-compact comparison",
+      "sha256": "4af952d469f0c9f46dcf16b1f9aa3ca2919ae5b9e640a872f2e8b3e30ea668d2"
+    },
+    {
+      "path": "new/round3/results/nia-accounting-docs-full-v-compact-analysis-20260824.json",
+      "role": "legacy historical comparison pinned by the balanced run",
+      "sha256": "f24e3e044c5e782b2e4e33ff6855c240d939b20b742b7aa8f5cfab9478d3bbd3"
+    },
+    {
+      "path": "new/round3/results/nia-accounting-balanced-full-compact-raw-20260824.json",
+      "role": "decisive balanced raw observations",
+      "sha256": "a6fb8b59744857b76e04a692bed2f0a4723f0d903394aea2b613be92cec661cc"
+    },
+    {
+      "path": "new/round3/results/nia-accounting-balanced-full-compact-analysis-20260824.json",
+      "role": "decisive balanced analysis",
+      "sha256": "3c24afea0a03b53b9c79c74808ba4c105121c3db837f364df010003a77b44254"
+    }
+  ],
+  "checks": {
+    "balanced_full_compact": {
+      "analysis_recomputed_equal_ignoring_top_level_timestamps": true,
+      "analysis_shared_sections_equal_raw": true,
+      "citation_identity_mismatches": 0,
+      "citation_rows_with_exactly_five_recorded_citations": 100,
+      "dispatched_observations": 100,
+      "duplicate_citation_identities_within_observation": 0,
+      "effective_request_url": "https://apigcp.trynia.ai/v2/search",
+      "http_attempts": 100,
+      "http_transport_retries": 0,
+      "logical_retries": 0,
+      "provenance_file_hashes_match": true,
+      "raw_sha256_matches_analysis_input": true,
+      "schedule_matches_observations": true,
+      "scheduled_observations": 100,
+      "successful_observations": 100,
+      "technical_failures": 0,
+      "unique_retrieval_log_ids": 100,
+      "valid": true
+    },
+    "citation_identity_normalization": {
+      "compact_citations_checked": 500,
+      "file_path_and_sourceURL_disagreements": 0,
+      "full_citations_checked": 500,
+      "missing_line_spans": 0,
+      "missing_paths": 0,
+      "non_integer_line_spans": 0,
+      "normalization": "metadata.file_path:start_line:end_line; the documented fallback order was not exercised by these observations",
+      "observed_path_field": "metadata.file_path",
+      "paths_with_fragments": 0,
+      "paths_with_query_strings": 0,
+      "paths_with_trailing_slashes": 0,
+      "balanced_citations_checked": 500
+    },
+    "compact_determinism": {
+      "artifact_embeds_per_observation_attempt_fields": false,
+      "citation_rows_with_exactly_five_recorded_citations": 100,
+      "complete_cases": 10,
+      "complete_observations": 100,
+      "effective_request_url": "https://apigcp.trynia.ai/v2/search",
+      "errors": 0,
+      "http_attempts_recorded": 100,
+      "query_hashes_match": true,
+      "retry_policy_recorded": "NiaDocsAdapter max_attempts=1",
+      "runs": 10,
+      "unique_retrieval_log_ids": 100,
+      "valid": true
+    },
+    "historical_comparisons": {
+      "compact_metrics_consistent_across_both_analysis_artifacts": true,
+      "deltas_consistent_across_both_analysis_artifacts": true,
+      "full_metrics_consistent_across_both_analysis_artifacts": true,
+      "historical_full_original_http_attempts_exactly_known": false,
+      "historical_full_source_rows_embed_attempt_or_retry_fields": false,
+      "use": "descriptive only; the balanced run supersedes it for the query-shape decision"
+    },
+    "historical_full_citation_audit": {
+      "citation_rows_with_exactly_five_recorded_citations": 100,
+      "complete_cases": 10,
+      "complete_observations": 100,
+      "effective_request_url": "https://apigcp.trynia.ai/v2/search",
+      "errors": 0,
+      "metrics_recomputed_exact": true,
+      "new_hosted_requests_for_retrospective_audit": 0,
+      "unique_retrieval_log_ids": 100,
+      "valid_for_output_and_citation_reanalysis": true
+    },
+    "repository_readiness": {
+      "audit_valid_for_available_credential_scope": true,
+      "benchmark_ready": false,
+      "benchmark_score_reported": false,
+      "complete_cases": 0,
+      "effective_request_url": "https://apigcp.trynia.ai/v2/daemon/sources",
+      "errors": 0,
+      "hosted_read_calls": 1,
+      "required_pair_list_matches_development_samples": true,
+      "required_pairs": 68,
+      "sample_count": 75,
+      "visible_required_pairs": 0
+    }
+  },
+  "created_at": "2026-08-24T09:49:34Z",
+  "decision": {
+    "additional_hosted_test": null,
+    "additional_test_needed_now": false,
+    "no_more_calls_recommendation": "Make no further Nia calls. Full queries are already selected by the complete, order-balanced development run. A raw-source-mode study would characterize a different comparator contract but would not change the selected query transform or remove the repository blocker.",
+    "query_transform": "full",
+    "reactivation_condition": "Resume only after an owned Nia scope demonstrably exposes all 68 required commit-pinned repository sources in terminal indexed state and account-scoped reads succeed for every source. If the benchmark contract is separately changed to require raw-retrieval parity, predeclare a distinct development-only skip_llm=true protocol before making calls."
+  },
+  "findings": [
+    {
+      "impact": "The historical full block cannot support an exact no-retry claim because its source rows contain neither attempt nor retry fields and the historical adapter allowed up to three attempts. This does not affect the decisive balanced run, which records exactly 100 one-attempt observations and zero retries.",
+      "severity": "material historical limitation",
+      "title": "Historical full attempts are not recoverable"
+    },
+    {
+      "impact": "NIA_WORKSTREAM.md lists six result files but omits nia-accounting-docs-full-v-compact-analysis-20260824.json, even though the balanced artifact pins that file by hash. The omission is inventory-only; all metrics agree.",
+      "severity": "minor documentation gap",
+      "title": "Workstream result inventory omits one dependency"
+    },
+    {
+      "impact": "The balanced artifacts record base_url=https://apigcp.trynia.ai/v2 and endpoint=/v2/search. The executed URL is correctly https://apigcp.trynia.ai/v2/search, but consumers must treat endpoint as an absolute API path rather than concatenate both recorded strings.",
+      "severity": "minor metadata ambiguity",
+      "title": "Base URL and endpoint fields are not concatenable"
+    }
+  ],
+  "locked_final_split_inspected": false,
+  "remaining_blocker": {
+    "exact": "The available owned Nia credential scope exposes 0/68 required ARB development (repo, base_commit) sources under /arb3-new/. The previously observed six-source scope is not locally addressable and was nonterminal. Until one owned scope exposes all 68 sources in terminal indexed state and every account-scoped source read succeeds, no Nia repository or Track C score is valid.",
+    "type": "hosted_repository_ingestion_or_account_scope_recovery"
+  },
+  "request_ledger": {
+    "hosted_requests_made_by_this_audit": 0,
+    "offline_analysis_recomputations_by_this_audit": 1,
+    "previous_balanced_search_attempts_audited": 100,
+    "previous_compact_search_attempts_audited": 100,
+    "previous_repository_inventory_reads_audited": 1
+  },
+  "schema": "nia_frontier_audit_v1",
+  "scope": "Nia benchmark accounting only; development split only"
+}

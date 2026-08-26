@@ -1,0 +1,111 @@
+{
+  "analysis_latency_ms": 14.152832794934511,
+  "complete_case_count": 10,
+  "complete_case_ids": [
+    "277",
+    "339",
+    "482",
+    "51",
+    "538",
+    "635",
+    "670",
+    "680",
+    "850",
+    "887"
+  ],
+  "complete_observation_count": 100,
+  "context_tokens": {
+    "mean": 1414.44,
+    "median": 1465.5
+  },
+  "corpus": {
+    "input_result_files": [
+      "new/round3/determinism/nia/docs-full-r1-details.json",
+      "new/round3/determinism/nia/docs-full-r2-details.json",
+      "new/round3/determinism/nia/docs-full-r3-details.json",
+      "new/round3/determinism/nia/docs-full-r4-details.json",
+      "new/round3/determinism/nia/docs-full-r5-details.json",
+      "new/round3/determinism/nia/docs-full-r6-details.json",
+      "new/round3/determinism/nia/docs-full-r7-details.json",
+      "new/round3/determinism/nia/docs-full-r8-details.json",
+      "new/round3/determinism/nia/docs-full-r9-details.json",
+      "new/round3/determinism/nia/docs-full-r10-details.json"
+    ],
+    "intended_case_count": 10,
+    "intended_repeat_count": 10,
+    "sample_file": "new/round3/samples/docs/determinism10.jsonl",
+    "sample_ids": [
+      "277",
+      "339",
+      "482",
+      "51",
+      "538",
+      "635",
+      "670",
+      "680",
+      "850",
+      "887"
+    ],
+    "sample_manifest": "new/round3/samples/docs/determinism10-manifest.json",
+    "split": "development",
+    "track": "documentation development determinism"
+  },
+  "created_at": "2026-08-24T08:24:51.389997+00:00",
+  "determinism": {
+    "citation_identity": "file_path_or_source_url:start_line:end_line over all five recorded citations",
+    "citation_ordered_exact_rate": 0.98,
+    "citation_set_exact_rate": 0.98,
+    "citation_set_mean_jaccard": 0.9933333333333333,
+    "citation_top1_exact_rate": 1.0,
+    "exact_synthesized_context_rate": 0.0,
+    "identifier_hit_agreement_rate": 0.9288888888888889,
+    "paired_case_comparisons": 450
+  },
+  "errors": [],
+  "hosted_search_query_count": 0,
+  "intended_observation_count": 100,
+  "latency_ms": {
+    "max": 22092.862917110324,
+    "mean": 12204.833301652689,
+    "median": 11174.019228899851,
+    "min": 9153.426457894966
+  },
+  "quality": {
+    "max_identifier_hit_rate": 0.7,
+    "mean_identifier_hit_rate": 0.6,
+    "min_identifier_hit_rate": 0.5,
+    "run_identifier_hit_rates": [
+      0.5,
+      0.7,
+      0.7,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.5
+    ]
+  },
+  "request_configuration": {
+    "bypass_semantic_cache": true,
+    "citation_limit_recorded": 5,
+    "endpoint": "/v2/search",
+    "fast_mode": true,
+    "include_sources": true,
+    "max_tokens": 8000,
+    "mode": "query",
+    "query_transform": "full",
+    "search_mode": "sources",
+    "skip_llm": false
+  },
+  "request_mode": "retrospective_docs_full_retrieval_plus_synthesis_citation_audit",
+  "schema": "nia_accounting_v1",
+  "synthesis_involved": true,
+  "validity": {
+    "locked_final_split_inspected": false,
+    "reason": "all 10 predeclared development cases complete in all 10 existing repeats",
+    "score_reportable": true,
+    "valid": true
+  }
+}

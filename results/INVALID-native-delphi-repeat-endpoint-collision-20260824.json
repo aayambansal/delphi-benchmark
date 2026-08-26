@@ -1,0 +1,38 @@
+{
+  "schema": "benchmark_run_invalidation_v1",
+  "created_at": "2026-08-24T09:31:47.049856+00:00",
+  "reason": "The scorer trusted port identity without verifying the serving retrieval configuration. Another development worker replaced both listeners before the repeat began.",
+  "invalid_runs": [
+    {
+      "run_id": "I-dev-delphi-native-current-r2",
+      "declared_configuration": {
+        "vector_exact_scan": true,
+        "file_bm25": false
+      },
+      "observed_serving_configuration": {
+        "vector_exact_scan": false,
+        "hnsw_ef_search": 100,
+        "file_bm25": false
+      },
+      "evidence_terminal": "new native API process on port 28743 started at 2026-08-24T09:29:03.898Z"
+    },
+    {
+      "run_id": "I-dev-delphi-native-filebm15-r2",
+      "declared_configuration": {
+        "vector_exact_scan": true,
+        "file_bm25": true,
+        "file_bm25_weight": 0.15
+      },
+      "observed_serving_configuration": {
+        "vector_exact_scan": false,
+        "hnsw_ef_search": 400,
+        "file_bm25": false
+      },
+      "evidence_terminal": "new native API process on port 28744 started at 2026-08-24T09:29:03.936Z"
+    }
+  ],
+  "dashboard_status_updated": true,
+  "score_reportable": false,
+  "final_split_inspected": false,
+  "required_fix": "Return retrieval configuration provenance with every search response and make the benchmark scorer fail when it differs from the predeclared expectation."
+}

@@ -1,0 +1,74 @@
+# Standalone round-3 experimental stack. Own project name, own volume, own
+# ports; envs fully specified here (no repo .env inheritance).
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: synsc
+      POSTGRES_PASSWORD: delphi-r3-postgres
+      POSTGRES_DB: synsc
+    ports:
+      - "57436:5432"
+    volumes:
+      - pgdata-r3:/var/lib/postgresql/data
+      - /Users/aayambansal/Desktop/syntheticsciences/delphi/database/supabase/setup_local.sql:/docker-entrypoint-initdb.d/01-setup.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synsc -d synsc"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: /Users/aayambansal/Desktop/syntheticsciences/delphi/backend
+      target: api
+    env_file:
+      - r3-secrets.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://synsc:delphi-r3-postgres@postgres:5432/synsc
+      SYNSC_API_HOST: "0.0.0.0"
+      SYNSC_API_PORT: "8742"
+      SYNSC_LOG_FORMAT: json
+      SERVER_SECRET: delphi-r3-session-secret-local-only
+      SYSTEM_PASSWORD: delphi-r3-admin
+      EMBEDDING_PROVIDER: gemini
+      SYNSC_RATE_LIMIT_SEARCH: 10000/minute
+      SYNSC_RATE_LIMIT_INDEX: 10000/minute
+      SYNSC_ENABLE_RERANKER: "true"
+      SYNSC_USE_CODE_RERANKER: "false"
+      RERANKER_BLEND_ALPHA: "0.4"
+      SYNSC_HYBRID_CANDIDATES: "50"
+      SYNSC_HYBRID_RERANK_K: "30"
+      SYNSC_QUERY_EXPANSION: "true"
+      SYNSC_LISTWISE_RERANK: "true"
+      SYNSC_LISTWISE_RERANK_MODEL: gpt-4o
+      SYNSC_LISTWISE_RERANK_K: "20"
+    ports:
+      - "21742:8742"
+    volumes:
+      - hf-cache-r3:/home/synsc/.cache/huggingface
+      - /Users/aayambansal/Desktop/syntheticsciences/delphi/new/round3/corpus/snapshots:/bench/corpus:ro
+
+  worker:
+    build:
+      context: /Users/aayambansal/Desktop/syntheticsciences/delphi/backend
+      target: worker
+    env_file:
+      - r3-secrets.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://synsc:delphi-r3-postgres@postgres:5432/synsc
+      SYNSC_LOG_FORMAT: json
+      SYNSC_WORKER_THREADS: "4"
+      EMBEDDING_PROVIDER: gemini
+    volumes:
+      - hf-cache-r3:/home/synsc/.cache/huggingface
+
+volumes:
+  pgdata-r3:
+  hf-cache-r3:

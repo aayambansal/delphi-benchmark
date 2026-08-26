@@ -1,0 +1,104 @@
+{
+  "any_gold_at_20": {
+    "baseline_cases": 39,
+    "both": 39,
+    "candidate_cases": 39,
+    "lost": 0,
+    "mcnemar_exact_p": 1.0,
+    "metric": "Recall@20",
+    "neither": 9,
+    "recovered": 0
+  },
+  "baseline_run": "I-dev-lexical-v3",
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260823,
+  "bootstrap_unit": "repository",
+  "by_workflow": {
+    "commit2files": {
+      "BCY@8k": {
+        "baseline_mean": 0.4395833333333334,
+        "candidate_mean": 0.43263888888888885,
+        "losses": 2,
+        "mean_delta": -0.006944444444444444,
+        "n": 48,
+        "wins": 1
+      },
+      "MRR": {
+        "baseline_mean": 0.461866353067011,
+        "candidate_mean": 0.46913930976430973,
+        "losses": 6,
+        "mean_delta": 0.007272956697298802,
+        "n": 48,
+        "wins": 11
+      },
+      "Recall@20": {
+        "baseline_mean": 0.7319444444444444,
+        "candidate_mean": 0.7319444444444444,
+        "losses": 0,
+        "mean_delta": 0.0,
+        "n": 48,
+        "wins": 0
+      },
+      "Recall@5": {
+        "baseline_mean": 0.5125000000000001,
+        "candidate_mean": 0.5506944444444445,
+        "losses": 4,
+        "mean_delta": 0.03819444444444444,
+        "n": 48,
+        "wins": 6
+      }
+    }
+  },
+  "candidate_run": "I-dev-lexical-bm25-rrf70-v1",
+  "cases": 48,
+  "metrics": {
+    "BCY@8k": {
+      "baseline_mean": 0.4395833333333334,
+      "candidate_mean": 0.43263888888888885,
+      "losses": 2,
+      "mean_delta": -0.006944444444444444,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.052083333333333336,
+        0.03125
+      ],
+      "ties": 45,
+      "wins": 1
+    },
+    "MRR": {
+      "baseline_mean": 0.461866353067011,
+      "candidate_mean": 0.46913930976430973,
+      "losses": 6,
+      "mean_delta": 0.007272956697298802,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.041090178096757045,
+        0.044529410647831696
+      ],
+      "ties": 31,
+      "wins": 11
+    },
+    "Recall@20": {
+      "baseline_mean": 0.7319444444444444,
+      "candidate_mean": 0.7319444444444444,
+      "losses": 0,
+      "mean_delta": 0.0,
+      "repo_cluster_bootstrap_95_ci": [
+        0.0,
+        0.0
+      ],
+      "ties": 48,
+      "wins": 0
+    },
+    "Recall@5": {
+      "baseline_mean": 0.5125000000000001,
+      "candidate_mean": 0.5506944444444445,
+      "losses": 4,
+      "mean_delta": 0.03819444444444444,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.02777777777777778,
+        0.1076388888888889
+      ],
+      "ties": 38,
+      "wins": 6
+    }
+  }
+}

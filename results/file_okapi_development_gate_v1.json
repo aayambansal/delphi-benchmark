@@ -1,0 +1,68 @@
+{
+  "arb_candidate": {
+    "reason": "independent common adoption gate failed before ARB candidate",
+    "status": "not_run"
+  },
+  "candidate_commit": "3565123",
+  "decision": "reject_file_okapi_retain_exact_current",
+  "independent": {
+    "any_gold": {
+      "baseline_cases": 42,
+      "both": 42,
+      "candidate_cases": 42,
+      "lost": 0,
+      "lost_case_ids": [],
+      "mcnemar_exact_p": 1.0,
+      "metric": "Recall@20",
+      "neither": 6,
+      "recovered": 0,
+      "recovered_case_ids": []
+    },
+    "baseline_median_latency_ms": 147.75727060623467,
+    "baseline_metrics": {
+      "BCY@8k": 0.5805555555555556,
+      "MRR": 0.6577433166248956,
+      "Recall@20": 0.7819444444444444
+    },
+    "baseline_run": "I-dev-delphi-native-generated-source-okapi-disabled-top20-r2",
+    "candidate_median_latency_ms": 198.2698329957202,
+    "candidate_metrics": {
+      "BCY@8k": 0.6090277777777778,
+      "MRR": 0.6600085282651073,
+      "Recall@20": 0.7999999999999999
+    },
+    "candidate_repeat_exact": true,
+    "candidate_run": "I-dev-delphi-native-fileokapi15-generated-top20-r2",
+    "checks": {
+      "bcy_ci_lower_at_least_minus_0_01": false,
+      "median_latency_ratio_at_most_1_2": false,
+      "mrr_ci_lower_at_least_minus_0_01": false,
+      "nonnegative_recall20_delta": true,
+      "zero_any_gold_losses": true
+    },
+    "confidence_intervals": {
+      "BCY@8k": [
+        -0.03680555555555556,
+        0.09097222222222222
+      ],
+      "MRR": [
+        -0.049999999999999996,
+        0.05590277777777778
+      ],
+      "Recall@20": [
+        0.0,
+        0.03888888888888889
+      ]
+    },
+    "deltas": {
+      "BCY@8k": 0.02847222222222222,
+      "MRR": 0.0022652116402116424,
+      "Recall@20": 0.018055555555555557
+    },
+    "median_latency_ratio": 1.3418617722311537,
+    "passed": false
+  },
+  "no_second_configuration": true,
+  "schema": "file_okapi_development_gate_v1",
+  "stop_reason": "underperformed"
+}

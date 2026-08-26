@@ -1,0 +1,259 @@
+[
+  {
+    "vignette": "gin-html-escape",
+    "repo": "gin-gonic/gin",
+    "rev": "64ead9e6bd924d431f4dd612349bc5e13300e6fc",
+    "question": "why does my JSON response get HTML-escaped and how do I turn that off?",
+    "answer_files": [
+      "render/json.go",
+      "context.go"
+    ],
+    "delphi": {
+      "latency_s": 5.93,
+      "files": [
+        "render/json.go",
+        "render/render_test.go",
+        "internal/json/json.go",
+        "internal/json/go_json.go",
+        "internal/json/jsoniter.go",
+        "errors.go",
+        "binding/json.go",
+        "binding/json_test.go"
+      ],
+      "snippets": [
+        {
+          "path": "render/json.go",
+          "lines": "56-58",
+          "head": "# method: func (r JSON) Render(w http.ResponseWriter) error\n# preceding context:\n# \t\"net/http\"\n# \n# \t\"github.com/gin-gonic/gin/internal/bytesconv\"\n# \t\"github.com/gin-gonic/gin/internal/json\"\n# )\n\nfunc (r JSON) Render(w http.ResponseWriter) error {\n\tr"
+        },
+        {
+          "path": "render/render_test.go",
+          "lines": "27-42",
+          "head": "# function: func TestRenderJSON(t *testing.T)\n# preceding context:\n# \t\"github.com/gin-gonic/gin/internal/json\"\n# \ttestdata \"github.com/gin-gonic/gin/testdata/protoexample\"\n# \t\"github.com/stretchr/testify/assert\"\n# \t\"google.golang.org/protobuf/proto\"\n"
+        },
+        {
+          "path": "internal/json/json.go",
+          "lines": "9-9",
+          "head": "import \"encoding/json\""
+        },
+        {
+          "path": "internal/json/go_json.go",
+          "lines": "9-9",
+          "head": "import json \"github.com/goccy/go-json\""
+        },
+        {
+          "path": "internal/json/jsoniter.go",
+          "lines": "9-9",
+          "head": "import jsoniter \"github.com/json-iterator/go\""
+        }
+      ]
+    },
+    "nia": {
+      "latency_s": 12.03,
+      "files": [
+        "render/json.go",
+        "render/render_test.go",
+        "binding/json.go",
+        "internal/json/json.go",
+        "render/render.go",
+        "render/html.go",
+        "internal/json/sonic.go"
+      ],
+      "answer_head": "Based on the retrieved code, JSON responses in Gin are HTML-escaped by default as a security measure. Here's why and how to turn it off:\n\n## Why JSON is HTML-escaped\n\nLooking at `render/json.go`, the standard `JSON` renderer uses Go's `json.Marshal()` which HTML-escapes characters like `<`, `>`, and `&` by default. For example:\n\n```go\n// From render/render_test.go\ndata := map[string]any{\n    \"foo\":  \"bar\",\n    \"html\": \"<b>\",\n}\n// Results in: {\"foo\":\"bar\",\"html\":\"\\u003cb\\u003e\"}\n```\n\nThe `<b>` gets escaped to `\\u003cb\\u003e` to prevent XSS attacks when JSON is embedded in HTML.\n\n## How to turn off HTML-escaping\n\nUse **`PureJSON`** instead of `JSON`. From `render/json.go`:\n\n```go\n// Render (PureJSON) writes custom ContentType and encodes the given interface object.\nfunc (r PureJSON) Render(w http.ResponseWriter) error {\n    r.WriteContentType(w)\n    encoder := json.NewEncoder(w)\n    encode"
+    },
+    "grep": {
+      "latency_s": 0.03,
+      "files": [
+        "tree_test.go",
+        "gin.go",
+        "tree.go",
+        "context.go",
+        "context_test.go",
+        "render/json.go",
+        "routes_test.go",
+        "CHANGELOG.md"
+      ],
+      "match_counts": {
+        "tree_test.go": 14,
+        "gin.go": 13,
+        "tree.go": 10,
+        "context.go": 8,
+        "context_test.go": 5,
+        "render/json.go": 3,
+        "routes_test.go": 2,
+        "CHANGELOG.md": 1
+      }
+    }
+  },
+  {
+    "vignette": "tokio-joinhandle-drop",
+    "repo": "tokio-rs/tokio",
+    "rev": "25e7f2641ef2555d688c267059431a2802805f1d",
+    "question": "what happens when I drop a JoinHandle, does the spawned task keep running?",
+    "answer_files": [
+      "tokio/src/task/join.rs",
+      "tokio/src/runtime/task/mod.rs"
+    ],
+    "delphi": {
+      "latency_s": 4.69,
+      "files": [
+        "tokio/src/runtime/task/mod.rs",
+        "tokio/src/task/mod.rs",
+        "tokio/src/runtime/task/state.rs",
+        "tokio/tests/join_handle_panic.rs",
+        "tokio-util/tests/abort_on_drop.rs",
+        "tokio/tests/task_join_set.rs",
+        "tokio-util/tests/task_join_map.rs",
+        "tokio-util/tests/task_join_queue.rs"
+      ],
+      "snippets": [
+        {
+          "path": "tokio/src/runtime/task/mod.rs",
+          "lines": "1-170",
+          "head": "//! The task module.\n//!\n//! The task module contains the code that manages spawned tasks and provides a\n//! safe API for the rest of the runtime to use. Each task in a runtime is\n//! stored in an `OwnedTasks` or `LocalOwnedTasks` object.\n//!\n//! # T"
+        },
+        {
+          "path": "tokio/src/task/mod.rs",
+          "lines": "1-185",
+          "head": "//! Asynchronous green-threads.\n//!\n//! ## What are Tasks?\n//!\n//! A _task_ is a light weight, non-blocking unit of execution. A task is similar\n//! to an OS thread, but rather than being managed by the OS scheduler, they are\n//! managed by the [Toki"
+        },
+        {
+          "path": "tokio/src/runtime/task/state.rs",
+          "lines": "93-96",
+          "head": "# struct: pub(super) struct TransitionToJoinHandleDrop\n# preceding context:\n# pub(crate) enum TransitionToNotifiedByRef {\n#     DoNothing,\n#     Submit,\n# }\n\npub(super) struct TransitionToJoinHandleDrop {\n    pub(super) drop_waker: bool,\n    pub(supe"
+        },
+        {
+          "path": "tokio/tests/join_handle_panic.rs",
+          "lines": "14-21",
+          "head": "# function: async fn test_panics_do_not_propagate_when_dropping_join_handle()\n# preceding context:\n# struct PanicsOnDrop;\n\nasync fn test_panics_do_not_propagate_when_dropping_join_handle() {\n    let join_handle = tokio::spawn(async move { PanicsOnDro"
+        },
+        {
+          "path": "tokio-util/tests/abort_on_drop.rs",
+          "lines": "30-39",
+          "head": "# function: async fn does_not_abort_after_detach()\n# preceding context:\n#     handle.abort();\n#     tx.closed().await;\n#     assert!(tx.is_closed());\n#     assert!(handle.is_finished());\n# }\n\nasync fn does_not_abort_after_detach() {\n    let (tx, rx) "
+        }
+      ]
+    },
+    "nia": {
+      "latency_s": 13.08,
+      "files": [
+        "tokio/src/runtime/task/join.rs",
+        "tokio-util/src/task/abort_on_drop.rs",
+        "tokio/tests/task_join_set.rs",
+        "tokio/src/runtime/task/abort.rs",
+        "tokio/src/task/mod.rs",
+        "tokio-util/src/task/join_queue.rs",
+        "tokio/src/task/join_set.rs",
+        "tokio/src/runtime/task/mod.rs"
+      ],
+      "answer_head": "Based on the retrieved local folder, when you drop a `JoinHandle`, **the spawned task continues running in the background**. Here's what the documentation states:\n\n## Key Behavior\n\nFrom `tokio/src/runtime/task/join.rs`:\n\n> \"A `JoinHandle` *detaches* the associated task when it is dropped, which means that there is no longer any handle to the task, and no way to `join` on it.\"\n\nAnd more explicitly:\n\n> \"If a `JoinHandle` is dropped, then the task continues running in the background and its return value is lost.\"\n\n## Important Distinction\n\nThe documentation emphasizes this in the cancellation section from `tokio/src/task/mod.rs`:\n\n> \"Child being detached and outliving its parent:\n> ```rust\n> let original_task = task::spawn(async {\n>     let _detached_task = task::spawn(async {\n>         // Here we sleep to make sure that the first task returns before.\n>         time::sleep(Duration::from_mi"
+    },
+    "grep": {
+      "latency_s": 0.12,
+      "files": [
+        "tokio/src/runtime/task/join.rs",
+        "tokio/src/runtime/tests/task_combinations.rs",
+        "tokio/src/runtime/task/mod.rs",
+        "tokio/src/task/mod.rs",
+        "tokio-util/src/task/join_queue.rs",
+        "tokio-util/src/task/abort_on_drop.rs",
+        "tokio/CHANGELOG.md",
+        "tokio/src/runtime/task/harness.rs"
+      ],
+      "match_counts": {
+        "tokio/src/runtime/task/join.rs": 37,
+        "tokio/src/runtime/tests/task_combinations.rs": 29,
+        "tokio/src/runtime/task/mod.rs": 23,
+        "tokio/src/task/mod.rs": 19,
+        "tokio-util/src/task/join_queue.rs": 18,
+        "tokio-util/src/task/abort_on_drop.rs": 16,
+        "tokio/CHANGELOG.md": 15,
+        "tokio/src/runtime/task/harness.rs": 15
+      }
+    }
+  },
+  {
+    "vignette": "pytest-assert-rewrite",
+    "repo": "pytest-dev/pytest",
+    "rev": "0c80a1c836616b0206a4af2fe72001ff797a5f8f",
+    "question": "where is the logic that rewrites assert statements into detailed failure messages?",
+    "answer_files": [
+      "src/_pytest/assertion/rewrite.py"
+    ],
+    "delphi": {
+      "latency_s": 5.74,
+      "files": [
+        "src/_pytest/assertion/rewrite.py",
+        "src/_pytest/assertion/__init__.py",
+        "src/_pytest/assertion/util.py",
+        "testing/test_assertrewrite.py",
+        "testing/test_assertion.py",
+        "testing/python/approx.py",
+        "testing/python/raises.py",
+        "src/_pytest/pytester_assertions.py"
+      ],
+      "snippets": [
+        {
+          "path": "src/_pytest/assertion/rewrite.py",
+          "lines": "1-1",
+          "head": "\"\"\"Rewrite assertion AST to produce nice error messages.\"\"\""
+        },
+        {
+          "path": "src/_pytest/assertion/__init__.py",
+          "lines": "80-86",
+          "head": "# class: class AssertionState:\n# Docstring: State for the assertion plugin.\n# preceding context:\n# class DummyRewriteHook:\n#     \"\"\"A no-op import hook for when rewriting is disabled.\"\"\"\n# \n#     def mark_rewrite(self, *names: str) -> None:\n#        "
+        },
+        {
+          "path": "src/_pytest/assertion/util.py",
+          "lines": "1-1",
+          "head": "\"\"\"Utilities for assertion debugging.\"\"\""
+        },
+        {
+          "path": "testing/test_assertrewrite.py",
+          "lines": "73-243",
+          "head": "# class: class TestAssertionRewrite:\n# preceding context:\n#         return s\n#     else:\n#         if not must_pass:\n#             pytest.fail(\"function didn't raise at all\")\n#         return None\n\nclass TestAssertionRewrite:\n    def test_place_initi"
+        },
+        {
+          "path": "testing/test_assertion.py",
+          "lines": "30-231",
+          "head": "# class: class TestImportHookInstallation:\n# preceding context:\n#             if name == \"verbose\":\n#                 return verbose\n#             raise KeyError(\"Not mocked out: %s\" % name)\n# \n#     return Config()\n\nclass TestImportHookInstallation:"
+        }
+      ]
+    },
+    "nia": {
+      "latency_s": 16.94,
+      "files": [
+        "testing/test_assertrewrite.py",
+        "src/_pytest/assertion/__init__.py",
+        "testing/test_assertion.py",
+        "doc/en/how-to/assert.rst",
+        "testing/python/approx.py",
+        "doc/en/example/assertion/failure_demo.py"
+      ],
+      "answer_head": "Based on the retrieved local folder content, the logic that rewrites assert statements into detailed failure messages is located in **`src/_pytest/assertion/rewrite.py`**.\n\nHere's what the retrieved content reveals:\n\n## Key Components\n\n### 1. **Main Rewrite Function**\nFrom `testing/test_assertrewrite.py`, we can see the `rewrite_asserts` function being imported and used:\n\n```python\nfrom _pytest.assertion.rewrite import rewrite_asserts\n\ndef rewrite(src: str) -> ast.Module:\n    tree = ast.parse(src)\n    rewrite_asserts(tree, src.encode())\n    return tree\n```\n\nThis `rewrite_asserts()` function is the core logic that transforms the AST (Abstract Syntax Tree) of assert statements.\n\n### 2. **AssertionRewritingHook**\nFrom `src/_pytest/assertion/__init__.py` and `testing/test_assertrewrite.py`:\n\n```python\nfrom _pytest.assertion.rewrite import AssertionRewritingHook\n\ndef install_importhook(config"
+    },
+    "grep": {
+      "latency_s": 0.15,
+      "files": [
+        "testing/test_assertrewrite.py",
+        "doc/en/changelog.rst",
+        "src/_pytest/assertion/rewrite.py",
+        "doc/en/example/reportingdemo.rst",
+        "testing/test_assertion.py",
+        "src/_pytest/assertion/__init__.py",
+        "doc/en/how-to/output.rst",
+        "src/_pytest/config/__init__.py"
+      ],
+      "match_counts": {
+        "testing/test_assertrewrite.py": 143,
+        "doc/en/changelog.rst": 135,
+        "src/_pytest/assertion/rewrite.py": 109,
+        "doc/en/example/reportingdemo.rst": 65,
+        "testing/test_assertion.py": 62,
+        "src/_pytest/assertion/__init__.py": 46,
+        "doc/en/how-to/output.rst": 38,
+        "src/_pytest/config/__init__.py": 28
+      }
+    }
+  }
+]

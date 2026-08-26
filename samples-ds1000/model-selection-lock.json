@@ -1,0 +1,32 @@
+{
+  "candidates": {
+    "anthropic": {
+      "library_macro_pass_at_1": 0.9,
+      "model": "claude-opus-5",
+      "pass_at_1": 0.9,
+      "provider": "anthropic",
+      "summary_sha256": "b9e3c42c821930a710a25144d9692975a7d634fa25cf5e7eeccc4c8cceea43c8"
+    },
+    "google": {
+      "library_macro_pass_at_1": 0.625,
+      "model": "gemini-3.1-pro-preview",
+      "pass_at_1": 0.625,
+      "provider": "google",
+      "summary_sha256": "a42f0e70b0d83b149696687a088a397a38f13478f57ab854ed3641ebaa731895"
+    },
+    "openai": {
+      "library_macro_pass_at_1": 0.725,
+      "model": "gpt-5.6-sol",
+      "pass_at_1": 0.725,
+      "provider": "openai",
+      "summary_sha256": "141cfcb820fb4dac59cf6e368396025bb1ed061416d6dba314d4fec98210e776"
+    }
+  },
+  "criterion": "highest executable pass_at_1; tie-break library macro pass_at_1, then lower mean generation latency",
+  "selected_model": "claude-opus-5",
+  "selected_pass_at_1": 0.9,
+  "selected_provider": "anthropic",
+  "selection_set": "samples/ds1000/development.jsonl",
+  "selection_set_sha256": "a2d3e3a2cf727418d039f84fb7e38d90ecf380aee77aba7313879a018b9cded6",
+  "temperature_policy": "provider default; temperature omitted for all providers because current OpenAI and Anthropic endpoints reject it"
+}

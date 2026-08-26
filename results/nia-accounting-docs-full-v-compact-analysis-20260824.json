@@ -1,0 +1,149 @@
+{
+  "schema": "nia_query_transform_analysis_v1",
+  "created_at": "2026-08-24T08:58:00+00:00",
+  "corpus": {
+    "split": "development",
+    "cases": 10,
+    "repeats_per_transform": 10,
+    "observations_per_transform": 100,
+    "sample_file": "new/round3/samples/docs/determinism10.jsonl",
+    "final_split_inspected": false
+  },
+  "inputs": {
+    "full_determinism_summary": {
+      "path": "new/round3/results/DETERMINISM-docs-nia-full-synth.json",
+      "sha256": "6767d0f84d0fc0b9f7b5971bf1814ca7d53d33487ede2f6d488c57f6cc2371ca"
+    },
+    "full_citation_audit": {
+      "path": "new/round3/results/nia-accounting-docs-full-citation-audit-20260824.json",
+      "sha256": "89954748355a926cc29d8471d7c2d59793a717effa5f91f488da0fc2f8e34663"
+    },
+    "compact_determinism": {
+      "path": "new/round3/results/nia-accounting-docs-compact-determinism-20260824.json",
+      "sha256": "92b0411c6355a4478d2884ec95c604b08c1184e343d098a345045f596412ffa0"
+    }
+  },
+  "full": {
+    "mean_identifier_hit_rate": 0.6,
+    "min_run_identifier_hit_rate": 0.5,
+    "max_run_identifier_hit_rate": 0.7,
+    "identifier_hit_agreement_rate": 0.9288888888888889,
+    "citation_ordered_exact_rate": 0.98,
+    "citation_set_exact_rate": 0.98,
+    "citation_set_mean_jaccard": 0.9933333333333333,
+    "citation_top1_exact_rate": 1.0,
+    "exact_synthesized_context_rate": 0.0,
+    "mean_context_tokens": 1414.44,
+    "mean_latency_ms": 12204.833301652689
+  },
+  "compact": {
+    "mean_identifier_hit_rate": 0.26,
+    "min_run_identifier_hit_rate": 0.2,
+    "max_run_identifier_hit_rate": 0.3,
+    "identifier_hit_agreement_rate": 0.8888888888888888,
+    "citation_ordered_exact_rate": 1.0,
+    "citation_set_exact_rate": 1.0,
+    "citation_set_mean_jaccard": 1.0,
+    "citation_top1_exact_rate": 1.0,
+    "exact_synthesized_context_rate": 0.0,
+    "mean_context_tokens": 1515.83,
+    "mean_latency_ms": 15137.99676124705,
+    "hosted_requests": 100,
+    "http_attempts": 100,
+    "retry_count": 0,
+    "technical_failures": 0
+  },
+  "compact_minus_full": {
+    "mean_identifier_hit_rate": -0.34,
+    "case_cluster_bootstrap_95_ci": [
+      -0.6,
+      -0.09
+    ],
+    "bootstrap_samples": 100000,
+    "bootstrap_seed": 20260824,
+    "bootstrap_unit": "case",
+    "mean_context_tokens": 101.39,
+    "mean_latency_ms": 2933.163459594361
+  },
+  "per_case_identifier_hit_rates": [
+    {
+      "case_id": "277",
+      "full": 1.0,
+      "compact": 0.0,
+      "compact_minus_full": -1.0
+    },
+    {
+      "case_id": "339",
+      "full": 0.0,
+      "compact": 0.0,
+      "compact_minus_full": 0.0
+    },
+    {
+      "case_id": "482",
+      "full": 1.0,
+      "compact": 1.0,
+      "compact_minus_full": 0.0
+    },
+    {
+      "case_id": "51",
+      "full": 0.0,
+      "compact": 0.1,
+      "compact_minus_full": 0.1
+    },
+    {
+      "case_id": "538",
+      "full": 1.0,
+      "compact": 1.0,
+      "compact_minus_full": 0.0
+    },
+    {
+      "case_id": "635",
+      "full": 1.0,
+      "compact": 0.2,
+      "compact_minus_full": -0.8
+    },
+    {
+      "case_id": "670",
+      "full": 0.8,
+      "compact": 0.2,
+      "compact_minus_full": -0.6
+    },
+    {
+      "case_id": "680",
+      "full": 0.2,
+      "compact": 0.0,
+      "compact_minus_full": -0.2
+    },
+    {
+      "case_id": "850",
+      "full": 1.0,
+      "compact": 0.1,
+      "compact_minus_full": -0.9
+    },
+    {
+      "case_id": "887",
+      "full": 0.0,
+      "compact": 0.0,
+      "compact_minus_full": 0.0
+    }
+  ],
+  "cross_transform_citation_identity": {
+    "comparison": "all 10 x 10 full/compact repeat pairs within each case",
+    "comparisons": 1000,
+    "ordered_exact_rate": 0.2,
+    "top1_exact_rate": 0.8,
+    "mean_set_jaccard": 0.6063492063492063
+  },
+  "interpretation": {
+    "descriptive_result": "Full queries are strongly favored in these completed development repeats. Compact queries lower identifier hit, return more tokens, and take longer on average.",
+    "mechanism_signal": "Each transform is internally citation-stable, but the transforms retrieve materially different citation sets; the quality gap is therefore not synthesis variation alone.",
+    "causal_limit": "The two transform blocks were acquired at different times and were not order-balanced. The compact block forbade retries while the historical full block did not account for attempts. Treat the delta as strong development evidence, not a clean randomized transform effect.",
+    "next_step": "Keep full Nia documentation queries as the provisional arm. Require an interleaved, attempt-accounted comparison before making a causal query-transform claim."
+  },
+  "validity": {
+    "complete": true,
+    "partial_scores_reported": false,
+    "score_reportable": true,
+    "final_split_inspected": false
+  }
+}

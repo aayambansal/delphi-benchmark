@@ -1,0 +1,323 @@
+{
+  "generated_at": "2026-08-24T09:37:51Z",
+  "scope": {
+    "corpus": "corpus/independent/v1/development.jsonl",
+    "cases": 48,
+    "repositories": 16,
+    "snapshots": 48,
+    "final_split_accessed": false
+  },
+  "index": {
+    "database": "delphi_native_independent_dev_20260824",
+    "manifest": "results/native-delphi-independent-dev-sources.jsonl",
+    "manifest_rows": 48,
+    "stored_files": 44189,
+    "chunks": 145258,
+    "embeddings": 145258,
+    "database_size": "1685 MB",
+    "all_source_ids_match_database": true,
+    "all_chunk_counts_nonzero": true,
+    "all_embedding_counts_match": true
+  },
+  "serving_configuration_attestation": {
+    "response_field": "retrieval_config",
+    "harness_flag": "--expected-retrieval-config-json",
+    "all_scored_cases_attested": true,
+    "mismatch_behavior": "fatal",
+    "shared_controls": {
+      "embedding_model": "text-embedding-3-small",
+      "hybrid_candidates": 50,
+      "hybrid_rerank_k": 30,
+      "query_expansion_enabled": true,
+      "listwise_rerank_enabled": true,
+      "listwise_rerank_model": "gpt-4o",
+      "listwise_rerank_k": 20,
+      "llm_seed": 1042
+    }
+  },
+  "exact_baseline": {
+    "run_ids": [
+      "native-delphi-independent-exact-attested-r1",
+      "native-delphi-independent-exact-attested-r2"
+    ],
+    "sample_weighted": {
+      "BCY@8k": 0.5277777777777778,
+      "F0.5@10": 0.136527539391975,
+      "F0.5@20": 0.07948326524460328,
+      "F0.5@5": 0.2274295752556622,
+      "MRR": 0.5951479076479077,
+      "Precision@10": 0.11458333333333333,
+      "Precision@20": 0.06570512820512821,
+      "Precision@5": 0.19999999999999998,
+      "Recall@10": 0.7083333333333334,
+      "Recall@20": 0.7291666666666666,
+      "Recall@5": 0.607638888888889,
+      "context_efficiency@8k": 0.46582073434125265,
+      "context_pollution_tokens@8k": 15255.5,
+      "coverage_auc@20": 0.6690972222222222,
+      "gold_coverage@8k": 0.3489583333333333,
+      "gold_token_ratio@8k": 0.46582073434125265,
+      "hard_negative_hits@10": 0.0,
+      "hard_negative_hits@20": 0.0,
+      "hard_negative_hits@5": 0.0,
+      "irrelevant_files@10": 8.854166666666666,
+      "irrelevant_files@20": 18.4375,
+      "irrelevant_files@5": 4.0,
+      "redundancy@8k": 0.0
+    },
+    "latency_ms": {
+      "attested_r1_mean": 174.32381332522104,
+      "attested_r1_median": 163.60983299091458,
+      "attested_r2_mean": 176.18844011061205,
+      "attested_r2_median": 157.50397951342165
+    },
+    "determinism": {
+      "cases_compared": 48,
+      "ranking_mismatches": 0,
+      "metric_mismatches": 0,
+      "compared_fields": [
+        "sample_id",
+        "repo",
+        "base_commit",
+        "gold_files",
+        "top_files",
+        "status",
+        "metrics"
+      ]
+    }
+  },
+  "file_diverse_bm25": [
+    {
+      "weight": 0.1,
+      "run_id": "native-delphi-independent-filebm10-attested-r1",
+      "sample_weighted": {
+        "BCY@8k": 0.513888888888889,
+        "F0.5@10": 0.1413725006322851,
+        "F0.5@20": 0.08073828532492457,
+        "F0.5@5": 0.24122239475500343,
+        "MRR": 0.5953373015873016,
+        "Precision@10": 0.11875000000000001,
+        "Precision@20": 0.06674679487179487,
+        "Precision@5": 0.21250000000000002,
+        "Recall@10": 0.7222222222222222,
+        "Recall@20": 0.7361111111111112,
+        "Recall@5": 0.6319444444444444,
+        "context_efficiency@8k": 0.4791666666666667,
+        "context_pollution_tokens@8k": 15156.375,
+        "coverage_auc@20": 0.6803819444444444,
+        "gold_coverage@8k": 0.3489583333333333,
+        "gold_token_ratio@8k": 0.4791666666666667,
+        "hard_negative_hits@10": 0.0,
+        "hard_negative_hits@20": 0.0,
+        "hard_negative_hits@5": 0.0,
+        "irrelevant_files@10": 8.8125,
+        "irrelevant_files@20": 18.416666666666668,
+        "irrelevant_files@5": 3.9375,
+        "redundancy@8k": 0.0
+      },
+      "delta_vs_exact": {
+        "MRR": 0.00018939393939393945,
+        "Recall@5": 0.024305555555555552,
+        "Recall@20": 0.006944444444444445,
+        "BCY@8k": -0.01388888888888889
+      },
+      "repository_cluster_ci95": {
+        "MRR": [-0.0009199134199134196, 0.001488095238095238],
+        "Recall@5": [0.0, 0.05208333333333333],
+        "Recall@20": [0.0, 0.020833333333333336],
+        "BCY@8k": [-0.0625, 0.020833333333333332]
+      },
+      "latency_ms": {
+        "mean": 216.7544868813517,
+        "median": 169.82402105350047
+      }
+    },
+    {
+      "weight": 0.15,
+      "run_id": "native-delphi-independent-filebm15-attested-r1",
+      "sample_weighted": {
+        "BCY@8k": 0.513888888888889,
+        "F0.5@10": 0.1413148225222814,
+        "F0.5@20": 0.08073828532492457,
+        "F0.5@5": 0.24575138026224982,
+        "MRR": 0.6017857142857143,
+        "Precision@10": 0.11875000000000001,
+        "Precision@20": 0.06674679487179487,
+        "Precision@5": 0.21666666666666667,
+        "Recall@10": 0.71875,
+        "Recall@20": 0.7361111111111112,
+        "Recall@5": 0.638888888888889,
+        "context_efficiency@8k": 0.5,
+        "context_pollution_tokens@8k": 14304.645833333334,
+        "coverage_auc@20": 0.6796875,
+        "gold_coverage@8k": 0.35590277777777773,
+        "gold_token_ratio@8k": 0.5,
+        "hard_negative_hits@10": 0.0,
+        "hard_negative_hits@20": 0.0,
+        "hard_negative_hits@5": 0.0,
+        "irrelevant_files@10": 8.8125,
+        "irrelevant_files@20": 18.416666666666668,
+        "irrelevant_files@5": 3.9166666666666665,
+        "redundancy@8k": 0.0
+      },
+      "delta_vs_exact": {
+        "MRR": 0.006637806637806637,
+        "Recall@5": 0.03125,
+        "Recall@20": 0.006944444444444445,
+        "BCY@8k": -0.01388888888888889
+      },
+      "repository_cluster_ci95": {
+        "MRR": [-0.010416666666666668, 0.030943362193362193],
+        "Recall@5": [0.0, 0.06944444444444445],
+        "Recall@20": [0.0, 0.020833333333333336],
+        "BCY@8k": [-0.0625, 0.020833333333333332]
+      },
+      "latency_ms": {
+        "mean": 223.57031779150324,
+        "median": 174.09181303810328
+      }
+    },
+    {
+      "weight": 0.2,
+      "run_id": "native-delphi-independent-filebm20-attested-r1",
+      "sample_weighted": {
+        "BCY@8k": 0.5208333333333334,
+        "F0.5@10": 0.14379498125244014,
+        "F0.5@20": 0.08073828532492457,
+        "F0.5@5": 0.24122239475500343,
+        "MRR": 0.5955687830687831,
+        "Precision@10": 0.12083333333333335,
+        "Precision@20": 0.06674679487179487,
+        "Precision@5": 0.21250000000000002,
+        "Recall@10": 0.7291666666666666,
+        "Recall@20": 0.7361111111111112,
+        "Recall@5": 0.6319444444444444,
+        "context_efficiency@8k": 0.4791666666666667,
+        "context_pollution_tokens@8k": 14939.604166666666,
+        "coverage_auc@20": 0.6842013888888889,
+        "gold_coverage@8k": 0.3489583333333333,
+        "gold_token_ratio@8k": 0.4791666666666667,
+        "hard_negative_hits@10": 0.0,
+        "hard_negative_hits@20": 0.0,
+        "hard_negative_hits@5": 0.0,
+        "irrelevant_files@10": 8.791666666666666,
+        "irrelevant_files@20": 18.416666666666668,
+        "irrelevant_files@5": 3.9375,
+        "redundancy@8k": 0.0
+      },
+      "delta_vs_exact": {
+        "MRR": 0.0004208754208754207,
+        "Recall@5": 0.024305555555555556,
+        "Recall@20": 0.006944444444444445,
+        "BCY@8k": -0.006944444444444445
+      },
+      "repository_cluster_ci95": {
+        "MRR": [-0.030829124579124578, 0.03167087542087542],
+        "Recall@5": [-0.006944444444444447, 0.06597222222222222],
+        "Recall@20": [0.0, 0.020833333333333336],
+        "BCY@8k": [-0.05555555555555555, 0.027777777777777776]
+      },
+      "latency_ms": {
+        "mean": 224.27256514007846,
+        "median": 177.56941658444703
+      }
+    }
+  ],
+  "hnsw": {
+    "hnsw100": {
+      "run_id": "native-delphi-independent-hnsw100-attested-r1",
+      "sample_weighted": {
+        "BCY@8k": 0.5277777777777778,
+        "F0.5@10": 0.136527539391975,
+        "F0.5@20": 0.07948326524460328,
+        "F0.5@5": 0.2274295752556622,
+        "MRR": 0.5951479076479077,
+        "Precision@10": 0.11458333333333333,
+        "Precision@20": 0.06570512820512821,
+        "Precision@5": 0.19999999999999998,
+        "Recall@10": 0.7083333333333334,
+        "Recall@20": 0.7291666666666666,
+        "Recall@5": 0.607638888888889,
+        "context_efficiency@8k": 0.46582073434125265,
+        "context_pollution_tokens@8k": 15255.5,
+        "coverage_auc@20": 0.6690972222222222,
+        "gold_coverage@8k": 0.3489583333333333,
+        "gold_token_ratio@8k": 0.46582073434125265,
+        "hard_negative_hits@10": 0.0,
+        "hard_negative_hits@20": 0.0,
+        "hard_negative_hits@5": 0.0,
+        "irrelevant_files@10": 8.854166666666666,
+        "irrelevant_files@20": 18.4375,
+        "irrelevant_files@5": 4.0,
+        "redundancy@8k": 0.0
+      },
+      "latency_ms": {
+        "mean": 185.74481333780568,
+        "median": 167.14895830955356
+      }
+    },
+    "hnsw400": {
+      "run_id": "native-delphi-independent-hnsw400-attested-r1",
+      "sample_weighted": {
+        "BCY@8k": 0.5277777777777778,
+        "F0.5@10": 0.136527539391975,
+        "F0.5@20": 0.07948326524460328,
+        "F0.5@5": 0.2274295752556622,
+        "MRR": 0.5951479076479077,
+        "Precision@10": 0.11458333333333333,
+        "Precision@20": 0.06570512820512821,
+        "Precision@5": 0.19999999999999998,
+        "Recall@10": 0.7083333333333334,
+        "Recall@20": 0.7291666666666666,
+        "Recall@5": 0.607638888888889,
+        "context_efficiency@8k": 0.46582073434125265,
+        "context_pollution_tokens@8k": 15255.5,
+        "coverage_auc@20": 0.6690972222222222,
+        "gold_coverage@8k": 0.3489583333333333,
+        "gold_token_ratio@8k": 0.46582073434125265,
+        "hard_negative_hits@10": 0.0,
+        "hard_negative_hits@20": 0.0,
+        "hard_negative_hits@5": 0.0,
+        "irrelevant_files@10": 8.854166666666666,
+        "irrelevant_files@20": 18.4375,
+        "irrelevant_files@5": 4.0,
+        "redundancy@8k": 0.0
+      },
+      "latency_ms": {
+        "mean": 181.99389664126406,
+        "median": 164.82039541006088
+      }
+    },
+    "hnsw100_vs_hnsw400": {
+      "identical_full_ranking_cases": 48,
+      "identical_metric_cases": 48,
+      "file_jaccard@5_mean": 1.0,
+      "file_jaccard@10_mean": 1.0,
+      "file_jaccard@20_mean": 1.0
+    },
+    "exact_vs_each_hnsw": {
+      "identical_full_ranking_cases": 48,
+      "identical_metric_cases": 48,
+      "file_jaccard@5_mean": 1.0,
+      "file_jaccard@10_mean": 1.0,
+      "file_jaccard@20_mean": 1.0,
+      "MRR_delta": 0.0,
+      "Recall@5_delta": 0.0,
+      "Recall@20_delta": 0.0,
+      "BCY@8k_delta": 0.0
+    }
+  },
+  "fresh_chunk_index_audit": {
+    "max_chunk_tokens": 3057,
+    "chunks_over_embedding_provider_limit_8191": 0,
+    "chunks_over_configured_limit_2048": 609,
+    "oversized_single_line_chunks_over_2048": 0,
+    "note": "The remaining >2048 chunks are allowed multi-line AST regions under the existing 1.5x tolerance; the isolated pre-fix index is unavailable, so this is a safety audit rather than a paired quality estimate."
+  },
+  "interpretation": {
+    "exact_baseline": "The serving-config-attested exact baseline is deterministic across all 48 cases and both warm repeats.",
+    "file_diverse_bm25": "Weight 0.15 is the best development candidate for MRR and Recall@5, but both intervals include zero at the lower bound and BCY@8k moves down. Keep the branch opt-in pending downstream validation rather than making it the default.",
+    "hnsw": "ef_search=100 and ef_search=400 are identical to each other and to exact on every ranked list. Raising the default search depth is unsupported on this development corpus.",
+    "chunking": "The fresh native index contains no provider-truncated or oversized single-line chunks. A paired pre-fix comparison is impossible because the damaged Docker index is invalid."
+  }
+}

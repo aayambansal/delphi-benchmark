@@ -1,0 +1,878 @@
+{
+  "accounting": {
+    "actual_new_hosted_requests": 50,
+    "budget_unit": "outbound hosted HTTP request",
+    "endpoint_counts": {
+      "/api/v2/libs/search": 50
+    },
+    "max_new_hosted_requests": 50,
+    "method_counts": {
+      "GET": 50
+    },
+    "recorded_observations": 50,
+    "resolution_requests": 50,
+    "retry_requests": 0,
+    "scheduled_observations": 50,
+    "snippet_context_requests": 0,
+    "warmup_requests": 0
+  },
+  "aggregate_stability": {
+    "candidate_list_all_packages_exact": false,
+    "candidate_list_pairwise_exact_rate_macro": 0.5555555555555556,
+    "candidate_list_pairwise_exact_rate_micro": 0.5555555555555556,
+    "candidate_score_list_all_packages_exact": false,
+    "candidate_score_list_pairwise_exact_rate_micro": 0.5555555555555556,
+    "candidate_set_mean_jaccard_macro": 0.8622222222222222,
+    "candidate_set_mean_jaccard_micro": 0.8622222222222222,
+    "candidate_set_min_jaccard": 0.42857142857142855,
+    "max_latency_ms": 2337.6817090902478,
+    "mean_latency_ms": 1600.513204233721,
+    "median_latency_ms": 1562.1683538192883,
+    "min_latency_ms": 1261.0229589045048,
+    "p95_latency_ms_nearest_rank": 2220.1990419998765,
+    "package_internal_pairwise_comparisons": 225,
+    "packages": 5,
+    "quality_selection_tie_observations": 0,
+    "requests": 50,
+    "selected_id_all_packages_exact": true,
+    "selected_id_pairwise_exact_rate_macro": 1.0,
+    "selected_id_pairwise_exact_rate_micro": 1.0
+  },
+  "artifact_kind": "compact_audit_analysis",
+  "design": {
+    "development_only": true,
+    "final_split_touched": false,
+    "inter_request_delay_seconds": 0.1,
+    "manifest": "new/round3/samples/docs/determinism10-manifest.json",
+    "manifest_sha256": "d45ba193dc8f0965e1fd9fc2bc63822d533b9e5a0ed728f73fd61a73c0718142",
+    "manifest_source_sha256": "a2d3e3a2cf727418d039f84fb7e38d90ecf380aee77aba7313879a018b9cded6",
+    "objective": "Measure quality-guided Context7 library-resolution stability without making snippet-retrieval requests.",
+    "package_identities": [
+      {
+        "canonical_name": "matplotlib",
+        "manifest_label": "Matplotlib",
+        "package": "Matplotlib"
+      },
+      {
+        "canonical_name": "numpy",
+        "manifest_label": "Numpy",
+        "package": "NumPy"
+      },
+      {
+        "canonical_name": "pandas",
+        "manifest_label": "Pandas",
+        "package": "pandas"
+      },
+      {
+        "canonical_name": "scikit-learn",
+        "manifest_label": "Sklearn",
+        "package": "scikit-learn"
+      },
+      {
+        "canonical_name": "tensorflow",
+        "manifest_label": "Tensorflow",
+        "package": "TensorFlow"
+      }
+    ],
+    "repeats_per_package": 10,
+    "request": {
+      "endpoint": "https://context7.com/api/v2/libs/search",
+      "method": "GET",
+      "params": {
+        "libraryName": "canonical package name",
+        "query": "the same canonical package name"
+      },
+      "query_control_reason": "Use one identical identity-only query per package to remove DS-1000 case-query variation and isolate resolver behavior; this does not estimate task-query resolver quality."
+    },
+    "retry_policy": "one direct httpx request per observation; HTTPTransport(retries=0); redirects disabled; no application retry",
+    "schedule": "ten balanced rounds: five forward cyclic orders followed by five reverse cyclic orders; every package occupies each within-round position exactly twice",
+    "selection_policy": {
+      "name": "existing automatic quality-guided resolver",
+      "ordered_key_maximized": [
+        "exact normalized candidate title equals canonical library name",
+        "benchmarkScore",
+        "trustScore",
+        "totalSnippets"
+      ],
+      "tie_behavior": "first candidate in Context7 response order, matching Python max and the existing adapter"
+    },
+    "warmup_requests": 0
+  },
+  "historical_identity_comparison": {
+    "Matplotlib": {
+      "all_current_match_prior_fixed_ablation_id": true,
+      "current_observed_selected_id_counts": {
+        "/websites/matplotlib_stable": 10
+      },
+      "historical_automatic_quality_id_counts": {
+        "/websites/matplotlib_stable": 20
+      },
+      "historical_automatic_quality_ids": [
+        "/websites/matplotlib_stable"
+      ],
+      "prior_fixed_ablation_id": "/websites/matplotlib_stable"
+    },
+    "NumPy": {
+      "all_current_match_prior_fixed_ablation_id": true,
+      "current_observed_selected_id_counts": {
+        "/websites/numpy_doc_stable": 10
+      },
+      "historical_automatic_quality_id_counts": {
+        "/websites/numpy_doc_stable": 20
+      },
+      "historical_automatic_quality_ids": [
+        "/websites/numpy_doc_stable"
+      ],
+      "prior_fixed_ablation_id": "/websites/numpy_doc_stable"
+    },
+    "TensorFlow": {
+      "all_current_match_prior_fixed_ablation_id": false,
+      "current_observed_selected_id_counts": {
+        "/tensorflow/tensorflow": 10
+      },
+      "historical_automatic_quality_id_counts": {
+        "/tensorflow/tensorflow": 20
+      },
+      "historical_automatic_quality_ids": [
+        "/tensorflow/tensorflow"
+      ],
+      "prior_fixed_ablation_id": "/tensorflow/docs"
+    },
+    "pandas": {
+      "all_current_match_prior_fixed_ablation_id": true,
+      "current_observed_selected_id_counts": {
+        "/websites/pandas_pydata": 10
+      },
+      "historical_automatic_quality_id_counts": {
+        "/websites/pandas_pydata": 20
+      },
+      "historical_automatic_quality_ids": [
+        "/websites/pandas_pydata"
+      ],
+      "prior_fixed_ablation_id": "/websites/pandas_pydata"
+    },
+    "scikit-learn": {
+      "all_current_match_prior_fixed_ablation_id": true,
+      "current_observed_selected_id_counts": {
+        "/websites/scikit-learn_stable": 10
+      },
+      "historical_automatic_quality_id_counts": {
+        "/websites/scikit-learn_stable": 20
+      },
+      "historical_automatic_quality_ids": [
+        "/websites/scikit-learn_stable"
+      ],
+      "prior_fixed_ablation_id": "/websites/scikit-learn_stable"
+    }
+  },
+  "interpretation": {
+    "candidate_lists_stable_in_this_audit": false,
+    "candidate_scores_stable_in_this_audit": false,
+    "pinning_note": "Resolve-once pinning remains required whenever exact source identity is evaluation provenance, especially if current IDs differ from historical automatic-quality IDs.",
+    "scope_note": "Stability is measured for canonical-name identity queries only; task-specific query wording was deliberately excluded.",
+    "selected_ids_stable_in_this_audit": true
+  },
+  "per_package_stability": {
+    "Matplotlib": {
+      "candidate_count_max": 5,
+      "candidate_count_min": 5,
+      "candidate_list_all_exact": true,
+      "candidate_list_exact_vs_first_rate": 1.0,
+      "candidate_list_modal_rate": 1.0,
+      "candidate_list_pairwise_exact_rate": 1.0,
+      "candidate_list_unique_count": 1,
+      "candidate_score_list_all_exact": true,
+      "candidate_score_list_pairwise_exact_rate": 1.0,
+      "candidate_score_list_unique_count": 1,
+      "candidate_set_mean_jaccard": 1.0,
+      "candidate_set_min_jaccard": 1.0,
+      "canonical_name": "matplotlib",
+      "manifest_label": "Matplotlib",
+      "max_latency_ms": 2053.3451249357313,
+      "mean_latency_ms": 1541.5741332806647,
+      "median_latency_ms": 1496.8923124251887,
+      "min_latency_ms": 1290.0804998353124,
+      "observations": [
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1653.2420001458377,
+          "repeat": 1,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 1,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1365.0136669166386,
+          "repeat": 2,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 10,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1653.9901250507683,
+          "repeat": 3,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 14,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1415.0169158820063,
+          "repeat": 4,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 18,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1530.7247499004006,
+          "repeat": 5,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 22,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1463.0598749499768,
+          "repeat": 6,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 26,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 2053.3451249357313,
+          "repeat": 7,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 35,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1570.8987500984222,
+          "repeat": 8,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 39,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1420.3696250915527,
+          "repeat": 9,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 43,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "754dcf4775a603d30b93adcc0e00d615e8db7c9da35d75720feba99272ae994f",
+          "candidate_score_list_sha256": "87ef0a1ed14268116b80f3873247bc0120db7de74e2b79617af1d3e16511436c",
+          "latency_ms": 1290.0804998353124,
+          "repeat": 10,
+          "selected_id": "/websites/matplotlib_stable",
+          "sequence": 47,
+          "within_round_position": 2
+        }
+      ],
+      "p95_latency_ms_nearest_rank": 2053.3451249357313,
+      "pairwise_comparisons": 45,
+      "quality_selection_tie_observations": 0,
+      "requests": 10,
+      "selected_id_all_exact": true,
+      "selected_id_counts": {
+        "/websites/matplotlib_stable": 10
+      },
+      "selected_id_exact_vs_first_rate": 1.0,
+      "selected_id_modal_rate": 1.0,
+      "selected_id_pairwise_exact_rate": 1.0,
+      "selected_id_unique_count": 1
+    },
+    "NumPy": {
+      "candidate_count_max": 5,
+      "candidate_count_min": 5,
+      "candidate_list_all_exact": false,
+      "candidate_list_exact_vs_first_rate": 0.1111111111111111,
+      "candidate_list_modal_rate": 0.7,
+      "candidate_list_pairwise_exact_rate": 0.4888888888888889,
+      "candidate_list_unique_count": 3,
+      "candidate_score_list_all_exact": false,
+      "candidate_score_list_pairwise_exact_rate": 0.4888888888888889,
+      "candidate_score_list_unique_count": 3,
+      "candidate_set_mean_jaccard": 0.8444444444444444,
+      "candidate_set_min_jaccard": 0.6666666666666666,
+      "canonical_name": "numpy",
+      "manifest_label": "Numpy",
+      "max_latency_ms": 2302.2017918992788,
+      "mean_latency_ms": 1648.6634250730276,
+      "median_latency_ms": 1603.525333572179,
+      "min_latency_ms": 1321.1146669927984,
+      "observations": [
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "e34cdbeceda41a31856122face28569b692dbb5fdb42626d7f9e1506a68b5351",
+          "candidate_score_list_sha256": "ae03fddc87a25e0aa8f79767ba7951134a4c158e05275b708dd4f59580dde22e",
+          "latency_ms": 1624.7603339143097,
+          "repeat": 1,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 2,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 1641.8974159751087,
+          "repeat": 2,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 6,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 1599.988125031814,
+          "repeat": 3,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 15,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "e34cdbeceda41a31856122face28569b692dbb5fdb42626d7f9e1506a68b5351",
+          "candidate_score_list_sha256": "ae03fddc87a25e0aa8f79767ba7951134a4c158e05275b708dd4f59580dde22e",
+          "latency_ms": 1430.6290831882507,
+          "repeat": 4,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 19,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 1561.3347918260843,
+          "repeat": 5,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 23,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 1607.0625421125442,
+          "repeat": 6,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 30,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "5606023a9350204864ab486e24ffa95aab3dc1ab9800ef26ad5dd681df31cbba",
+          "candidate_score_list_sha256": "0f55fca2371d79d09c26c8d5f9d32b6b3e06be12e65634e0d0adb8b0d1866bd5",
+          "latency_ms": 1922.3308749496937,
+          "repeat": 7,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 34,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 2302.2017918992788,
+          "repeat": 8,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 38,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 1321.1146669927984,
+          "repeat": 9,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 42,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "b83e3f499f81972cb4a82de219966d02e044fcf8a4617626eaee4b4a929974b7",
+          "candidate_score_list_sha256": "0ad6aa5554372e2e2e8a355a4085e55b429372ec12fa68a4708acc5c10697ee2",
+          "latency_ms": 1475.3146248403937,
+          "repeat": 10,
+          "selected_id": "/websites/numpy_doc_stable",
+          "sequence": 46,
+          "within_round_position": 1
+        }
+      ],
+      "p95_latency_ms_nearest_rank": 2302.2017918992788,
+      "pairwise_comparisons": 45,
+      "quality_selection_tie_observations": 0,
+      "requests": 10,
+      "selected_id_all_exact": true,
+      "selected_id_counts": {
+        "/websites/numpy_doc_stable": 10
+      },
+      "selected_id_exact_vs_first_rate": 1.0,
+      "selected_id_modal_rate": 1.0,
+      "selected_id_pairwise_exact_rate": 1.0,
+      "selected_id_unique_count": 1
+    },
+    "TensorFlow": {
+      "candidate_count_max": 5,
+      "candidate_count_min": 5,
+      "candidate_list_all_exact": false,
+      "candidate_list_exact_vs_first_rate": 0.4444444444444444,
+      "candidate_list_modal_rate": 0.5,
+      "candidate_list_pairwise_exact_rate": 0.4444444444444444,
+      "candidate_list_unique_count": 2,
+      "candidate_score_list_all_exact": false,
+      "candidate_score_list_pairwise_exact_rate": 0.4444444444444444,
+      "candidate_score_list_unique_count": 2,
+      "candidate_set_mean_jaccard": 1.0,
+      "candidate_set_min_jaccard": 1.0,
+      "canonical_name": "tensorflow",
+      "manifest_label": "Tensorflow",
+      "max_latency_ms": 2002.6410000864416,
+      "mean_latency_ms": 1496.7660415917635,
+      "median_latency_ms": 1394.6565835503861,
+      "min_latency_ms": 1283.4489999804646,
+      "observations": [
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "3ad1d1bc8944e4d113f8fb1bd5d413573df81244e68a05849be836b0fcda9f69",
+          "candidate_score_list_sha256": "30f02accf0902f7f83d9eab3b54bd89cfd12d83445a11ff73746a818ff7a4aa0",
+          "latency_ms": 1283.4489999804646,
+          "repeat": 1,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 5,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "3ad1d1bc8944e4d113f8fb1bd5d413573df81244e68a05849be836b0fcda9f69",
+          "candidate_score_list_sha256": "30f02accf0902f7f83d9eab3b54bd89cfd12d83445a11ff73746a818ff7a4aa0",
+          "latency_ms": 1308.7978749535978,
+          "repeat": 2,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 9,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "5cd0a1b11838f318c13dcd4dd2e249f2e2424540aacd4136d6c23bd3607a14a6",
+          "candidate_score_list_sha256": "341f36e09d35880d645d1d2a6792a6bbce28e8ea04281cd068680b2bca292914",
+          "latency_ms": 1300.2804580610245,
+          "repeat": 3,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 13,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "3ad1d1bc8944e4d113f8fb1bd5d413573df81244e68a05849be836b0fcda9f69",
+          "candidate_score_list_sha256": "30f02accf0902f7f83d9eab3b54bd89cfd12d83445a11ff73746a818ff7a4aa0",
+          "latency_ms": 1364.18787506409,
+          "repeat": 4,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 17,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "5cd0a1b11838f318c13dcd4dd2e249f2e2424540aacd4136d6c23bd3607a14a6",
+          "candidate_score_list_sha256": "341f36e09d35880d645d1d2a6792a6bbce28e8ea04281cd068680b2bca292914",
+          "latency_ms": 1872.1222919411957,
+          "repeat": 5,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 21,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "3ad1d1bc8944e4d113f8fb1bd5d413573df81244e68a05849be836b0fcda9f69",
+          "candidate_score_list_sha256": "30f02accf0902f7f83d9eab3b54bd89cfd12d83445a11ff73746a818ff7a4aa0",
+          "latency_ms": 1510.8320829458535,
+          "repeat": 6,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 27,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "3ad1d1bc8944e4d113f8fb1bd5d413573df81244e68a05849be836b0fcda9f69",
+          "candidate_score_list_sha256": "30f02accf0902f7f83d9eab3b54bd89cfd12d83445a11ff73746a818ff7a4aa0",
+          "latency_ms": 1337.2226250357926,
+          "repeat": 7,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 31,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "5cd0a1b11838f318c13dcd4dd2e249f2e2424540aacd4136d6c23bd3607a14a6",
+          "candidate_score_list_sha256": "341f36e09d35880d645d1d2a6792a6bbce28e8ea04281cd068680b2bca292914",
+          "latency_ms": 1563.0019158124924,
+          "repeat": 8,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 40,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "5cd0a1b11838f318c13dcd4dd2e249f2e2424540aacd4136d6c23bd3607a14a6",
+          "candidate_score_list_sha256": "341f36e09d35880d645d1d2a6792a6bbce28e8ea04281cd068680b2bca292914",
+          "latency_ms": 2002.6410000864416,
+          "repeat": 9,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 44,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "5cd0a1b11838f318c13dcd4dd2e249f2e2424540aacd4136d6c23bd3607a14a6",
+          "candidate_score_list_sha256": "341f36e09d35880d645d1d2a6792a6bbce28e8ea04281cd068680b2bca292914",
+          "latency_ms": 1425.1252920366824,
+          "repeat": 10,
+          "selected_id": "/tensorflow/tensorflow",
+          "sequence": 48,
+          "within_round_position": 3
+        }
+      ],
+      "p95_latency_ms_nearest_rank": 2002.6410000864416,
+      "pairwise_comparisons": 45,
+      "quality_selection_tie_observations": 0,
+      "requests": 10,
+      "selected_id_all_exact": true,
+      "selected_id_counts": {
+        "/tensorflow/tensorflow": 10
+      },
+      "selected_id_exact_vs_first_rate": 1.0,
+      "selected_id_modal_rate": 1.0,
+      "selected_id_pairwise_exact_rate": 1.0,
+      "selected_id_unique_count": 1
+    },
+    "pandas": {
+      "candidate_count_max": 5,
+      "candidate_count_min": 5,
+      "candidate_list_all_exact": false,
+      "candidate_list_exact_vs_first_rate": 0.3333333333333333,
+      "candidate_list_modal_rate": 0.4,
+      "candidate_list_pairwise_exact_rate": 0.2,
+      "candidate_list_unique_count": 5,
+      "candidate_score_list_all_exact": false,
+      "candidate_score_list_pairwise_exact_rate": 0.2,
+      "candidate_score_list_unique_count": 5,
+      "candidate_set_mean_jaccard": 0.6698412698412698,
+      "candidate_set_min_jaccard": 0.42857142857142855,
+      "canonical_name": "pandas",
+      "manifest_label": "Pandas",
+      "max_latency_ms": 2051.2165420223027,
+      "mean_latency_ms": 1605.3214709972963,
+      "median_latency_ms": 1556.6505000460893,
+      "min_latency_ms": 1371.7070838902146,
+      "observations": [
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f522bd2c6c9fbe06f6b3f68869b1e369cf17e08121ed353ba4527d9ac79c114",
+          "candidate_score_list_sha256": "f16577a1722547373ea6c54f2c77a893a42253ae5c699cb9b26ae122b7bb69a8",
+          "latency_ms": 1779.9459169618785,
+          "repeat": 1,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 3,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f719533f0f9b51fef3b25744840cada504c3956fb1d97e2bf2d3b48451417ba",
+          "candidate_score_list_sha256": "2c3207384dd3961d6f78f721305844a96adbd0c290f51a910b2d6fa18b09cee8",
+          "latency_ms": 1566.2647921126336,
+          "repeat": 2,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 7,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f522bd2c6c9fbe06f6b3f68869b1e369cf17e08121ed353ba4527d9ac79c114",
+          "candidate_score_list_sha256": "f16577a1722547373ea6c54f2c77a893a42253ae5c699cb9b26ae122b7bb69a8",
+          "latency_ms": 1547.036207979545,
+          "repeat": 3,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 11,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f522bd2c6c9fbe06f6b3f68869b1e369cf17e08121ed353ba4527d9ac79c114",
+          "candidate_score_list_sha256": "f16577a1722547373ea6c54f2c77a893a42253ae5c699cb9b26ae122b7bb69a8",
+          "latency_ms": 1496.0319171659648,
+          "repeat": 4,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 20,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f719533f0f9b51fef3b25744840cada504c3956fb1d97e2bf2d3b48451417ba",
+          "candidate_score_list_sha256": "2c3207384dd3961d6f78f721305844a96adbd0c290f51a910b2d6fa18b09cee8",
+          "latency_ms": 1469.8844170197845,
+          "repeat": 5,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 24,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "cfdabf08c213524ef68e907497a4f944373407eca1d89f865c1f53799893c584",
+          "candidate_score_list_sha256": "fec150091aa936460ea95a44ecd8c736b92d406baa3fe761cc6b477cb4b0e564",
+          "latency_ms": 1629.048541886732,
+          "repeat": 6,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 29,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f719533f0f9b51fef3b25744840cada504c3956fb1d97e2bf2d3b48451417ba",
+          "candidate_score_list_sha256": "2c3207384dd3961d6f78f721305844a96adbd0c290f51a910b2d6fa18b09cee8",
+          "latency_ms": 1458.5880408994853,
+          "repeat": 7,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 33,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "79dce40ce12f4f4cd27582555ca27f63a1086ceed8dfb48dbf2e91524c80097f",
+          "candidate_score_list_sha256": "817dd590494d2bf06c7e82839999a18573092f5246717408efdad3ac8198cf16",
+          "latency_ms": 2051.2165420223027,
+          "repeat": 8,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 37,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "d9dcd6f8b91cd0d427bf02f14b1bff034338d41c5a822fafde4ad68009daf8d1",
+          "candidate_score_list_sha256": "9c67f3df4fe6f43fbc9b17f6da95007cc186c8c23dbc396dac4875333b9410c3",
+          "latency_ms": 1371.7070838902146,
+          "repeat": 9,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 41,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "2f522bd2c6c9fbe06f6b3f68869b1e369cf17e08121ed353ba4527d9ac79c114",
+          "candidate_score_list_sha256": "f16577a1722547373ea6c54f2c77a893a42253ae5c699cb9b26ae122b7bb69a8",
+          "latency_ms": 1683.4912500344217,
+          "repeat": 10,
+          "selected_id": "/websites/pandas_pydata",
+          "sequence": 50,
+          "within_round_position": 5
+        }
+      ],
+      "p95_latency_ms_nearest_rank": 2051.2165420223027,
+      "pairwise_comparisons": 45,
+      "quality_selection_tie_observations": 0,
+      "requests": 10,
+      "selected_id_all_exact": true,
+      "selected_id_counts": {
+        "/websites/pandas_pydata": 10
+      },
+      "selected_id_exact_vs_first_rate": 1.0,
+      "selected_id_modal_rate": 1.0,
+      "selected_id_pairwise_exact_rate": 1.0,
+      "selected_id_unique_count": 1
+    },
+    "scikit-learn": {
+      "candidate_count_max": 5,
+      "candidate_count_min": 5,
+      "candidate_list_all_exact": false,
+      "candidate_list_exact_vs_first_rate": 0.7777777777777778,
+      "candidate_list_modal_rate": 0.8,
+      "candidate_list_pairwise_exact_rate": 0.6444444444444445,
+      "candidate_list_unique_count": 2,
+      "candidate_score_list_all_exact": false,
+      "candidate_score_list_pairwise_exact_rate": 0.6444444444444445,
+      "candidate_score_list_unique_count": 2,
+      "candidate_set_mean_jaccard": 0.7968253968253968,
+      "candidate_set_min_jaccard": 0.42857142857142855,
+      "canonical_name": "scikit-learn",
+      "manifest_label": "Sklearn",
+      "max_latency_ms": 2337.6817090902478,
+      "mean_latency_ms": 1710.2409502258524,
+      "median_latency_ms": 1625.7084995741025,
+      "min_latency_ms": 1261.0229589045048,
+      "observations": [
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 1991.180167067796,
+          "repeat": 1,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 4,
+          "within_round_position": 4
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 1616.56270804815,
+          "repeat": 2,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 8,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 1378.3160420134664,
+          "repeat": 3,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 12,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 1579.9355420749635,
+          "repeat": 4,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 16,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 2337.6817090902478,
+          "repeat": 5,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 25,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 1261.0229589045048,
+          "repeat": 6,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 28,
+          "within_round_position": 3
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 1285.6920829508454,
+          "repeat": 7,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 32,
+          "within_round_position": 2
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "924433ec69a38ee5028b22d738dc1bb3255ed96be2a663aa1c723867cacb860b",
+          "candidate_score_list_sha256": "d489b1581bb6b861db4e9f5ec8c4de2a7eb7700a88af61b9caa9d821fa38cc5e",
+          "latency_ms": 2220.1990419998765,
+          "repeat": 8,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 36,
+          "within_round_position": 1
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "e2152e6c1b661b382753e5f8487be8d372bc5010c9cbb99a496a4d9af6ac0986",
+          "candidate_score_list_sha256": "a8de15eb62dc0873b1d897907f9bee2ee0e080c1263d706200fb45ac51c302b7",
+          "latency_ms": 1634.854291100055,
+          "repeat": 9,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 45,
+          "within_round_position": 5
+        },
+        {
+          "candidate_count": 5,
+          "candidate_list_sha256": "e2152e6c1b661b382753e5f8487be8d372bc5010c9cbb99a496a4d9af6ac0986",
+          "candidate_score_list_sha256": "a8de15eb62dc0873b1d897907f9bee2ee0e080c1263d706200fb45ac51c302b7",
+          "latency_ms": 1796.9649590086192,
+          "repeat": 10,
+          "selected_id": "/websites/scikit-learn_stable",
+          "sequence": 49,
+          "within_round_position": 4
+        }
+      ],
+      "p95_latency_ms_nearest_rank": 2337.6817090902478,
+      "pairwise_comparisons": 45,
+      "quality_selection_tie_observations": 0,
+      "requests": 10,
+      "selected_id_all_exact": true,
+      "selected_id_counts": {
+        "/websites/scikit-learn_stable": 10
+      },
+      "selected_id_exact_vs_first_rate": 1.0,
+      "selected_id_modal_rate": 1.0,
+      "selected_id_pairwise_exact_rate": 1.0,
+      "selected_id_unique_count": 1
+    }
+  },
+  "raw_artifact": {
+    "bytes": 378534,
+    "path": "new/round3/results/context7-accounting-resolver-stability-raw.json",
+    "sha256": "05bd8cd431b746e7905887a2ab49720f95807f3ed19104260096c2d1c5c90ea5"
+  },
+  "schema": "context7_accounting_resolver_stability_analysis_v1",
+  "timing": {
+    "elapsed_seconds": 85.30222754203714,
+    "finished_at": "2026-08-24T08:46:36.693930+00:00",
+    "started_at": "2026-08-24T08:45:11.390808+00:00"
+  },
+  "validity": {
+    "accounting_exact": true,
+    "all_observations_valid": true,
+    "coverage_complete": true,
+    "errors": [],
+    "expected_requests_per_package": 10,
+    "expected_rows": 50,
+    "fail_closed": true,
+    "metrics_status": "valid_complete_run",
+    "observed_requests_per_package": {
+      "Matplotlib": 10,
+      "NumPy": 10,
+      "TensorFlow": 10,
+      "pandas": 10,
+      "scikit-learn": 10
+    },
+    "observed_rows": 50,
+    "technical_failure_count": 0,
+    "valid": true
+  }
+}

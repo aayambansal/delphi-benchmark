@@ -1,0 +1,979 @@
+[
+  {
+    "case_id": "3",
+    "context": "Use Series.map or DataFrame.apply with value_counts, then replace values whose count is below 3 with \"other\".\n\nThe most direct solution is:\n\nresult = df.apply(lambda s: s.where(s.map(s.value_counts()) >= 3, \"other\"))\n\nWhy this works:\n- s.value_counts() gives counts per unique value in each column.\n- s.map(...) maps each cell to its frequency in that column.\n- s.where(condition, other) keeps values where the condition is True and replaces the rest with \"other\".\n\nIf you want it in-place for the existing dataframe:\n\ndf = df.apply(lambda s: s.where(s.map(s.value_counts()) >= 3, \"other\"))\n\nFor your example, this produces:\n- Qu1: cheese kept, others become other\n- Qu2: apple and banana kept, sausage becomes other\n- Qu3: cheese and potato kept, apple/sausage/egg become other\n\nRelevant pandas APIs:\n- pandas.Series.value_counts()\n- pandas.Series.map()\n- pandas.Series.where()\n- pandas.DataFrame.apply()\n\nThe retrieved documentation covered DataFrame.apply and where/conditional setting in general, but not this exact pattern; the solution above uses standard pandas Series methods. Source paths used: the retrieved pandas docs section on setting values conditionally and DataFrame.apply/where behavior from the tutorial page.",
+    "context_tokens": 267,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.where"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 4116.742291953415,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8829,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 274,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2685.9777909703553,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "51",
+    "context": "Use vectorized column-wise assignment. The relevant pandas APIs here are DataFrame columns selection via df.columns, DataFrame.__getitem__ / df[...], and element-wise NumPy/pandas math. The documentation explicitly says new columns can be created by assigning to a new column name, and operations are element-wise; no row loop is needed. Source: “How to create new columns derived from existing columns” in the pandas docs you provided.\n\nIf you want to add exp_ versions of every existing column, one concise way is:\n\nimport numpy as np\nresult = df.assign(**{f\"exp_{c}\": np.exp(df[c]) for c in df.columns})\n\nThis returns a new DataFrame with the original columns plus exp_A and exp_B.\n\nIf you prefer in-place mutation instead of returning a new frame:\n\nfor c in df.columns:\n    df[f\"exp_{c}\"] = np.exp(df[c])\nresult = df\n\nThe documented pieces used here are:\n- df[\"new_col\"] = ... for creating new columns\n- element-wise operations on columns\n- df.columns for iterating over existing column names\n\nIf you want, I can also show a fully vectorized version using DataFrame.apply or DataFrame.transform, but for this case assign + dict comprehension is the cleanest.",
+    "context_tokens": 258,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.join"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2083.5022090468556,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8504,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 268,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2675.0598328653723,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "115",
+    "context": "Use DataFrame.div with the row-wise sum across the value columns, then exclude the cat column from the arithmetic.\n\nThe simplest solution is:\n\ndf = df.assign(\n    val1=df[\"val1\"] / df[[\"val1\", \"val2\", \"val3\", \"val4\"]].sum(axis=1),\n    val2=df[\"val2\"] / df[[\"val1\", \"val2\", \"val3\", \"val4\"]].sum(axis=1),\n    val3=df[\"val3\"] / df[[\"val1\", \"val2\", \"val3\", \"val4\"]].sum(axis=1),\n    val4=df[\"val4\"] / df[[\"val1\", \"val2\", \"val3\", \"val4\"]].sum(axis=1),\n)\n\nA more compact pandas idiom is:\n\ndf = df.set_index(\"cat\")\ndf = df.div(df.sum(axis=1), axis=0).reset_index()\n\nIf you want only the numeric columns normalized by row total and keep cat as a column:\n\ndf[[\"val1\", \"val2\", \"val3\", \"val4\"]] = df[[\"val1\", \"val2\", \"val3\", \"val4\"]].div(\n    df[[\"val1\", \"val2\", \"val3\", \"val4\"]].sum(axis=1),\n    axis=0,\n)\n\nThis uses the exact pandas APIs DataFrame.sum(axis=1) and DataFrame.div(other, axis=0). The documentation I retrieved mentions DataFrame.assign() and DataFrame.sum(); it did not cover DataFrame.div() directly, but this is the standard pandas method for elementwise division by a row-wise Series.",
+    "context_tokens": 346,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.set_index",
+      "df.div",
+      "res.reset_index"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2305.17316586338,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8518,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 356,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2781.0865419451147,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "123",
+    "context": "Use DataFrame.agg (or apply) across the row, after dropping the NaN values in that row.\n\nThe simplest solution is:\n\ndf[\"keywords_all\"] = df[[\"keywords_0\", \"keywords_1\", \"keywords_2\", \"keywords_3\"]].apply(\n    lambda row: \",\".join(row.dropna()),\n    axis=1\n)\n\nIf you want it a bit more compact, you can also do:\n\ndf[\"keywords_all\"] = df.filter(like=\"keywords_\").apply(lambda row: \",\".join(row.dropna()), axis=1)\n\nResult:\n  keywords_0 keywords_1 keywords_2 keywords_3 keywords_all\n0          a          d        NaN          f        a,d,f\n1        NaN          e        NaN        NaN            e\n2          c        NaN          b          g        c,b,g\n\nWhy this works:\n- df[columns].apply(..., axis=1) applies the function row-by-row.\n- row.dropna() removes the NaN values from that row.\n- \",\".join(...) concatenates only the remaining strings.\n\nThe pandas docs I used cover:\n- DataFrame missing-data handling via DataFrame.dropna()\n- column selection / derived columns with DataFrame.apply patterns\nSource path: the retrieved pandas docs section “How to create new columns derived from existing columns” and “DataFrame > Missing data handling” (including DataFrame.dropna).",
+    "context_tokens": 284,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.apply"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2881.7719579674304,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8759,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 301,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2871.152416104451,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "170",
+    "context": "You can drop all-zero rows and all-zero columns by filtering on sums:\n\nresult = df.loc[df.sum(axis=1) != 0, df.sum(axis=0) != 0]\n\nIf you want it a bit more explicit:\n\nrow_mask = df.sum(axis=1) != 0\ncol_mask = df.sum(axis=0) != 0\nresult = df.loc[row_mask, col_mask]\n\nThis keeps only rows whose row sum is not 0 and columns whose column sum is not 0.\n\nRelevant pandas APIs:\n- DataFrame.sum(axis=1) and DataFrame.sum(axis=0)\n- DataFrame.loc for row/column selection\n\nThe retrieved documentation covered DataFrame.sum in the \"10 minutes to pandas > Operations\" section, and DataFrame selection with .loc is standard pandas indexing. Source paths used: the operations section mentioning df.mean()/axis behavior and the DataFrame grouping/selection examples in the retrieved pandas docs.",
+    "context_tokens": 187,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.sum"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2584.5608750823885,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8491,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 197,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2839.6479580551386,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "190",
+    "context": "Yes. Use a dict for aggfunc so each value column can have its own aggregation function.\n\nFor your case:\n\nresult = pd.pivot_table(\n    df,\n    values=[\"D\", \"E\"],\n    index=[\"B\"],\n    aggfunc={\"D\": np.sum, \"E\": np.mean}\n)\n\nIf you want the newer pandas-style method call, this is equivalent:\n\nresult = df.pivot_table(\n    values=[\"D\", \"E\"],\n    index=[\"B\"],\n    aggfunc={\"D\": \"sum\", \"E\": \"mean\"}\n)\n\nThe relevant pandas API docs explicitly say that aggfunc can be a dict, where “the key is column to aggregate and the value is function or list of functions”:\n- pandas.DataFrame.pivot_table\n- pandas.pivot_table\n\nSource paths used:\n- pandas.DataFrame.pivot_table\n- pandas.pivot_table",
+    "context_tokens": 169,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "pandas.pivot_table"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2709.366041002795,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8724,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 182,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2903.8421250879765,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "229",
+    "context": "Use a 2D groupby: group by username and by the binned views, then unstack.\n\nresult = (\n    df.groupby([\"username\", pd.cut(df[\"views\"], bins)])[\"post_id\"]\n      .count()\n      .unstack(fill_value=0)\n)\n\nIf you want the counts of rows rather than post_id specifically, you can also use .size() instead of [\"post_id\"].count():\n\nresult = (\n    df.groupby([\"username\", pd.cut(df[\"views\"], bins)])\n      .size()\n      .unstack(fill_value=0)\n)\n\nFor your sample data, this produces a DataFrame indexed by username with one column per bin.\n\nRelevant pandas APIs:\n- pandas.cut\n- DataFrame.groupby\n- GroupBy.count / GroupBy.size\n- Series.unstack\n\nThe retrieved docs covered DataFrameGroupBy.count and grouping/transform concepts, but not this exact binning pattern; this solution is based on standard pandas groupby usage.",
+    "context_tokens": 194,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.groupby"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2326.865374809131,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8670,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 200,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2768.183541018516,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "277",
+    "context": "Use DataFrame.sort_values, not sort_index, because you want to sort by the VIM values. In pandas, sort_values can sort by column names and, for a DataFrame with a MultiIndex, by index level names too. To keep rows with equal VIM in their original order, pass kind=\"stable\" (or kind=\"mergesort\", which is stable).\n\nFor your example:\n\nresult = df.sort_values(by=\"VIM\", ascending=True, kind=\"stable\")\n\nIf you want the result stored back into df:\n\ndf = df.sort_values(by=\"VIM\", ascending=True, kind=\"stable\")\n\nWhy this works:\n- DataFrame.sort_values(by=...) sorts by values, including a column like \"VIM\".\n- kind=\"stable\" preserves the original relative order of ties.\n\nRelevant pandas docs:\n- pandas.DataFrame.sort_values: retrieved documentation section “pandas.DataFrame.sort_values”\n- pandas.DataFrame.sort_index is for sorting by index, which is not what you need\n- docs note that mergesort and stable are the only stable algorithms\n\nIf you instead meant “sort by an index level named time”, you would use:\ndf.sort_index(level=\"time\", kind=\"stable\")\n\nBut for sorting by the VIM column, sort_values is the correct API.",
+    "context_tokens": 256,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.sort_values"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2432.905958034098,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 8744,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 265,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2776.0572500992566,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "314",
+    "context": "Use np.argsort on the flattened array, then take the second-to-last index and convert it to unraveled coordinates with np.unravel_index.\n\nThe relevant NumPy APIs are:\n- numpy.argsort(a, axis=None) to sort the flattened array when axis=None\n- numpy.unravel_index(indices, shape) to convert a flat index into an index tuple\n\nDocs used:\n- numpy.argsort: retrieved documentation path “numpy.argsort”\n- numpy.unravel_index is referenced in the numpy.argmax/numpy.argmin docs you provided as the conversion tool for flat indices\n\nFor your example:\n\nresult = np.unravel_index(np.argsort(a, axis=None)[-2], a.shape)\n\nFor\na = np.array([[10,50,30],[60,20,40]])\n\nresult is:\n(0, 1)\n\nIf you want to be explicit about descending order, you can also do:\n\nresult = np.unravel_index(np.argsort(a, axis=None)[-2], a.shape)\n\nbecause sorting ascending and taking [-2] gives the second largest element.",
+    "context_tokens": 213,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.unravel_index",
+      "a.min"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2127.8006250504404,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 8269,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 225,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2775.0914588104934,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "316",
+    "context": "Use a boolean mask with np.isnan and row selection:\n\nimport numpy as np\na = np.array([[np.nan, 2., 3., np.nan],\n              [1., 2., 3., 9]])\n\na = a[~np.isnan(a).any(axis=1)]\n\nThis returns:\narray([[1., 2., 3., 9.]])\n\nWhat it does:\n- np.isnan(a) gives a boolean array marking NaNs\n- .any(axis=1) is True for rows containing at least one NaN\n- ~ negates that mask\n- a[mask] keeps only the rows you want\n\nIf you want to delete rows based on any missing value, this is the standard NumPy approach. The retrieved documentation covered dropping missing data in pandas with DataFrame.dropna(), but not NumPy row deletion specifically.",
+    "context_tokens": 171,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.any"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 1805.0297917798162,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 4439,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 178,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2475.535500096157,
+    "source_context_tokens": 4045,
+    "status": "ok"
+  },
+  {
+    "case_id": "335",
+    "context": "Use NumPy’s element-wise ufunc np.maximum, or nest it for more than two arrays.\n\nresult = np.maximum(np.maximum(a, b), c)\n\nThis returns array([50, 20, 40]).\n\nRelevant docs:\n- numpy.maximum: “Element-wise maximum of array elements”; it compares two arrays and returns the element-wise maxima.\n- It also supports broadcasting and is equivalent to np.where(x1 >= x2, x1, x2) for non-NaN values.\n\nSource paths used:\n- numpy.maximum documentation\n- Mathematical functions > Extrema finding",
+    "context_tokens": 118,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.max"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1381.346708862111,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 8338,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 122,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 3189.9901248980314,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "339",
+    "context": "Use np.fliplr(a).diagonal() for the top-right-to-bottom-left diagonal.\n\nFor your example:\n\nimport numpy as np\na = np.array([[ 0,  1,  2,  3,  4, 5],\n              [ 5,  6,  7,  8,  9, 10],\n              [10, 11, 12, 13, 14, 15],\n              [15, 16, 17, 18, 19, 20],\n              [20, 21, 22, 23, 24, 25]])\n\nresult = np.fliplr(a).diagonal()\n\nThis returns:\narray([ 5,  9, 13, 17, 21])\n\nIf you want the diagonal of the flipped array starting from the other corner, you can also use np.flipud(a).diagonal(), which gives the opposite direction.\n\nRelevant NumPy APIs from the docs:\n- ndarray.diagonal(offset=0, axis1=0, axis2=1)\n- numpy.diagonal(a, offset=0, axis1=0, axis2=1)\n- numpy.fliplr(m) / numpy.flipud(m)\n\nSource paths used:\n- numpy.diagonal / ndarray.diagonal docs in the retrieved documentation\n- numpy.fliplr / numpy.flipud examples referenced under numpy.diagonal docs",
+    "context_tokens": 295,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.vstack"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2340.6439579557627,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 8653,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 298,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2753.0025420710444,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "381",
+    "context": "Yes. Use numpy.argsort on the negated array so the largest values come first.\n\nresult = np.argsort(-a)\n\nFor your example:\na = np.array([4, 1, 0, 8, 5, 2])\nresult is array([3, 4, 0, 5, 1, 2])\n\nIf you want a Python list instead:\nresult = np.argsort(-a).tolist()\n\nRelevant NumPy API: numpy.argsort(a, axis=-1, kind=None, order=None, *, stable=None, descending=None). The docs say it \"returns the indices that would sort an array,\" and the newer descending=True parameter can also be used for descending order. Source: retrieved documentation for numpy.argsort and numpy.ndarray.argsort.",
+    "context_tokens": 155,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.argsort"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2067.822667071596,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 7746,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 164,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2955.1517500076443,
+    "source_context_tokens": 7384,
+    "status": "ok"
+  },
+  {
+    "case_id": "444",
+    "context": "Use np.searchsorted to find the interval boundaries in B, then slice A with a boolean mask. For a sorted A, this is fully vectorized and avoids a Python for loop.\n\nRelevant NumPy APIs: np.searchsorted and np.r_[ / np.concatenate for building the mask. The NumPy docs you retrieved include np.searchsorted under “Sorting, searching, and counting” and describe it as “Find indices where elements should be inserted to maintain order.” Source path: generated/numpy.searchsorted.html.\n\nSolution:\n\nimport numpy as np\n\nA = np.array([1,1,2,3,3,3,4,5,6,7,8,8])\nB = np.array([1,4,8])\n\nstarts = np.searchsorted(A, B[:-1], side='right')\nends = np.searchsorted(A, B[1:], side='left')\n\nC = np.concatenate([A[s:e] for s, e in zip(starts, ends)])\n\nFor your example, C is:\narray([2, 3, 3, 3, 5, 6, 7])\n\nIf you want a version with no Python-level loop at all, use a boolean mask built from the interval boundaries:\n\nmask = ((A > B[0]) & (A < B[1])) | ((A > B[1]) & (A < B[2]))\nC = A[mask]\n\nSince your B has only 3 elements, this is simplest and fastest.\n\nIf B can have more than 3 elements and A is sorted, the general vectorized form is:\n\nmask = (A[:, None] > B[:-1]) & (A[:, None] < B[1:])\nC = A[mask.any(axis=1)]\n\nThat said, for a 3.8M-element A and only 3 boundaries in B, the explicit 2-interval mask above is the most efficient straightforward approach.",
+    "context_tokens": 393,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.logical_and"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3015.9638330806047,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 8411,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 398,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2842.668999917805,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "482",
+    "context": "Use numpy.polyfit. It does exactly a least-squares polynomial fit and returns the coefficients from highest order to lowest order.\n\nFor your quadratic, use deg=2:\n\nimport numpy as np\nx = [-1, 2, 5, 100]\ny = [123, 456, 789, 1255]\n\nresult = np.polyfit(x, y, deg=2)\n\nresult will be an array like [a, b, c].\n\nIf you want to evaluate the fitted polynomial later, you can use:\n\np = np.poly1d(result)\ny_pred = p(x)\n\nRelevant documentation:\n- np.polyfit example showing coefficient fitting: retrieved docs path not provided in the excerpt, but the doc explicitly shows np.polyfit(x, y, deg=1) returning coefficients.\n- numpy.polynomial convenience classes, including Chebyshev.fit, are also mentioned in the retrieved docs, but for plain quadratic coefficients in descending power order, np.polyfit is the direct solution.",
+    "context_tokens": 203,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.polyfit"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2127.701582852751,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 8404,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 205,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2825.485915876925,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "501",
+    "context": "Use NumPy’s advanced indexing with np.arange to build the row/column coordinates, then pick the third-dimension entries with b:\n\nresult = a[np.arange(a.shape[0])[:, None], np.arange(a.shape[1])[None, :], b]\n\nThis works because:\n- np.arange(a.shape[0])[:, None] gives row indices shaped (N, 1)\n- np.arange(a.shape[1])[None, :] gives column indices shaped (1, M)\n- b supplies the index into the last axis of a at each (i, j)\n\nFor your example, result is:\narray([[ 0,  3,  5],\n       [ 7,  8, 11],\n       [13, 15, 16]])\n\nRelevant NumPy docs:\n- ndarray indexing / array indexing: retrieved docs mention that arrays can be indexed with extended slicing syntax, but the specific advanced-indexing example is not covered in detail there.\n- numpy.arange is the helper used here, though it was not included in the retrieved documentation.\n- numpy.transpose / numpy.moveaxis are not needed for this solution.\n\nIf you want a TensorFlow-friendly equivalent, you can use tf.gather with batch_dims=2 after rearranging axes, but in NumPy the one-line advanced-indexing solution above is the simplest.",
+    "context_tokens": 269,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.take_along_axis"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3113.8729171361774,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 8635,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 275,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2835.795625112951,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "538",
+    "context": "Use Axes.set_xlabel with the loc='right' parameter:\n\nfig, ax = plt.subplots()\nax.plot(x, y)\nax.set_xlabel(\"X\", loc=\"right\")\n\nIf you want the label at the far right but also manually control placement, Matplotlib’s documentation notes that set_xlabel accepts Text keyword arguments, including position, and that loc controls axis-label position. Source: retrieved Matplotlib docs on “Axis label position” and “Labels for x- and y-axis” in the provided documentation.",
+    "context_tokens": 101,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.gca",
+      "ax.set_xlabel",
+      "ax.set_label_coords"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1401.2402079533786,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 7165,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 106,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2754.0720410179347,
+    "source_context_tokens": 6839,
+    "status": "ok"
+  },
+  {
+    "case_id": "582",
+    "context": "Use plt.subplots with gridspec_kw and width_ratios to make the first subplot 3× wider, while keeping the same height:\n\nfig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [3, 1]})\naxs[0].plot(x, y)\naxs[1].plot(x, y)\n\nRelevant documented API: matplotlib.pyplot.subplots(..., gridspec_kw=...) with width_ratios, and the docs explicitly note that subplots can have variable widths via gridspec_kw; see the retrieved documentation section “Variable widths or heights in a grid” and “matplotlib.pyplot.subplots”.\n\nIf you want the first subplot to be wider but not necessarily plot the same data twice, just change the plotting calls accordingly.\n\nSource paths used:\n- matplotlib.pyplot.subplots\n- matplotlib.gridspec.GridSpec\n- Variable widths or heights in a grid section in the retrieved Matplotlib docs",
+    "context_tokens": 187,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "a1.plot",
+      "plt.subplots"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1741.1706249695271,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 8362,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 190,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2739.7357090376318,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "592",
+    "context": "Use matplotlib.collections.LineCollection to draw each segment and set its colors from c:\n\nfrom matplotlib.collections import LineCollection\n\nfig, ax = plt.subplots()\n\nlc = LineCollection(lines, colors=c)\nax.add_collection(lc)\n\nax.autoscale()\nplt.show()\n\nIf you want the colors to be colormapped instead of passed as explicit RGBA values, use LineCollection(..., array=...) or lc.set_array(...), but for your c array of RGBA values, the exact API is the colors parameter of LineCollection. The documentation example for multicolored lines uses LineCollection and ax.add_collection(lc) from the Matplotlib gallery source path provided: “Multicolored lines > Color values between points”.",
+    "context_tokens": 143,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.plot"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 1568.3252080343664,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 8353,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 149,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2703.0552090145648,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "596",
+    "context": "Use pyplot.plot with a marker style and set alpha on the marker/line artist; for a solid line with semi-transparent markers, the simplest approach is to use a line plot with markers and set the artist alpha to 0.5:\n\nplt.plot(x, y, marker='o', linestyle='-', alpha=0.5)\n\nIf you want the line to stay fully solid while only the markers are 0.5 transparent, create the line and markers separately:\n\nline, = plt.plot(x, y, linestyle='-', color='C0')\nplt.plot(x, y, linestyle='None', marker='o', color='C0', alpha=0.5)\n\nThe relevant matplotlib API is matplotlib.pyplot.plot / Axes.plot, with the marker, linestyle, and alpha parameters. The documentation you provided confirms that plot supports markers and that alpha controls transparency for plotted artists; it also notes markevery for marker subsampling, though that’s not needed here. Source paths: matplotlib.pyplot.plot / matplotlib.axes.Axes.plot, and the transparency example in the scatter-with-legend section.",
+    "context_tokens": 219,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "l.set_color",
+      "l.set_markerfacecolor"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2098.143415991217,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 5307,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 223,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2689.308291999623,
+    "source_context_tokens": 5035,
+    "status": "ok"
+  },
+  {
+    "case_id": "599",
+    "context": "Use Axes.set_xticks with the labels argument so only the second tick gets a custom label.\n\nAdd this at SOLUTION START:\nax.set_xticks(range(1, 10), labels=['1', 'second', '3', '4', '5', '6', '7', '8', '9'])\n\nThis uses the documented Matplotlib API matplotlib.axes.Axes.set_xticks(ticks, labels=None, minor=False, **kwargs). The retrieved docs explicitly show using set_xticks(xticks, labels=xlabels) for custom tick labels. Source: retrieved documentation section “Axis ticks > Manual location and formats” in the Matplotlib docs.",
+    "context_tokens": 131,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "ax.set_xticklabels"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 1567.9426670540124,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 8102,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 138,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 3075.036833062768,
+    "source_context_tokens": 7782,
+    "status": "ok"
+  },
+  {
+    "case_id": "601",
+    "context": "Use Axes.set_xticks to explicitly set the combined tick locations. Since plt.xticks(range(0, 10, 2)) already set the major x ticks, add the extra values by passing the union of the existing ticks and the new ones:\n\nexisting = list(range(0, 10, 2))\nextra = [2.1, 3, 7.6]\nplt.gca().set_xticks(existing + extra)\n\nIf you want them sorted:\n\nplt.gca().set_xticks(sorted(existing + extra))\n\nRelevant documented API: matplotlib.axes.Axes.set_xticks(ticks, labels=None, minor=False, ...) — see the “Axis ticks” documentation path in the retrieved docs, especially the sections on “Manual location and formats” and “Tick locators and formatters.”",
+    "context_tokens": 160,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.xticks"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1854.0607090108097,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 8251,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 167,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 8873.928665881976,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "635",
+    "context": "Use the line’s `marker` settings plus `matplotlib.axes.Axes.legend()` to show the legend. To show only two markers on the line, set `markevery` to two positions on the line.\n\nAdd this:\n\nplt.legend()\nplt.setp(plt.gca().lines[0], markevery=[0, 9])\n\nOr more explicitly with the line object:\n\nline, = plt.plot(x, y, marker=\"*\", label=\"Line\")\nline.set_markevery([0, 9])\nplt.legend()\nplt.show()\n\nRelevant APIs:\n- `matplotlib.pyplot.plot(..., marker=..., label=...)`\n- `matplotlib.axes.Axes.legend()`\n- `Line2D.set_markevery()` / the `markevery` property to control which markers are drawn\n\nThe retrieved docs explicitly show `ax.legend()` for line/marker legends and mention `markevery` in the lines-and-markers section, though they do not give a dedicated `markevery` parameter example here. Sources used: retrieved docs sections “the histogram of the data > Legends” and “Lines, bars and markers.”",
+    "context_tokens": 230,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.legend"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1823.2082920148969,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 6545,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 230,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2645.3498748596758,
+    "source_context_tokens": 6259,
+    "status": "ok"
+  },
+  {
+    "case_id": "637",
+    "context": "Use an Axes title with mathtext to bold only the word “Figure”:\n\nax = plt.gca()\nax.plot(x, y)\nax.set_title(r\"$\\mathbf{Figure}$ 1\")\n\nThis uses matplotlib.axes.Axes.plot and matplotlib.axes.Axes.set_title; the retrieved documentation shows set_title is the correct API for adding an axes title, and it supports text styling via Matplotlib text rendering. Source paths used: matplotlib.axes.Axes.set_title and the “Axes labels and text” section in the retrieved docs.",
+    "context_tokens": 108,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.plot",
+      "plt.title"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 1691.9968330767006,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 8372,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 112,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 3587.8018331713974,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "669",
+    "context": "Use tf.one_hot, then invert it with tf.ones_like and cast to int32:\n\nimport tensorflow as tf\n\nlabels = [0, 6, 5, 4, 2]\n\nresult = tf.ones_like(tf.one_hot(labels, depth=10), dtype=tf.int32) - tf.one_hot(labels, depth=10, dtype=tf.int32)\n\nIf you want to keep it as a TensorFlow tensor with dtype int32, that already does it. For your example, result will be:\n\n[[0 1 1 1 1 1 1 1 1 1]\n [1 1 1 1 1 1 0 1 1 1]\n [1 1 1 1 1 0 1 1 1 1]\n [1 1 1 1 0 1 1 1 1 1]\n [1 1 0 1 1 1 1 1 1 1]]\n\nExact API used:\n- tf.one_hot(indices, depth, dtype=tf.int32)\n- tf.ones_like(tensor, dtype=tf.int32)\n\nNote: TensorFlow’s tf.one_hot is the key API here; the retrieved documentation did not cover TensorFlow, so this answer is from TensorFlow’s standard behavior rather than the provided docs.",
+    "context_tokens": 271,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.one_hot"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2355.138292070478,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8503,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 280,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2695.8693750202656,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "670",
+    "context": "Use tf.one_hot. In TensorFlow 2.10.0, the exact API is tensorflow.one_hot(indices, depth, on_value=..., off_value=..., axis=-1, dtype=...).\n\nFor your case:\n\nimport tensorflow as tf\n\nlabels = [0, 6, 5, 4, 2]\nresult = tf.one_hot(labels, depth=10, dtype=tf.int32)\n\nThis produces:\n[[1 0 0 0 0 0 0 0 0 0]\n [0 0 0 0 0 0 1 0 0 0]\n [0 0 0 0 0 1 0 0 0 0]\n [0 0 0 0 1 0 0 0 0 0]\n [0 0 1 0 0 0 0 0 0 0]]\n\nIf you want the “reversed one hot” format you showed, where class 0 is [0 0 0 0 0 0 0 0 0 1], just reverse the one-hot vectors on the last axis:\n\nresult = tf.reverse(tf.one_hot(labels, depth=10, dtype=tf.int32), axis=[-1])\n\nThat gives:\n[[0 0 0 0 0 0 0 0 0 1]\n [0 0 1 0 0 0 0 0 0 0]\n [0 0 0 0 0 1 0 0 0 0]\n [0 0 0 1 0 0 0 0 0 0]\n [0 0 0 0 0 0 1 0 0 0]]\n\nNote: the retrieved documentation covered sklearn target formats and one-hot-style indicator matrices, but not TensorFlow’s one_hot API directly.",
+    "context_tokens": 398,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "t.numpy",
+      "tf.one_hot",
+      "tf.constant"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2752.8494999278337,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8503,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 404,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2726.338207954541,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "673",
+    "context": "Use tf.data.Dataset.flat_map() here, not map().\n\nWhy: map() transforms one input element into one output element. flat_map() takes one input element, returns a Dataset, and then flattens the resulting datasets into a single stream of elements. This is exactly what you want for one input -> multiple outputs. The documentation says flat_map has type signature map_func: Callable[[T], Dataset[S]] and “maps map_func across this dataset and flattens the result” (docs path: tf.data.Dataset#flat_map in the retrieved material).\n\nIn your case, don’t use tf.compat.v1.py_func returning a list. Instead, return a tf.data.Dataset from the per-element function.\n\nresult = (\n    tf.data.Dataset.from_tensor_slices(input)\n    .flat_map(lambda i: tf.data.Dataset.from_tensor_slices([i, i + 1, i + 2]))\n)\n\nIf you need to run it in TF 2.10 graph-style code with eager disabled and collect the values:\n\nimport tensorflow as tf\n\ntf.compat.v1.disable_eager_execution()\ninput = [10, 20, 30]\n\nresult = (\n    tf.data.Dataset.from_tensor_slices(input)\n    .flat_map(lambda i: tf.data.Dataset.from_tensor_slices([i, i + 1, i + 2]))\n)\n\nelement = tf.compat.v1.data.make_one_shot_iterator(result).get_next()\n\nout = []\nwith tf.compat.v1.Session() as sess:\n    try:\n        while True:\n            out.append(sess.run(element))\n    except tf.errors.OutOfRangeError:\n        pass\n\nout is:\n[10, 11, 12, 20, 21, 22, 30, 31, 32]\n\nIf you want the most direct “single input element -> multiple output elements” solution, this is it.\n\nRelevant docs used:\n- tf.data.Dataset.flat_map: maps a dataset element to a Dataset and flattens the result\n- tf.data.Dataset.interleave: generalization of flat_map\n- tf.data.Dataset.map: returns one transformed element per input element",
+    "context_tokens": 424,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "<ast.name object at 0x7f3f04a97ee0>.session"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2881.3268749509007,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 6866,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 436,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 3823.90012498945,
+    "source_context_tokens": 6358,
+    "status": "ok"
+  },
+  {
+    "case_id": "675",
+    "context": "You can build it by comparing each position index against the lengths, then cast the boolean result to 0/1.\n\nIn TensorFlow 2.10, the cleanest way is to use tf.range, tf.expand_dims, tf.shape, and tf.cast:\n\nimport tensorflow as tf\n\nlengths = [4, 3, 5, 2]\nlengths = tf.constant(lengths)\n\ntotal_len = 8\npositions = tf.range(total_len)  # [0, 1, 2, ..., 7]\n\n# True for positions that should be 1\nmask = positions < tf.expand_dims(lengths, axis=1)\n\n# Convert boolean mask to 1s and 0s\nresult = tf.cast(mask, tf.int32)\n\nThis gives:\n[[1 1 1 1 0 0 0 0]\n [1 1 1 0 0 0 0 0]\n [1 1 1 1 1 0 0 0]\n [1 1 0 0 0 0 0 0]]\n\nIf you want the exact Python list output, you can use result.numpy().\n\nA compact one-liner form is:\n\nresult = tf.cast(tf.range(8)[None, :] < tf.constant(lengths)[:, None], tf.int32)\n\nRelevant docs used:\n- tf.fill (for creating tensors of a chosen shape/value, though not needed for the final solution): retrieved documentation path mentioned tf.fill\n- tf.compat.v1.boolean_mask was retrieved, but it does not solve this front-padding mask directly because it filters/compacts rather than creates the padded 2D mask.",
+    "context_tokens": 344,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.less",
+      "tf.where",
+      "tf.expand_dims",
+      "tf.range"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2487.698666052893,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8107,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 348,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2645.1590419746935,
+    "source_context_tokens": 7728,
+    "status": "ok"
+  },
+  {
+    "case_id": "680",
+    "context": "Yes. In TensorFlow 2.10, the easiest “cartesian product” style solution is to use broadcasting, typically with tf.expand_dims plus tf.reshape or tf.stack.\n\nFor your example:\n\nimport tensorflow as tf\n\na = tf.constant([1, 2, 3])\nb = tf.constant([4, 5, 6, 7])\n\nresult = tf.stack(\n    tf.meshgrid(a, b, indexing=\"ij\"),\n    axis=-1\n)\nresult = tf.reshape(result, [-1, 2])\n\nThis gives:\n[[1 4]\n [1 5]\n [1 6]\n [1 7]\n [2 4]\n [2 5]\n [2 6]\n [2 7]\n [3 4]\n [3 5]\n [3 6]\n [3 7]]\n\nIf you want a more explicit version using broadcasting:\n\na2 = tf.expand_dims(a, 1)   # shape [3, 1]\nb2 = tf.expand_dims(b, 0)   # shape [1, 4]\ngrid_a, grid_b = tf.meshgrid(a, b, indexing=\"ij\")\nresult = tf.stack([grid_a, grid_b], axis=-1)\nresult = tf.reshape(result, [-1, 2])\n\nThe main TensorFlow APIs involved are:\n- tf.meshgrid\n- tf.stack\n- tf.reshape\n- tf.expand_dims\n\nThe retrieved docs did not cover tf.meshgrid directly, but this is the standard TensorFlow equivalent pattern. The docs did confirm TensorFlow’s tensor ops style and also showed tf.matmul, but that is not the right API for cartesian products (it performs matrix multiplication, not pairing all elements). Source paths used: tensorflow/python/ops/math_ops.py in the tf.linalg.matmul documentation, and the TensorFlow data examples in the retrieved docs.",
+    "context_tokens": 374,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.tile",
+      "tf.expand_dims",
+      "tf.concat"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 4982.260791119188,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8330,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 384,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2553.438500035554,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "687",
+    "context": "Use TensorFlow’s reciprocal operation:\n\nresult = tf.math.reciprocal(A)\n\nFor your tensor:\nA = tf.constant([-0.5, -0.1, 0, 0.1, 0.5, 2], dtype=tf.float32)\nresult = tf.math.reciprocal(A)\n\nThis is the direct TensorFlow equivalent of np.reciprocal(A). Note that reciprocal of 0 will produce an infinity value in floating point, just like NumPy does.\n\nSource used: the retrieved documentation did not cover tf.math.reciprocal specifically, so this answer is based on TensorFlow API knowledge.",
+    "context_tokens": 123,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.reciprocal"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 1697.8728328831494,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8340,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 134,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2725.799083011225,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "701",
+    "context": "In TF 2.3, the direct equivalent of your TF 1.x “build graph + Session.run” pattern is usually: don’t use Session at all. In eager mode, ops execute immediately, so your code becomes:\n\nimport tensorflow as tf\n\ntf.random.set_seed(10)\nA = tf.random.normal([100, 100])\nB = tf.random.normal([100, 100])\nresult = tf.reduce_sum(tf.matmul(A, B))\n\nIf you need TF 1.x-style graph execution in TF 2.3, you must explicitly disable eager execution and use the compat.v1 APIs:\n\nimport tensorflow as tf\n\ntf.compat.v1.disable_eager_execution()\ntf.random.set_seed(10)\nA = tf.random.normal([100, 100])\nB = tf.random.normal([100, 100])\nwith tf.compat.v1.Session() as sess:\n    result = sess.run(tf.reduce_sum(tf.matmul(A, B)))\n\nThe TF 2 runtime error you saw, “Attempting to capture an EagerTensor without building a function,” happens because tf.compat.v1.Session is a graph-execution API, but your tensors were created eagerly. The documentation you provided confirms TF 2’s migration direction away from Session-style execution and toward eager execution / tf.keras / tf.data, though it does not cover Session migration for this exact snippet. Relevant doc path: “Migrate to TF2” in the retrieved tf.compat.v1.train.get_global_step page.\n\nAbout whether dropping Session is functionally equivalent: for this snippet, yes. With eager execution, tf.matmul(A, B) and tf.reduce_sum(...) produce the same numeric result as sess.run(...) would on the final graph fetch, assuming the same seed and dtypes.\n\nWhy Session can appear dramatically slower in your TF 1.16 benchmark:\n1. You are likely timing graph construction + session startup + execution, and the session path has nontrivial overhead.\n2. If you create random tensors outside the session in a way that causes eager/compat interactions, you can trigger extra conversion/capture overhead.\n3. The big 30 sec vs 0.005 sec gap strongly suggests you are not benchmarking the same thing. For a 100x100 matmul, 30 seconds is far too slow; that usually means startup, synchronization, device fallback, or a missing optimized kernel path, not the math itself.\n4. In TF 2, eager execution may be faster for this tiny one-off computation because it avoids graph/session overhead entirely. For repeated performance-critical code, wrap the computation in tf.function to get graph-like optimization without manual Session usage:\n   @tf.function\n   def f(A, B):\n       return tf.reduce_sum(tf.matmul(A, B))\n   result = f(A, B)\n\nIf you specifically want TF 1-style behavior inside TF 2.3, the exact APIs are tf.compat.v1.disable_eager_execution() and tf.compat.v1.Session(). If you want the idiomatic TF 2 solution, remove Session and just use the tensors directly.",
+    "context_tokens": 618,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.set_seed",
+      "tf.reduce_sum",
+      "tf.normal"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 4244.239832973108,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8596,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 621,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 8492.12049995549,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "706",
+    "context": "You’re mixing old standalone Keras with tf.keras, and that’s why you’re not getting the SavedModel directory.\n\nWhat to use\n\nUse TensorFlow’s Keras API:\n- tensorflow.keras.models.Sequential\n- tensorflow.keras.layers.Dense\n- model.save(filepath, save_format=\"tf\") or just model.save(filepath) in TF 2.x when using tf.keras\n\nWhy your current code saves an HDF5 file\n\nThe retrieved docs say tf.keras.Model.save(filepath, overwrite=True, save_format=None, **kwargs) saves either a TensorFlow SavedModel or HDF5 file, and in TF 2.x the default save_format is \"tf\" for tf.keras. But that applies to tf.keras, not the legacy standalone keras package you imported from.\n\nWith standalone keras==2.3.1 / tensorflow==2.3.0, model.save(\"my_model\") commonly defaults to HDF5 behavior unless you explicitly request TensorFlow SavedModel.\n\nExact fix\n\n1) Import from tensorflow.keras, not keras.\n2) Explicitly request SavedModel format.\n\nUse this:\n\nimport tensorflow as tf\nfrom tensorflow.keras.models import Sequential\nfrom tensorflow.keras.layers import Dense\n\n# ... build/train model as before ...\n\nmodel.save(\"my_model\", save_format=\"tf\")\n\nThis should create a folder named my_model containing:\n- saved_model.pb\n- variables/\n- assets/ (if needed)\n\nIf you want to be extra explicit, you can also use:\nmodel.save(\"my_model\", save_format=\"tf\", include_optimizer=True)\n\nNotes from the docs\n\nThe documentation for tf.keras.Model.save states:\n- filepath: path where to save the model\n- save_format: either \"keras\", \"tf\", or \"h5\"\n- \"tf\" means TensorFlow SavedModel format\n- \"h5\" means legacy HDF5 format\n\nAlso, the docs note that model.save() is an alias for tf.keras.models.save_model().\n\nMost likely issue in your environment\n\nYou said:\n- tensorflow 2.10.0\n- keras 2.3.1 and tensorflow 2.3.0\n\nThose versions are inconsistent. Keras 2.3.1 is the old standalone Keras package, while TF 2.10 is designed to be used with tf.keras from TensorFlow itself. If you have both installed, use only tf.keras and remove/avoid importing from keras.\n\nSource paths used:\n- tensorflow.keras.Model.save documentation in the retrieved docs\n- tensorflow.keras.Model.save_format / SavedModel format notes in the retrieved docs",
+    "context_tokens": 508,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.save"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3452.0795419812202,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 8535,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 520,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2748.5040000174195,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "840",
+    "context": "Use cross_val_predict with method='predict_proba'. That returns out-of-fold probability estimates for each sample, instead of scores.\n\nproba = cross_val_predict(logreg, X, y, cv=cv, method='predict_proba')\n\nIf you want it as a plain Python list:\nproba = cross_val_predict(logreg, X, y, cv=cv, method='predict_proba').tolist()\n\nNotes:\n- cross_val_predict is the right API for getting per-sample predictions from cross-validation.\n- method='predict_proba' tells it to call LogisticRegression.predict_proba on each held-out fold.\n- This works because LogisticRegression supports predict_proba.\n\nRelevant docs:\n- sklearn.model_selection.cross_val_predict: retrieved docs under “Obtaining predictions by cross-validation”\n- sklearn.linear_model.LogisticRegression.predict_proba: retrieved docs under “Logistic regression” / multinomial case",
+    "context_tokens": 174,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "cross_val_predict"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1957.3024159763008,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8315,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 184,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2691.598125034943,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "850",
+    "context": "Your error means sklearn is seeing X as 1 sample with 600 features, while y has 600 labels. For RandomForestRegressor, fit expects X to have shape (n_samples, n_features) and y to have shape (n_samples,) or (n_samples, n_outputs). The documentation says each row of X is one sample, and y must have one target per sample. Source paths: Getting Started > Fitting and predicting: estimator basics, and RandomForestRegressor API in the scikit-learn docs you provided.\n\nBecause your X is a 1D array like [735233.27, 735234.27, ...], you need to reshape it into a 2D column vector before fitting: X.reshape(-1, 1).\n\nBEGIN SOLUTION\nimport numpy as np\nimport pandas as pd\nfrom sklearn.ensemble import RandomForestRegressor\n\nX, y, X_test = load_data()\nassert type(X) == np.ndarray\nassert type(y) == np.ndarray\nassert type(X_test) == np.ndarray\n\nX = X.reshape(-1, 1)\nX_test = X_test.reshape(-1, 1)\n\nregressor = RandomForestRegressor(\n    n_estimators=150,\n    min_samples_split=2,\n    random_state=42\n)\nregressor.fit(X, y)\n\npredict = regressor.predict(X_test)",
+    "context_tokens": 273,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "RandomForestRegressor"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1874.66258299537,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8970,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 285,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2670.6610419787467,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "875",
+    "context": "Use sklearn.feature_extraction.DictVectorizer. It is designed to convert a list of Python dicts into a 2D numeric matrix and it supports multi-valued categorical features with one-hot coding. Documentation source: sklearn feature extraction “Loading features from dicts” and “Categorical features stored as strings…” in the retrieved docs.\n\nFor your data, convert each sample to a dict whose keys are the feature names and whose values are 1 for present features. Then vectorize:\n\nimport pandas as pd\nimport numpy as np\nfrom sklearn.feature_extraction import DictVectorizer\n\nfeatures = [\n    ['f1', 'f2', 'f3'],\n    ['f2', 'f4', 'f5', 'f6'],\n    ['f1', 'f2']\n]\n\nvec = DictVectorizer(sparse=False)\nnew_features = vec.fit_transform(\n    [{f: 1 for f in sample} for sample in features]\n)\n\nThis gives a dense NumPy array like:\n\narray([[1., 1., 1., 0., 0., 0.],\n       [0., 1., 0., 1., 1., 1.],\n       [1., 1., 0., 0., 0., 0.]])\n\nIf you want the column order/names, use vec.get_feature_names_out().\n\nAlternative with pandas, if you prefer:\nnew_features = pd.DataFrame(0, index=np.arange(len(features)), columns=sorted({f for s in features for f in s}))\nfor i, sample in enumerate(features):\n    new_features.loc[i, sample] = 1\nnew_features = new_features.to_numpy()\n\nBut the most sklearn-native solution is DictVectorizer.",
+    "context_tokens": 346,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "MultiLabelBinarizer.fit_transform"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2270.0197079684585,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8422,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 359,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2690.549457911402,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "887",
+    "context": "Yes. In scikit-learn, the main tools are:\n\n- sklearn.preprocessing.StandardScaler for centering and scaling to zero mean / unit variance\n- sklearn.preprocessing.PowerTransformer for reducing skewness and making data more Gaussian-like\n- sklearn.preprocessing.QuantileTransformer with output_distribution='normal' for mapping to a normal distribution\n\nFor your specific “scaling and centering” case, use StandardScaler. The documentation says it “transform[s] the data to center it by removing the mean value of each feature, then scale it by dividing non-constant features by their standard deviation,” yielding zero mean and unit variance. Source: preprocessing docs, section “Standardization, or mean removal and variance scaling”.\n\nIf you also want to reduce skewness, PowerTransformer is the better fit; the docs explicitly say it “aim[s] to map data from any distribution to as close to a Gaussian distribution as possible in order to stabilize variance and minimize skewness.” Source: preprocessing docs, section “Mapping to a Gaussian distribution”.\n\nFor your code, the simplest solution is:\n\ncentered_scaled_data = sklearn.preprocessing.StandardScaler().fit_transform(data)\n\nIf you want a skewness-reducing transform instead, use:\n\ncentered_scaled_data = sklearn.preprocessing.PowerTransformer().fit_transform(data)\n\nNotes from the docs:\n- StandardScaler accepts with_mean=False or with_std=False to disable centering or scaling.\n- For outliers, RobustScaler is suggested as a drop-in replacement.\n- For sparse input, StandardScaler must be used with with_mean=False.\n\nRelevant documentation paths used:\n- 8.3. Preprocessing data > 8.3.1. Standardization, or mean removal and variance scaling\n- 8.3. Preprocessing data > 8.3.2. Non-linear transformation > 8.3.2.2. Mapping to a Gaussian distribution",
+    "context_tokens": 376,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "preprocessing.scale"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2444.610208971426,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8280,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 380,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2831.8179168272763,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "892",
+    "context": "Yes. In scikit-learn, the default CountVectorizer tokenization drops punctuation, but you can preserve punctuation marks by overriding the tokenizer or by using a character-based analyzer.\n\nThe documentation shows that CountVectorizer can be customized with a callable tokenizer, and that a custom tokenizer can keep punctuation in tokens; see the “Customizing the vectorizer classes” section in the retrieved docs. Source paths used: sklearn/feature_extraction/text.py docs under “8.2.3.10. Customizing the vectorizer classes” and “CountVectorizer”.\n\nFor your case, the simplest solution is to use tokenizer=str.split if your text is already space-separated and you want punctuation to stay attached to words, or provide your own tokenizer.\n\ntransformed_text = CountVectorizer(tokenizer=str.split, token_pattern=None).fit_transform([text])\n\nIf you want to explicitly preserve tokens containing !, ?, \" and ' as part of the tokenization, you can do:\n\nimport re\ndef my_tokenizer(s):\n    return re.findall(r\"[^\\s]+\", s)\n\ntransformed_text = CountVectorizer(tokenizer=my_tokenizer, token_pattern=None).fit_transform([text])\n\nKey detail:\n- token_pattern must be set to None when you supply tokenizer=..., so the default regex tokenizer is not used.\n\nIf your goal is to preserve punctuation as separate features, then use character n-grams instead:\n\ntransformed_text = CountVectorizer(analyzer='char', ngram_range=(1, 1)).fit_transform([text])\n\nBut for keeping punctuation attached to words, tokenizer=... is the right API.",
+    "context_tokens": 318,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "CountVectorizer"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2498.6529999878258,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8397,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 329,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2522.8728340007365,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "896",
+    "context": "Use `sklearn.model_selection.train_test_split` for the 80/20 split, and then slice the DataFrame/arrays so that:\n\n- X = all columns except the last\n- y = last column\n\nThe pandas docs confirm `read_csv(..., header=None)` is the right way to load a CSV without headers, and the scikit-learn docs say `train_test_split` is the convenience function for splitting into train/test subsets. Source paths used: pandas `read_csv()` docs and scikit-learn `train_test_split` docs in the retrieved documentation.\n\nA direct solution:\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\n\ndataset = pd.read_csv('example.csv', header=None, sep=',')\n\ndef solve(data):\n    # Split into features and target first\n    X = data.iloc[:, :-1].values\n    y = data.iloc[:, -1].values\n\n    # 80/20 train-test split\n    X_train, X_test, y_train, y_test = train_test_split(\n        X, y, test_size=0.2, random_state=42\n    )\n\n    return X_train, y_train, X_test, y_test\n\nIf you want X/y for each split explicitly after that, they are already:\n\n- X_train = X_train\n- y_train = y_train\n- X_test = X_test\n- y_test = y_test\n\nIf you prefer to keep them as pandas objects instead of NumPy arrays, just omit `.values`:\n\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\n\ndef solve(data):\n    X = data.iloc[:, :-1]\n    y = data.iloc[:, -1]\n\n    X_train, X_test, y_train, y_test = train_test_split(\n        X, y, test_size=0.2, random_state=42\n    )\n\n    return X_train, y_train, X_test, y_test\n\nKey API names:\n- pandas.read_csv(..., header=None, sep=',')\n- DataFrame.iloc\n- sklearn.model_selection.train_test_split(test_size=0.2, random_state=42)\n\nIf you want, I can also show the version that returns `(x_train, y_train), (x_test, y_test)` exactly like Keras-style dataset loaders.",
+    "context_tokens": 474,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "train_test_split"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 4395.154417026788,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8385,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 480,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2560.0447088945657,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "902",
+    "context": "CountVectorizer does not preserve the order of a user-supplied vocabulary for the output feature matrix. The column order is determined by the internal mapping in vocabulary_, and scikit-learn’s text vectorizers expose feature names in that internal index order via get_feature_names_out().\n\nIf you want your output columns in exactly the order you specified, do the reordering yourself after fit_transform, using the vocabulary_ mapping. The relevant APIs are CountVectorizer.fit_transform(), CountVectorizer.vocabulary_, and CountVectorizer.get_feature_names_out().\n\nSolution:\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.feature_extraction.text import CountVectorizer\n\ncorpus = [\n    'We are looking for Java developer',\n    'Frontend developer with knowledge in SQL and Jscript',\n    'And this is the third one.',\n    'Is this the first document?',\n]\n\nvocab = ['Jscript', '.Net', 'TypeScript', 'SQL', 'NodeJS', 'Angular', 'Mongo',\n         'CSS', 'Python', 'PHP', 'Photoshop', 'Oracle', 'Linux', 'C++', 'Java',\n         'TeamCity', 'Frontend', 'Backend', 'Full stack', 'UI Design', 'Web',\n         'Integration', 'Database design', 'UX']\n\nvectorizer = CountVectorizer(\n    stop_words=\"english\",\n    binary=True,\n    lowercase=False,\n    vocabulary=vocab\n)\n\nX = vectorizer.fit_transform(corpus)\n\nfeature_names = np.array(vocab)\nX = X[:, [vectorizer.vocabulary_[f] for f in feature_names]]\n\nOr, if you want the names and matrix to match exactly and conveniently:\n\nfeature_names = vocab\nX = X[:, [vectorizer.vocabulary_[f] for f in feature_names]]\n\nWhy this works:\n- CountVectorizer.vocabulary_ is a dict mapping token -> column index.\n- The matrix columns are always in that index order.\n- So to enforce your own order, you reorder columns manually by indexing X with the desired vocabulary order.\n\nImportant note:\n- Since you passed vocabulary=..., CountVectorizer will not learn a new vocabulary from the corpus.\n- The documentation for CountVectorizer explains that each term is assigned a unique integer index and that the mapping is stored in vocabulary_. It does not provide a parameter to force arbitrary output-column ordering beyond that internal mapping. Source used: 8.2.3.3 Common Vectorizer usage; 8.2.3.10 Customizing the vectorizer classes; HashingVectorizer section in the retrieved scikit-learn documentation.",
+    "context_tokens": 516,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "CountVectorizer"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3686.1632908694446,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8880,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 531,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2538.0134999286383,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  },
+  {
+    "case_id": "912",
+    "context": "Yes. MinMaxScaler scales each feature/column because its formula uses X.min(axis=0) and X.max(axis=0). If you want to normalize the whole array as one block, use sklearn.preprocessing.minmax_scale with axis=None, or do the min/max manually with NumPy.\n\nFor your solution variable:\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import MinMaxScaler\nnp_array = load_data()\ntransformed = (np_array - np.min(np_array)) / (np.max(np_array) - np.min(np_array))\n\nIf you specifically want to stay within scikit-learn, the relevant API is sklearn.preprocessing.minmax_scale(..., axis=None) rather than MinMaxScaler. The retrieved docs cover MinMaxScaler’s column-wise behavior and show that it uses axis=0 in its formula, but they do not document minmax_scale directly. Source: sklearn preprocessing docs, section “Scaling features to a range” in 8.3.1.1.",
+    "context_tokens": 201,
+    "engine": "delphi_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "MinMaxScaler"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1707.731124944985,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 8294,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 206,
+      "provider": "openai",
+      "source_engine": "delphi"
+    },
+    "retrieval_latency_ms": 2564.702457981184,
+    "source_context_tokens": 8000,
+    "status": "ok"
+  }
+]
