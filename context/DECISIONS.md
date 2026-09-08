@@ -426,3 +426,39 @@ Freeze the confirmatory stack at branch `feature/generated-source-freeze`
 commit `91d76c1`, equal to master `c17c186` plus the cherry-picked `3565123`
 generated-source fix. All final scoring uses exact vectors, API `top_k=20`,
 configuration attestation, and the gold-searchability preflight.
+
+## 2026-09-09 — round 4: relabel, match, withdraw
+
+Prompted by two external reviews of the round-3 draft.
+
+1. **ARB round-3 final is reclassified C2 (validation evidence).** All 427 cases
+   were scored in round 2 and round-2 held-out aggregates gated the shipped
+   components (round2-provenance/NEGATIVE-RESULTS.md). No confirmatory claim
+   rests on it. Confirmatory claims use C0 sets only: SWE-bench Verified (62,
+   plus a 100-instance expansion drawn under a fresh salt) and the independent
+   commit-to-files final (18). Ledger: context/EXPOSURE_LEDGER.md.
+2. **Matched conventional ladder adopted as the primary comparator family.**
+   dense -> dense+BM25 RRF -> + Delphi's rerankers -> + Delphi's expansion,
+   over the official ARB chunks of the identical corpora, prompts imported
+   from the backend. Outcome: on the independent final the conventional stack
+   beats Delphi with intervals excluding zero (R@20 -0.120, MRR -0.111); on
+   SWE-bench Delphi leads the full rung by +0.083 MRR with an interval through
+   zero; on the C2 ARB set +0.103 MRR [-0.008, +0.189]. Delphi's own
+   additions do not separate from the conventional stack on any C0 set.
+3. **"Parity or better" on documentation is withdrawn.** With the hosted
+   synthesis engine's own retrieved sources routed through the frozen stage,
+   all four arms are within 0.05 and every engine-versus-engine interval
+   includes zero. The supported sentence is "no statistically resolved
+   difference".
+4. **Determinism is reported like for like.** Retrieved-set stability: hosted
+   synthesis engine 1.000, Delphi 0.980, documentation engine 0.54/0.50. The
+   "0.0%" figure for the synthesis engine described generated text and is no
+   longer used as a retrieval claim.
+5. **Closed-tool seeding is described as a replication of ARB's intervention**;
+   the sentence attributing the remaining gap to retrieval rather than the agent
+   is withdrawn.
+6. **Executable pilot preregistered before scoring** (context/PILOT_PROTOCOL.md):
+   62 C0 SWE-bench instances, mini-SWE-agent + gpt-5.4-mini, conditions none /
+   random / delphi seed / conventional seed, step budget 50, official harness.
+7. **No SOTA claim is made anywhere.** The hosted repository arm remains
+   unscoreable; after the ladder results this is no longer the decisive gap.

@@ -127,6 +127,11 @@ def main() -> None:
     parser.add_argument("--max-output-tokens", type=int, default=1600)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--summary", type=Path, required=True)
+    parser.add_argument(
+        "--engine-label",
+        default=None,
+        help="engine label for the output rows (default: delphi_answer_synthesis / synthesis_no_retrieval)",
+    )
     args = parser.parse_args()
 
     if args.mode == "answer" and args.contexts is None:
@@ -154,7 +159,7 @@ def main() -> None:
         if missing:
             raise SystemExit(f"missing source contexts: {', '.join(missing)}")
 
-    engine = (
+    engine = args.engine_label or (
         "delphi_answer_synthesis"
         if args.mode == "answer"
         else "synthesis_no_retrieval"

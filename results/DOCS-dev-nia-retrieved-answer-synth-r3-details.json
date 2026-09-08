@@ -1,0 +1,979 @@
+[
+  {
+    "case_id": "3",
+    "context": "Use Series.value_counts() to find the values you want to keep, then Series.where() or DataFrame.where() to replace the rest with \"other\" (or \"others\"). The documentation for Series.value_counts() and Series.where() is in the pandas Series API page, and DataFrame.where() is documented separately.\n\nA compact solution is:\n\nresult = df.apply(lambda s: s.where(s.isin(s.value_counts()[s.value_counts() >= 3].index), \"other\"))\n\nThis works because:\n- s.value_counts() returns counts per unique value.\n- s.value_counts() >= 3 makes a boolean filter of the values to keep.\n- s.value_counts()[...].index gives the labels that meet the threshold.\n- s.isin(...) marks rows whose values should stay unchanged.\n- s.where(cond, other) keeps values where cond is True and replaces False with \"other\".\n\nIf you want to keep the original object and overwrite in place:\n\ndf[:] = df.apply(lambda s: s.where(s.isin(s.value_counts()[s.value_counts() >= 3].index), \"other\"))\n\nFor your sample data, result will be:\n\n    Qu1     Qu2     Qu3\n0  other   other   other\n1  other  banana  potato\n2  cheese   apple   other\n3  other   apple  cheese\n4  cheese   apple  cheese\n5  other   other  potato\n6  cheese  banana  cheese\n7  other  banana  potato\n8  other  banana   other\n\nSources used:\n- pandas Series.value_counts: https://pandas.pydata.org/docs/reference/api/pandas.Series.html\n- pandas Series.where: https://pandas.pydata.org/docs/reference/api/pandas.Series.html\n- pandas DataFrame.where: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.where.html",
+    "context_tokens": 376,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.where"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 4985.2452501654625,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 3798,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 384,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 2037.1972909197211,
+    "source_context_tokens": 3100,
+    "status": "ok"
+  },
+  {
+    "case_id": "51",
+    "context": "Use the column-wise vectorized NumPy exponential and then assign the new columns back to the DataFrame.\n\nThe relevant pandas APIs are:\n- DataFrame.apply(func, axis=0) to apply a function to each column\n- DataFrame.__setitem__ / assignment to add new columns\n- DataFrame columns can be renamed by constructing a new DataFrame with prefixed names\n\nFrom the docs:\n- DataFrame.apply applies a function along axis=0 to each column.\n- Operations are element-wise, so no row loop is needed.\n- New columns are created by assigning to df[\"new_name\"].\n\nSolution:\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nexp_cols = np.exp(df).add_prefix(\"exp_\")\nresult = df.join(exp_cols)\n\nIf you want the column names to include a trailing space exactly like your example, use:\n\nresult = df.join(np.exp(df).add_prefix(\"exp_ \"))\n\nA slightly more explicit pandas-only version is:\n\nresult = df.assign(**{f\"exp_{col}\": np.exp(df[col]) for col in df.columns})\n\nThis creates one new exponential column per existing column, named with the prefix.\n\nSources used:\n- https://pandas.pydata.org/docs/dev/getting_started/intro_tutorials/05_add_columns.html\n- https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html",
+    "context_tokens": 300,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.join"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3092.7892080508173,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 3612,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 314,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1518.0753748863935,
+    "source_context_tokens": 3071,
+    "status": "ok"
+  },
+  {
+    "case_id": "115",
+    "context": "df = df.set_index(\"cat\").div(df.set_index(\"cat\").sum(axis=1), axis=0)\n\nThis uses DataFrame.div(other, axis=0) to divide each row by its row total. The row totals come from DataFrame.sum(axis=1). Since cat is the grouping key, setting it as the index makes the division align by category.\n\nSource docs used:\n- pandas.DataFrame.rdiv / flexible arithmetic wrappers: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rdiv.html\n- pandas groupby aggregation example for row-wise sums: https://pandas.pydata.org/docs/user_guide/groupby.html",
+    "context_tokens": 128,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.set_index",
+      "df.div",
+      "res.reset_index"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 4188.277082983404,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 3732,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 138,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1589.2990829888731,
+    "source_context_tokens": 3150,
+    "status": "ok"
+  },
+  {
+    "case_id": "123",
+    "context": "Use DataFrame.apply with axis=1 to work row-by-row, drop the NaN values in each row, then join the remaining values.\n\ndf[\"keywords_all\"] = df.apply(lambda row: \",\".join(row.dropna().astype(str)), axis=1)\n\nWhy this works:\n- DataFrame.apply(..., axis=1) passes each row as a Series to your function, as documented in pandas.DataFrame.apply.\n- Series.dropna() removes missing values.\n- \",\".join(...) concatenates the remaining strings.\n\nIf you want to restrict it to only those four columns explicitly, you can do:\n\ncols = [\"keywords_0\", \"keywords_1\", \"keywords_2\", \"keywords_3\"]\ndf[\"keywords_all\"] = df[cols].apply(lambda row: \",\".join(row.dropna().astype(str)), axis=1)\n\nDocumentation used:\n- pandas.DataFrame.apply: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html",
+    "context_tokens": 192,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.apply"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2252.0002499222755,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 3987,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 202,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1559.672374976799,
+    "source_context_tokens": 3341,
+    "status": "ok"
+  },
+  {
+    "case_id": "170",
+    "context": "Use boolean filtering with DataFrame.sum and then drop zero-sum rows/columns with DataFrame.loc plus DataFrame.drop or direct boolean masks.\n\nThe cleanest solution is:\n\nresult = df.loc[df.sum(axis=1).ne(0), df.sum(axis=0).ne(0)]\n\nIf you want to explicitly use the documented drop API, you can do:\n\nresult = df.drop(index=df.index[df.sum(axis=1).eq(0)], columns=df.columns[df.sum(axis=0).eq(0)])\n\nWhy this works:\n- df.sum(axis=1) computes row sums.\n- df.sum(axis=0) computes column sums.\n- .eq(0) and .ne(0) build boolean masks.\n- DataFrame.drop(..., index=..., columns=...) removes the zero-sum rows and columns.\n\nRelevant docs used:\n- pandas.DataFrame.drop: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html\n- pandas.DataFrame.filter: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.filter.html",
+    "context_tokens": 207,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.sum"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2199.874499812722,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 4117,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 220,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1569.877333007753,
+    "source_context_tokens": 3661,
+    "status": "ok"
+  },
+  {
+    "case_id": "190",
+    "context": "Yes. Use named aggregation via DataFrameGroupBy.agg, then pivot if you want a pivot-table-style result.\n\nFor your specific case, the direct pivot-table equivalent is:\n\nresult = pd.pivot_table(\n    df,\n    index=\"B\",\n    values=[\"D\", \"E\"],\n    aggfunc={\"D\": np.sum, \"E\": np.mean},\n)\n\nThis uses a different aggregation per value column. The pandas groupby docs show that passing a dict to aggregate/agg applies different functions to different columns, and named aggregation is also supported. Source: pandas groupby user guide, “Applying different functions to DataFrame columns” and “Named aggregation” at https://pandas.pydata.org/docs/user_guide/groupby.html\n\nIf you want the same idea with groupby directly:\n\nresult = df.groupby(\"B\").agg({\"D\": \"sum\", \"E\": \"mean\"})\n\nIf you want to keep the exact “pivot table” API, the dict form of aggfunc is the key.",
+    "context_tokens": 202,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "pandas.pivot_table"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2222.2199998795986,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 3148,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 209,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1413.1752499379218,
+    "source_context_tokens": 2634,
+    "status": "ok"
+  },
+  {
+    "case_id": "229",
+    "context": "Use a 2D grouping/crosstab: put the binned `views` on the columns and `username` on the index.\n\nThe exact pandas API that fits this is `pandas.crosstab`, which computes a frequency table of two factors. Combine it with `pandas.cut` to bin `views` first. `pd.cut` is documented as the binning function for turning continuous values into categorical intervals, and `pd.crosstab` computes the cross-tabulation counts. Sources: pandas.cut and pandas.crosstab docs.\n\nresult = pd.crosstab(df[\"username\"], pd.cut(df[\"views\"], bins))\n\nIf you want to reproduce your sample:\n\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"username\": [\"john\", \"john\", \"john\", \"john\", \"jane\", \"jane\", \"jane\", \"jane\"],\n    \"post_id\": [1, 2, 3, 4, 7, 8, 9, 10],\n    \"views\": [3, 23, 44, 82, 5, 25, 46, 56]\n})\nbins = [1, 10, 25, 50, 100]\n\nresult = pd.crosstab(df[\"username\"], pd.cut(df[\"views\"], bins))\n\nThis gives counts by user and bin.\n\nIf you prefer a `groupby`-style solution, you can also do:\nresult = df.groupby([\"username\", pd.cut(df[\"views\"], bins)]).size().unstack(fill_value=0)\n\nBut the simplest direct answer is `pd.crosstab(...)`.",
+    "context_tokens": 335,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.groupby"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3281.585750170052,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 4048,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 340,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 2130.9064580127597,
+    "source_context_tokens": 3407,
+    "status": "ok"
+  },
+  {
+    "case_id": "277",
+    "context": "Use DataFrame.sort_values on the VIM column, not sort_index. If you want ties to preserve the original order, use a stable sort algorithm via kind=\"mergesort\".\n\nresult = df.sort_values(by=\"VIM\", ascending=True, kind=\"mergesort\")\n\nIf you want to sort the whole frame by the values in the VIM column while keeping the MultiIndex attached, this is the standard approach. The relevant pandas API is DataFrame.sort_values(by=..., ascending=..., kind=...), and pandas documents sort_values as the way to “Sort values in a DataFrame” (docs path: https://pandas.pydata.org/docs/user_guide/cookbook.html#sorting; also see DataFrame.sort_values via the DataFrame API referenced there).\n\nIf instead you meant sorting the MultiIndex itself by one of its levels, pandas uses sort_index(level=...) on the index levels, but that does not sort by column values (docs path: https://pandas.pydata.org/docs/dev/user_guide/advanced.html#sorting-a-multiindex).",
+    "context_tokens": 210,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "df.sort_values"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 7689.242291729897,
+    "library": "Pandas",
+    "provider_metadata": {
+      "input_tokens": 3229,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 221,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1506.8815839476883,
+    "source_context_tokens": 2578,
+    "status": "ok"
+  },
+  {
+    "case_id": "314",
+    "context": "Use np.argpartition to find the index of the 2nd largest element, then unravel it in C order with np.unravel_index.\n\nAPIs:\n- np.argpartition(a, kth)\n- np.unravel_index(indices, shape, order='C')\n\nFor the second largest, partition by -2 on the flattened array:\n\nresult = np.unravel_index(np.argpartition(a.ravel(), -2)[-2], a.shape)\n\nFor your example:\n\nimport numpy as np\na = np.array([[10,50,30],[60,20,40]])\nresult = np.unravel_index(np.argpartition(a.ravel(), -2)[-2], a.shape)\n\nThis gives:\n(0, 1)\n\nNotes:\n- np.argpartition is documented in NumPy’s genindex as ndarray.argpartition / np.argpartition.\n- np.unravel_index returns unraveled coordinates in the requested order; default order is 'C'. The retrieved docs covered argpartition but not unravel_index, so that part is from NumPy’s standard API knowledge.",
+    "context_tokens": 213,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.unravel_index",
+      "a.min"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2294.0856250934303,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 3216,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 220,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1295.0534580741078,
+    "source_context_tokens": 2926,
+    "status": "ok"
+  },
+  {
+    "case_id": "316",
+    "context": "Use a boolean mask to keep only rows with no NaNs.\n\na = a[~np.isnan(a).any(axis=1)]\n\nThis works because:\n- np.isnan(a) gives a boolean array marking NaNs\n- .any(axis=1) is True for rows that contain at least one NaN\n- ~ inverts that mask\n- a[mask] selects the rows to keep\n\nIf you prefer the masked-array API, the documented NumPy functions are:\n- numpy.ma.masked_invalid(a) to mask NaN/inf values\n- numpy.ma.compress_rows(a) to suppress rows containing masked values\n\nSource docs used:\n- https://numpy.org/doc/stable/reference/routines.ma.html\n- https://numpy.org/doc/stable/reference/generated/numpy.compress.html\n- https://numpy.org/doc/stable/reference/generated/numpy.delete.html",
+    "context_tokens": 170,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.any"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 1952.5213339366019,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 3274,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 177,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1409.9000829737633,
+    "source_context_tokens": 2907,
+    "status": "ok"
+  },
+  {
+    "case_id": "335",
+    "context": "Use numpy.maximum for element-wise comparison, and if you have more than two arrays, chain it or use functools.reduce.\n\nFor your example:\n\nresult = np.maximum(np.maximum(a, b), c)\n\nThis returns array([50, 20, 40]).\n\nRelevant docs:\n- numpy.maximum: element-wise maximum of array elements\n- numpy.amax: maximum over an array or along an axis\n- numpy.for multiple arrays, there is no direct 3-argument np.maximum; chaining is the standard approach\n\nSource paths used:\n- https://numpy.org/doc/stable/reference/ufuncs.html\n- https://numpy.org/doc/stable/reference/generated/numpy.maximum.html (linked from the ufuncs page)",
+    "context_tokens": 146,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.max"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2095.7956248894334,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 3416,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 150,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1337.836666032672,
+    "source_context_tokens": 3102,
+    "status": "ok"
+  },
+  {
+    "case_id": "339",
+    "context": "Use np.fliplr or reverse the second axis, then take the diagonal.\n\nFor your example:\nresult = np.diagonal(np.fliplr(a))\n\nThis gives:\narray([ 4,  8, 12, 16, 20])\n\nIf you want both diagonals in one 2D result:\nresult = np.vstack((np.diagonal(a), np.diagonal(np.fliplr(a))))\n\nThis returns:\narray([[ 0,  6, 12, 18, 24],\n       [ 4,  8, 12, 16, 20]])\n\nFor a general 2D array, this works for any shape as long as you want the main diagonal and the anti-diagonal up to the shorter dimension.\n\nRelevant NumPy APIs:\n- numpy.diagonal(a, offset=0, axis1=0, axis2=1)\n- numpy.fliplr(m)\n\nThe retrieved documentation explicitly covers numpy.diagonal in the NumPy linalg routines page, and np.einsum('ii->i', a) as an alternative way to extract the main diagonal. Source paths used:\n- https://numpy.org/doc/stable/reference/routines.linalg.html\n- https://numpy.org/doc/stable/reference/generated/numpy.einsum.html",
+    "context_tokens": 261,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.vstack"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2686.2206659279764,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 3720,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 264,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1392.249207943678,
+    "source_context_tokens": 3140,
+    "status": "ok"
+  },
+  {
+    "case_id": "381",
+    "context": "Yes. Use numpy.argsort to get the indices that would sort the array, then reverse them for decreasing order.\n\nThe exact API is numpy.argsort(a, axis=-1, kind=None, order=None, stable=None). NumPy documents it as an “Indirect sort” on the numpy.sort page and in the sorting section. Source paths used: https://numpy.org/doc/stable/reference/generated/numpy.sort.html, https://numpy.org/doc/stable/reference/routines.ma.html\n\nFor your example:\n\nimport numpy as np\na = np.array([4, 1, 0, 8, 5, 2])\n\nresult = np.argsort(a)[::-1]\n\nThis gives:\narray([3, 4, 0, 5, 1, 2])\n\nIf you want a Python list instead of a NumPy array, use:\nresult = np.argsort(a)[::-1].tolist()\n\nIf you have NumPy 2.5.0 or newer, numpy.sort also has a descending=True parameter, but that returns sorted values, not indices, so np.argsort(...)[::-1] is the right solution here.",
+    "context_tokens": 230,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.argsort"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 10944.18758386746,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 2360,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 238,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1482.4922080151737,
+    "source_context_tokens": 1994,
+    "status": "ok"
+  },
+  {
+    "case_id": "444",
+    "context": "Yes — use boolean indexing, no Python for-loop needed.\n\nSince A is sorted and B has only a few boundary values, the clean NumPy solution is to build a mask for values strictly between consecutive entries of B, then select with that mask:\n\nimport numpy as np\n\nA = np.array([1,1,2,3,3,3,4,5,6,7,8,8])\nB = np.array([1,4,8])\n\nmask = np.zeros_like(A, dtype=bool)\nfor lo, hi in zip(B[:-1], B[1:]):\n    mask |= (A > lo) & (A < hi)\n\nC = A[mask]\n\nThis gives:\narray([2, 3, 3, 3, 5, 6, 7])\n\nIf you want to avoid even that small loop over B, you can use searchsorted because A is sorted:\n\nimport numpy as np\n\nA = np.array([1,1,2,3,3,3,4,5,6,7,8,8])\nB = np.array([1,4,8])\n\nstarts = np.searchsorted(A, B[:-1], side=\"right\")\nends = np.searchsorted(A, B[1:], side=\"left\")\n\nC = np.concatenate([A[s:e] for s, e in zip(starts, ends)])\n\nFor your example, C is:\narray([2, 3, 3, 3, 5, 6, 7])\n\nRelevant NumPy APIs:\n- boolean indexing: A[mask] (NumPy quickstart docs: “Indexing with boolean arrays”)\n- np.searchsorted(a, v, side=\"right\"/\"left\")\n- np.concatenate\n- np.compress and np.delete are related selection APIs, but boolean indexing is the most direct fit here\n\nDocs used:\n- numpy quickstart, “Indexing with boolean arrays”\n- numpy.compress\n- numpy.delete",
+    "context_tokens": 400,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.logical_and"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3141.022833995521,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 2997,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 406,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1517.4494590610266,
+    "source_context_tokens": 2630,
+    "status": "ok"
+  },
+  {
+    "case_id": "482",
+    "context": "Use np.polyfit with deg=2. It solves the least-squares polynomial fit and returns coefficients in highest-power-first order, i.e. [a, b, c].\n\nresult = np.polyfit(x, y, 2)\n\nIf you want the exact full example:\n\nimport numpy as np\nx = [-1, 2, 5, 100]\ny = [123, 456, 789, 1255]\nresult = np.polyfit(x, y, 2)\n\nIf you need the fit to be more numerically stable for new code, NumPy’s docs recommend numpy.polynomial.Polynomial.fit, but np.polyfit is the direct solution for returning [a, b, c].\n\nSource: numpy.polyfit documentation, especially the “Least squares polynomial fit” description and “Returns: p ndarray, shape (deg + 1,) … Polynomial coefficients, highest power first.”",
+    "context_tokens": 184,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.polyfit"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1872.241874691099,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 3037,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 189,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1526.4385000336915,
+    "source_context_tokens": 2675,
+    "status": "ok"
+  },
+  {
+    "case_id": "501",
+    "context": "Use NumPy advanced indexing with the third-axis indices from b.\n\nThe exact expression is:\n\nresult = a[np.arange(a.shape[0])[:, None], np.arange(a.shape[1]), b]\n\nBut since the row/column indices must broadcast to (N, M), the clean version is:\n\nresult = a[np.arange(a.shape[0])[:, None], np.arange(a.shape[1]), b]\n\nFor your example, that gives:\n\nresult = np.array(\n    [[ 0,  3,  5],\n     [ 7,  8, 11],\n     [13, 15, 16]]\n)\n\nWhy this works:\n- a is shape (N, M, 2)\n- b is shape (N, M)\n- a[i, j, k] selects element k along the third axis\n- np.arange(a.shape[0])[:, None] creates row indices of shape (N, 1)\n- np.arange(a.shape[1]) creates column indices of shape (M,)\n- these broadcast against b to index all (N, M) positions at once\n\nThis is directly supported by NumPy’s advanced indexing rules:\n- indexing arrays must have the same shape or broadcast together\n- multidimensional arrays can be indexed with one index per axis\n\nRelevant docs used:\n- NumPy quickstart, “Indexing with arrays of indices”:\n  https://numpy.org/doc/stable/user/quickstart.html\n- NumPy quickstart, advanced indexing examples with multiple index arrays:\n  https://numpy.org/doc/stable/user/quickstart.html",
+    "context_tokens": 323,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "numpy.take_along_axis"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2598.008499946445,
+    "library": "Numpy",
+    "provider_metadata": {
+      "input_tokens": 3458,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 328,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1388.9473751187325,
+    "source_context_tokens": 2855,
+    "status": "ok"
+  },
+  {
+    "case_id": "538",
+    "context": "Use an Axes object and move the x-axis label to the right end with Axes.xaxis.set_label_position(\"right\"), then set the label with Axes.set_xlabel(\"X\"). The docs explicitly cover Axes.xaxis.set_label_position for repositioning axis labels, and Axes.set_xlabel for setting the label text; see the retrieved Matplotlib docs at https://matplotlib.org/stable/gallery/ticks/ticks_top_right.html and https://matplotlib.org/stable/api/axis_api.html.\n\nSOLUTION START\nax = plt.gca()\nax.set_xlabel(\"X\")\nax.xaxis.set_label_position(\"bottom\")\nax.xaxis.set_label_coords(1.0, -0.08)\nSOLUTION END\n\nIf you want the label literally at the right end of the x-axis, Axes.xaxis.set_label_coords(x, y) is the direct way to place it; the retrieved docs covered set_label_position, but not set_label_coords.",
+    "context_tokens": 182,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.gca",
+      "ax.set_xlabel",
+      "ax.set_label_coords"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1948.631042148918,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 2695,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 199,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1231.4073329325765,
+    "source_context_tokens": 2423,
+    "status": "ok"
+  },
+  {
+    "case_id": "582",
+    "context": "Use matplotlib’s GridSpec with width ratios. The docs show `GridSpec` as the flexible way to lay out subplot grids, and `plt.subplots(..., gridspec_kw=dict(width_ratios=[...]))` for variable sizes. Source: matplotlib gallery “gridspec_multicolumn” and “axes_box_aspect” / “subplot”.\n\nSOLUTION START:\nfig = plt.figure()\ngs = fig.add_gridspec(1, 2, width_ratios=[3, 1])\n\nax1 = fig.add_subplot(gs[0, 0])\nax2 = fig.add_subplot(gs[0, 1])\n\nax1.plot(x, y)\nax2.plot(x, y)\n\nplt.show()\n\nThis makes both subplots the same height because they are in the same row, and the first is three times wider because of `width_ratios=[3, 1]`.\n\nIf you want to use `plt.subplots` instead, the relevant API is `plt.subplots(nrows=1, ncols=2, gridspec_kw={\"width_ratios\": [3, 1]})`.",
+    "context_tokens": 222,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "a1.plot",
+      "plt.subplots"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2041.2736251018941,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 2898,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 228,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1242.1990830916911,
+    "source_context_tokens": 2621,
+    "status": "ok"
+  },
+  {
+    "case_id": "592",
+    "context": "Use Axes.plot for each 2-point segment, passing the per-segment RGBA color from c:\n\nfig, ax = plt.subplots()\nfor seg, color in zip(lines, c):\n    xs, ys = zip(*seg)\n    ax.plot(xs, ys, color=color)\n\nplt.show()\n\nRelevant Matplotlib API:\n- matplotlib.axes.Axes.plot(x, y, color=..., linewidth=..., linestyle=...)\n- It creates and adds a matplotlib.lines.Line2D to the Axes, per the artist documentation.\nSource used: matplotlib.org/stable/tutorials/artists.html\n\nIf you want the whole solution inline in your snippet:\n\n# SOLUTION START\nfig, ax = plt.subplots()\nfor seg, color in zip(lines, c):\n    xs, ys = zip(*seg)\n    ax.plot(xs, ys, color=color)\nplt.show()\n# SOLUTION END",
+    "context_tokens": 174,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.plot"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3327.309832908213,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 3970,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 182,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1110.1202089339495,
+    "source_context_tokens": 3508,
+    "status": "ok"
+  },
+  {
+    "case_id": "596",
+    "context": "Use ax.plot with marker='o' and set the marker transparency separately via markerfacecolor (and optionally markeredgecolor) with an RGBA alpha of 0.5. Keep the line solid with linestyle='-'. The marker reference docs show markers are selected with the marker parameter, and marker fill/edge colors can be specified separately. Source: matplotlib.org/stable/gallery/lines_bars_and_markers/marker_reference.html\n\nSOLUTION START\nax = plt.plot(x, y, linestyle='-', marker='o', color='C0',\n              markerfacecolor=(0.0, 0.0, 1.0, 0.5),\n              markeredgecolor=(0.0, 0.0, 1.0, 0.5))[0]\nplt.show()",
+    "context_tokens": 162,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "l.set_color",
+      "l.set_markerfacecolor"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3319.991583004594,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 2258,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 169,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1354.2391250375658,
+    "source_context_tokens": 2001,
+    "status": "ok"
+  },
+  {
+    "case_id": "599",
+    "context": "Use Axes.set_ticklabels together with Axes.set_ticks (the docs note these should be used together: set the tick locations first, then the labels). For your case, set the x tick labels on ax after you’ve plotted:\n\nax.set_ticks = None  # not needed; use the axis object below\nax.xaxis.set_ticks(range(1, 10))\nax.xaxis.set_ticklabels(['1', 'second', '3', '4', '5', '6', '7', '8', '9'])\n\nIf you want to keep the existing numeric ticks but only replace the second label, this is the direct solution:\n\nax.set_xticks(range(1, 10))\nax.set_xticklabels(['1', 'second', '3', '4', '5', '6', '7', '8', '9'])\n\nThis uses the documented behavior from the Matplotlib axis API: set_ticks and set_ticklabels. Source: https://matplotlib.org/stable/api/axis_api.html",
+    "context_tokens": 202,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "ax.set_xticklabels"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1923.678457736969,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 3319,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 210,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1102.9475000686944,
+    "source_context_tokens": 2981,
+    "status": "ok"
+  },
+  {
+    "case_id": "601",
+    "context": "Use the axis minor tick locator for the extra positions, and keep your existing major ticks from `plt.xticks(...)`.\n\nAdd this after `plt.xticks(...)`:\n\nfrom matplotlib.ticker import FixedLocator\nplt.gca().xaxis.set_minor_locator(FixedLocator([2.1, 3, 7.6]))\nplt.gca().tick_params(axis='x', which='minor', bottom=True, labelbottom=False)\n\nWhy this works:\n- `Axis.set_ticks` / `plt.xticks(...)` sets the major tick locations.\n- `FixedLocator` lets you place ticks at exact positions.\n- `Axis.set_minor_locator(...)` installs those positions as minor ticks.\n- `tick_params(..., which='minor')` makes the minor ticks visible without labels.\n\nThe retrieved docs explicitly mention that minor ticks are controlled by setting the minor locator, and that `set_ticks` is for tick locations on an axis. Source paths used:\n- https://matplotlib.org/stable/gallery/ticks/major_minor_demo.html\n- https://matplotlib.org/stable/api/axis_api.html\n\nIf you want them as visible tick marks on the x-axis, this is the cleanest way.",
+    "context_tokens": 237,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.xticks"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2088.886540848762,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 2416,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 247,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1149.3464158847928,
+    "source_context_tokens": 2116,
+    "status": "ok"
+  },
+  {
+    "case_id": "635",
+    "context": "Use plt.legend() to show the legend, and set numpoints=2 to draw two markers in the legend entry for the Line2D created by plt.plot.\n\nSo add:\n\nplt.legend(numpoints=2)\nplt.show()\n\nRelevant docs:\n- matplotlib.pyplot.plot supports marker and label via Line2D keyword args (see https://matplotlib.org/stable/devel/document.html, source path: devel/document.html)\n- legend(..., numpoints=2) controls the number of marker points for a line legend entry (see https://matplotlib.org/stable/api/legend_api.html, source path: api/legend_api.html)\n\nIf you meant “show two markers on the plotted line itself” rather than in the legend, use two plot points or set markevery to place markers only at selected data points; the retrieved docs here cover legend numpoints, not markevery.",
+    "context_tokens": 182,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.legend"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 10571.762041654438,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 3054,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 183,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1087.19279197976,
+    "source_context_tokens": 2719,
+    "status": "ok"
+  },
+  {
+    "case_id": "637",
+    "context": "Use plt.title with mathtext to bold only the word “Figure”:\n\nplt.plot(x, y)\nplt.title(r'$\\mathbf{Figure}$ 1')\nplt.show()\n\nRelevant Matplotlib API: matplotlib.pyplot.title, which accepts a title string; mathtext lets you apply bold formatting to just part of the text. The docs here show title usage via plt.title(...) and title positioning in titles_demo; they don’t explicitly cover partial-bold text, so this part is based on Matplotlib’s mathtext support. Source used: https://matplotlib.org/stable/gallery/text_labels_and_annotations/titles_demo.html, https://matplotlib.org/stable/users/explain/customizing.html",
+    "context_tokens": 140,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "plt.plot",
+      "plt.title"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 1772.1567079424858,
+    "library": "Matplotlib",
+    "provider_metadata": {
+      "input_tokens": 3427,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 141,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1343.3688329532743,
+    "source_context_tokens": 3134,
+    "status": "ok"
+  },
+  {
+    "case_id": "669",
+    "context": "Use tf.keras.utils.to_categorical with your integer labels and set num_classes=10, then cast to int32.\n\nresult = tf.keras.utils.to_categorical(labels, num_classes=10).astype(\"int32\")\n\nIf you want to stay in TensorFlow ops, tf.keras.ops.multi_hot also does this for integer labels, with num_classes and dtype:\n\nresult = tf.keras.ops.multi_hot(tf.convert_to_tensor(labels), num_classes=10, dtype=\"int32\")\n\nRelevant docs:\n- tf.keras.utils.to_categorical: converts a class vector (integers) to a binary class matrix.\n- tf.keras.ops.multi_hot(inputs, num_classes=None, axis=-1, dtype=None, sparse=False): encodes integer labels as multi-hot vectors.\n\nSource paths used:\n- https://www.tensorflow.org/api_docs/python/tf/keras/utils/to_categorical\n- https://www.tensorflow.org/api_docs/python/tf/keras/ops/multi_hot",
+    "context_tokens": 191,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.one_hot"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 6368.752125184983,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 1959,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 197,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1573.239125078544,
+    "source_context_tokens": 1571,
+    "status": "ok"
+  },
+  {
+    "case_id": "670",
+    "context": "Use tf.keras.utils.to_categorical for this. It converts integer class vectors to a binary class matrix, and you can set num_classes=10 and dtype=\"int32\".\n\nresult = tf.keras.utils.to_categorical(labels, num_classes=10, dtype=\"int32\")\n\nIf you want a TensorFlow tensor explicitly, wrap it with tf.convert_to_tensor:\n\nresult = tf.convert_to_tensor(\n    tf.keras.utils.to_categorical(labels, num_classes=10, dtype=\"int32\"),\n    dtype=tf.int32\n)\n\nFor your example, this produces:\n[[1 0 0 0 0 0 0 0 0 0]\n [0 0 0 0 0 0 1 0 0 0]\n [0 0 0 0 0 1 0 0 0 0]\n [0 0 0 0 1 0 0 0 0 0]\n [0 0 1 0 0 0 0 0 0 0]]\n\nNote: your example output is “reversed one hot” in the sense that class 0 is at the last position. If that is what you need, do this instead:\n\nlabels = [0, 6, 5, 4, 2]\nresult = tf.reverse(\n    tf.keras.utils.to_categorical(labels, num_classes=10, dtype=\"int32\"),\n    axis=[-1]\n)\n\nThat gives:\n[[0 0 0 0 0 0 0 0 0 1]\n [0 0 1 0 0 0 0 0 0 0]\n [0 0 0 0 0 0 1 0 0 0]\n [0 0 0 1 0 0 0 0 0 0]\n [0 0 0 0 0 1 0 0 0 0]]\n\nAPIs used:\n- tf.keras.utils.to_categorical(x, num_classes=None)\n- tf.reverse(tensor, axis)\n\nSource used:\n- https://www.tensorflow.org/api_docs/python/tf/keras/utils/to_categorical\n- https://www.tensorflow.org/api_docs/python/tf/keras/ops/multi_hot",
+    "context_tokens": 469,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "t.numpy",
+      "tf.one_hot",
+      "tf.constant"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 7641.8111668899655,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 1959,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 479,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1347.902333829552,
+    "source_context_tokens": 1571,
+    "status": "ok"
+  },
+  {
+    "case_id": "673",
+    "context": "Use tf.data.Dataset.flat_map, not map, because your function needs to turn one input element into a Dataset of multiple output elements.\n\nThe documented API is:\ntf.data.Dataset.flat_map(map_func)\nwhere map_func has the form:\nmap_func: Callable[[T], Dataset[S]]\n\nSo the key change is: instead of returning a Python list from your custom function, return a tf.data.Dataset. In your case, make one dataset per input item using tf.data.Dataset.from_tensor_slices([i, i+1, i+2]), then flatten those per-element datasets with flat_map.\n\nFilled-in solution:\n\nimport tensorflow as tf\n\ntf.compat.v1.disable_eager_execution()\ninput = [10, 20, 30]\n\nds = tf.data.Dataset.from_tensor_slices(input)\nds = ds.flat_map(lambda i: tf.data.Dataset.from_tensor_slices([i, i + 1, i + 2]))\n\nresult = []\nwith tf.compat.v1.Session() as sess:\n  for x in ds:\n    result.append(sess.run(x))\n\nThis produces:\n[10, 11, 12, 20, 21, 22, 30, 31, 32]\n\nIf you want to keep your custom Python function, it would need to return a Dataset, not a list, for flat_map to work.\n\nSource used: https://www.tensorflow.org/api_docs/python/tf/compat/v1/data/experimental/CsvDataset (the retrieved docs include the tf.data.Dataset.flat_map signature and example).",
+    "context_tokens": 307,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "<ast.name object at 0x7f3f04a97ee0>.session"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2546.914500184357,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 2162,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 314,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1465.1219581719488,
+    "source_context_tokens": 1675,
+    "status": "ok"
+  },
+  {
+    "case_id": "675",
+    "context": "Use tf.keras.utils.pad_sequences with padding='pre' and value=1 for the left side, then set the right-side padded tail to 0 by constructing the mask from a range comparison.\n\nThe most direct TensorFlow solution is:\n\nimport tensorflow as tf\n\nlengths = tf.constant([4, 3, 5, 2])\ntotal_len = 8\n\nresult = tf.cast(\n    tf.range(total_len)[None, :] < lengths[:, None],\n    tf.int32\n)\n\nThis produces:\n[[1, 1, 1, 1, 0, 0, 0, 0],\n [1, 1, 1, 0, 0, 0, 0, 0],\n [1, 1, 1, 1, 1, 0, 0, 0],\n [1, 1, 0, 0, 0, 0, 0, 0]]\n\nExplanation:\n- tf.range(total_len) creates [0, 1, ..., 7].\n- lengths[:, None] makes the lengths shape [4, 1].\n- Comparing tf.range(total_len)[None, :] < lengths[:, None] gives True for positions before each length.\n- tf.cast(..., tf.int32) converts True/False to 1/0.\n\nIf you specifically want the \"padded in front by 1s\" formulation using a padding utility, tf.keras.utils.pad_sequences supports padding='pre' and value=0.0, but for this exact mask pattern, the comparison-based approach above is the cleanest and fully TensorFlow-native. The relevant docs I used were:\n- tf.keras.utils.pad_sequences: https://www.tensorflow.org/api_docs/python/tf/keras/utils/pad_sequences",
+    "context_tokens": 366,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.less",
+      "tf.where",
+      "tf.expand_dims",
+      "tf.range"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3314.7467910312116,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 2531,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 371,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1393.6985421460122,
+    "source_context_tokens": 2179,
+    "status": "ok"
+  },
+  {
+    "case_id": "680",
+    "context": "Yes. For a TensorFlow-native equivalent of a 2-way Cartesian product, the simplest option is to use broadcasting via reshape, or use `tf.experimental.numpy.ix_` to build broadcastable index arrays.\n\nGiven your example, if you want all pairs from `a` and `b`, one easy TensorFlow solution is:\n\nresult = tf.stack(tf.meshgrid(a, b, indexing=\"ij\"), axis=-1)\nresult = tf.reshape(result, [-1, 2])\n\nThis produces pairs like:\n[[1, 4],\n [1, 5],\n [1, 6],\n [1, 7],\n [2, 4],\n ...,\n [3, 7]]\n\nIf you want a more NumPy-like helper, TensorFlow also provides `tf.experimental.numpy.ix_` for building broadcastable vectors. The retrieved docs mention `tf.experimental.numpy.ix_( *args )` as the TensorFlow variant of NumPy’s `numpy.ix_` (source: https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/ix_). TensorFlow also has `tf.experimental.numpy.outer` for outer products, but that computes numeric multiplication, not pair enumeration (source: https://www.tensorflow.org/api_docs/python/tf/experimental/numpy/outer).\n\nFor your exact code, put this in `result`:\n\nimport tensorflow as tf\n\na = tf.constant([1, 2, 3])\nb = tf.constant([4, 5, 6, 7])\n\nresult = tf.reshape(tf.stack(tf.meshgrid(a, b, indexing=\"ij\"), axis=-1), [-1, 2])\n\nIf you prefer a version using `tf.experimental.numpy.ix_`:\n\nresult = tf.stack(tf.experimental.numpy.ix_(a, b), axis=-1)\n\nbut note that this gives a broadcasted grid structure, so you’d still reshape if you want a flat list of pairs.\n\nOne important note: `tf.ragged.cross` exists, but its documented behavior is for string feature crosses and it returns a 2D `RaggedTensor` of type string, so it is not the right fit for numeric pair combinations here (source: https://www.tensorflow.org/api_docs/python/tf/ragged/cross).",
+    "context_tokens": 454,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.tile",
+      "tf.expand_dims",
+      "tf.concat"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 4984.955833759159,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 2814,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 471,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1459.3117921613157,
+    "source_context_tokens": 2569,
+    "status": "ok"
+  },
+  {
+    "case_id": "687",
+    "context": "Use tf.math.reciprocal(A) for the TensorFlow equivalent of np.reciprocal(A).\n\nFor your example:\n\nresult = tf.math.reciprocal(A)\n\nNotes:\n- tf.math.reciprocal(x) computes element-wise 1/x and returns a Tensor.\n- It has the same shape and type as x.\n- Since A contains 0, tf.math.reciprocal(A) will produce infinity at that position (matching NumPy’s reciprocal behavior for floats).\n\nIf you want to avoid inf at zeros, use tf.math.reciprocal_no_nan(A), which returns 0 where x is 0.\n\nSource docs used:\n- https://www.tensorflow.org/api_docs/python/tf/math/reciprocal\n- https://www.tensorflow.org/api_docs/python/tf/math/reciprocal_no_nan",
+    "context_tokens": 162,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.reciprocal"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3700.6359165534377,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 2761,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 175,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1339.4769160076976,
+    "source_context_tokens": 2533,
+    "status": "ok"
+  },
+  {
+    "case_id": "701",
+    "context": "In TensorFlow 2.3, the direct equivalent of your TF1 `Session.run(...)` code is to use eager execution and just evaluate the tensor directly with `.numpy()` if you need a NumPy value.\n\nThe TF2 version is:\n\nimport tensorflow as tf\n\ntf.random.set_seed(10)\nA = tf.random.normal([100, 100])\nB = tf.random.normal([100, 100])\nresult = tf.reduce_sum(tf.matmul(A, B)).numpy()\n\nIf you want to keep TF1-style graph execution in TF2, you must disable eager execution and use the v1 graph APIs explicitly:\n\nimport tensorflow as tf\n\ntf.compat.v1.disable_eager_execution()\ntf.random.set_seed(10)\nA = tf.random.normal([100, 100])\nB = tf.random.normal([100, 100])\nwith tf.compat.v1.Session() as sess:\n    result = sess.run(tf.reduce_sum(tf.matmul(A, B)))\n\nKey points:\n\n- `tf.Session` is gone in TF2; the supported compatibility API is `tf.compat.v1.Session`.\n- But `tf.compat.v1.Session` only works in graph mode, not with eager tensors. That is why you get: “Attempting to capture an EagerTensor without building a function.”\n- In TF2 eager mode, ops execute immediately, so `sess.run(...)` is unnecessary. Use the tensor directly or call `.numpy()`.\n\nWhy your TF1 code is much faster with `Session`:\n- In TF1, `sess.run(...)` executes a built graph, which can fuse/optimize the computation and avoid Python overhead.\n- In TF2 eager mode, the same math may run op-by-op unless wrapped in `tf.function`.\n- The recommended TF2 performance equivalent is to wrap the computation in `tf.function`, for example:\n\nimport tensorflow as tf\n\ntf.random.set_seed(10)\n\n@tf.function\ndef compute():\n    A = tf.random.normal([100, 100])\n    B = tf.random.normal([100, 100])\n    return tf.reduce_sum(tf.matmul(A, B))\n\nresult = compute().numpy()\n\nThis gives TF2 graph execution behavior similar to TF1 `Session.run(...)`.\n\nWhy `Session` can seem slower in TF1 if used naively:\n- If you create tensors/ops inside the loop and call `sess.run` repeatedly, Python-side graph construction or repeated feed/fetch overhead can dominate.\n- If your benchmark was timing just one tiny matrix multiply, startup costs, device placement, and input/output conversion can swamp the actual compute.\n- Also, TF builds and optimizes the graph once, but if your code is not structured to reuse the graph, performance can vary a lot.\n\nRelevant docs used:\n- `tf.compat.v1.placeholder`: says it is not compatible with eager execution and `tf.function`, and that in TF2 you should pass tensors directly and use `tf.function` for performance.\n- `tf.compat.v1.train.MonitoredSession`: also marked not compatible with eager execution and `tf.function`, with migration guidance toward TF2 eager/`tf.function`.\n- `tf.compat.v1.enable_eager_execution`: compatibility API for eager mode control.\n\nSo the practical TF2.3 answer is: don’t use `Session` at all unless you explicitly disable eager execution; instead, use eager mode directly, or wrap the computation in `tf.function` if you want graph-style performance.",
+    "context_tokens": 695,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.set_seed",
+      "tf.reduce_sum",
+      "tf.normal"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 4678.826457820833,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 1997,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 700,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1782.3432500008494,
+    "source_context_tokens": 1537,
+    "status": "ok"
+  },
+  {
+    "case_id": "706",
+    "context": "You’re mixing Keras packages.\n\nIn TensorFlow 2.10, if you want the TensorFlow SavedModel directory, use TensorFlow’s Keras API:\n\nfrom tensorflow.keras.models import Sequential\nfrom tensorflow.keras.layers import Dense\n\nand then save with:\n\nmodel.save(\"my_model\", save_format=\"tf\")\n\nOr, in TF 2.x, you can usually just do:\n\nmodel.save(\"my_model\")\n\nand it should default to SavedModel only if you are using tf.keras. The key issue is that your code imports from standalone Keras:\n\nfrom keras.models import Sequential\nfrom keras.layers import Dense\n\nThat standalone Keras package can default to HDF5 behavior, which is why you get a single .h5-like file instead of a SavedModel folder.\n\nWhat to change\n\n1. Replace all standalone keras imports with tensorflow.keras imports:\n- from keras.models import Sequential → from tensorflow.keras.models import Sequential\n- from keras.layers import Dense → from tensorflow.keras.layers import Dense\n- same for optimizers/backend/activations if needed\n\n2. Save explicitly as SavedModel:\n- model.save(\"my_model\", save_format=\"tf\")\n\nOr, if you want the low-level API:\n- tf.saved_model.save(model, \"my_model\")\n\nImportant detail from the docs\nThe documented signature is:\nsave(filepath, overwrite=True, save_format=None, **kwargs)\n\nand save_format can be:\n- \"tf\" for TensorFlow SavedModel\n- \"h5\" for legacy HDF5\n- \"keras\" for native Keras format\n\nIn TF 2.x, the default is \"tf\" when using tf.keras.\n\nSo the practical fix is:\n- use tensorflow.keras, not keras\n- optionally pass save_format=\"tf\"\n\nSource paths used:\n- https://www.tensorflow.org/api_docs/python/tfm/nlp/networks/BertEncoder\n- https://www.tensorflow.org/api_docs/python/tfm/vision/decoders/NASFPN",
+    "context_tokens": 392,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "tf.save"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 6685.073000378907,
+    "library": "Tensorflow",
+    "provider_metadata": {
+      "input_tokens": 3011,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 401,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1695.3444581013173,
+    "source_context_tokens": 2241,
+    "status": "ok"
+  },
+  {
+    "case_id": "840",
+    "context": "Use cross-validated out-of-fold probabilities with sklearn.model_selection.cross_val_predict and set method=\"predict_proba\". That returns the class probabilities for each sample, using the fitted estimator on each CV split.\n\nThe exact solution is:\n\nproba = cross_val_predict(logreg, X, y, cv=cv, method=\"predict_proba\")\n\nIf you want them as a Python list:\n\nproba = cross_val_predict(logreg, X, y, cv=cv, method=\"predict_proba\").tolist()\n\nIf you prefer to make it explicit in your snippet:\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import StratifiedKFold, cross_val_predict\n\nX, y = load_data()\nassert type(X) == np.ndarray\nassert type(y) == np.ndarray\ncv = StratifiedKFold(5).split(X, y)\nlogreg = LogisticRegression()\n\nproba = cross_val_predict(logreg, X, y, cv=cv, method=\"predict_proba\")\n\nThis works because LogisticRegression.predict_proba(X) returns “Probability estimates” with shape (n_samples, n_classes), and cross_val_predict supports passing method names such as predict_proba in cross-validation instead of the default predict.\n\nSources used:\n- scikit-learn LogisticRegression.predict_proba: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html\n- scikit-learn change note mentioning cross_val_predict with method names such as predict_proba: https://scikit-learn.org/stable/whats_new/v0.18.html",
+    "context_tokens": 320,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "cross_val_predict"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3398.520624730736,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 3474,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 331,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1482.914499938488,
+    "source_context_tokens": 3122,
+    "status": "ok"
+  },
+  {
+    "case_id": "850",
+    "context": "The error means X is being seen as a 1D array with 1 sample, while y has 600 labels. For scikit-learn, fit expects:\n\n- X shape: (n_samples, n_features)\n- y shape: (n_samples,)\n\nSo if you have one feature, X still must be 2D, e.g. shape (600, 1), not (600,).\n\nThe relevant APIs are:\n- RandomForestRegressor.fit(X, y)\n- RandomForestRegressor.predict(X)\n- NumPy reshape(..., -1, 1) or np.newaxis to make X 2D\n\nDocumentation used:\n- scikit-learn getting started: X must be (n_samples, n_features) and y is 1D\n- RandomForestRegressor.fit docs: X is (n_samples, n_features), y is (n_samples,) or (n_samples, n_outputs)\n- check_X_y docs: enforces X to be 2D and y 1D\n\nSource paths:\n- https://scikit-learn.org/stable/getting_started.html\n- https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html\n- https://scikit-learn.org/stable/modules/generated/sklearn.utils.check_X_y.html\n\nBEGIN SOLUTION\ncode\nimport numpy as np\nfrom sklearn.ensemble import RandomForestRegressor\n\n# Ensure X is 2D: (n_samples, 1)\nX = np.asarray(X).reshape(-1, 1)\ny = np.asarray(y)\n\nregressor = RandomForestRegressor(\n    n_estimators=150,\n    min_samples_split=2,\n    random_state=42\n)\n\nregressor.fit(X, y)\n\n# Predict on new data; X_test also must be 2D\nX_test = np.asarray(X_test).reshape(-1, 1)\npredict = regressor.predict(X_test)",
+    "context_tokens": 388,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "RandomForestRegressor"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 8638.326459098607,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 4245,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 402,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1662.9860000684857,
+    "source_context_tokens": 3298,
+    "status": "ok"
+  },
+  {
+    "case_id": "875",
+    "context": "Use sklearn.feature_extraction.DictVectorizer. It is designed to convert lists of dict-like feature mappings into a 2D NumPy/SciPy representation, and it performs one-hot coding for string-valued features. According to the docs, “features that do not occur in a sample will have a zero value” and “when feature values are strings, this transformer will do a binary one-hot coding.” Source: scikit-learn docs for DictVectorizer and feature extraction:\n- https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.DictVectorizer.html\n- https://scikit-learn.org/stable/modules/feature_extraction.html\n\nSince your input is a list of lists of feature names, first convert each sample to a dict mapping each feature name to 1, then vectorize:\n\nfrom sklearn.feature_extraction import DictVectorizer\n\nX = [{'f1': 1, 'f2': 1, 'f3': 1},\n     {'f2': 1, 'f4': 1, 'f5': 1, 'f6': 1},\n     {'f1': 1, 'f2': 1}]\n\nvec = DictVectorizer(sparse=False, dtype=int)\nnew_features = vec.fit_transform(X)\n\nIf you want the columns in a specific order, use vec.get_feature_names_out() to inspect them.\n\nIf you prefer NumPy-only, you can do it by building a vocabulary and filling a zero matrix:\n\nimport numpy as np\n\nfeatures = [\n    ['f1', 'f2', 'f3'],\n    ['f2', 'f4', 'f5', 'f6'],\n    ['f1', 'f2']\n]\n\nvocab = sorted({f for sample in features for f in sample})\nidx = {f: i for i, f in enumerate(vocab)}\n\nnew_features = np.zeros((len(features), len(vocab)), dtype=int)\nfor i, sample in enumerate(features):\n    new_features[i, [idx[f] for f in sample]] = 1\n\nFor your example, new_features will be:\narray([[1, 1, 1, 0, 0, 0],\n       [0, 1, 0, 1, 1, 1],\n       [1, 1, 0, 0, 0, 0]])",
+    "context_tokens": 484,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "MultiLabelBinarizer.fit_transform"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 3546.28024995327,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 3782,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 497,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1574.6942919213325,
+    "source_context_tokens": 3362,
+    "status": "ok"
+  },
+  {
+    "case_id": "887",
+    "context": "Yes. In scikit-learn, the exact tool you want is sklearn.preprocessing.StandardScaler.\n\nIt “standardizes” features by removing the mean and scaling to unit variance:\nz = (x - u) / s\n\nSo for your numpy array, do:\n\nfrom sklearn.preprocessing import StandardScaler\n\nscaler = StandardScaler()\ncentered_scaled_data = scaler.fit_transform(data)\n\nIf you want to fit on training data and later apply the same transformation to test data, use:\n\nscaler.fit(X_train)\nX_train_scaled = scaler.transform(X_train)\nX_test_scaled = scaler.transform(X_test)\n\nFor your snippet specifically, centered_scaled_data is:\n\nfrom sklearn.preprocessing import StandardScaler\ncentered_scaled_data = StandardScaler().fit_transform(data)\n\nRelevant docs used:\n- scikit-learn preprocessing guide: “Standardization, or mean removal and variance scaling”\n- sklearn.preprocessing.StandardScaler API: mean removal and unit-variance scaling, with fit, transform, and fit_transform behavior",
+    "context_tokens": 197,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "preprocessing.scale"
+    ],
+    "identifier_hit": false,
+    "latency_ms": 2447.6817920804024,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 3140,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 200,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1426.830624928698,
+    "source_context_tokens": 2902,
+    "status": "ok"
+  },
+  {
+    "case_id": "892",
+    "context": "Yes. In CountVectorizer, punctuation is ignored by the default word tokenizer because token_pattern only keeps alphanumeric word tokens and “punctuation is completely ignored and always treated as a token separator” (scikit-learn docs: sklearn.feature_extraction.text.CountVectorizer parameters, and “Customizing the vectorizer classes”).\n\nTo preserve characters like !, ?, \" and ' in the tokens, use a custom tokenizer or set analyzer='char' / analyzer='char_wb'. For your case, the simplest word-level solution is to override tokenizer so it does not split on punctuation.\n\nUse:\n- CountVectorizer(tokenizer=..., token_pattern=None)\n- fit_transform(text)\n\nExample:\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.feature_extraction.text import CountVectorizer\n\ntext = load_data()  # text is a str or a list of str documents\n\nvectorizer = CountVectorizer(\n    tokenizer=str.split,\n    token_pattern=None\n)\ntransformed_text = vectorizer.fit_transform([text])\n\nIf you want punctuation marks kept attached to neighboring words, you can tokenize with a regex or a custom callable, for example:\n\nimport re\nfrom sklearn.feature_extraction.text import CountVectorizer\n\ndef my_tokenizer(s):\n    return re.findall(r\"\"\"[\\w']+|[!?\"]\"\"\", s)\n\nvectorizer = CountVectorizer(tokenizer=my_tokenizer, token_pattern=None)\ntransformed_text = vectorizer.fit_transform([text])\n\nNotes:\n- token_pattern must be set to None when you supply tokenizer; otherwise scikit-learn still applies its default token pattern.\n- If you want every punctuation character preserved as its own feature, a character analyzer is also possible: CountVectorizer(analyzer='char') or analyzer='char_wb'.\n\nSource paths used:\n- scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html\n- scikit-learn.org/stable/modules/feature_extraction.html#customizing-the-vectorizer-classes",
+    "context_tokens": 390,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "CountVectorizer"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3331.764250062406,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 4225,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 410,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1467.2568337991834,
+    "source_context_tokens": 3870,
+    "status": "ok"
+  },
+  {
+    "case_id": "896",
+    "context": "Use sklearn.model_selection.train_test_split with test_size=0.2 and random_state=42 for reproducibility.\n\nSince your target is the last column, first split the dataframe into:\n- X = all columns except the last\n- y = last column\n\nThen split X and y together so they stay aligned.\n\nExact APIs:\n- dataset.iloc[:, :-1] for features\n- dataset.iloc[:, -1] for target\n- sklearn.model_selection.train_test_split(..., test_size=0.2, random_state=42)\n\nExample:\n\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\n\ndataset = pd.read_csv(\"example.csv\", header=None, sep=\",\")\n\nX = dataset.iloc[:, :-1]\ny = dataset.iloc[:, -1]\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\nIf you want the split function wrapped as requested:\n\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\n\ndef solve(data):\n    X = data.iloc[:, :-1]\n    y = data.iloc[:, -1]\n    x_train, x_test, y_train, y_test = train_test_split(\n        X, y, test_size=0.2, random_state=42\n    )\n    return x_train, y_train, x_test, y_test\n\nDocumentation used:\n- sklearn.model_selection.train_test_split parameters test_size, random_state, and return order: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html",
+    "context_tokens": 327,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "train_test_split"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2350.2764170989394,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 3051,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 329,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 2346.5690829325467,
+    "source_context_tokens": 2727,
+    "status": "ok"
+  },
+  {
+    "case_id": "902",
+    "context": "CountVectorizer does not preserve the order of an iterable vocabulary for the output columns. If you pass vocabulary=..., scikit-learn treats it as a fixed term→index mapping, and the feature order is determined by the indices in that mapping, not by insertion order. The docs say vocabulary can be a Mapping where “keys are terms and values are indices in the feature matrix,” and that this fixed vocabulary is used as-is. Source: scikit-learn CountVectorizer docs and feature extraction guide: https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html, https://scikit-learn.org/stable/modules/feature_extraction.html\n\nSo to control the column order, build an explicit mapping from your desired ordered list, then use get_feature_names_out() for the column names.\n\nfeature_names = ['Jscript', '.Net', 'TypeScript', 'SQL', 'NodeJS', 'Angular', 'Mongo', 'CSS', 'Python', 'PHP', 'Photoshop', 'Oracle', 'Linux', 'C++', 'Java', 'TeamCity', 'Frontend', 'Backend', 'Full stack', 'UI Design', 'Web', 'Integration', 'Database design', 'UX']\nvocabulary = {term: i for i, term in enumerate(feature_names)}\n\nvectorizer = CountVectorizer(\n    stop_words=\"english\",\n    binary=True,\n    lowercase=False,\n    vocabulary=vocabulary\n)\n\nX = vectorizer.fit_transform(corpus)\nfeature_names = vectorizer.get_feature_names_out()\n\nIf you want the exact variable assignment in your template, use:\n\nfeature_names = np.array(['Jscript', '.Net', 'TypeScript', 'SQL', 'NodeJS', 'Angular', 'Mongo', 'CSS', 'Python', 'PHP', 'Photoshop', 'Oracle', 'Linux', 'C++', 'Java', 'TeamCity', 'Frontend', 'Backend', 'Full stack', 'UI Design', 'Web', 'Integration', 'Database design', 'UX'])\nvectorizer = CountVectorizer(stop_words=\"english\", binary=True, lowercase=False, vocabulary={t: i for i, t in enumerate(feature_names)})\nX = vectorizer.fit_transform(corpus)\n\nIf you already have a vocabulary set and just want the names in a custom order, sort by the column indices from vectorizer.vocabulary_ rather than relying on the dict order. The docs mention the order is encoded via vocabulary_ and the newer API is get_feature_names_out().",
+    "context_tokens": 506,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "CountVectorizer"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 3659.027374815196,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 3879,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 520,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1574.0289168898016,
+    "source_context_tokens": 3074,
+    "status": "ok"
+  },
+  {
+    "case_id": "912",
+    "context": "Yes. `MinMaxScaler` scales per feature by default, so it normalizes column by column. For a single scale across the entire numpy array, use `sklearn.preprocessing.minmax_scale` with `axis=None`.\n\nExact API from the docs:\n- sklearn.preprocessing.minmax_scale(X, feature_range=(0, 1), *, axis=0, copy=True)\n- Set axis=None? The documented options are only 0 or 1 for `minmax_scale`; for “entire array all together” the simplest approach is to flatten the array, scale it, then reshape back.\n\nUse this:\n\nfrom sklearn.preprocessing import minmax_scale\ntransformed = minmax_scale(np_array.reshape(-1), feature_range=(0, 1)).reshape(np_array.shape)\n\nIf you want to keep a 2D shape and scale using one global min/max, this does exactly that.\n\nIf you prefer to avoid flattening explicitly, you can also do it with NumPy:\n\nmn = np_array.min()\nmx = np_array.max()\ntransformed = (np_array - mn) / (mx - mn)\n\nThis uses one global minimum and maximum across the whole array, not per column.\n\nSource used: scikit-learn docs for `minmax_scale` and `MinMaxScaler` at `sklearn.preprocessing.minmax_scale` and `sklearn.preprocessing.MinMaxScaler`.",
+    "context_tokens": 276,
+    "engine": "nia_retrieved_answer_synthesis",
+    "error_type": null,
+    "gold_identifiers": [
+      "MinMaxScaler"
+    ],
+    "identifier_hit": true,
+    "latency_ms": 2647.5953748449683,
+    "library": "Sklearn",
+    "provider_metadata": {
+      "input_tokens": 3526,
+      "mode": "answer",
+      "model": "gpt-5.4-mini",
+      "output_tokens": 282,
+      "provider": "openai",
+      "source_engine": "nia"
+    },
+    "retrieval_latency_ms": 1443.1795829441398,
+    "source_context_tokens": 3250,
+    "status": "ok"
+  }
+]

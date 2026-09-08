@@ -1,0 +1,215 @@
+{
+  "answer_vs_context7": {
+    "baseline_mean": 0.625,
+    "case_cluster_bootstrap_95_ci": [
+      -0.11666666666666667,
+      0.09166666666666666
+    ],
+    "condition_mean": 0.6166666666666667,
+    "library_cluster_bootstrap_95_ci": [
+      -0.1,
+      0.1
+    ],
+    "losses": 5,
+    "mean_delta": -0.008333333333333335,
+    "ties": 29,
+    "wins": 6
+  },
+  "answer_vs_control": {
+    "baseline_mean": 0.4916666666666667,
+    "case_cluster_bootstrap_95_ci": [
+      1.3877787807814458e-18,
+      0.25
+    ],
+    "condition_mean": 0.6166666666666667,
+    "library_cluster_bootstrap_95_ci": [
+      -0.058333333333333334,
+      0.3
+    ],
+    "losses": 2,
+    "mean_delta": 0.125,
+    "ties": 29,
+    "wins": 9
+  },
+  "answer_vs_nia": {
+    "baseline_mean": 0.575,
+    "case_cluster_bootstrap_95_ci": [
+      -0.09166666666666667,
+      0.18333333333333332
+    ],
+    "condition_mean": 0.6166666666666667,
+    "library_cluster_bootstrap_95_ci": [
+      -0.09166666666666667,
+      0.16666666666666666
+    ],
+    "losses": 6,
+    "mean_delta": 0.041666666666666664,
+    "ties": 28,
+    "wins": 6
+  },
+  "answer_vs_nia_matched": {
+    "baseline_mean": 0.5833333333333333,
+    "case_cluster_bootstrap_95_ci": [
+      -0.09166666666666666,
+      0.15833333333333335
+    ],
+    "condition_mean": 0.6166666666666667,
+    "library_cluster_bootstrap_95_ci": [
+      -0.06666666666666668,
+      0.13333333333333336
+    ],
+    "losses": 5,
+    "mean_delta": 0.03333333333333334,
+    "ties": 28,
+    "wins": 7
+  },
+  "arms": {
+    "context7_answer_synthesis": {
+      "case_mean_rate": 0.625,
+      "per_repeat_rates": [
+        0.65,
+        0.6,
+        0.625
+      ]
+    },
+    "delphi_answer_synthesis": {
+      "case_mean_rate": 0.6166666666666667,
+      "per_repeat_rates": [
+        0.6,
+        0.625,
+        0.625
+      ]
+    },
+    "nia_full_recorded": {
+      "case_mean_rate": 0.575
+    },
+    "synthesis_no_retrieval": {
+      "case_mean_rate": 0.4916666666666667,
+      "per_repeat_rates": [
+        0.475,
+        0.475,
+        0.525
+      ]
+    }
+  },
+  "arms_nia_retrieved_answer_synthesis": {
+    "case_mean_rate": 0.5833333333333333,
+    "note": "the hosted engine's five recorded retrieved source chunks, packed under the shared 8,000-token budget and routed through the same frozen synthesis stage as every other arm",
+    "per_repeat_rates": [
+      0.625,
+      0.525,
+      0.6
+    ]
+  },
+  "bootstrap_samples": 20000,
+  "bootstrap_seed": 1042,
+  "cases": 40,
+  "context7_vs_control": {
+    "baseline_mean": 0.4916666666666667,
+    "case_cluster_bootstrap_95_ci": [
+      0.008333333333333335,
+      0.25833333333333336
+    ],
+    "condition_mean": 0.625,
+    "library_cluster_bootstrap_95_ci": [
+      1.3877787807814458e-18,
+      0.24166666666666664
+    ],
+    "losses": 4,
+    "mean_delta": 0.13333333333333336,
+    "ties": 26,
+    "wins": 10
+  },
+  "context7_vs_nia": {
+    "baseline_mean": 0.575,
+    "case_cluster_bootstrap_95_ci": [
+      -0.09166666666666667,
+      0.19166666666666668
+    ],
+    "condition_mean": 0.625,
+    "library_cluster_bootstrap_95_ci": [
+      -0.04166666666666667,
+      0.13333333333333333
+    ],
+    "losses": 5,
+    "mean_delta": 0.05,
+    "ties": 28,
+    "wins": 7
+  },
+  "context7_vs_nia_matched": {
+    "baseline_mean": 0.5833333333333333,
+    "case_cluster_bootstrap_95_ci": [
+      -0.08333333333333334,
+      0.16666666666666669
+    ],
+    "condition_mean": 0.625,
+    "library_cluster_bootstrap_95_ci": [
+      -0.06666666666666667,
+      0.15833333333333335
+    ],
+    "losses": 7,
+    "mean_delta": 0.04166666666666667,
+    "ties": 23,
+    "wins": 10
+  },
+  "control_vs_nia": {
+    "baseline_mean": 0.575,
+    "case_cluster_bootstrap_95_ci": [
+      -0.2,
+      0.024999999999999998
+    ],
+    "condition_mean": 0.4916666666666667,
+    "library_cluster_bootstrap_95_ci": [
+      -0.19166666666666668,
+      -0.008333333333333335
+    ],
+    "losses": 6,
+    "mean_delta": -0.08333333333333334,
+    "ties": 31,
+    "wins": 3
+  },
+  "criterion_met": true,
+  "majority_vote_vs_nia_mcnemar": {
+    "answer_majority_only": 5,
+    "exact_p": 0.7265625,
+    "nia_only": 3
+  },
+  "nia_matched_vs_control": {
+    "baseline_mean": 0.4916666666666667,
+    "case_cluster_bootstrap_95_ci": [
+      -0.008333333333333342,
+      0.2
+    ],
+    "condition_mean": 0.5833333333333333,
+    "library_cluster_bootstrap_95_ci": [
+      -0.016666666666666677,
+      0.24166666666666664
+    ],
+    "losses": 3,
+    "mean_delta": 0.09166666666666666,
+    "ties": 28,
+    "wins": 9
+  },
+  "nia_matched_vs_nia_native": {
+    "baseline_mean": 0.575,
+    "case_cluster_bootstrap_95_ci": [
+      -0.05000000000000001,
+      0.07499999999999998
+    ],
+    "condition_mean": 0.5833333333333333,
+    "library_cluster_bootstrap_95_ci": [
+      -0.05000000000000001,
+      0.06666666666666667
+    ],
+    "losses": 4,
+    "mean_delta": 0.008333333333333326,
+    "ties": 31,
+    "wins": 5
+  },
+  "raw_retrieval_identifier_hit": {
+    "nia_retrieved_k5_reconstructed": 0.475,
+    "note": "raw (unsynthesized) context hit rates; Delphi compact k=5 0.400 and k=20 0.425 are recorded in DOCS-dev-delphi-compact*-summary.json"
+  },
+  "repeats": 3,
+  "success_criterion": "metrics.identifier_hit_rate >= 0.575"
+}

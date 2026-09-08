@@ -1,0 +1,271 @@
+"""Generate the paper's result tables directly from recorded artifacts.
+
+Every number in paper/tables/*.tex is read from results/*-summary.json,
+results/*-details.jsonl, and the paired-analysis JSON files, so the tables
+cannot drift from the evidence. Re-run after adding artifacts:
+
+    python harness/paper_tables.py
+"""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+RESULTS = ROOT / "results"
+OUT = ROOT / "paper" / "tables"
+
+LADDER = [
+    ("dense", "Dense (same embedding)"),
+    ("hybrid", "Dense+BM25 RRF"),
+    ("hybrid_rerank", "\\quad + Delphi's rerankers"),
+    ("hybrid_rerank_expand", "\\quad + expansion"),
+]
+LEXICAL = [
+    ("lexical_bm25", "Lexical+BM25 RRF"),
+    ("lexical", "Lexical ranker"),
+    ("bm25", "BM25"),
+]
+
+TRACKS = {
+    "independent": {
+        "delphi": "I-final-delphi-generated-source-exact-top20-v1",
+        "ladder": "I-final-{eng}-r4-v1",
+        "lexical": {
+            "lexical_bm25": "I-final-lexical_bm25-generated-policy-v1",
+            "lexical": "I-final-lexical-generated-policy-v1",
+            "bm25": "I-final-bm25-generated-policy-v1",
+        },
+        "pair_ladder": "independent_final_delphi_vs_{eng}_r4_v1.json",
+        "pair_lexical": {
+            "lexical_bm25": "independent_final_delphi_vs_lexical_bm25_v1.json",
+            "lexical": "independent_final_delphi_vs_lexical_v1.json",
+            "bm25": "independent_final_delphi_vs_bm25_v1.json",
+        },
+    },
+    "swebench": {
+        "delphi": "D-final-delphi-generated-source-exact-top20-v1",
+        "ladder": "D-final-{eng}-r4-v1",
+        "lexical": {
+            "lexical_bm25": "D-final-lexical_bm25-generated-policy-v1",
+            "lexical": "D-final-lexical-generated-policy-v1",
+            "bm25": "D-final-bm25-generated-policy-v1",
+        },
+        "pair_ladder": "trackd_final_delphi_vs_{eng}_r4_v1.json",
+        "pair_lexical": {
+            "lexical_bm25": "trackd_final_delphi_vs_lexicalbm25_v1.json",
+            "lexical": "trackd_final_delphi_vs_lexical_v1.json",
+            "bm25": "trackd_final_delphi_vs_bm25_v1.json",
+        },
+    },
+    "arb": {
+        "delphi": "A-final-delphi-generated-source-exact-top20-v1",
+        "ladder": "A-final-{eng}-r4-v1",
+        "lexical": {
+            "lexical_bm25": "A-final-lexical-bm25-generated-policy-v1",
+            "lexical": "A-final-lexical-generated-policy-v1",
+            "bm25": "A-final-bm25-generated-policy-v1",
+        },
+        "pair_ladder": "arb_final_delphi_vs_{eng}_r4_v1.json",
+        "pair_lexical": {
+            "lexical_bm25": "arb_final_delphi_vs_lexical-bm25_v1.json",
+            "lexical": "arb_final_delphi_vs_lexical_v1.json",
+            "bm25": "arb_final_delphi_vs_bm25_v1.json",
+        },
+    },
+}
+
+METRICS = [("MRR", "MRR"), ("Recall@5", "R@5"), ("Recall@20", "R@20"), ("BCY@8k", "BCY@8k")]
+
+
+def summary(run_id: str) -> dict | None:
+    path = RESULTS / f"{run_id}-summary.json"
+    return json.load(path.open()) if path.exists() else None
+
+
+def any_gold(run_id: str, k: int = 20) -> tuple[int, int] | None:
+    path = RESULTS / f"{run_id}-details.jsonl"
+    if not path.exists():
+        return None
+    rows = [json.loads(l) for l in path.open() if l.strip()]
+    hits = sum(1 for r in rows if any(g in (r.get("top_files") or [])[:k] for g in r.get("gold_files") or []))
+    return hits, len(rows)
+
+
+def fmt(value: float | None) -> str:
+    return "---" if value is None else f"{value:.3f}"
+
+
+def delta_cell(pair: dict | None, metric: str) -> str:
+    if pair is None or metric not in pair.get("metrics", {}):
+        return "---"
+    m = pair["metrics"][metric]
+    lo, hi = m["repo_cluster_bootstrap_95_ci"]
+    d = m["mean_delta"]
+    star = "$^{*}$" if (lo > 0 or hi < 0) else ""
+    return f"${d:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}}"
+
+
+def system_row(label: str, run_id: str, *, bold: bool = False) -> str | None:
+    s = summary(run_id)
+    if s is None:
+        return None
+    m = s["sample_weighted"]
+    ag = any_gold(run_id)
+    cells = [fmt(m.get(k)) for k, _ in METRICS]
+    if bold:
+        cells = [f"\\textbf{{{c}}}" for c in cells]
+        label = f"\\textbf{{{label}}}"
+    agc = f"{ag[0]}/{ag[1]}" if ag else "---"
+    lat = s.get("latency_ms", {}).get("median")
+    latc = f"{lat / 1000:.1f}" if lat else "---"
+    return f"{label} & " + " & ".join(cells) + f" & {agc} & {latc} \\\\"
+
+
+LADDER_HEAD = (
+    "\\begin{tabular}{lcccccc}\n\\toprule\n"
+    "System & MRR & R@5 & R@20 & BCY@8k & any-gold & s \\\\\n\\midrule"
+)
+TAIL = "\\bottomrule\n\\end{tabular}"
+
+
+def ladder_table(track: str) -> str:
+    spec = TRACKS[track]
+    lines = [LADDER_HEAD]
+    row = system_row("Delphi (frozen)", spec["delphi"], bold=True)
+    if row:
+        lines.append(row)
+    lines.append("\\midrule")
+    for eng, label in LADDER:
+        row = system_row(label, spec["ladder"].format(eng=eng))
+        lines.append(row or f"{label} & \\multicolumn{{6}}{{l}}{{\\emph{{pending}}}} \\\\")
+    lines.append("\\midrule")
+    for eng, label in LEXICAL:
+        row = system_row(label, spec["lexical"][eng])
+        if row:
+            lines.append(row)
+    # paired deltas
+    lines.append("\\midrule")
+    lines.append("\\multicolumn{7}{l}{\\emph{Paired Delphi$-$system deltas, repository-cluster bootstrap 95\\% intervals; $^{*}$ interval excludes zero}} \\\\")
+    for eng, label in LADDER:
+        path = RESULTS / spec["pair_ladder"].format(eng=eng)
+        pair = json.load(path.open()) if path.exists() else None
+        if pair is None:
+            continue
+        ag = pair.get("any_gold_at_20", {})
+        agc = f"{ag.get('candidate_cases', '?')} vs {ag.get('baseline_cases', '?')}"
+        p = ag.get("mcnemar_exact_p")
+        pc = f"$p{{=}}{p:.2g}$" if p is not None else ""
+        lines.append(
+            f"$\\Delta$ vs.\\ {label.replace(chr(92) + 'quad ', '')} & "
+            + " & ".join(delta_cell(pair, k) for k, _ in METRICS)
+            + f" & {agc} & {pc} \\\\"
+        )
+    for eng, label in LEXICAL:
+        path = RESULTS / spec["pair_lexical"][eng]
+        pair = json.load(path.open()) if path.exists() else None
+        if pair is None:
+            continue
+        ag = pair.get("any_gold_at_20", {})
+        agc = f"{ag.get('candidate_cases', '?')} vs {ag.get('baseline_cases', '?')}"
+        p = ag.get("mcnemar_exact_p")
+        pc = f"$p{{=}}{p:.2g}$" if p is not None else ""
+        lines.append(
+            f"$\\Delta$ vs.\\ {label} & "
+            + " & ".join(delta_cell(pair, k) for k, _ in METRICS)
+            + f" & {agc} & {pc} \\\\"
+        )
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def docs_table() -> str:
+    a = json.load((RESULTS / "DOCS-dev-answer-synthesis-analysis-v3.json").open())
+    arms = a["arms"]
+    nia_m = a.get("arms_nia_retrieved_answer_synthesis")
+
+    def reps(v: dict | None) -> str:
+        if not v or not v.get("per_repeat_rates"):
+            return "---"
+        return "/".join(f"{x:.3f}" for x in v["per_repeat_rates"])
+
+    def ci(key: str) -> str:
+        v = a.get(key)
+        if not v:
+            return "---"
+        lo, hi = v["case_cluster_bootstrap_95_ci"]
+        return f"${v['mean_delta']:+.3f}$ \\ci{{{lo:+.3f}}}{{{hi:+.3f}}}"
+
+    rows = [
+        ("Documentation engine retrieval + frozen synthesis", arms["context7_answer_synthesis"]["case_mean_rate"], reps(arms["context7_answer_synthesis"]), ci("context7_vs_control")),
+        ("\\textbf{Delphi retrieval + frozen synthesis}", arms["delphi_answer_synthesis"]["case_mean_rate"], reps(arms["delphi_answer_synthesis"]), ci("answer_vs_control")),
+        ("Synthesis engine retrieval + frozen synthesis", nia_m["case_mean_rate"] if nia_m else None, reps(nia_m), ci("nia_matched_vs_control")),
+        ("Synthesis engine, native synthesis (recorded)", arms["nia_full_recorded"]["case_mean_rate"], "single pass", ci("control_vs_nia").replace("+", "\\mathrm{sign\\,flipped}") if False else "---"),
+        ("Model alone (no retrieval)", arms["synthesis_no_retrieval"]["case_mean_rate"], reps(arms["synthesis_no_retrieval"]), "---"),
+    ]
+    lines = ["\\begin{tabular}{lccc}", "\\toprule", "Arm & Identifier hit & Per-repeat & $\\Delta$ vs.\\ control \\\\", "\\midrule"]
+    for label, rate, rep, d in rows:
+        lines.append(f"{label} & {fmt(rate)} & {rep} & {d} \\\\")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def docs_pairs_table() -> str:
+    a = json.load((RESULTS / "DOCS-dev-answer-synthesis-analysis-v3.json").open())
+
+    def line(label: str, key: str) -> str:
+        v = a.get(key)
+        if not v:
+            return ""
+        lo, hi = v["case_cluster_bootstrap_95_ci"]
+        return f"{label} & ${v['mean_delta']:+.3f}$ & \\ci{{{lo:+.3f}}}{{{hi:+.3f}}} & {v['wins']}/{v['losses']}/{v['ties']} \\\\"
+
+    rows = [
+        line("Delphi $-$ synthesis engine (matched)", "answer_vs_nia_matched"),
+        line("Delphi $-$ synthesis engine (native)", "answer_vs_nia"),
+        line("Delphi $-$ documentation engine", "answer_vs_context7"),
+        line("Documentation engine $-$ synthesis engine (matched)", "context7_vs_nia_matched"),
+        line("Synthesis engine matched $-$ native", "nia_matched_vs_nia_native"),
+    ]
+    lines = ["\\begin{tabular}{lccc}", "\\toprule", "Comparison & $\\Delta$ & $95\\%$ CI & W/L/T \\\\", "\\midrule"]
+    lines += [r for r in rows if r]
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def determinism_table() -> str:
+    d = json.load((RESULTS / "DETERMINISM-docs-like-for-like-v1.json").open())["engines"]
+    labels = {
+        "delphi_compact": "Delphi (raw context, $k{=}5$)",
+        "context7_guided_compact": "Documentation engine (quality-guided IDs)",
+        "context7_oracle_compact": "Documentation engine (oracle IDs)",
+        "nia_full_synthesis": "Synthesis engine (cited-URL set)",
+    }
+    lines = ["\\begin{tabular}{lccccc}", "\\toprule", "Engine & Set exact & Order exact & Set Jaccard & Byte exact & Hit agreement \\\\", "\\midrule"]
+    for key, label in labels.items():
+        e = d.get(key)
+        if not e:
+            continue
+        lines.append(
+            f"{label} & {e['retrieved_set_exact_rate']:.3f} & {e['retrieved_order_exact_rate']:.3f} & "
+            f"{e['retrieved_set_jaccard']:.3f} & {e['context_byte_exact_rate']:.3f} & {e['identifier_hit_agreement_rate']:.3f} \\\\"
+        )
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    # No trailing newline: a blank line after \input inside a tabular is a
+    # paragraph break, which LaTeX reports as a misplaced \noalign.
+    for track in TRACKS:
+        (OUT / f"{track}_ladder.tex").write_text(ladder_table(track).rstrip("\n") + "%")
+    (OUT / "docs_matched.tex").write_text(docs_table().rstrip("\n") + "%")
+    (OUT / "docs_pairs.tex").write_text(docs_pairs_table().rstrip("\n") + "%")
+    (OUT / "determinism_like_for_like.tex").write_text(determinism_table().rstrip("\n") + "%")
+    for path in sorted(OUT.glob("*.tex")):
+        print(path.name, path.stat().st_size, "bytes")
+
+
+if __name__ == "__main__":
+    main()

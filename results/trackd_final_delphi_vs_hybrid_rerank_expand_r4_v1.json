@@ -1,0 +1,104 @@
+{
+  "any_gold_at_20": {
+    "baseline_cases": 44,
+    "both": 39,
+    "candidate_cases": 48,
+    "lost": 5,
+    "mcnemar_exact_p": 0.4239501953125,
+    "metric": "Recall@20",
+    "neither": 9,
+    "recovered": 9
+  },
+  "baseline_run": "D-final-hybrid_rerank_expand-r4-v1",
+  "bootstrap_samples": 20000,
+  "bootstrap_seed": 1042,
+  "bootstrap_unit": "repository",
+  "by_workflow": {
+    "swebench_localization": {
+      "BCY@8k": {
+        "baseline_mean": 0.5733486943164363,
+        "candidate_mean": 0.6378648233486943,
+        "losses": 4,
+        "mean_delta": 0.06451612903225806,
+        "n": 62,
+        "wins": 8
+      },
+      "MRR": {
+        "baseline_mean": 0.5968269028041324,
+        "candidate_mean": 0.6797122074636306,
+        "losses": 8,
+        "mean_delta": 0.08288530465949821,
+        "n": 62,
+        "wins": 15
+      },
+      "Recall@20": {
+        "baseline_mean": 0.6570660522273426,
+        "candidate_mean": 0.7369431643625192,
+        "losses": 6,
+        "mean_delta": 0.07987711213517665,
+        "n": 62,
+        "wins": 10
+      },
+      "Recall@5": {
+        "baseline_mean": 0.6225038402457758,
+        "candidate_mean": 0.7039170506912443,
+        "losses": 4,
+        "mean_delta": 0.08141321044546851,
+        "n": 62,
+        "wins": 10
+      }
+    }
+  },
+  "candidate_run": "D-final-delphi-generated-source-exact-top20-v1",
+  "cases": 62,
+  "metrics": {
+    "BCY@8k": {
+      "baseline_mean": 0.5733486943164363,
+      "candidate_mean": 0.6378648233486943,
+      "losses": 4,
+      "mean_delta": 0.06451612903225806,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.0625,
+        0.17142857142857143
+      ],
+      "ties": 50,
+      "wins": 8
+    },
+    "MRR": {
+      "baseline_mean": 0.5968269028041324,
+      "candidate_mean": 0.6797122074636306,
+      "losses": 8,
+      "mean_delta": 0.08288530465949821,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.10727969348659004,
+        0.202659767610748
+      ],
+      "ties": 39,
+      "wins": 15
+    },
+    "Recall@20": {
+      "baseline_mean": 0.6570660522273426,
+      "candidate_mean": 0.7369431643625192,
+      "losses": 6,
+      "mean_delta": 0.07987711213517665,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.10526315789473684,
+        0.21697388632872505
+      ],
+      "ties": 46,
+      "wins": 10
+    },
+    "Recall@5": {
+      "baseline_mean": 0.6225038402457758,
+      "candidate_mean": 0.7039170506912443,
+      "losses": 4,
+      "mean_delta": 0.08141321044546851,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.055782312925170066,
+        0.25132275132275134
+      ],
+      "ties": 48,
+      "wins": 10
+    }
+  }
+}

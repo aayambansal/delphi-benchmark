@@ -7,34 +7,33 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 
-\title{Do Context Engines Help?\\Retrieval Quality, Determinism, and Agent Utility}
+\title{Do Context Engines Help?\\Retrieval Quality, Determinism, and Agent Utility\\Under Matched Baselines and Audited Exposure}
 
 \author{Anonymous Authors}
 
 \newcommand{\ci}[2]{{\footnotesize$[#1,\,#2]$}}
+\newcommand{\pending}[1]{\emph{[pending: #1]}}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Coding agents are increasingly wrapped in ``context engines'' that index a repository and return the files the model might need. It is not obvious that this helps: a competent agent already has \texttt{grep}, and hosted retrievers are often slower and less inspectable than a local search. We treat the question as a measurement problem and run it to completion under a preregistered protocol: fresh exposure-accounted splits, canonical git corpora, frozen code for every confirmatory number, exact attempt accounting for hosted engines, and cluster-aware uncertainty for every claim. On the untouched Agent Retrieval Bench round-3 final (220 cases, 25 repositories), the frozen Delphi stack reaches MRR $0.332$ and Recall@20 $0.648$, beating whole-file BM25, the official lexical ranker, and their tuned reciprocal-rank fusion on all four preregistered metrics with repository-cluster $95\%$ intervals excluding zero. On 62 held-out SWE-bench Verified localization instances it leads MRR decisively ($0.680$ vs.\ $0.406$) and ties Recall@20. On documentation retrieval we show that the apparent quality lead of a hosted retrieval-plus-synthesis engine ($0.575$ vs.\ $0.400$ identifier hit) is an output-contract artifact: routing every engine's retrieved context through the same frozen synthesis stage yields a three-way statistical tie ($0.617$/$0.625$/$0.575$) barely above a no-retrieval floor of $0.492$, at less than half the hosted engine's latency. Delphi is near-deterministic where hosted engines are not ($98.0\%$ vs.\ $35.6\%$ and $0.0\%$ pairwise exact context). A closed-tool agent intervention shows retrieval seeds causally change what a frozen agent submits; direct DS-1000 utility deltas remain unresolved at $n{=}40$ for every engine. We do not claim state of the art: the hosted engine's repository arm never reached required coverage (32/68 snapshots; a minimal 1.5\,MB probe stalls in ingestion), and our claim rule requires the complete comparable engine set. The paper reports the protocol, the numbers, the failure modes that actually changed the product, and what remains blocked.
+Coding agents are increasingly wrapped in ``context engines'' that index a repository and return the files the model might need. We evaluate one open-source engine, Delphi, against lexical baselines, a matched ladder of conventional retrievers, and two hosted engines, under a protocol that records at the case level what each evaluation set could have influenced. Three findings temper our own earlier claims. \emph{Exposure:} the largest partition we had called ``untouched''---220 Agent Retrieval Bench cases---was re-drawn from a pool whose cases had all been scored in an earlier round and whose aggregate results gated which retrieval components shipped; we relabel it validation evidence and rest confirmatory claims on sets never scored before their single run: 62 SWE-bench Verified localization instances, 18 repository-disjoint commit-to-files cases, and a further 100 Verified instances drawn under a fresh salt. \emph{Baselines:} Delphi beats BM25 and the official lexical ranker on every set, but a conventional dense+BM25 hybrid built from the same embedding model, with Delphi's own cross-encoder, listwise reranker, and query expansion attached, matches or exceeds it; on the 18-case independent final the hybrid's Recall@20 lead ($+0.120$) and the full conventional rung's MRR lead ($+0.111$) have repository-cluster intervals excluding zero. on the 62-case SWE-bench set Delphi leads that stack by $+0.083$ MRR with an interval through zero \ci{-0.107}{+0.203}, and the reranking head alone accounts for most of its margin over lexical systems. What is specific to Delphi---structural candidate branches, tuned weights, quoted-path demotion---does not separate from that conventional stack. \emph{Contracts:} routing every engine's retrieved evidence, including the hosted synthesis engine's own retrieved sources, through one frozen synthesis stage yields a four-way documentation tie ($0.625/0.617/0.583/0.575$) sitting $0.08$--$0.13$ above a $0.492$ no-retrieval floor; no engine-versus-engine interval excludes zero. On like-for-like retrieved-set stability the hosted synthesis engine is fully stable and Delphi is $98\%$ stable; the ``$0\%$'' we had reported for it measured generated text. A preregistered executable pilot on the same SWE-bench instances tests whether any seed changes verified repair \pending{pilot outcome}. We claim no state of the art. The contribution is the protocol, the negative and null results, and an exposure ledger that lets a reader check which number can bear which claim.
 \end{abstract}
 
 \section{Introduction}
 
-The pitch for a context engine is simple. Index the repo. Embed the chunks. When the agent (or the human) asks a question, return the files that matter. The pitch for \emph{not} building one is simpler: \texttt{rg} is deterministic, takes 30 milliseconds, and already found \texttt{src/\_pytest/assertion/rewrite.py} when we asked where pytest rewrites asserts.
+The pitch for a context engine is simple. Index the repo. Embed the chunks. When the agent asks a question, return the files that matter. The pitch for \emph{not} building one is simpler: \texttt{rg} is deterministic, takes 30 milliseconds, and already found \texttt{src/\_pytest/assertion/rewrite.py} when we asked where pytest rewrites asserts.
 
-We built Delphi as a local-first retrieval stack---hybrid lexical/vector search, query expansion, a cross-encoder, an optional listwise rerank---and then watched it lose to a hosted engine and to grep in sloppy internal benches. Those benches mixed embedding spaces, leaked gold into queries, and treated a single run as a fact. This paper is the repair, run to completion: a locked protocol, fresh splits, official metrics over canonical git text, a variance study that ends in an engineering fix rather than a shrug, matched-contract comparisons against two hosted engines on their strongest surface, a closed-tool agent intervention, and one-shot confirmatory finals from frozen code.
-
-Three research questions:
+We built Delphi as a local-first retrieval stack---hybrid lexical/vector search, query expansion, a cross-encoder, a listwise rerank---and spent two evaluation rounds measuring it. The first round reported large wins over lexical baselines on a partition we called untouched. External review asked three questions we could not answer from the draft: what information from the earlier round was available while the shipped system was chosen; how much of the margin survives against a conventional dense-plus-lexical hybrid that uses the same reranker; and whether any of it changes what a coding agent actually repairs. This paper is the answer, and much of it is unflattering.
 
 \begin{enumerate}
-    \item \textbf{RQ1 (utility).} Does a context seed change what a frozen coding agent submits, relative to no seed, a grep-style seed, an oracle seed, and a random-file seed? Does any engine's context measurably improve downstream code generation?
-    \item \textbf{RQ2 (ranking).} Is Delphi state of the art among directly comparable engines on agent-relevant repository retrieval?
-    \item \textbf{RQ3 (determinism).} Where does run-to-run variance come from, how large is each source, and what does removing it cost?
+    \item \textbf{RQ1 (utility).} Holding the agent, its tools, and its budget fixed, does a retrieval seed change what it submits---and does it change verified repair?
+    \item \textbf{RQ2 (ranking).} Against lexical baselines, against a matched conventional hybrid, and against hosted engines, where does Delphi lead, tie, or trail, on cases that no development decision could see?
+    \item \textbf{RQ3 (determinism).} Where does run-to-run variance come from, and when the same quantity is measured for every engine, who is actually stable?
 \end{enumerate}
 
-Short answers. \textbf{RQ2:} on every runnable comparison Delphi now leads or ties---decisively against the strongest local baselines on the untouched finals---but the hosted engine's repository arm never became scoreable, so ``state of the art'' stays unclaimed by our own rule. \textbf{RQ3:} the variance was ours, not the embedding API's; total SQL ordering, single-flight sharing of hosted calls, and a persistent stage cache take exact repeat rates from $30.6\%$ to $100\%$ in-process and make results restart-durable. \textbf{RQ1:} seeds causally move a frozen agent (a July Delphi seed nearly triples file-F1 over no seed), but on DS-1000 no engine's context---ours included---separates from a no-retrieval control at $n{=}40$. The rest of the paper is the evidence.
+Short answers. \textbf{RQ2:} Delphi leads lexical baselines everywhere; against the conventional ladder it does not lead on the unused sets, and on the independent final it trails with intervals excluding zero (\S\ref{sec:ranking}). \textbf{RQ3:} the variance was ours and is fixed in-process, but the like-for-like comparison shows the hosted synthesis engine's retrieval is at least as stable as ours (\S\ref{sec:determinism}). \textbf{RQ1:} seeds move a closed-tool agent's file selection, replicating the benchmark's own intervention; on executable repair \pending{pilot outcome} (\S\ref{sec:utility}).
 
 \section{Related work}
 
@@ -42,186 +41,152 @@ SWE-bench established executable repository-level issue resolution
 \citep{swebench}, while SWE-agent and Agentless expose repository navigation and
 localization as explicit stages \citep{sweagent,agentless}. LocAgent studies a
 graph-guided localization agent and reports that better localization can improve
-multi-attempt repair \citep{locagent}. These systems remain end-to-end or
-localization pipelines: a failed patch can still reflect retrieval, reasoning,
-editing, or validation.
+multi-attempt repair \citep{locagent}. Repository-level code completion provides
+complementary evidence that cross-file retrieval matters once the edit location
+is known: RepoCoder alternates retrieval and generation \citep{repocoder};
+CodeRAG adds multi-path retrieval and preference-aligned reranking
+\citep{coderag}. Dense retrieval, late interaction, and hypothetical-document
+expansion motivate the components in practical context engines
+\citep{karpukhin2020,khattab2020,gao2023hyde}, while BM25 remains a strong
+exact-term baseline for code \citep{bm25}.
 
-Repository-level code completion provides complementary evidence that cross-file
-retrieval matters once the edit location is known. RepoCoder alternates retrieval
-and generation \citep{repocoder}; CodeRAG adds multi-path retrieval and
-preference-aligned reranking \citep{coderag}. Dense retrieval, late interaction,
-and hypothetical-document expansion motivate components used by practical
-context engines \citep{karpukhin2020,khattab2020,gao2023hyde}, while BM25 remains
-a strong exact-term baseline for code \citep{bm25}.
-
-The closest work now measures context acquisition directly. ContextBench provides
-human-verified file, block, and line contexts for 1,136 issue-resolution tasks and
+The closest work measures context acquisition directly. ContextBench provides
+human-verified file, block, and line contexts for issue-resolution tasks and
 scores agent trajectories \citep{contextbench}. CORE-Bench scales
 requirement-driven retrieval across code understanding, edit localization, and
-broader context, and finds a large drop from traditional code search to
-repository-state retrieval \citep{corebench}. SWE-Explore derives audited
-line-level targets from successful trajectories and validates exploration metrics
-with a restricted-context repair bridge \citep{sweexplore}. Agent Retrieval Bench
-contributes workflow-derived next-context targets, base-commit hygiene, and
-budget-aware file metrics \citep{arb}. We build on this evaluation line rather
-than claiming a new retrieval task: our focus is the intervention
-itself---holding the agent and tool policy fixed while varying only its initial
-context---plus repeated-system determinism, matched output contracts across
-hosted engines, and development-to-confirmatory product iteration.
+broader context \citep{corebench}. SWE-Explore derives audited line-level
+targets from successful trajectories \citep{sweexplore}. Agent Retrieval Bench
+(ARB) contributes workflow-derived next-context targets, base-commit hygiene,
+budget-aware file metrics, open-embedding and RepoMap baselines, and a
+closed-tool seed intervention with no-seed, random, retrieval-derived, and
+oracle arms \citep{arb}. Our closed-tool experiment (\S\ref{sec:utility}) is a
+replication of that intervention with an additional seed, not a new design. What
+we add to this line is narrower: an exposure ledger that classifies every case
+by what could have influenced it, a component-matched baseline ladder, matched
+output contracts for hosted engines, like-for-like determinism, and a
+preregistered executable pilot on the same tasks as the ranking evaluation.
 
 \section{Protocol}
+\label{sec:protocol}
 
-\paragraph{Exposure and splits.} All 427 ARB v2 cases were scored in a July 2026 internal round. Round 3 therefore draws a new split with salt \texttt{delphi-round3-v1} ($25\%$ development / $75\%$ confirmatory within each \texttt{(release, repo)} stratum) and excludes 50 \texttt{legacy\_exposed} trace2code IDs. Development ($n{=}75$ positive cases, 68 snapshots) may guide product changes; the confirmatory final ($n{=}220$ positive cases, 142 snapshots) is queried exactly once after freeze. Two further finals have never been used for development: an independent commit-to-files split over a repository-disjoint corpus (18 cases, 48 snapshots), and 62 stratified SWE-bench Verified localization instances (12 repositories; a leakage audit finds patch markers in $0/62$ queries). A 40-case DS-1000 development subset (8 cases per library over Matplotlib, NumPy, pandas, scikit-learn, TensorFlow) drives the documentation and downstream tracks.
+\paragraph{Exposure classes.} Every evaluation set is assigned a class in a case-level ledger (Appendix~\ref{app:exposure}). \textbf{C0}: never scored by any system before its single confirmatory run, drawn from a pool no development decision could see. \textbf{C1}: development. \textbf{C2}: re-partitioned from a pool whose cases were all scored in an earlier round, where that round's aggregates influenced the shipped system. The ARB round-3 ``final'' is C2: all 427 ARB v2 cases were scored in July 2026; the July held-out aggregates were the acceptance test for query expansion, listwise reranking, the cross-encoder blend, reciprocal-rank fusion, and the path-affinity branch, and the July per-workflow rates motivated the quoted-path demotion fix. Round 3 then drew a new $25/75$ split from the same pool, excluded 50 legacy-exposed IDs, and queried the 220-case partition once. Re-drawing does not un-expose a case. Round-2 per-case outputs are not retained, so per-case tuning can neither be ruled in nor out from the archive; we therefore treat the partition as validation evidence throughout and make no confirmatory claim on it. The C0 sets are: 62 stratified SWE-bench Verified localization instances (12 repositories; patch-marker leakage audit $0/62$); an 18-case commit-to-files final over a repository-disjoint corpus locked before any scoring; and 100 further Verified instances drawn on 2026-09-09 under a fresh salt from the 438 instances no round had used. A 40-case DS-1000 development subset drives the documentation track and is C1. The ledger controls author exposure; it cannot control whether the foundation models inside any engine saw these public repositories during training, a caveat shared by every arm.
 
-\paragraph{Queries, corpus, metrics.} Queries are the official ARB gold-free structured objects, serialized with sorted keys---not free-text paraphrases. File text comes from \texttt{git show} against bare clones at each case's \texttt{base\_commit}; binary and non-UTF-8 blobs are skipped. Metrics are the official ARB \texttt{sample\_metrics} (MRR, Recall@$k$, F$_{0.5}$@$k$) plus BCY@8k, the budget-constrained yield from packing ranked files into an 8{,}000-token context. Documentation cases score \emph{identifier hit}: whether the returned context contains the case's gold API identifier. Downstream utility is DS-1000 pass@1 under the official execution harness in an isolated interpreter.
+\paragraph{Queries, corpus, metrics.} Queries are the official ARB gold-free structured objects, serialized with sorted keys. File text comes from bare git clones at each case's \texttt{base\_commit} (materialized snapshots; binary and non-UTF-8 blobs skipped). Metrics are the official ARB \texttt{sample\_metrics} (MRR, Recall@$k$) plus BCY@8k, the budget-constrained yield from packing ranked files into an 8{,}000-token context. Documentation cases score \emph{identifier hit}: whether the returned text contains the case's gold API identifier.
 
-\paragraph{Hosted-engine accounting.} Before scoring a hosted engine, a coverage preflight requires a source for every sampled \texttt{(repo, base\_commit)} pair; partial runs abort and cannot enter a table. We added this check after catching a manifest whose row count looked complete but whose snapshot intersection was not. Every hosted run records exact attempt counts (one HTTP attempt per observation unless stated), latencies, and response hashes; balanced acquisition (alternating arms within case) is used wherever a hosted provider's drift over time could masquerade as a treatment effect.
+\paragraph{Freeze and attestation.} All Delphi numbers come from one frozen commit (\texttt{91d76c1}) with exact vector scan, API $\text{top-}k{=}20$, and response-level serving-configuration attestation: every response carries the retrieval configuration actually served, and a run aborts on the first mismatch with its declared configuration. The frozen configuration is reproduced in full in Appendix~\ref{app:system}. Paired deltas carry cluster bootstrap $95\%$ intervals (20{,}000 resamples, seed 1042; repository clusters for repository tracks, case clusters for documentation), plus exact McNemar tests on any-gold@20 movement.
 
-\paragraph{Preregistration and freeze.} Hypotheses, success criteria, and analysis plans are recorded in a persistent research map before execution; failed candidates stay recorded. All confirmatory numbers come from one frozen commit (an auditable branch equal to the development winner plus one cherry-picked indexing fix, \S\ref{sec:failures}), with exact vector scan, API $\text{top-}k{=}20$, response-level serving-configuration attestation, and a per-gold-path searchability preflight on every provisioned index. Paired deltas carry cluster bootstrap $95\%$ intervals (20{,}000 resamples, seed 1042; repository clusters for repository tracks, case clusters for documentation and generation), plus exact McNemar tests on any-gold@20 movement.
+\paragraph{Matched baseline ladder.} The lexical comparators (whole-file BM25, ARB's official lexical ranker, and their development-tuned fusion) cannot say how much of a margin is Delphi's engineering and how much is a learned reranker on top of anything. We therefore add four conventional systems, each adding one Delphi component to the previous one, over the official ARB chunks (file chunk plus symbol chunks) of the identical corpus: \textbf{dense}, \texttt{text-embedding-3-small}---the embedding model inside Delphi---max-pooled to files; \textbf{hybrid}, reciprocal-rank fusion ($k{=}60$, equal weights, untuned) of the dense ranking and BM25; \textbf{+ rerankers}, the hybrid's top 50 narrowed to 30 through Delphi's own cross-encoder (\texttt{ms-marco-MiniLM-L-6-v2}, blend $0.4$) and then Delphi's own listwise \texttt{gpt-4o} reranker over the top 20 (seed 1042, identical prompt); \textbf{+ expansion}, the same with Delphi's hypothetical-document expansion (\texttt{gpt-4o-mini}, identical prompt and gate) feeding the dense query. The prompts and parsers are imported from Delphi's source so they are identical by construction. What remains between the last rung and Delphi is exactly Delphi's own contribution: exact-symbol, exact-path, path-affinity, and trigram branches; its chunker and index; tuned fusion weights; quoted-path demotion. Reported latencies exclude index construction for every system, as they did for Delphi.
 
-\paragraph{Claim rule.} ``State of the art'' is reserved for a named track where Delphi leads every directly comparable engine on the untouched primary metric, or is statistically tied while leading a predeclared complementary metric, with the confirmatory partition unused for development \emph{and the complete comparable engine set runnable}. Losses are reported with the same prominence as wins.
+\paragraph{Claim rule.} ``State of the art'' would require leading every directly comparable engine on a C0 set with the complete comparable engine set runnable. No result in this paper meets it.
 
-\section{RQ3: determinism, from diagnosis to fix}
+\section{RQ2: repository retrieval}
+\label{sec:ranking}
+
+\begin{table}[t]
+\centering
+\caption{Independent commit-to-files final (C0): 18 cases, 6 repositories, scored once. Any-gold is the number of cases with a gold file in the top 20; latency is the median query time in seconds. $\Delta$ rows are Delphi minus the named system.}
+\label{tab:independent}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\input{tables/independent_ladder.tex}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{SWE-bench Verified localization (C0): 62 instances, 12 repositories, scored once. Columns as in Table~\ref{tab:independent}.}
+\label{tab:swebench}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\input{tables/swebench_ladder.tex}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{ARB round-3 partition (C2, validation evidence only): 220 cases, 19 repositories. Columns as in Table~\ref{tab:independent}. This table is reported for completeness; no confirmatory claim rests on it.}
+\label{tab:arb}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\input{tables/arb_ladder.tex}}
+\end{table}
+
+\paragraph{Against lexical baselines.} Delphi leads whole-file BM25, the official lexical ranker, and their tuned fusion on every set. On the independent final the Recall@20 leads over BM25 ($+0.074$ \ci{+0.019}{+0.139}) and the lexical ranker ($+0.046$ \ci{+0.009}{+0.083}) exclude zero while the fusion comparison is a tie; on SWE-bench MRR leads the strongest lexical system by $+0.274$ \ci{+0.194}{+0.412} with Recall@20 tied; on the C2 ARB partition every lexical comparison excludes zero. None of this is in dispute, and none of it isolates Delphi's contribution.
+
+\paragraph{Against the matched ladder.} Table~\ref{tab:independent} is the first of the two clean tests. The dense rung alone, using nothing but the embedding model Delphi already calls, ties Delphi on any-gold and exceeds it on Recall@20 ($0.796$ vs.\ $0.750$). Adding BM25 by untuned reciprocal-rank fusion yields MRR $0.579$ and Recall@20 $0.870$ against Delphi's $0.508$ and $0.750$; the Recall@20 gap ($-0.120$ \ci{-0.231}{-0.019}) excludes zero. Attaching Delphi's own rerankers and expansion reaches MRR $0.619$ and BCY $0.546$, and Delphi's MRR deficit against that rung ($-0.111$ \ci{-0.200}{-0.034}) also excludes zero. Six repository clusters is a small basis for an interval and we report the direction with that caveat; but the point is not that the conventional stack wins, it is that nothing Delphi adds on top of it is visible here.
+
+Table~\ref{tab:swebench} is the second clean test. Its point estimates lean the other way and its conclusion is the same. On issue text the dense rung alone is weak (MRR $0.254$) and untuned fusion with BM25 helps little ($0.296$); Delphi's leads over both have intervals excluding zero. Attaching Delphi's rerankers to that hybrid moves MRR from $0.296$ to $0.575$, and expansion to $0.597$: the reranking head, not the candidate branches, is where the margin over lexical systems comes from. Against the final rung Delphi leads by $+0.083$ MRR \ci{-0.107}{+0.203}, $+0.080$ Recall@20 \ci{-0.105}{+0.217}, and $+0.065$ BCY \ci{-0.062}{+0.171}, with any-gold 48 vs.\ 44 ($p{=}0.42$)---a tie. Across the two C0 sets the sign of Delphi's difference from the conventional stack flips, neither set resolves it in Delphi's favor, and the only resolved differences (independent Recall@20 and MRR) favor the conventional stack. On the C2 ARB partition (Table~\ref{tab:arb}) Delphi's margin over the final rung is $+0.103$ MRR \ci{-0.008}{+0.189} and $+0.076$ BCY \ci{-0.019}{+0.157}, with Recall@5 and Recall@20 tied and any-gold 163 vs.\ 148 ($p{=}0.08$); against every earlier rung the leads exclude zero. That is the set on which Delphi's components were selected, so a margin there is the expected direction of selection, not evidence. Its workflow breakdown is still informative as a hypothesis: Delphi's lead is concentrated in \texttt{trace2code} (MRR $0.579$ vs.\ $0.149$; Recall@20 $0.895$ vs.\ $0.368$) and \texttt{edit2ripple}, whose queries carry file paths and symbol names that its exact-path, path-affinity, and symbol branches match directly, while on \texttt{code2test} and \texttt{comment2context} the conventional rung is equal or ahead. An exploratory split of the 62 SWE-bench issues by whether they contain a traceback or a Python path does not reproduce that pattern (Delphi's largest advantage is on issues with neither, $n{=}35$), so we record it as a hypothesis for a designed test, not a finding.
+
+\paragraph{The 100-instance expansion.} To widen the C0 basis beyond 62 SWE-bench instances we provisioned the frozen stack on 100 further Verified instances drawn under a fresh salt (Appendix~\ref{app:exposure}) and will score them once, with the ladder and lexical comparators over the same snapshots. \pending{expansion results; if not complete at submission, the draw and protocol are fixed and the run is reported as in progress}.
+
+\paragraph{Development, briefly.} The development partitions drove preregistered ablations whose outcomes we keep regardless of direction: exact vector scan replaced HNSW ($+0.020$ Recall@20 \ci{0.000}{0.063}); query expansion stayed on; a Gemini embedding swap was rejected (MRR $-0.054$ \ci{-0.102}{-0.011}); and a file-level Okapi BM25 branch was rejected when its single approved configuration failed preregistered gates (MRR interval floor $-0.050$, BCY floor $-0.037$, median latency ratio $1.34$) despite losing zero any-gold cases. It ships default-off. Two development findings moved code: review-comment queries retrieved the file the comment already quoted, so paths present in the query envelope are demoted after the cross-encoder; and a global \texttt{*.pb.go} exclusion had silently dropped a gold file, so agent-mode indexing now retains generated source under the existing size and binary guards. Both were selected on development or C2 evidence, which is exactly why they cannot be credited from Table~\ref{tab:arb}.
+
+\section{RQ3: determinism, like for like}
 \label{sec:determinism}
 
-\paragraph{Embeddings are not the problem.} We embedded the same texts $N{=}20$ times per provider (Table~\ref{tab:embed}). OpenAI embeddings jitter at the fifth decimal; the small model never changed top-ten membership or order, and Gemini was bitwise deterministic.
-
-\begin{table}[h]
-\centering
-\caption{Embedding-level repeats ($N{=}20$). Ranking is over the cosine neighborhood of each text against a fixed gallery.}
-\label{tab:embed}
-\begin{tabular}{lccc}
-\toprule
-Provider & Exact-equal & Max cosine dist. & Top-10 identical \\
-\midrule
-\texttt{text-embedding-3-small} & 69.3\% & $2.3\times10^{-4}$ & 100\% \\
-\texttt{text-embedding-3-large} & 80.6\% & $5.1\times10^{-5}$ & 98.7\% \\
-\texttt{gemini-embedding-001} & 100\% & $\approx 0$ & 100\% \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\paragraph{The pipeline was.} Repeating eight ARB queries ten times against the July stack gave a mean exact top-10 list rate of $30.6\%$ (Jaccard@10 $0.760$, Kendall $\tau$ $0.959$). Paired traces isolated three causes: uncached, unseeded LLM stages (query expansion, listwise rerank); insertion-order ties in fusion SQL; and approximate HNSW under concurrency. The fixes are unglamorous: total SQL ordering on every branch, single-flight sharing of hosted call outcomes across concurrent identical requests, an explicit LLM seed, and an optional SQLite-backed persistent cache for expansion, listwise, and embedding outputs. After the fixes, exact and HNSW variants both produce $100\%$ exact top-10 lists across two concurrent 8-query$\times$10-repeat packets and two concurrent 75-case repeats. A genuine API cold restart still moved lists ($1/8$ exact) because hosted stages resample across process lifetimes; with the persistent cache warm, $8/8$ lists survive two real restarts ($24/24$ pairwise), and mean packet latency falls from $4.90$\,s on fill to $1.48$--$1.79$\,s. We claim restart-durable repeatability from the first persisted answer, not that two clean installations agree on their first answer.
-
-\paragraph{Hosted engines, same probe.} On ten documentation cases $\times$ ten repeats, Delphi returns byte-identical context in $98.0\%$ of run pairs (identifier-hit agreement $1.000$); the documentation-only hosted engine manages $35.6\%$ (quality-guided) and $25.3\%$ (oracle IDs), and the retrieval-plus-synthesis engine never repeats a byte ($0.0\%$), though its underlying five-citation sets are near-stable (mean Jaccard $0.9933$). An audit also caught resolver-identity drift in the documentation engine: the same library resolved to different corpus IDs across periods, which silently mixes resolver and retrieval effects unless IDs are pinned---so all our comparisons pin them.
-
-\section{RQ2a: repository retrieval on the untouched finals}
-\label{sec:tracka}
-
-\paragraph{Development, briefly.} The development partition drove a sequence of preregistered ablations whose outcomes we keep regardless of direction: exact vector scan replaced HNSW ($+0.020$ Recall@20 \ci{0.000}{0.063}, two any-gold recoveries, no losses); query expansion stayed on (three complete-miss recoveries vs.\ one loss); a Gemini embedding swap was rejected (MRR $-0.054$ \ci{-0.102}{-0.011}); retrieval $\text{top-}k$ was locked at 20; and a file-level Okapi BM25 branch---attractive in storage terms after a $26.7\times$ compaction---was rejected when its single approved configuration failed preregistered adoption gates (MRR interval floor $-0.050$ and BCY floor $-0.037$ below the $-0.01$ bound; median latency ratio $1.342>1.2$) despite repeating exactly and losing zero any-gold cases. It ships default-off.
+\paragraph{The pipeline was the variance.} Repeating eight ARB queries ten times against the July stack gave a mean exact top-10 rate of $30.6\%$. Paired traces isolated uncached, unseeded LLM stages; insertion-order ties in fusion SQL; and approximate HNSW under concurrency. Total SQL ordering, single-flight sharing of concurrent identical hosted calls, an explicit seed, and a persistent stage cache take exact repeats to $100\%$ in-process across two concurrent 8$\times$10 packets and two 75-case repeats; a genuine cold restart still moved $7/8$ lists until the cache was warm, after which $8/8$ survive two restarts. We claim restart-durable repeatability from the first persisted answer, not that two clean installations agree on their first answer. Embedding APIs were not the problem: the small OpenAI model jitters at the fifth decimal and never changed top-ten membership across $N{=}20$ repeats; Gemini was bitwise deterministic.
 
 \begin{table}[t]
 \centering
-\caption{ARB round-3 final: 220 untouched cases, scored once from frozen code. Comparators run over the identical canonical-git corpus. Bracketed values are paired repository-cluster bootstrap $95\%$ intervals on the Delphi$-$baseline delta; any-gold@20 movement is recovered/lost with exact McNemar $p$.}
-\label{tab:arbfinal}
-\footnotesize
-\setlength{\tabcolsep}{2pt}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccc}
-\toprule
-System & MRR & R@5 & R@20 & BCY@8k \\
-\midrule
-\textbf{Delphi (frozen)} & \textbf{0.332} & \textbf{0.476} & \textbf{0.648} & \textbf{0.296} \\
-Lexical+BM25 RRF & 0.160 & 0.204 & 0.518 & 0.124 \\
-Lexical ranker & 0.144 & 0.215 & 0.478 & 0.138 \\
-BM25 (whole-file) & 0.128 & 0.177 & 0.425 & 0.075 \\
-\midrule
-$\Delta$ vs.\ RRF & $+0.172$ \ci{0.083}{0.235} & $+0.272$ \ci{0.148}{0.372} & $+0.130$ \ci{0.024}{0.200} & $+0.172$ \ci{0.098}{0.263} \\
-$\Delta$ vs.\ lexical & $+0.188$ \ci{0.106}{0.246} & $+0.261$ \ci{0.140}{0.361} & $+0.170$ \ci{0.088}{0.226} & $+0.158$ \ci{0.076}{0.255} \\
-$\Delta$ vs.\ BM25 & $+0.204$ \ci{0.111}{0.277} & $+0.299$ \ci{0.157}{0.433} & $+0.223$ \ci{0.111}{0.310} & $+0.221$ \ci{0.129}{0.303} \\
-\midrule
-any-gold@20 & \multicolumn{4}{l}{Delphi 163/220; vs.\ RRF $+51/-19$ ($p{=}1.7\times10^{-4}$); vs.\ lexical $+56/-16$} \\
- & \multicolumn{4}{l}{($p{=}2.4\times10^{-6}$); vs.\ BM25 $+63/-13$ ($p{=}5.0\times10^{-9}$)} \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-\paragraph{Final.} Table~\ref{tab:arbfinal} is the answer to RQ2 against runnable comparators: every metric, every baseline, every interval excluding zero. The gap is not an artifact of one workflow: Delphi recovers 51 cases the fusion baseline misses entirely while losing 19, and the exact McNemar test resolves the asymmetry at $p{=}1.7\times10^{-4}$.
-
-\section{RQ2b: generalization finals}
-
-\begin{table}[t]
-\centering
-\caption{Generalization finals from the same frozen commit. Independent: 18 repository-disjoint commit-to-files cases. SWE-bench: 62 Verified localization instances. Ties are reported as ties.}
-\label{tab:generalization}
+\caption{Like-for-like repeatability on ten documentation cases $\times$ ten runs (450 run pairs per engine). Retrieved-set columns use each engine's observable retrieval unit: retrieved items for Delphi and the documentation engine, the set of cited URLs for the synthesis engine. Byte-exact is the delivered context text; hit agreement is whether the identifier-hit outcome agreed across the pair.}
+\label{tab:determinism}
 \small
-\begin{tabular}{llcccc}
-\toprule
-Track & System & MRR & R@5 & R@20 & BCY@8k \\
-\midrule
-\multirow{4}{*}{SWE-bench (62)} & \textbf{Delphi (frozen)} & \textbf{0.680} & \textbf{0.704} & \textbf{0.737} & \textbf{0.638} \\
- & Lexical ranker & 0.406 & 0.509 & 0.702 & 0.387 \\
- & Lexical+BM25 RRF & 0.354 & 0.500 & 0.719 & 0.306 \\
- & BM25 (whole-file) & 0.149 & 0.230 & 0.416 & 0.145 \\
-\midrule
-\multirow{4}{*}{Independent (18)} & \textbf{Delphi (frozen)} & \textbf{0.508} & \textbf{0.551} & 0.750 & \textbf{0.454} \\
- & Lexical+BM25 RRF & 0.473 & 0.500 & 0.759 & 0.287 \\
- & Lexical ranker & 0.438 & 0.403 & 0.704 & 0.259 \\
- & BM25 (whole-file) & 0.370 & 0.458 & 0.676 & 0.259 \\
-\bottomrule
-\end{tabular}
+\setlength{\tabcolsep}{4pt}
+\input{tables/determinism_like_for_like.tex}
 \end{table}
 
-Table~\ref{tab:generalization}: on SWE-bench localization Delphi leads MRR by $+0.274$ \ci{0.194}{0.412} over the strongest baseline and BCY@8k by $+0.251$ \ci{0.157}{0.433}, while Recall@20 is a statistical tie ($+0.018$ \ci{-0.073}{0.075} vs.\ RRF): when twenty guesses are allowed, lexical engines eventually surface the file; Delphi's advantage is putting it first. The independent final shows the same shape at small $n$: Recall@20 beats BM25 ($+0.074$ \ci{0.019}{0.139}) and lexical ($+0.046$ \ci{0.009}{0.083}) and ties RRF ($-0.009$ \ci{-0.148}{0.083}; any-gold 15 vs.\ 15). Nothing on either final shows a Delphi loss with an interval excluding zero.
+\paragraph{Same quantity, every engine.} Our earlier headline---$98.0\%$ byte-identical context for Delphi against $35.6\%$ and $0.0\%$ for the hosted engines---compared retrieval stability for two engines with generated-text stability for the third. Table~\ref{tab:determinism} separates the layers. On retrieved-set stability the synthesis engine's cited sources are identical across every pair ($1.000$), Delphi's retrieved items across $98.0\%$, and the documentation engine's across $54\%$ (quality-guided) or $50\%$ (oracle IDs). What differs for the synthesis engine is the layer above retrieval: its answer text never repeats byte-for-byte, and that variation flips the identifier-hit outcome in $7.1\%$ of pairs, against $0\%$ for Delphi. The defensible statements are narrower than before: Delphi's caching and total ordering make its retrieved text repeatable, and repeatable retrieved text makes downstream decisions repeatable; the documentation engine's retrieval drifts; the synthesis engine's retrieval does not drift, its prose does. We have not tested whether a caching wrapper would give the hosted engines the same repeatability, and expect that it would.
 
-\section{Failure modes that changed the product}
-\label{sec:failures}
-
-Two development findings moved code, and both survived their preregistered ablations into the frozen stack.
-
-\paragraph{The engine returned the file the query quoted.} By workflow, July any-gold@20 was $92\%$ (trace2code) but $48\%$ (comment2context): review-comment queries retrieved the markdown note or test that the comment already quotes, never the implementation behind it. The fix demotes paths the query envelope itself contains (only when evidence keys such as \texttt{comment} or \texttt{diff} are present) after the cross-encoder and before listwise. Development Recall@20 rose from $0.544$ to $0.642$ with the broader patch set ($+0.098$ \ci{0.041}{0.186}).
-
-\paragraph{The index silently dropped generated source.} A locked SWE-adjacent gold path (\texttt{channelz.pb.go}, 114{,}500 bytes of protobuf-generated Go) was excluded by a global \texttt{*.pb.go} pattern in both old and new indexes---invisible until a per-gold-path searchability preflight failed. Agent-mode indexing now retains generated source under the existing 500{,}000-byte and NUL-content guards, the queued legacy worker enforces the same guards, and every confirmatory index passed an exact file/chunk/embedding audit (final corpus: 142 snapshots, 229{,}836 files, 1{,}089{,}836 chunks and embeddings, zero mismatches) plus the searchability preflight before any query ran. The frozen confirmatory commit is exactly the development winner plus this fix.
-
-\section{Documentation: the fair ordeal}
+\section{Documentation: matched contracts, all four arms}
 \label{sec:docs}
 
-Documentation retrieval is where hosted engines are strongest, and where output contracts differ most. The retrieval-plus-synthesis engine returns a fluent synthesized answer with citations; the documentation-only engine and Delphi return raw context. Scored naively, the synthesis engine leads: identifier hit $0.575$ (full prompts) against Delphi's $0.400$ (compact) and the documentation engine's $0.375$ (quality-guided). Query shape is engine-specific, not a shared transform: a balanced, order-alternating ablation shows full prompts beat compact for the synthesis engine by $0.400$ \ci{0.160}{0.640} on identifier hit, while a 220-request pinned-ID ablation shows the documentation engine statistically tied across shapes ($+0.010$ \ci{-0.085}{0.110}).
+Documentation retrieval is where hosted engines are strongest and where output contracts differ most. The synthesis engine returns a fluent answer with citations; the documentation engine and Delphi return raw context. Scored naively, the synthesis engine leads (identifier hit $0.575$ against Delphi's $0.400$ and the documentation engine's $0.375$). That comparison conflates retrieval with the synthesis model's parametric knowledge.
 
-\paragraph{Matching the contract.} The synthesized-answer score conflates retrieval with the synthesis model's parametric knowledge---an answer can name \texttt{df.where} because the model knows pandas, not because retrieval found it. So we matched contracts: every engine's recorded retrieved context goes through the \emph{same} frozen answer-style synthesis stage (\texttt{gpt-5.4-mini}, 1{,}600 output tokens, identical system prompt), plus a no-retrieval control with the same prompt shape. Three repeats per arm, 40 cases, zero technical failures (Table~\ref{tab:docsfair}).
+\paragraph{Matching the contract, properly.} Our first attempt routed the two raw-context engines through a frozen answer-style synthesis stage (\texttt{gpt-5.4-mini}, 1{,}600 output tokens, one system prompt) and compared them with the synthesis engine's \emph{native} pass, which a reviewer correctly identified as only partially matched: the output format was aligned, the synthesis model and prompt were not. The engine's raw-retrieval mode returned no sources during the recorded round, so we could not route its retrieval at the time. Its synthesized responses, however, carry the five retrieved source chunks it grounded on. We reconstructed that context from the recorded responses (five sources per case, mean 2{,}754 tokens), packed it under the same 8{,}000-token budget with the same routine as every other arm, and routed it through the same frozen stage, three repeats, no new hosted calls. Table~\ref{tab:docsfair} is now a four-arm comparison under one synthesis model, one prompt, one budget.
 
 \begin{table}[t]
 \centering
-\caption{Matched-output-contract documentation comparison, 40 development cases $\times$ 3 repeats (the hosted synthesis engine's recorded pass is single-repeat by its own contract). Case-cluster bootstrap $95\%$ intervals; every engine-vs-engine interval includes zero.}
+\caption{Matched-output-contract documentation comparison, 40 development cases (C1) $\times$ 3 repeats through one frozen synthesis stage. Deltas are case-cluster bootstrap $95\%$ intervals against the no-retrieval control. The synthesis engine's native single pass is shown for reference only.}
 \label{tab:docsfair}
 \small
-\begin{tabular}{lccc}
-\toprule
-Arm & Identifier hit & Per-repeat & $\Delta$ vs.\ control \\
-\midrule
-Documentation engine + synthesis & \textbf{0.625} & 0.650/0.600/0.625 & $+0.133$ \ci{0.008}{0.258} \\
-\textbf{Delphi + synthesis} & \textbf{0.617} & 0.600/0.625/0.625 & $+0.125$ \ci{0.000}{0.250} \\
-Synthesis engine (recorded, native) & 0.575 & --- & $+0.083$ \\
-Model alone (no retrieval) & 0.492 & 0.475/0.475/0.525 & --- \\
-\bottomrule
-\end{tabular}
+\setlength{\tabcolsep}{4pt}
+\input{tables/docs_matched.tex}
 \end{table}
 
-Three findings. First, the ``documentation gap'' was the contract, not the retrieval: under matched output contracts Delphi moves from $0.400$ to $0.617$ and sits above the synthesis engine's $0.575$ ($+0.042$ \ci{-0.092}{0.183}; 6 wins, 6 losses, 28 ties)---parity or better, with superiority unresolved. Second, the metric saturates: the bare model scores $0.492$, so roughly half of \emph{every} engine's synthesized-contract score is parametric knowledge, and the three engines finish within $0.05$ of one another (Delphi vs.\ documentation engine $-0.008$ \ci{-0.117}{0.092}). Identifier hit over synthesized text is a weak discriminator of retrieval; raw-context scoring remains the cleaner instrument. Third, the price differs: the synthesis engine's native pass averages $12.4$\,s per request against $\approx 5.1$\,s for Delphi's retrieval-plus-synthesis ($2.6$\,s + $2.5$\,s means) and it is the only arm that never repeats byte-identically (\S\ref{sec:determinism}).
+\begin{table}[t]
+\centering
+\caption{Engine-versus-engine paired differences under the matched contract (case-cluster bootstrap $95\%$ intervals; wins/losses/ties over 40 cases). Every interval includes zero.}
+\label{tab:docspairs}
+\small
+\input{tables/docs_pairs.tex}
+\end{table}
+
+Three findings. First, on raw retrieved context the synthesis engine is ahead of Delphi: its reconstructed five-source context hits the gold identifier on $0.475$ of cases against Delphi's $0.400$ ($k{=}5$) and $0.425$ ($k{=}20$). Second, under the matched contract the four arms finish within $0.05$ of one another and every engine-versus-engine interval includes zero (Table~\ref{tab:docspairs}); the synthesis engine's matched arm ($0.583$) is within $0.008$ of its native pass, so its own synthesis added nothing our frozen stage did not. Third, the metric saturates: the bare model scores $0.492$, so roughly $80\%$ of every arm's score is parametric knowledge, and the retrieval-over-floor deltas are $+0.13$, $+0.13$, and $+0.09$. We do not detect a statistically resolved difference between any two engines under this evaluation. That is the supported sentence; we withdraw ``parity or better,'' which an interval of \ci{-0.09}{+0.16} does not establish. Establishing non-inferiority would require a predeclared margin and a sample several times this size.
 
 \section{RQ1: does any of it help an agent?}
 \label{sec:utility}
 
-\paragraph{Causal seeding (closed-tool agent).} Track C freezes the policy model (\texttt{gpt-5.4-mini}) and the tool set (\texttt{list\_dir}/\texttt{grep}/\texttt{read\_file}/\texttt{submit}) and varies only the seed context block, 40 paired development cases per arm. File-F1: no seed $0.046$; random files $0.013$; BM25 seed $0.093$; lexical seed $0.119$; July-Delphi seed $0.234$; oracle $0.858$. The Delphi seed beats no-seed by $+0.188$ \ci{0.055}{0.294} and BM25 by $+0.142$ \ci{0.059}{0.208}; against lexical, final-any-gold improves by $0.225$ (McNemar $p{=}0.035$) while the F1 interval narrowly includes zero \ci{-0.002}{0.190}. Seeds causally change what a frozen agent reads and submits, ordered by seed quality; the ceiling (oracle $0.858$) shows most of the remaining gap is retrieval, not the agent.
+\paragraph{Closed-tool seeding (a replication).} ARB's own seed intervention holds a closed-tool agent fixed and varies its initial context. We replicated it with the policy model \texttt{gpt-5.4-mini}, tools \texttt{list\_dir}/\texttt{grep}/\texttt{read\_file}/\texttt{submit}, and 40 paired development cases per arm, adding a July-Delphi seed. File-F1: no seed $0.046$; random files $0.013$; BM25 seed $0.093$; lexical seed $0.119$; July-Delphi seed $0.234$; oracle $0.858$. The Delphi seed beats no-seed by $+0.188$ \ci{0.055}{0.294} and BM25 by $+0.142$ \ci{0.059}{0.208}; against lexical the F1 interval includes zero \ci{-0.002}{0.190}. Seeds change which files a frozen agent submits, ordered by seed quality, which is what the benchmark's authors also found. The oracle ceiling shows localization headroom in this harness; it does not show that retrieval dominates reasoning, editing, or validation failures in a repairing agent, and we withdraw that sentence from the earlier draft.
 
-\paragraph{Direct generation utility (DS-1000).} With the frozen generator, 40 cases $\times$ 3 repeats per condition: no retrieval $0.575$; documentation engine $0.567$ ($-0.008$ \ci{-0.142}{0.125}); Delphi retrieval$+$synthesis $0.592$ ($+0.017$ \ci{-0.125}{0.158}); synthesis engine $0.642$ ($+0.067$ \ci{-0.075}{0.200}); head-to-head synthesis engine vs.\ Delphi $+0.050$ \ci{-0.075}{0.183}. Every interval includes zero. On a 40-case development set with a strong generator, \emph{no} context engine---ours included---demonstrably helps or hurts DS-1000 pass@1. Claims of downstream coding utility at this scale should be treated as unresolved by default.
+\paragraph{DS-1000 (unresolved, not negative).} With the frozen generator, 40 cases $\times$ 3 repeats: no retrieval $0.575$; documentation engine $0.567$ ($-0.008$ \ci{-0.142}{0.125}); Delphi retrieval$+$synthesis $0.592$ ($+0.017$ \ci{-0.125}{0.158}); synthesis engine $0.642$ ($+0.067$ \ci{-0.075}{0.200}). Every interval spans effects from substantial harm to substantial benefit. This experiment does not show that retrieval fails to help; it shows that 40 cases cannot tell.
 
-\paragraph{Vignettes (not ARB JSON).} Three questions a person would actually type, on pinned commits. Gin: why is my JSON HTML-escaped? Delphi, the synthesis engine, and grep all hit \texttt{render/json.go} ($5.9$\,s / $12.0$\,s / $0.03$\,s). Tokio: does a dropped \texttt{JoinHandle} keep running? All three hit ($4.7$\,s / $13.1$\,s / $0.12$\,s). Pytest: where is assert rewriting implemented? Delphi and grep hit \texttt{src/\_pytest/assertion/rewrite.py}; the synthesis engine wrote a correct-looking explanation from tests and docs without returning the file ($5.7$\,s / $16.9$\,s / $0.15$\,s). A fluent answer can hide a miss; that is why Track C grades submissions, not prose.
+\paragraph{Executable pilot (preregistered).} The reviewers' request was direct: measure retrieval and executable outcome on the same tasks. We preregistered a pilot (Appendix~\ref{app:pilot}) on the 62 C0 SWE-bench instances whose rankings every system in Table~\ref{tab:swebench} had already produced once. The agent is mini-SWE-agent with \texttt{gpt-5.4-mini}, ordinary shell tools in every condition, and a fixed step budget; a seed is a block appended to the issue naming the top five files a recorded ranking produced, with the head of each file, capped at 3{,}000 tokens. Conditions: no seed; five random non-gold files in the same block (prompting control); Delphi's recorded top five; the conventional ladder's recorded top five. The outcome is verified repair under the official harness, paired by instance, with instance- and repository-cluster intervals and exact McNemar tests. \pending{pilot results at step budget 50}.
 
-\section{The hosted repository arm, transparently}
+\section{The hosted repository arm}
 \label{sec:blocked}
 
-The synthesis engine also markets a repository surface, and RQ2 deserves that head-to-head. It never became runnable. The development corpus requires 68 exact \texttt{(repo, base\_commit)} snapshots in the provider's account. Whole-snapshot ingestion of large repositories (etcd, tokio, transformers) stalled in a non-terminal \texttt{syncing} state for over 24 hours; a prior evaluation round succeeded only by sharding snapshots into $\le$100-file, $\le$1.5\,MB sources, and 32/68 required pairs remain terminally indexed from that round. Re-applying the sharded strategy, our minimal probe---one shard, the smallest unit the API accepts---was accepted by the sync API and then also failed to leave \texttt{syncing} within a 40-minute deadline; a multi-hour watcher recorded no late completion. Under the fail-closed coverage rule this is an external blocker, not a loss: no repository score is reported for that engine in either direction, and the head-to-head runs the moment 68/68 coverage is demonstrable.
+The synthesis engine also markets a repository surface. Scoring it requires 68 exact \texttt{(repo, base\_commit)} snapshots in the provider's account for the development split alone. Whole-snapshot ingestion of large repositories stalled in a non-terminal \texttt{syncing} state; 32/68 pairs remain indexed from an earlier sharded round; a minimal one-shard probe also failed to leave \texttt{syncing} across a 40-minute deadline and a three-hour watch; the account inventory on 2026-09-09 still shows those probes syncing. No repository score is reported for that engine in either direction. This is a gap in the evidence, not a result, and after the matched-ladder findings it is no longer the most important gap.
 
 \section{What we claim, and what we do not}
 
-\textbf{Claimed.} (1) On the untouched ARB round-3 final, Delphi beats whole-file BM25, the official lexical ranker, and their tuned fusion on all four metrics with repository-cluster intervals excluding zero. (2) On held-out SWE-bench localization it leads MRR and BCY decisively and ties Recall@20; on the independent final it leads or ties everywhere. (3) Under matched output contracts, Delphi's documentation retrieval plus a frozen synthesis stage is at parity or better with a hosted retrieval-plus-synthesis engine at less than half its latency. (4) Delphi's retrieval is near-deterministic in-process and restart-durable with a warm cache; the hosted engines are not close. (5) Retrieval seeds causally improve a frozen agent's submissions, ordered by seed quality.
+\textbf{Claimed.} (1) Delphi leads whole-file BM25 and the official lexical ranker on every set, with intervals excluding zero on the C0 sets for Recall@20 (independent) and MRR (SWE-bench). (2) A conventional dense+BM25 hybrid built from Delphi's own embedding model, with Delphi's own rerankers and expansion attached, matches or exceeds Delphi on the C0 sets; on the independent final two of its leads have intervals excluding zero. (3) Under one frozen synthesis stage, no two documentation engines are statistically distinguishable at $n{=}40$, and all sit $0.08$--$0.13$ above a no-retrieval floor. (4) Delphi's retrieved text is repeatable in-process and across restarts with a warm cache; on retrieved-set stability the hosted synthesis engine is at least as stable. (5) Retrieval seeds change a closed-tool agent's file selection, ordered by seed quality, replicating ARB.
 
-\textbf{Not claimed.} (1) State of the art: the hosted repository head-to-head is externally blocked at 32/68 coverage, and our claim rule requires the complete comparable set. (2) Documentation superiority: $+0.042$ has an interval through zero; parity-or-better is the supported sentence. (3) Downstream DS-1000 utility, for anyone, at $n{=}40$. (4) Anything from the rejected file-level Okapi candidate, which failed its preregistered gates and ships default-off. (5) The resurrected July ``95\% DS-1000'' number, which predates this protocol and stays retired.
+\textbf{Not claimed.} (1) State of the art, anywhere. (2) Any confirmatory result on the ARB round-3 partition, which is C2. (3) Documentation parity or non-inferiority. (4) Downstream utility on DS-1000 at $n{=}40$, in either direction. (5) That Delphi's structural branches, tuned weights, or quoted-path demotion add value over the conventional ladder: on the sets that can bear the question, they do not separate from it.
 
 \section{Conclusion}
 
-Context engines help when they promote the file the query is about rather than the file the query already quoted, when they index the generated source the gold path lives in, and when they return the same answer twice. Making those three sentences true required a measurement protocol more than a modeling idea: untouched finals, exact hosted accounting, matched output contracts, cluster-aware intervals, and preregistered gates that rejected one of our own favorite features. The result is an engine that decisively beats the strongest runnable baselines on its home surface, matches a hosted synthesis engine on the surface where it was supposedly behind, and holds the only determinism story in the comparison---with the one remaining head-to-head blocked outside our code and recorded as exactly that.
+Measured against baselines built from its own parts, and on cases its development could not see, Delphi's advantage reduces to the components any careful practitioner would assemble: an embedding model, BM25, reciprocal-rank fusion, a small cross-encoder, a listwise reranker, and query expansion. The claims we made from the re-partitioned ARB set did not survive the ledger that classified how that set had been used, and the claims we made against hosted engines did not survive matching the quantity being measured. What survives is a protocol---exposure classes at the case level, component-matched baselines, matched output contracts, like-for-like determinism, artifact-generated tables---and one open question the pilot begins to answer: whether any of this changes what an agent repairs.
 
 \subsection*{AI use statement}
 
@@ -229,10 +194,10 @@ Generative AI tools were used to help formulate experimental questions, write an
 test evaluation and product code, operate experiments, inspect failures, search
 for related work, and draft and edit this manuscript. They were not used to
 generate benchmark gold labels. Empirical claims are checked against persisted
-run artifacts and canonical repository snapshots; code changes are tested and
-ablation-tested before inclusion. All AI-assisted work remains subject to human
-review before submission, and the authors take responsibility for the final
-content, claims, code, and artifacts.
+run artifacts and canonical repository snapshots; every table in this paper is
+generated from those artifacts by a script in the released archive. All
+AI-assisted work remains subject to human review before submission, and the
+authors take responsibility for the final content, claims, code, and artifacts.
 
 \subsection*{Ethics statement}
 
@@ -241,20 +206,101 @@ Repository contents are processed locally except where a named hosted retrieval
 or model API is itself the evaluated system. We retain commit identifiers and
 public issue or review text for provenance, but do not intentionally collect
 private repository data or credentials. Because benchmark results can be used
-in product marketing, we predeclare the claim rule, preserve failed runs, report
-exposure, and give losses the same prominence as wins.
+in product marketing, we predeclare the claim rule, preserve failed runs, publish
+the exposure ledger, and give losses the same prominence as wins.
 
 \subsection*{Reproducibility statement}
 
-All confirmatory numbers derive from one frozen commit with response-level
-serving-configuration attestation. Paired analyses use cluster bootstraps with
-20{,}000 resamples at seed 1042 and exact McNemar tests. Hosted runs carry exact
-attempt ledgers; documentation comparisons pin resolver-selected library IDs.
-Per-case artifacts (queries, gold paths, ranked outputs, synthesized answers,
-latencies, and analysis JSON) are retained for every table in this paper,
-including failed and rejected runs.
+The archive accompanying this paper contains the split manifests and case-level
+exposure ledger, every per-case artifact (queries, gold paths, ranked outputs,
+synthesized answers, latencies), every paired-analysis JSON, the harness code
+for every system and comparator including the matched ladder, the frozen
+serving configuration and the scripts that launch it, the pilot protocol and
+trajectories, and the script that regenerates every table in this paper from
+those artifacts. Repository corpora are re-cloned from public GitHub by a
+provided script; hosted-engine runs require the reader's own credentials.
 
 \bibliography{context}
 \bibliographystyle{iclr2027_conference}
+
+\appendix
+
+\section{Frozen system specification}
+\label{app:system}
+
+Frozen commit \texttt{91d76c1} of the Delphi repository (branch
+\texttt{feature/generated-source-freeze}), served natively against PostgreSQL
+with pgvector. Every scored response carried the following attested
+configuration: embedding model \texttt{text-embedding-3-small}; vector mode
+exact scan (HNSW disabled for scoring; \texttt{ef\_search} 100 when enabled);
+hybrid candidate branches vector, BM25, exact symbol, exact path, path affinity,
+and trigram with reciprocal-rank fusion weights $0.50/0.25/0.20/0.15/0.15/0.05$
+and $k{=}60$; 50 fused candidates; cross-encoder
+\texttt{cross-encoder/ms-marco-MiniLM-L-6-v2} over the top 30 with blend
+$\alpha{=}0.4$ (code-aware reranker disabled); quoted-path demotion when the
+query envelope carries evidence keys; listwise reranking of the top 20 by
+\texttt{gpt-4o} at temperature 0, seed 1042, 280-character excerpts,
+300-token replies; hypothetical-document expansion by \texttt{gpt-4o-mini}
+(temperature 0, seed 1042, 220-token replies) gated on prose-like queries and
+feeding only the vector branch; persistent SQLite stage cache; API
+$\text{top-}k{=}20$; file-diverse BM25 and path-token branches disabled; agent
+quality mode with tests, docs, examples, configs, and manifests indexed and
+generated source retained under 500{,}000-byte and NUL-content guards. The
+listwise and expansion system prompts are the strings in
+\texttt{synsc/services/listwise\_rerank.py} and
+\texttt{synsc/services/query\_expansion.py} at the frozen commit; the matched
+ladder imports them from the same files. Context packing for BCY@8k uses the
+official ARB \texttt{pack\_files} at an 8{,}000-token budget.
+
+\section{Exposure ledger}
+\label{app:exposure}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrll}
+\toprule
+Set & Cases & Class & Supports \\
+\midrule
+ARB round-3 partition (positive workflows) & 220 & C2 & validation only \\
+ARB round-3 development & 75 & C1 & development \\
+Independent commit-to-files final & 18 & C0 & confirmatory \\
+Independent commit-to-files development & 48 & C1 & development \\
+SWE-bench Verified, round 3 & 62 & C0 & confirmatory \\
+SWE-bench Verified, round-4 expansion & 100 & C0 & confirmatory (scoring in progress) \\
+DS-1000 documentation subset & 40 & C1 & development \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Decisions and the evidence that informed them: query-time embedding alignment,
+RRF fusion, the path-affinity branch, the cross-encoder blend, expansion, and
+listwise reranking were accepted on round-2 development (75) and round-2
+held-out (220) aggregates over the ARB v2 pool that round 3 re-partitioned;
+quoted-path demotion on July per-workflow rates over all 427 cases; exact scan,
+single-flight, the persistent cache, and total SQL ordering on round-3
+development and determinism probes; generated-source indexing on the gold-path
+preflight over the independent and ARB development sets; the File-Okapi
+rejection on both development sets. The machine-readable ledger lists every
+case ID per set.
+
+\section{Executable pilot protocol}
+\label{app:pilot}
+
+Tasks: the 62 round-3 SWE-bench Verified instances. Agent: mini-SWE-agent
+2.4.6, text-based action format, \texttt{gpt-5.4-mini}, official
+\texttt{x86\_64} instance images. Conditions: \texttt{none}; \texttt{random}
+(five candidate files drawn with seed 1042 per instance, gold excluded);
+\texttt{delphi} (top five of the frozen stack's recorded ranking);
+\texttt{hybrid\_rerank\_expand} (top five of the conventional ladder's recorded
+ranking). Seed block: identical wording, up to five paths with the first 40
+lines of each file at the base commit, capped at 3{,}000 tokens. Budgets:
+primary step limit 50 with a 2.0 USD cost cap; secondary step limit 15 if time
+allows. Outcome: verified repair under \texttt{swebench} 5.0.2 against
+\texttt{SWE-bench/SWE-bench\_Verified}; secondary outcomes API cost, steps,
+whether a gold file was opened, and submission rate. Analysis: paired by
+instance; instance-cluster and repository-cluster bootstrap $95\%$ intervals
+(20{,}000 resamples, seed 1042); exact McNemar on discordant pairs. An interval
+including zero at $n{=}62$ is reported as unresolved.
 
 \end{document}

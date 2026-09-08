@@ -27,7 +27,17 @@ from typing import Any, Iterable
 ROOT = Path(__file__).resolve().parent.parent
 R2 = ROOT.parent / "delphi-evaluation-2026-07-29-round2"
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str((R2 / "external" / "arb-src" / "src").resolve()))
+# The pinned official ARB implementation lives in the archive (see
+# harness/restore_corpora.py and external/arb-src); the round-2 tree is the
+# historical fallback location.
+for _arb_src in (ROOT / "external" / "arb-src" / "src", R2 / "external" / "arb-src" / "src"):
+    if _arb_src.is_dir():
+        sys.path.insert(0, str(_arb_src.resolve()))
+        break
+# Delphi's backend supplies the listwise/expansion prompts for matched baselines.
+_BACKEND = ROOT.parent / "backend"
+if _BACKEND.is_dir():
+    sys.path.insert(0, str(_BACKEND.resolve()))
 
 import httpx  # noqa: E402
 
@@ -132,20 +142,36 @@ class ChunkCache:
         self.cache: dict[tuple[str, str], list[dict[str, Any]]] = {}
         self.max_snapshots = max_snapshots
 
+    def _disk_path(self, repo: str, commit: str) -> Path:
+        return ROOT / "cache" / "chunks" / repo.replace("/", "__") / f"{commit}.jsonl.gz"
+
     def get(self, repo: str, commit: str) -> list[dict[str, Any]]:
+        import gzip
+
         from agent_retrieval_bench.corpus import chunks_for_file, is_candidate_path
 
         key = (repo, commit)
         if key in self.cache:
             return self.cache[key]
+        disk = self._disk_path(repo, commit)
         chunks: list[dict[str, Any]] = []
-        for path in self.corpus.list_files(repo, commit):
-            if not is_text_candidate(path) or not is_candidate_path(path):
-                continue
-            text = self.corpus.file_text(repo, commit, path)
-            if text is None or not text.strip() or len(text) > 1_500_000:
-                continue
-            chunks.extend(chunks_for_file(repo, commit, path, text))
+        if disk.is_file():
+            with gzip.open(disk, "rt", encoding="utf-8") as fh:
+                chunks = [json.loads(line) for line in fh if line.strip()]
+        else:
+            for path in self.corpus.list_files(repo, commit):
+                if not is_text_candidate(path) or not is_candidate_path(path):
+                    continue
+                text = self.corpus.file_text(repo, commit, path)
+                if text is None or not text.strip() or len(text) > 1_500_000:
+                    continue
+                chunks.extend(chunks_for_file(repo, commit, path, text))
+            disk.parent.mkdir(parents=True, exist_ok=True)
+            tmp = disk.with_suffix(".tmp")
+            with gzip.open(tmp, "wt", encoding="utf-8") as fh:
+                for chunk in chunks:
+                    fh.write(json.dumps(chunk, ensure_ascii=False) + "\n")
+            tmp.replace(disk)
         if len(self.cache) >= self.max_snapshots:
             self.cache.pop(next(iter(self.cache)))
         self.cache[key] = chunks
@@ -694,7 +720,17 @@ def main() -> None:
     parser.add_argument(
         "--engine",
         required=True,
-        choices=("delphi", "nia", "bm25", "lexical", "lexical_bm25"),
+        choices=(
+            "delphi",
+            "nia",
+            "bm25",
+            "lexical",
+            "lexical_bm25",
+            "dense",
+            "hybrid",
+            "hybrid_rerank",
+            "hybrid_rerank_expand",
+        ),
     )
     parser.add_argument(
         "--split", default="development", choices=("development", "final")
@@ -740,6 +776,11 @@ def main() -> None:
         ),
     )
     parser.add_argument("--lexical-weight", type=float, default=0.7)
+    parser.add_argument(
+        "--keep-snapshots",
+        action="store_true",
+        help="keep materialized snapshots on disk after a strong-baseline run",
+    )
     parser.add_argument(
         "--nia-fast-mode", action=argparse.BooleanOptionalAction, default=True
     )
@@ -791,6 +832,15 @@ def main() -> None:
     elif args.engine == "nia":
         source_map = load_sources(args.sources)
         engine = NiaEngine(source_map, fast_mode=args.nia_fast_mode)
+    elif args.engine in ("dense", "hybrid", "hybrid_rerank", "hybrid_rerank_expand"):
+        from harness.strong_baselines import StrongBaselineEngine
+
+        engine = StrongBaselineEngine(
+            corpus,
+            ChunkCache(corpus),
+            args.engine,
+            transient_snapshots=not args.keep_snapshots,
+        )
     else:
         engine = CorpusEngine(
             corpus,
@@ -997,6 +1047,10 @@ def main() -> None:
         ),
     }
     status = benchmark_status(details, skipped)
+    if hasattr(engine, "stats"):
+        summary["engine_stats"] = dict(engine.stats)
+    if hasattr(engine, "close"):
+        engine.close()
     writer.finish(summary, status=status)
     out = ROOT / "results" / f"{writer.run_id}-details.jsonl"
     with out.open("w") as fh:

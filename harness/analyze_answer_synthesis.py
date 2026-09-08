@@ -131,6 +131,21 @@ def main() -> None:
     context7 = (
         per_case_mean(c7_paths) if all(p.exists() for p in c7_paths) else None
     )
+    nia_matched_paths = [
+        results / f"DOCS-dev-nia-retrieved-answer-synth-r{r}-details.json"
+        for r in (1, 2, 3)
+    ]
+    nia_matched = (
+        per_case_mean(nia_matched_paths)
+        if all(p.exists() for p in nia_matched_paths)
+        else None
+    )
+    nia_raw_path = results / "DOCS-dev-nia-retrieved-k5-details.json"
+    nia_raw = (
+        {c: float(bool(row["identifier_hit"])) for c, row in load_details(nia_raw_path).items()}
+        if nia_raw_path.exists()
+        else None
+    )
 
     majority = {c: 1.0 if answer[c] >= 2 / 3 else 0.0 for c in answer}
     b = sum(1 for c in majority if majority[c] > nia_hits[c])
@@ -183,6 +198,45 @@ def main() -> None:
         "answer_vs_nia": paired(answer, nia_hits),
         "answer_vs_control": paired(answer, control),
         "control_vs_nia": paired(control, nia_hits),
+        **(
+            {
+                "arms_nia_retrieved_answer_synthesis": {
+                    "per_repeat_rates": [
+                        fmean(
+                            float(bool(row["identifier_hit"]))
+                            for row in load_details(path).values()
+                        )
+                        for path in nia_matched_paths
+                    ],
+                    "case_mean_rate": fmean(nia_matched.values()),
+                    "note": (
+                        "the hosted engine's five recorded retrieved source chunks, "
+                        "packed under the shared 8,000-token budget and routed through "
+                        "the same frozen synthesis stage as every other arm"
+                    ),
+                },
+                "nia_matched_vs_nia_native": paired(nia_matched, nia_hits),
+                "nia_matched_vs_control": paired(nia_matched, control),
+                "answer_vs_nia_matched": paired(answer, nia_matched),
+                **(
+                    {"context7_vs_nia_matched": paired(context7, nia_matched)}
+                    if context7 is not None
+                    else {}
+                ),
+            }
+            if nia_matched is not None
+            else {}
+        ),
+        **(
+            {
+                "raw_retrieval_identifier_hit": {
+                    "nia_retrieved_k5_reconstructed": fmean(nia_raw.values()),
+                    "note": "raw (unsynthesized) context hit rates; Delphi compact k=5 0.400 and k=20 0.425 are recorded in DOCS-dev-delphi-compact*-summary.json",
+                }
+            }
+            if nia_raw is not None
+            else {}
+        ),
         **(
             {
                 "context7_vs_nia": paired(context7, nia_hits),
