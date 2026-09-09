@@ -1,0 +1,47 @@
+diff --git a/seaborn/_core/plot.py b/seaborn/_core/plot.py
+index 4f0290a4..23abaa63 100644
+--- a/seaborn/_core/plot.py
++++ b/seaborn/_core/plot.py
+@@ -1632,6 +1632,11 @@ class Plotter:
+             for axis in "xy":
+                 axis_key = sub[axis]
+ 
++                scale = p._scales.get(axis_key)
++                if scale is not None and getattr(scale, "_grid", None) is False:
++                    getattr(ax, f"{axis}axis").grid(False)
++                if scale is not None and getattr(scale, "_inverted", False) and axis == "y":
++                    ax.invert_yaxis()
+                 # Axis limits
+                 if axis_key in p._limits:
+                     convert_units = getattr(ax, f"{axis}axis").convert_units
+diff --git a/seaborn/_core/scales.py b/seaborn/_core/scales.py
+index bbd71ec1..03d2aba9 100644
+--- a/seaborn/_core/scales.py
++++ b/seaborn/_core/scales.py
+@@ -139,6 +139,9 @@ class Nominal(Scale):
+     """
+     A categorical scale without relative importance / magnitude.
+     """
++
++    _grid: bool = False
++    _inverted: bool = False
+     # Categorical (convert to strings), un-sortable
+ 
+     values: tuple | str | list | dict | None = None
+@@ -227,6 +230,16 @@ class Nominal(Scale):
+ 
+         return new
+ 
++    def grid(self, value: bool = True):
++        new = copy(self)
++        new._grid = value
++        return new
++
++    def invert(self, value: bool = True):
++        new = copy(self)
++        new._inverted = value
++        return new
++
+     def tick(self, locator: Locator | None = None):
+         """
+         Configure the selection of ticks for the scale's axis or legend.

@@ -1,0 +1,22 @@
+2026-09-09 06:46:24,723 - INFO - Creating container for pytest-dev__pytest-5631...
+2026-09-09 06:46:24,755 - INFO - Container for pytest-dev__pytest-5631 created: e4c388414fcb4deb243fdadb4392b97015af6d1e3d63a6128214946d19d5bca0
+2026-09-09 06:46:24,825 - INFO - Container for pytest-dev__pytest-5631 started: e4c388414fcb4deb243fdadb4392b97015af6d1e3d63a6128214946d19d5bca0
+2026-09-09 06:46:24,826 - INFO - Intermediate patch for pytest-dev__pytest-5631 written to logs/run_evaluation/none-s50-r2/gpt-5.4-mini/pytest-dev__pytest-5631/patch.diff, now applying to container...
+2026-09-09 06:46:24,941 - INFO - >>>>> Applied Patch:
+Checking patch src/_pytest/compat.py...
+Applied patch src/_pytest/compat.py cleanly.
+
+2026-09-09 06:46:25,070 - INFO - Git diff before:
+diff --git a/src/_pytest/compat.py b/src/_pytest/compat.py
+index d238061b4..3ce9558d7 100644
+--- a/src/_pytest/compat.py
++++ b/src/_pytest/compat.py
+@@ -68,7 +68,7 @@ def num_mock_patch_args(function):
+     if any(mock_modules):
+         sentinels = [m.DEFAULT for m in mock_modules if m is not None]
+         return len(
+-            [p for p in patchings if not p.attribute_name and p.new in sentinels]
++            [p for p in patchings if not p.attribute_name and any(p.new is s for s in sentinels)]
+         )
+     return len(patchings)
+2026-09-09 06:46:25,071 - INFO - Eval script for pytest-dev__pytest-5631 written to logs/run_evaluation/none-s50-r2/gpt-5.4-mini/pytest-dev__pytest-5631/eval.sh; copying to container...

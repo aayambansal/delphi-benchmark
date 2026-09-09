@@ -1,0 +1,23 @@
+diff --git a/lib/matplotlib/axes/_axes.py b/lib/matplotlib/axes/_axes.py
+index 4b73d5229..60b2bfeba 100644
+--- a/lib/matplotlib/axes/_axes.py
++++ b/lib/matplotlib/axes/_axes.py
+@@ -45,6 +45,9 @@ except ImportError:
+         if np.ndim(bins) == 1:
+             return bins
+ 
++        if range is None:
++            range = np.min(arr), np.max(arr)
++
+         if isinstance(bins, str):
+             # rather than backporting the internals, just do the full
+             # computation.  If this is too slow for users, they can
+@@ -54,8 +57,6 @@ except ImportError:
+             if bins is None:
+                 # hard-code numpy's default
+                 bins = 10
+-            if range is None:
+-                range = np.min(arr), np.max(arr)
+ 
+             return np.linspace(*range, bins + 1)
+ 

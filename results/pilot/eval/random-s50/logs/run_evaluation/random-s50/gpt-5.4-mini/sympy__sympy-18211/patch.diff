@@ -1,0 +1,16 @@
+diff --git a/sympy/solvers/solveset.py b/sympy/solvers/solveset.py
+index 445be3e0e8..a3ea12b4ca 100644
+--- a/sympy/solvers/solveset.py
++++ b/sympy/solvers/solveset.py
+@@ -1845,7 +1845,10 @@ def add_type(lhs, rhs, symbol, domain):
+ 
+     # invert_complex handles the call to the desired inverter based
+     # on the domain specified.
+-    lhs, rhs_s = invert_complex(f, 0, symbol, domain)
++    try:
++        lhs, rhs_s = invert_complex(f, 0, symbol, domain)
++    except NotImplementedError:
++        return ConditionSet(symbol, Eq(f, 0), domain)
+ 
+     if isinstance(rhs_s, FiniteSet):
+         assert (len(rhs_s.args)) == 1

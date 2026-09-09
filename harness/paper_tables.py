@@ -254,6 +254,51 @@ def determinism_table() -> str:
     return "\n".join(lines) + "\n"
 
 
+def pilot_table(budget: str = "s50") -> str:
+    path = RESULTS / "pilot" / f"analysis-{budget}.json"
+    if not path.exists():
+        return "\\begin{tabular}{l}\\emph{pending}\\end{tabular}"
+    a = json.load(path.open())
+    labels = {
+        "none": "No seed",
+        "random": "Random files (control)",
+        "delphi": "Delphi top-5 (frozen)",
+        "hybrid_rerank_expand": "Conventional ladder top-5",
+    }
+    n = a["instances_common"]
+    lines = ["\\begin{tabular}{lcccc}", "\\toprule",
+             f"Condition & Resolved (of {n}) & Rate & Mean cost (USD) & Mean steps \\\\", "\\midrule"]
+    for key in ("none", "random", "delphi", "hybrid_rerank_expand"):
+        c = a["conditions"].get(key)
+        if not c:
+            continue
+        lines.append(f"{labels[key]} & {c['resolved']} & {c['resolved_rate']:.3f} & {c['mean_cost_usd']:.4f} & {c['mean_steps']:.1f} \\\\")
+    lines.append("\\midrule")
+    lines.append("\\multicolumn{5}{l}{\\emph{Paired differences in resolved rate: instance-cluster 95\\% CI [repository-cluster CI]; discordant a/b; exact McNemar $p$}} \\\\")
+    pair_labels = {
+        "delphi_minus_none": "Delphi $-$ no seed",
+        "delphi_minus_random": "Delphi $-$ random",
+        "delphi_minus_hybrid_rerank_expand": "Delphi $-$ conventional",
+        "hybrid_rerank_expand_minus_none": "Conventional $-$ no seed",
+        "hybrid_rerank_expand_minus_random": "Conventional $-$ random",
+        "random_minus_none": "Random $-$ no seed",
+    }
+    for key, label in pair_labels.items():
+        pr = a["pairs"].get(key)
+        if not pr:
+            continue
+        r = pr["resolved"]
+        lo, hi = r["instance_cluster_95_ci"]
+        rlo, rhi = r["repository_cluster_95_ci"]
+        star = "$^{*}$" if (lo > 0 or hi < 0) else ""
+        lines.append(
+            f"{label} & \\multicolumn{{4}}{{l}}{{${r['mean_delta']:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}} [\\ci{{{rlo:+.3f}}}{{{rhi:+.3f}}}]; "
+            f"{r['a_only']}/{r['b_only']}; $p{{=}}{r['mcnemar_exact_p']:.2f}$}} \\\\"
+        )
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     # No trailing newline: a blank line after \input inside a tabular is a
@@ -263,6 +308,7 @@ def main() -> None:
     (OUT / "docs_matched.tex").write_text(docs_table().rstrip("\n") + "%")
     (OUT / "docs_pairs.tex").write_text(docs_pairs_table().rstrip("\n") + "%")
     (OUT / "determinism_like_for_like.tex").write_text(determinism_table().rstrip("\n") + "%")
+    (OUT / "pilot_s50.tex").write_text(pilot_table("s50").rstrip("\n") + "%")
     for path in sorted(OUT.glob("*.tex")):
         print(path.name, path.stat().st_size, "bytes")
 

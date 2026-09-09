@@ -1,0 +1,30 @@
+diff --git a/sphinx/ext/napoleon/docstring.py b/sphinx/ext/napoleon/docstring.py
+index d36fdd17a..d140ea606 100644
+--- a/sphinx/ext/napoleon/docstring.py
++++ b/sphinx/ext/napoleon/docstring.py
+@@ -273,8 +273,23 @@ class GoogleDocstring:
+         while not self._is_section_break():
+             _name, _type, _desc = self._consume_field(parse_type, prefer_type)
+             if multiple and _name:
+-                for name in _name.split(","):
+-                    fields.append((name.strip(), _type, _desc))
++                parts = []
++                current = []
++                depth = 0
++                for ch in _name:
++                    if ch in '([{':
++                        depth += 1
++                    elif ch in ')]}' and depth:
++                        depth -= 1
++                    elif ch == ',' and depth == 0:
++                        parts.append(''.join(current).strip())
++                        current = []
++                        continue
++                    current.append(ch)
++                parts.append(''.join(current).strip())
++                for name in parts:
++                    if name:
++                        fields.append((name, _type, _desc))
+             elif _name or _type or _desc:
+                 fields.append((_name, _type, _desc,))
+         return fields

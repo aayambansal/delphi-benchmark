@@ -1,0 +1,22 @@
+diff --git a/django/db/models/sql/where.py b/django/db/models/sql/where.py
+index aaab1730b7..64f24e65b0 100644
+--- a/django/db/models/sql/where.py
++++ b/django/db/models/sql/where.py
+@@ -128,14 +128,14 @@ class WhereNode(tree.Node):
+         if self.connector == XOR and not connection.features.supports_logical_xor:
+             # Convert if the database doesn't support XOR:
+             #   a XOR b XOR c XOR ...
+-            # to:
+-            #   (a OR b OR c OR ...) AND (a + b + c + ...) == 1
++            # to parity-based logic:
++            #   (a OR b OR c OR ...) AND (a + b + c + ...) % 2 == 1
+             lhs = self.__class__(self.children, OR)
+             rhs_sum = reduce(
+                 operator.add,
+                 (Case(When(c, then=1), default=0) for c in self.children),
+             )
+-            rhs = Exact(1, rhs_sum)
++            rhs = Exact(1, rhs_sum % 2)
+             return self.__class__([lhs, rhs], AND, self.negated).as_sql(
+                 compiler, connection
+             )

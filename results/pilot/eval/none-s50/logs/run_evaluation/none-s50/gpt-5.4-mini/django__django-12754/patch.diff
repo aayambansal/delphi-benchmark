@@ -1,0 +1,24 @@
+diff --git a/django/db/migrations/autodetector.py b/django/db/migrations/autodetector.py
+index 30616c0172..e17bcd40b9 100644
+--- a/django/db/migrations/autodetector.py
++++ b/django/db/migrations/autodetector.py
+@@ -399,9 +399,16 @@ class MigrationAutodetector:
+         # Removed field
+         elif dependency[2] is not None and dependency[3] is False:
+             return (
+-                isinstance(operation, operations.RemoveField) and
+-                operation.model_name_lower == dependency[1].lower() and
+-                operation.name_lower == dependency[2].lower()
++                (
++                    isinstance(operation, operations.RemoveField) and
++                    operation.model_name_lower == dependency[1].lower() and
++                    operation.name_lower == dependency[2].lower()
++                ) or
++                (
++                    isinstance(operation, operations.CreateModel) and
++                    operation.name_lower == dependency[1].lower() and
++                    any(dependency[2] == x for x, y in operation.fields)
++                )
+             )
+         # Removed model
+         elif dependency[2] is None and dependency[3] is False:

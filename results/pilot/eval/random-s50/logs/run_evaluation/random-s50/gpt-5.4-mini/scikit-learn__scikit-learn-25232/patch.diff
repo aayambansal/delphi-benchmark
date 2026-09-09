@@ -1,0 +1,49 @@
+diff --git a/sklearn/impute/_iterative.py b/sklearn/impute/_iterative.py
+index 1d918bc0c..b0aeaedfe 100644
+--- a/sklearn/impute/_iterative.py
++++ b/sklearn/impute/_iterative.py
+@@ -162,6 +162,12 @@ class IterativeImputer(_BaseImputer):
+         `sample_posterior=True`. Use an integer for determinism.
+         See :term:`the Glossary <random_state>`.
+ 
++    fill_value : str or numerical value, default=None
++        When `initial_strategy="constant"`, `fill_value` is used to replace
++        all occurrences of missing values in the initial imputation. If
++        `None`, the default value from :class:`~sklearn.impute.SimpleImputer`
++        is used.
++
+     add_indicator : bool, default=False
+         If `True`, a :class:`MissingIndicator` transform will stack onto output
+         of the imputer's transform. This allows a predictive estimator
+@@ -289,6 +295,7 @@ class IterativeImputer(_BaseImputer):
+         "max_value": [None, Interval(Real, None, None, closed="both"), "array-like"],
+         "verbose": ["verbose"],
+         "random_state": ["random_state"],
++        "fill_value": ["string", "boolean", "numeric", None],
+     }
+ 
+     def __init__(
+@@ -307,6 +314,7 @@ class IterativeImputer(_BaseImputer):
+         max_value=np.inf,
+         verbose=0,
+         random_state=None,
++        fill_value=None,
+         add_indicator=False,
+         keep_empty_features=False,
+     ):
+@@ -328,6 +336,7 @@ class IterativeImputer(_BaseImputer):
+         self.max_value = max_value
+         self.verbose = verbose
+         self.random_state = random_state
++        self.fill_value = fill_value
+ 
+     def _impute_one_feature(
+         self,
+@@ -613,6 +622,7 @@ class IterativeImputer(_BaseImputer):
+             self.initial_imputer_ = SimpleImputer(
+                 missing_values=self.missing_values,
+                 strategy=self.initial_strategy,
++                fill_value=self.fill_value,
+                 keep_empty_features=self.keep_empty_features,
+             )
+             X_filled = self.initial_imputer_.fit_transform(X)

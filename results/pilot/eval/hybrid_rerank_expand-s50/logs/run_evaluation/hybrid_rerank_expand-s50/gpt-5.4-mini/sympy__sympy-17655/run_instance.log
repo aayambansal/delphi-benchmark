@@ -1,0 +1,68 @@
+2026-09-09 06:25:58,687 - INFO - Creating container for sympy__sympy-17655...
+2026-09-09 06:25:58,718 - INFO - Container for sympy__sympy-17655 created: 6cdcfcbcf9f7a470f0cd70260e3e7632c3265386fabfd58cdb9755731487c553
+2026-09-09 06:25:58,791 - INFO - Container for sympy__sympy-17655 started: 6cdcfcbcf9f7a470f0cd70260e3e7632c3265386fabfd58cdb9755731487c553
+2026-09-09 06:25:58,791 - INFO - Intermediate patch for sympy__sympy-17655 written to logs/run_evaluation/hybrid_rerank_expand-s50/gpt-5.4-mini/sympy__sympy-17655/patch.diff, now applying to container...
+2026-09-09 06:25:58,921 - INFO - >>>>> Applied Patch:
+Checking patch sympy/geometry/point.py...
+Applied patch sympy/geometry/point.py cleanly.
+
+2026-09-09 06:25:59,410 - INFO - Git diff before:
+diff --git a/sympy/geometry/point.py b/sympy/geometry/point.py
+index 7c978c47be..74b5efe8b5 100755
+--- a/sympy/geometry/point.py
++++ b/sympy/geometry/point.py
+@@ -214,9 +214,17 @@ def __add__(self, other):
+ 
+         """
+         try:
+-            s, o = Point._normalize_dimension(self, Point(other, evaluate=False))
++            other = Point(other, evaluate=False)
+         except TypeError:
+-            raise GeometryError("Don't know how to add {} and a Point object".format(other))
++            if isinstance(other, Expr):
++                try:
++                    other = Point(other.args[1], evaluate=False)
++                    other = other * other.args[0]
++                except Exception:
++                    raise GeometryError("Don't know how to add {} and a Point object".format(other))
++            else:
++                raise GeometryError("Don't know how to add {} and a Point object".format(other))
++        s, o = Point._normalize_dimension(self, other)
+ 
+         coords = [simplify(a + b) for a, b in zip(s, o)]
+         return Point(coords, evaluate=False)
+2026-09-09 06:25:59,410 - INFO - Eval script for sympy__sympy-17655 written to logs/run_evaluation/hybrid_rerank_expand-s50/gpt-5.4-mini/sympy__sympy-17655/eval.sh; copying to container...
+2026-09-09 06:26:13,167 - INFO - Test runtime: 13.71 seconds
+2026-09-09 06:26:13,168 - INFO - Test output for sympy__sympy-17655 written to logs/run_evaluation/hybrid_rerank_expand-s50/gpt-5.4-mini/sympy__sympy-17655/test_output.txt
+2026-09-09 06:26:13,260 - INFO - Git diff after:
+diff --git a/sympy/geometry/point.py b/sympy/geometry/point.py
+index 7c978c47be..74b5efe8b5 100755
+--- a/sympy/geometry/point.py
++++ b/sympy/geometry/point.py
+@@ -214,9 +214,17 @@ def __add__(self, other):
+ 
+         """
+         try:
+-            s, o = Point._normalize_dimension(self, Point(other, evaluate=False))
++            other = Point(other, evaluate=False)
+         except TypeError:
+-            raise GeometryError("Don't know how to add {} and a Point object".format(other))
++            if isinstance(other, Expr):
++                try:
++                    other = Point(other.args[1], evaluate=False)
++                    other = other * other.args[0]
++                except Exception:
++                    raise GeometryError("Don't know how to add {} and a Point object".format(other))
++            else:
++                raise GeometryError("Don't know how to add {} and a Point object".format(other))
++        s, o = Point._normalize_dimension(self, other)
+ 
+         coords = [simplify(a + b) for a, b in zip(s, o)]
+         return Point(coords, evaluate=False)
+2026-09-09 06:26:13,261 - INFO - Grading answer for sympy__sympy-17655...
+2026-09-09 06:26:13,262 - INFO - report: {'sympy__sympy-17655': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'infra_failure': False, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': ['test_point', 'test_point3D']}, 'PASS_TO_PASS': {'success': ['test_Point2D', 'test_issue_9214', 'test_issue_11617', 'test_transform', 'test_concyclic_doctest_bug', 'test_arguments', 'test_unit', 'test_dot', 'test__normalize_dimension'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for sympy__sympy-17655: resolved: False
+2026-09-09 06:26:13,262 - INFO - Attempting to stop container sweb.eval.sympy__sympy-17655.hybrid_rerank_expand-s50...
+2026-09-09 06:26:28,386 - INFO - Container sweb.eval.sympy__sympy-17655.hybrid_rerank_expand-s50 stopped successfully.
+2026-09-09 06:26:28,386 - INFO - Attempting to remove container sweb.eval.sympy__sympy-17655.hybrid_rerank_expand-s50...
+2026-09-09 06:26:28,422 - INFO - Container sweb.eval.sympy__sympy-17655.hybrid_rerank_expand-s50 removed successfully.

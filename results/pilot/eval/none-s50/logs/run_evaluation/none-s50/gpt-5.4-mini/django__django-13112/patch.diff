@@ -1,0 +1,15 @@
+diff --git a/django/apps/registry.py b/django/apps/registry.py
+index 408964a146..031d11b142 100644
+--- a/django/apps/registry.py
++++ b/django/apps/registry.py
+@@ -155,8 +155,9 @@ class Apps:
+             return self.app_configs[app_label]
+         except KeyError:
+             message = "No installed app with label '%s'." % app_label
++            app_label_lower = app_label.lower()
+             for app_config in self.get_app_configs():
+-                if app_config.name == app_label:
++                if app_config.name.lower() == app_label_lower:
+                     message += " Did you mean '%s'?" % app_config.label
+                     break
+             raise LookupError(message)

@@ -1,0 +1,27 @@
+diff --git a/django/db/migrations/autodetector.py b/django/db/migrations/autodetector.py
+index 30616c0172..866a81cbc7 100644
+--- a/django/db/migrations/autodetector.py
++++ b/django/db/migrations/autodetector.py
+@@ -571,6 +571,22 @@ class MigrationAutodetector:
+                     None,
+                     True
+                 ))
++            # If this new model inherits from an existing concrete model, ensure
++            # any inherited field names that are being moved off the base are
++            # removed before the subclass is created.
++            for base in model_opts.get_parent_list():
++                base_key = (base._meta.app_label, base._meta.model_name)
++                if base_key not in self.old_model_keys:
++                    continue
++                old_base_state = self.from_state.models[base_key]
++                old_base_fields = set(old_base_state.fields)
++                for name, field in model_state.fields.items():
++                    if name not in old_base_fields:
++                        continue
++                    if name in related_fields:
++                        continue
++                    if name in old_base_state.fields:
++                        dependencies.append((base._meta.app_label, base._meta.object_name, name, False))
+             # Generate creation operation
+             self.add_operation(
+                 app_label,

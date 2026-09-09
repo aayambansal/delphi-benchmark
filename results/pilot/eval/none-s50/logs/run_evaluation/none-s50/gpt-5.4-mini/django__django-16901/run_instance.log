@@ -1,0 +1,60 @@
+2026-09-09 05:32:56,425 - INFO - Creating container for django__django-16901...
+2026-09-09 05:32:56,456 - INFO - Container for django__django-16901 created: 0fea9a34ccd92bc9de0f26a58e50cb9520b005950eb55a1003c1f8d8d908379f
+2026-09-09 05:32:56,523 - INFO - Container for django__django-16901 started: 0fea9a34ccd92bc9de0f26a58e50cb9520b005950eb55a1003c1f8d8d908379f
+2026-09-09 05:32:56,523 - INFO - Intermediate patch for django__django-16901 written to logs/run_evaluation/none-s50/gpt-5.4-mini/django__django-16901/patch.diff, now applying to container...
+2026-09-09 05:32:56,677 - INFO - >>>>> Applied Patch:
+Checking patch django/db/models/sql/where.py...
+Applied patch django/db/models/sql/where.py cleanly.
+
+2026-09-09 05:32:58,260 - INFO - Git diff before:
+diff --git a/django/db/models/sql/where.py b/django/db/models/sql/where.py
+index aaab1730b7..e335a1d831 100644
+--- a/django/db/models/sql/where.py
++++ b/django/db/models/sql/where.py
+@@ -129,13 +129,13 @@ class WhereNode(tree.Node):
+             # Convert if the database doesn't support XOR:
+             #   a XOR b XOR c XOR ...
+             # to:
+-            #   (a OR b OR c OR ...) AND (a + b + c + ...) == 1
++            #   (a OR b OR c OR ...) AND (a + b + c + ...) is odd
+             lhs = self.__class__(self.children, OR)
+             rhs_sum = reduce(
+                 operator.add,
+                 (Case(When(c, then=1), default=0) for c in self.children),
+             )
+-            rhs = Exact(1, rhs_sum)
++            rhs = Exact(1, rhs_sum % 2)
+             return self.__class__([lhs, rhs], AND, self.negated).as_sql(
+                 compiler, connection
+             )
+2026-09-09 05:32:58,261 - INFO - Eval script for django__django-16901 written to logs/run_evaluation/none-s50/gpt-5.4-mini/django__django-16901/eval.sh; copying to container...
+2026-09-09 05:33:06,006 - INFO - Test runtime: 7.66 seconds
+2026-09-09 05:33:06,008 - INFO - Test output for django__django-16901 written to logs/run_evaluation/none-s50/gpt-5.4-mini/django__django-16901/test_output.txt
+2026-09-09 05:33:06,144 - INFO - Git diff after:
+diff --git a/django/db/models/sql/where.py b/django/db/models/sql/where.py
+index aaab1730b7..e335a1d831 100644
+--- a/django/db/models/sql/where.py
++++ b/django/db/models/sql/where.py
+@@ -129,13 +129,13 @@ class WhereNode(tree.Node):
+             # Convert if the database doesn't support XOR:
+             #   a XOR b XOR c XOR ...
+             # to:
+-            #   (a OR b OR c OR ...) AND (a + b + c + ...) == 1
++            #   (a OR b OR c OR ...) AND (a + b + c + ...) is odd
+             lhs = self.__class__(self.children, OR)
+             rhs_sum = reduce(
+                 operator.add,
+                 (Case(When(c, then=1), default=0) for c in self.children),
+             )
+-            rhs = Exact(1, rhs_sum)
++            rhs = Exact(1, rhs_sum % 2)
+             return self.__class__([lhs, rhs], AND, self.negated).as_sql(
+                 compiler, connection
+             )
+2026-09-09 05:33:06,144 - INFO - Grading answer for django__django-16901...
+2026-09-09 05:33:06,144 - INFO - report: {'django__django-16901': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': True, 'infra_failure': False, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_filter_multiple (xor_lookups.tests.XorLookupsTests.test_filter_multiple)'], 'failure': []}, 'PASS_TO_PASS': {'success': ['test_empty_in (xor_lookups.tests.XorLookupsTests.test_empty_in)', 'test_exclude (xor_lookups.tests.XorLookupsTests.test_exclude)', 'test_filter (xor_lookups.tests.XorLookupsTests.test_filter)', 'test_filter_negated (xor_lookups.tests.XorLookupsTests.test_filter_negated)', 'test_pk_q (xor_lookups.tests.XorLookupsTests.test_pk_q)', 'test_stages (xor_lookups.tests.XorLookupsTests.test_stages)'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-16901: resolved: True
+2026-09-09 05:33:06,145 - INFO - Attempting to stop container sweb.eval.django__django-16901.none-s50...
+2026-09-09 05:33:21,334 - INFO - Container sweb.eval.django__django-16901.none-s50 stopped successfully.
+2026-09-09 05:33:21,334 - INFO - Attempting to remove container sweb.eval.django__django-16901.none-s50...
+2026-09-09 05:33:21,375 - INFO - Container sweb.eval.django__django-16901.none-s50 removed successfully.

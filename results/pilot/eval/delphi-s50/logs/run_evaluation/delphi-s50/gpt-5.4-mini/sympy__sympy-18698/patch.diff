@@ -1,0 +1,13 @@
+diff --git a/sympy/polys/polytools.py b/sympy/polys/polytools.py
+index c9e77a901f..454638c37e 100755
+--- a/sympy/polys/polytools.py
++++ b/sympy/polys/polytools.py
+@@ -5950,6 +5950,8 @@ def _symbolic_factor_list(expr, opt, method):
+ 
+                 factors.append((_factors_product(other), exp))
+ 
++    factors[:] = _sorted_factors(factors, method)
++
+     return coeff, factors
+ 
+ 

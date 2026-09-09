@@ -1,0 +1,48 @@
+diff --git a/django/contrib/staticfiles/storage.py b/django/contrib/staticfiles/storage.py
+index 494890cc23..7cd13f9d8a 100644
+--- a/django/contrib/staticfiles/storage.py
++++ b/django/contrib/staticfiles/storage.py
+@@ -226,23 +226,35 @@ class HashedFilesMixin:
+             path for path in paths
+             if matches_patterns(path, self._patterns)
+         ]
++        yielded = set()
++        substitutions = False
++
++        def emit(results):
++            nonlocal substitutions
++            for name, hashed_name, processed, subst in results:
++                substitutions = substitutions or subst
++                if name not in yielded:
++                    yielded.add(name)
++                    yield name, hashed_name, processed
++
+         # Do a single pass first. Post-process all files once, then repeat for
+         # adjustable files.
+-        for name, hashed_name, processed, _ in self._post_process(paths, adjustable_paths, hashed_files):
+-            yield name, hashed_name, processed
++        for result in emit(self._post_process(paths, adjustable_paths, hashed_files)):
++            yield result
+ 
+         paths = {path: paths[path] for path in adjustable_paths}
+ 
+         for i in range(self.max_post_process_passes):
+-            substitutions = False
+-            for name, hashed_name, processed, subst in self._post_process(paths, adjustable_paths, hashed_files):
+-                yield name, hashed_name, processed
+-                substitutions = substitutions or subst
++            any_substitutions = False
++            for result in emit(self._post_process(paths, adjustable_paths, hashed_files)):
++                yield result
++            any_substitutions = substitutions
+ 
+-            if not substitutions:
++            if not any_substitutions:
+                 break
++            substitutions = False
+ 
+-        if substitutions:
++        if any_substitutions:
+             yield 'All', None, RuntimeError('Max post-process passes exceeded.')
+ 
+         # Store the processed paths

@@ -1,0 +1,14 @@
+diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
+index e0c7d56f8..79d2c736f 100644
+--- a/sphinx/writers/latex.py
++++ b/sphinx/writers/latex.py
+@@ -1712,7 +1712,8 @@ class LaTeXTranslator(SphinxTranslator):
+         hlcode = hlcode.replace(r'\begin{Verbatim}[commandchars=\\\{\}]',
+                                 r'\sphinxcode{\sphinxupquote{')
+         # get consistent trailer
+-        hlcode = hlcode.rstrip()[:-14]  # strip \end{Verbatim}
++        hlcode = hlcode.removesuffix(r'\end{Verbatim}')
++        hlcode = hlcode.rstrip()
+         self.body.append(hlcode)
+         self.body.append('}}')
+         raise nodes.SkipNode

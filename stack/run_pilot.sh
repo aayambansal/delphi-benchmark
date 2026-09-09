@@ -2,13 +2,13 @@
 # Executable agent pilot: run one seeded condition at one step budget, then
 # evaluate with the official SWE-bench harness. See context/PILOT_PROTOCOL.md.
 #
-#   stack/run_pilot.sh <condition> <step_limit> [workers]
+#   stack/run_pilot.sh <condition> <step_limit> [workers] [repeat]
 set -uo pipefail
 HERE=${0:A:h}
 ARCHIVE=${HERE:h}
 cd "$ARCHIVE"
-COND=$1; STEPS=$2; WORKERS=${3:-3}
-LABEL="$COND-s$STEPS"
+COND=$1; STEPS=$2; WORKERS=${3:-3}; REP=${4:-1}
+LABEL="$COND-s$STEPS"; [[ $REP -gt 1 ]] && LABEL="$LABEL-r$REP"
 PKG=.venv-agent/lib/python3.12/site-packages/minisweagent
 set -a; source ~/.delphi-r4-secrets.env; set +a
 export MSWEA_SILENT_STARTUP=1

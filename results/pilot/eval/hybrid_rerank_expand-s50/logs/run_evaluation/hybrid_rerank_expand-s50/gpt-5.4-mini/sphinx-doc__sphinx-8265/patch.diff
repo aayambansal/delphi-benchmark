@@ -1,0 +1,16 @@
+diff --git a/sphinx/util/inspect.py b/sphinx/util/inspect.py
+index 378174993..9814dd332 100644
+--- a/sphinx/util/inspect.py
++++ b/sphinx/util/inspect.py
+@@ -397,7 +397,10 @@ def object_description(object: Any) -> str:
+     # Strip non-deterministic memory addresses such as
+     # ``<__main__.A at 0x7f68cb685710>``
+     s = memory_address_re.sub('', s)
+-    return s.replace('\n', ' ')
++    s = s.replace('\n', ' ')
++    if isinstance(object, tuple) and len(object) == 1 and not s.startswith('('):
++        s = '(' + s + ')'
++    return s
+ 
+ 
+ def is_builtin_class_method(obj: Any, attr_name: str) -> bool:

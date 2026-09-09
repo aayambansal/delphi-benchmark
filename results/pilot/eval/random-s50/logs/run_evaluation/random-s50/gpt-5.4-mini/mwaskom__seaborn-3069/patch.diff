@@ -1,0 +1,32 @@
+diff --git a/seaborn/_core/plot.py b/seaborn/_core/plot.py
+index 4f0290a4..f2bad724 100644
+--- a/seaborn/_core/plot.py
++++ b/seaborn/_core/plot.py
+@@ -1631,6 +1631,7 @@ class Plotter:
+             ax = sub["ax"]
+             for axis in "xy":
+                 axis_key = sub[axis]
++                scale = p._scales.get(axis_key)
+ 
+                 # Axis limits
+                 if axis_key in p._limits:
+@@ -1644,6 +1645,19 @@ class Plotter:
+                         hi = cast(float, hi) + 0.5
+                     ax.set(**{f"{axis}lim": (lo, hi)})
+ 
++                if isinstance(scale, Nominal):
++                    axis_obj = getattr(ax, f"{axis}axis")
++                    axis_obj.grid(False)
++                    if axis == "x":
++                        lo, hi = ax.get_xlim()
++                        if lo == hi:
++                            ax.set_xlim(-0.5, 0.5)
++                    else:
++                        ax.invert_yaxis()
++                        lo, hi = ax.get_ylim()
++                        if lo == hi:
++                            ax.set_ylim(0.5, -0.5)
++
+         engine_default = None if p._target is not None else "tight"
+         layout_engine = p._layout_spec.get("engine", engine_default)
+         set_layout_engine(self._figure, layout_engine)

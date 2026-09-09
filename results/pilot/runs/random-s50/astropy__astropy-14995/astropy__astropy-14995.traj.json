@@ -1,0 +1,701 @@
+{
+  "info": {
+    "model_stats": {
+      "instance_cost": 0.02483175,
+      "api_calls": 9
+    },
+    "config": {
+      "agent": {
+        "system_template": "You are a helpful assistant that can interact multiple times with a computer shell to solve programming tasks.\nYour response must contain exactly ONE bash code block with ONE command (or commands connected with && or ||).\n\nInclude a THOUGHT section before your command where you explain your reasoning process.\nFormat your response as shown in <format_example>.\n\n<format_example>\nTHOUGHT: Your reasoning and analysis here\n\n<mswea_bash_command>your_command_here</mswea_bash_command>\n</format_example>\n\nFailure to follow these rules will cause your response to be rejected.\n",
+        "instance_template": "<pr_description>\nConsider the following PR description:\n{{task}}\n</pr_description>\n\n<instructions>\n# Task Instructions\n\n## Overview\n\nYou're a software engineer interacting continuously with a computer by submitting commands.\nYou'll be helping implement necessary changes to meet requirements in the PR description.\nYour task is specifically to make changes to non-test files in the current directory in order to fix the issue described in the PR description in a way that is general and consistent with the codebase.\n\n<IMPORTANT>This is an interactive process where you will think and issue ONE command, see its result, then think and issue your next command.</IMPORTANT>\n\nFor each response:\n\n1. Include a THOUGHT section explaining your reasoning and what you're trying to accomplish\n2. Provide exactly ONE bash command to execute\n\n## Important Boundaries\n\n- MODIFY: Regular source code files in /testbed (this is the working directory for all your subsequent commands)\n- DO NOT MODIFY: Tests, configuration files (pyproject.toml, setup.cfg, etc.)\n\n## Recommended Workflow\n\n1. Analyze the codebase by finding and reading relevant files\n2. Create a script to reproduce the issue\n3. Edit the source code to resolve the issue\n4. Verify your fix works by running your script again\n5. Test edge cases to ensure your fix is robust\n\n## Command Execution Rules\n\nYou are operating in an environment where\n\n1. You write a single command\n2. The system executes that command in a subshell\n3. You see the result\n4. You write your next command\n\nEach response should include:\n\n1. A **THOUGHT** section where you explain your reasoning and plan\n2. A single bash code block with your command\n\nFormat your responses like demonstrated within the <format_example> block:\n\n<format_example>\nTHOUGHT: Here I explain my reasoning process, analysis of the current situation,\nand what I'm trying to accomplish with the command below.\n\n<mswea_bash_command>your_command_here</mswea_bash_command></format_example>\nCommands must be specified in a single bash XML tag:\n\n<mswea_bash_command>your_command_here</mswea_bash_command>\n\n**CRITICAL REQUIREMENTS:**\n\n- Your response SHOULD include a THOUGHT section explaining your reasoning\n- Your response MUST include EXACTLY ONE mswea_bash_command tag\n- This bash mswea_bash_command MUST contain EXACTLY ONE command (or a set of commands connected with && or ||)\n- If you include zero or multiple tags, or no command at all, YOUR RESPONSE WILL FAIL\n- Do NOT try to run multiple independent commands in separate blocks in one response\n- Directory or environment variable changes are not persistent. Every action is executed in a new subshell.\n- However, you can prefix any action with `MY_ENV_VAR=MY_VALUE cd /path/to/working/dir && ...` or write/load environment variables from files\n\nExample of a CORRECT response:\n\n<example_response>\nTHOUGHT: I need to understand the structure of the repository first. Let me check what files are in the current directory to get a better understanding of the codebase.\n\n<mswea_bash_command>ls -la</mswea_bash_command>\n</example_response>\n\nExample of an INCORRECT response:\n\n<example_response>\nTHOUGHT: I need to examine the codebase and then look at a specific file. I'll run multiple commands to do this.\n\n<mswea_bash_command>ls -la</mswea_bash_command>\n\nNow I'll read the file:\n\n<mswea_bash_command>cat file.txt</mswea_bash_command>\n</example_response>\n\nIf you need to run multiple commands, either:\n\n1. Combine them in one block using && or ||\n\n<mswea_bash_command>command1 && command2 || echo \"Error occurred\"</mswea_bash_command>\n\n2. Wait for the first command to complete, see its output, then issue the next command in your following response.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- You can use bash commands or invoke any tool that is available in the environment\n- You can also create new tools or scripts to help you with the task\n- If a tool isn't available, you can also install it\n\n## Submission\n\nWhen you've completed your work, you MUST submit your changes as a git patch.\nFollow these steps IN ORDER, with SEPARATE commands:\n\nStep 1: Create the patch file\nRun `git diff -- path/to/file1 path/to/file2 > patch.txt` listing only the source files you modified.\nDo NOT commit your changes.\n\n<IMPORTANT>\nThe patch must only contain changes to the specific source files you modified to fix the issue.\nDo not submit file creations or changes to any of the following files:\n\n- test and reproduction files\n- helper scripts, tests, or tools that you created\n- installation, build, packaging, configuration, or setup scripts unless they are directly part of the issue you were fixing (you can assume that the environment is already set up for your client)\n- binary or compiled files\n</IMPORTANT>\n\nStep 2: Verify your patch\nInspect patch.txt to confirm it only contains your intended changes and headers show `--- a/` and `+++ b/` paths.\n\nStep 3: Submit (EXACT command required)\nYou MUST use this EXACT command to submit:\n\n<mswea_bash_command>echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT && cat patch.txt</mswea_bash_command>\n\nIf the command fails (nonzero exit status), it will not submit.\n\n<CRITICAL>\n- Creating/viewing the patch and submitting it MUST be separate commands (not combined with &&).\n- If you modify patch.txt after verifying, you SHOULD verify again before submitting.\n- You CANNOT continue working (reading, editing, testing) in any way on this task after submitting.\n</CRITICAL>\n</instructions>\n",
+        "step_limit": 50,
+        "cost_limit": 2.0,
+        "wall_time_limit_seconds": 0,
+        "max_consecutive_format_errors": 3,
+        "output_path": null
+      },
+      "agent_type": "minisweagent.run.benchmarks.utils.common.ProgressTrackingAgent",
+      "model": {
+        "model_name": "gpt-5.4-mini",
+        "model_kwargs": {},
+        "litellm_model_registry": null,
+        "set_cache_control": null,
+        "cost_tracking": "default",
+        "format_error_template": "{% if finish_reason is defined and finish_reason in [\"length\", \"tool_calls\"] -%}\nYour previous response reached the output token limit (finish_reason={{ finish_reason }}) before you produced a complete action, so it was cut off. Respond more concisely and provide exactly one action in the required format. If you need to think more, do so briefly.\n{%- else -%}\nFormat error:\n\n<error>\n{{error}}\n</error>\n\nHere is general guidance on how to format your response:\n\nPlease always provide EXACTLY ONE action in the `<mswea_bash_command>` block, found {{actions|length}} actions.\n\nPlease format your action in a `<mswea_bash_command>` block as shown in <response_example>.\n\n<response_example>\nHere are some thoughts about why you want to perform the action.\n\n<mswea_bash_command>ls -la</mswea_bash_command>\n</response_example>\n\nIf you have completed your assignment, please consult the first message about how to\nsubmit your solution (you will not be able to continue working on this task after that).\n{%- endif %}\n",
+        "observation_template": "{% if output.exception_info -%}\n<exception>{{output.exception_info}}</exception>\n{% endif -%}\n<returncode>{{output.returncode}}</returncode>\n{% if output.output | length < 10000 -%}\n<output>\n{{ output.output -}}\n</output>\n{%- else -%}\n<warning>\nThe output of your last command was too long.\nPlease try a different command that produces less output.\nIf you're looking at a file you can try use head, tail or sed to view a smaller number of lines selectively.\nIf you're using grep or find and it produced too much output, you can use a more selective search pattern.\nIf you really need to see something from the full command's output, you can redirect output to a file and then search in that file.\n</warning>\n{%- set elided_chars = output.output | length - 10000 -%}\n<output_head>\n{{ output.output[:5000] }}\n</output_head>\n<elided_chars>\n{{ elided_chars }} characters elided\n</elided_chars>\n<output_tail>\n{{ output.output[-5000:] }}\n</output_tail>\n{%- endif -%}\n",
+        "multimodal_regex": "",
+        "action_regex": "<mswea_bash_command>(.*?)</mswea_bash_command>"
+      },
+      "model_type": "minisweagent.models.litellm_textbased_model.LitellmTextbasedModel",
+      "environment": {
+        "image": "docker.io/swebench/sweb.eval.x86_64.astropy_1776_astropy-14995:latest",
+        "cwd": "/testbed",
+        "env": {
+          "PAGER": "cat",
+          "MANPAGER": "cat",
+          "LESS": "-R",
+          "PIP_PROGRESS_BAR": "off",
+          "TQDM_DISABLE": "1"
+        },
+        "forward_env": [],
+        "timeout": 60,
+        "executable": "docker",
+        "run_args": [
+          "--rm",
+          "--platform",
+          "linux/amd64"
+        ],
+        "container_timeout": "2h",
+        "pull_timeout": 3600,
+        "interpreter": [
+          "bash",
+          "-c"
+        ]
+      },
+      "environment_type": "minisweagent.environments.docker.DockerEnvironment"
+    },
+    "mini_version": "2.4.6",
+    "exit_status": "Submitted",
+    "submission": "diff --git a/astropy/nddata/mixins/ndarithmetic.py b/astropy/nddata/mixins/ndarithmetic.py\nindex 4153dfccb..4104aa6eb 100755\n--- a/astropy/nddata/mixins/ndarithmetic.py\n+++ b/astropy/nddata/mixins/ndarithmetic.py\n@@ -513,15 +513,17 @@ class NDArithmeticMixin:\n             ``handle_mask`` must create (and copy) the returned mask.\n         \"\"\"\n         # If only one mask is present we need not bother about any type checks\n-        if (\n-            self.mask is None and operand is not None and operand.mask is None\n-        ) or handle_mask is None:\n+        if handle_mask is None:\n             return None\n         elif self.mask is None and operand is not None:\n+            if operand.mask is None:\n+                return None\n             # Make a copy so there is no reference in the result.\n             return deepcopy(operand.mask)\n-        elif operand is None:\n+        elif operand is None or operand.mask is None:\n             return deepcopy(self.mask)\n+        elif self.mask is None:\n+            return deepcopy(operand.mask)\n         else:\n             # Now lets calculate the resulting mask (operation enforces copy)\n             return handle_mask(self.mask, operand.mask, **kwds)\n"
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant that can interact multiple times with a computer shell to solve programming tasks.\nYour response must contain exactly ONE bash code block with ONE command (or commands connected with && or ||).\n\nInclude a THOUGHT section before your command where you explain your reasoning process.\nFormat your response as shown in <format_example>.\n\n<format_example>\nTHOUGHT: Your reasoning and analysis here\n\n<mswea_bash_command>your_command_here</mswea_bash_command>\n</format_example>\n\nFailure to follow these rules will cause your response to be rejected."
+    },
+    {
+      "role": "user",
+      "content": "<pr_description>\nConsider the following PR description:\nIn v5.3, NDDataRef mask propagation fails when one of the operand does not have a mask\n### Description\n\nThis applies to v5.3. \r\n\r\nIt looks like when one of the operand does not have a mask, the mask propagation when doing arithmetic, in particular with `handle_mask=np.bitwise_or` fails.  This is not a problem in v5.2.\r\n\r\nI don't know enough about how all that works, but it seems from the error that the operand without a mask is set as a mask of None's and then the bitwise_or tries to operate on an integer and a None and fails.\n\n### Expected behavior\n\nWhen one of the operand does not have mask, the mask that exists should just be copied over to the output.  Or whatever was done in that situation in v5.2 where there's no problem.\n\n### How to Reproduce\n\nThis is with v5.3.   With v5.2, there are no errors.\r\n\r\n```\r\n>>> import numpy as np\r\n>>> from astropy.nddata import NDDataRef\r\n\r\n>>> array = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\r\n>>> mask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\r\n\r\n>>> nref_nomask = NDDataRef(array)\r\n>>> nref_mask = NDDataRef(array, mask=mask)\r\n\r\n# multiply no mask by constant (no mask * no mask)\r\n>>> nref_nomask.multiply(1., handle_mask=np.bitwise_or).mask   # returns nothing, no mask,  OK\r\n\r\n# multiply no mask by itself (no mask * no mask)\r\n>>> nref_nomask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask # return nothing, no mask, OK\r\n\r\n# multiply mask by constant (mask * no mask)\r\n>>> nref_mask.multiply(1., handle_mask=np.bitwise_or).mask\r\n...\r\nTypeError: unsupported operand type(s) for |: 'int' and 'NoneType'\r\n\r\n# multiply mask by itself (mask * mask)\r\n>>> nref_mask.multiply(nref_mask, handle_mask=np.bitwise_or).mask\r\narray([[ 0,  1, 64],\r\n       [ 8,  0,  1],\r\n       [ 2,  1,  0]])\r\n\r\n# multiply mask by no mask (mask * no mask)\r\n>>> nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask\r\n...\r\nTypeError: unsupported operand type(s) for |: 'int' and 'NoneType'\r\n```\r\n\n\n### Versions\n\n>>> import sys; print(\"Python\", sys.version)\r\nPython 3.10.11 | packaged by conda-forge | (main, May 10 2023, 19:07:22) [Clang 14.0.6 ]\r\n>>> import astropy; print(\"astropy\", astropy.__version__)\r\nastropy 5.3\r\n>>> import numpy; print(\"Numpy\", numpy.__version__)\r\nNumpy 1.24.3\r\n>>> import erfa; print(\"pyerfa\", erfa.__version__)\r\npyerfa 2.0.0.3\r\n>>> import scipy; print(\"Scipy\", scipy.__version__)\r\nScipy 1.10.1\r\n>>> import matplotlib; print(\"Matplotlib\", matplotlib.__version__)\r\nMatplotlib 3.7.1\r\n\n\n\n<retrieved_context>\nA code search engine retrieved the following repository files as potentially relevant to this issue, best match first. Treat them as hints and verify them with your own tools; the fix may involve other files.\n\n### cextern/cfitsio/License.txt (lines 1-25)\nCopyright (Unpublished--all rights reserved under the copyright laws of\nthe United States), U.S. Government as represented by the Administrator\nof the National Aeronautics and Space Administration.  No copyright is\nclaimed in the United States under Title 17, U.S. Code.\n\nPermission to freely use, copy, modify, and distribute this software\nand its documentation without fee is hereby granted, provided that this\ncopyright notice and disclaimer of warranty appears in all copies.\n\nDISCLAIMER:\n\nTHE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,\nEITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO,\nANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY\nIMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR\nPURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE\nDOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE\nSOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NASA BE LIABLE FOR ANY\nDAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL OR\nCONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY WAY\nCONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,\nCONTRACT, TORT , OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY\nPERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED\nFROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR\nSERVICES PROVIDED HEREUNDER.\n\n### astropy/constants/iau2015.py (lines 1-40)\n# Licensed under a 3-clause BSD style license - see LICENSE.rst\n\"\"\"\nAstronomical and physics constants in SI units.  See :mod:`astropy.constants`\nfor a complete listing of constants defined in Astropy.\n\"\"\"\n\nimport numpy as np\n\nfrom .config import codata\nfrom .constant import Constant\n\n# ASTRONOMICAL CONSTANTS\n\n\nclass IAU2015(Constant):\n    default_reference = \"IAU 2015\"\n    _registry = {}\n    _has_incompatible_units = set()\n\n\n# DISTANCE\n\n# Astronomical Unit (did not change from 2012)\nau = IAU2015(\n    \"au\",\n    \"Astronomical Unit\",\n    1.49597870700e11,\n    \"m\",\n    0.0,\n    \"IAU 2012 Resolution B2\",\n    system=\"si\",\n)\n\n# Parsec\n\npc = IAU2015(\n    \"pc\",\n    \"Parsec\",\n    au.value / np.radians(1.0 / 3600.0),\n    \"m\",\n\n### astropy/io/ascii/tests/data/vizier/table5.dat (lines 1-40)\nCr110   2108 6696.79 Al1  4.02  -1.42  29.5   2.2  0.289\nCr110   2108 6698.67 Al1  3.14  -1.65  58.0   2.0  0.325\nCr110   2108 7361.57 Al1  4.02  -0.90  44.1   4.0  0.510\nCr110   2108 7362.30 Al1  4.02  -0.75  62.7   3.9  0.577\nCr110   2108 7835.31 Al1  4.02  -0.65  73.7   6.6  0.539\nCr110   2108 7836.13 Al1  4.02  -0.49  87.6   4.1  0.390\nCr110   2108 8772.86 Al1  4.02  -0.32  87.6   5.1  0.957\nCr110   2108 8773.90 Al1  4.02  -0.16 118.6  14.6  0.736\nCr110   2108 5853.67 Ba2  0.60  -1.00 121.9   5.5  1.435\nCr110   2108 6141.71 Ba2  0.70  -0.08 191.0   8.7  1.117\nCr110   2108 6496.90 Ba2  0.60  -0.38 175.8   6.8  1.473\nCr110   2108 5261.70 Ca1  2.52  -0.59 149.1   5.3  0.808\nCr110   2108 5512.98 Ca1  2.93  -0.71 106.7   6.2  1.416\nCr110   2108 5857.45 Ca1  2.93   0.26 163.8  19.8  2.209\nCr110   2108 6156.02 Ca1  2.52  -2.50  42.0   4.0  0.617\nCr110   2108 6166.44 Ca1  2.52  -1.16 110.7   3.3  1.046\nCr110   2108 6169.04 Ca1  2.52  -0.80 127.3   5.5  1.604\nCr110   2108 6169.56 Ca1  2.53  -0.53 148.2   6.0  1.419\nCr110   2108 6471.66 Ca1  2.53  -0.65 130.4   5.0  1.431\nCr110   2108 6499.65 Ca1  2.52  -0.72 129.0   5.4  1.183\nCr110   2108 5230.20 Co1  1.74  -1.84  60.4   6.7  1.210\nCr110   2108 5530.77 Co1  1.71  -2.06  73.2   4.3  1.005\nCr110   2108 5590.72 Co1  2.04  -1.87  69.9   3.2  0.706\nCr110   2108 5935.38 Co1  1.88  -2.68  33.0   4.4  0.665\nCr110   2108 6429.91 Co1  2.14  -2.41  28.2   1.3  0.340\nCr110   2108 6490.34 Co1  2.04  -2.52  33.6   3.5  0.323\nCr110   2108 6632.43 Co1  2.28  -2.00  50.9   2.1  0.391\nCr110   2108 7154.67 Co1  2.04  -2.42  45.9   1.9  0.280\nCr110   2108 7388.69 Co1  2.72  -1.65  36.6   1.8  0.343\nCr110   2108 7417.37 Co1  2.04  -2.07  71.4   1.9  0.369\nCr110   2108 7838.13 Co1  3.97  -0.30  32.7   2.7  0.495\nCr110   2108 5243.36 Cr1  3.40  -0.57  47.9   4.0  0.828\nCr110   2108 5329.14 Cr1  2.91  -0.06 110.4   4.9  1.113\nCr110   2108 5442.37 Cr1  3.42  -1.06  33.3   2.5  0.499\nCr110   2108 5712.75 Cr1  3.01  -1.30  49.4   5.3  1.038\nCr110   2108 5788.39 Cr1  3.01  -1.83  26.1   1.3  0.260\nCr110   2108 5844.59 Cr1  3.01  -1.76  26.2   3.9  0.863\nCr110   2108 6330.09 Cr1  0.94  -2.92  94.4   6.6  1.638\nCr110   2108 6537.93 Cr1  1.00  -4.07  33.0   2.4  0.479\nCr110   2108 6630.01 Cr1  1.03  -3.56  60.7   1.5  0.232\n\n### astropy/io/ascii/tests/data/vots_spec.dat (lines 1-40)\n####################################################################################\n##\n## VOTable-Simple Specification\n##\n## This is the specification of the VOTable-Simple (VOTS) format, given as an\n## example data table with comments and references.  This data table format is\n## intended to provide a way of specifying metadata and data for simple tabular\n## data sets.  This specification is intended as a subset of the VOTable data\n## model and allow easy generation of a VOTable-compliant data structure.  This\n## provides a uniform starting point for generating table documentation and\n## performing database table creation and ingest.\n##\n## A python application is available which uses the STILTS java package to\n## convert from a VOTS format to any of the (many) output formats supported by\n## STILTS.  This application can also generate a documentation file (in\n## reStructured Text format) or a Django model definition from a VOTS table.\n##\n## Key VOTable and STILTS references:\n##  Full spec: http://www.ivoa.net/Documents/latest/VOT.html\n##  Datatypes: http://www.ivoa.net/Documents/REC/VOTable/VOTable-20040811.html#ToC11\n##  FIELD def: http://www.ivoa.net/Documents/REC/VOTable/VOTable-20040811.html#ToC25 \n##  STILTS   : http://www.star.bris.ac.uk/~mbt/stilts/\n##\n## The VOTable-Simple format consists of header information followed by the tabular\n## data elements.  The VOTS header lines are all preceded by a single '#' character.\n## Comments are preceded by '##' at the beginning of a line.\n##\n## The VOTS header defines the metadata associated with the table. In the\n## VOTable-Simple format words in all CAPS (followed by ::) refer to the\n## corresponding metadata elements in the VOTable specification.  For instance\n## the DESCRIPTION:: keyword precedes the lines that are used in the VOTable\n## <DESCRIPTION /> element.  The COOSYS::, PARAM::, and FIELD:: keywords are\n## each followed by a whitespace-delimited table that defines the corresponding\n## VOTable elements and attributes.\n##\n## The actual table data must follow the header and consist of space or tab delimited \n## data fields.  The chosen delimiter must be used consistently throughout the table.\n##\n##----------------------------------------------------------------------------------\n## Table description, corresponding to the VOTable TABLE::DESCRIPTION element.\n\n### docs/development/testguide.rst\n</retrieved_context>\n\n</pr_description>\n\n<instructions>\n# Task Instructions\n\n## Overview\n\nYou're a software engineer interacting continuously with a computer by submitting commands.\nYou'll be helping implement necessary changes to meet requirements in the PR description.\nYour task is specifically to make changes to non-test files in the current directory in order to fix the issue described in the PR description in a way that is general and consistent with the codebase.\n\n<IMPORTANT>This is an interactive process where you will think and issue ONE command, see its result, then think and issue your next command.</IMPORTANT>\n\nFor each response:\n\n1. Include a THOUGHT section explaining your reasoning and what you're trying to accomplish\n2. Provide exactly ONE bash command to execute\n\n## Important Boundaries\n\n- MODIFY: Regular source code files in /testbed (this is the working directory for all your subsequent commands)\n- DO NOT MODIFY: Tests, configuration files (pyproject.toml, setup.cfg, etc.)\n\n## Recommended Workflow\n\n1. Analyze the codebase by finding and reading relevant files\n2. Create a script to reproduce the issue\n3. Edit the source code to resolve the issue\n4. Verify your fix works by running your script again\n5. Test edge cases to ensure your fix is robust\n\n## Command Execution Rules\n\nYou are operating in an environment where\n\n1. You write a single command\n2. The system executes that command in a subshell\n3. You see the result\n4. You write your next command\n\nEach response should include:\n\n1. A **THOUGHT** section where you explain your reasoning and plan\n2. A single bash code block with your command\n\nFormat your responses like demonstrated within the <format_example> block:\n\n<format_example>\nTHOUGHT: Here I explain my reasoning process, analysis of the current situation,\nand what I'm trying to accomplish with the command below.\n\n<mswea_bash_command>your_command_here</mswea_bash_command></format_example>\nCommands must be specified in a single bash XML tag:\n\n<mswea_bash_command>your_command_here</mswea_bash_command>\n\n**CRITICAL REQUIREMENTS:**\n\n- Your response SHOULD include a THOUGHT section explaining your reasoning\n- Your response MUST include EXACTLY ONE mswea_bash_command tag\n- This bash mswea_bash_command MUST contain EXACTLY ONE command (or a set of commands connected with && or ||)\n- If you include zero or multiple tags, or no command at all, YOUR RESPONSE WILL FAIL\n- Do NOT try to run multiple independent commands in separate blocks in one response\n- Directory or environment variable changes are not persistent. Every action is executed in a new subshell.\n- However, you can prefix any action with `MY_ENV_VAR=MY_VALUE cd /path/to/working/dir && ...` or write/load environment variables from files\n\nExample of a CORRECT response:\n\n<example_response>\nTHOUGHT: I need to understand the structure of the repository first. Let me check what files are in the current directory to get a better understanding of the codebase.\n\n<mswea_bash_command>ls -la</mswea_bash_command>\n</example_response>\n\nExample of an INCORRECT response:\n\n<example_response>\nTHOUGHT: I need to examine the codebase and then look at a specific file. I'll run multiple commands to do this.\n\n<mswea_bash_command>ls -la</mswea_bash_command>\n\nNow I'll read the file:\n\n<mswea_bash_command>cat file.txt</mswea_bash_command>\n</example_response>\n\nIf you need to run multiple commands, either:\n\n1. Combine them in one block using && or ||\n\n<mswea_bash_command>command1 && command2 || echo \"Error occurred\"</mswea_bash_command>\n\n2. Wait for the first command to complete, see its output, then issue the next command in your following response.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- You can use bash commands or invoke any tool that is available in the environment\n- You can also create new tools or scripts to help you with the task\n- If a tool isn't available, you can also install it\n\n## Submission\n\nWhen you've completed your work, you MUST submit your changes as a git patch.\nFollow these steps IN ORDER, with SEPARATE commands:\n\nStep 1: Create the patch file\nRun `git diff -- path/to/file1 path/to/file2 > patch.txt` listing only the source files you modified.\nDo NOT commit your changes.\n\n<IMPORTANT>\nThe patch must only contain changes to the specific source files you modified to fix the issue.\nDo not submit file creations or changes to any of the following files:\n\n- test and reproduction files\n- helper scripts, tests, or tools that you created\n- installation, build, packaging, configuration, or setup scripts unless they are directly part of the issue you were fixing (you can assume that the environment is already set up for your client)\n- binary or compiled files\n</IMPORTANT>\n\nStep 2: Verify your patch\nInspect patch.txt to confirm it only contains your intended changes and headers show `--- a/` and `+++ b/` paths.\n\nStep 3: Submit (EXACT command required)\nYou MUST use this EXACT command to submit:\n\n<mswea_bash_command>echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT && cat patch.txt</mswea_bash_command>\n\nIf the command fails (nonzero exit status), it will not submit.\n\n<CRITICAL>\n- Creating/viewing the patch and submitting it MUST be separate commands (not combined with &&).\n- If you modify patch.txt after verifying, you SHOULD verify again before submitting.\n- You CANNOT continue working (reading, editing, testing) in any way on this task after submitting.\n</CRITICAL>\n</instructions>"
+    },
+    {
+      "content": "THOUGHT: I need to inspect the NDData arithmetic/mask propagation implementation to find where a missing mask becomes an array of None values and then causes bitwise_or to fail. I\u2019ll locate the relevant source file and examine the mask-combination logic before making a targeted fix.\n\n<mswea_bash_command>grep -R \"handle_mask\" -n astropy/nddata | head -50</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "grep -R \"handle_mask\" -n astropy/nddata | head -50"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0F9jkvAs87ZmZAl4N6WZNM5VxLO",
+          "created": 1788912859,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: I need to inspect the NDData arithmetic/mask propagation implementation to find where a missing mask becomes an array of None values and then causes bitwise_or to fail. I\u2019ll locate the relevant source file and examine the mask-combination logic before making a targeted fix.\n\n<mswea_bash_command>grep -R \"handle_mask\" -n astropy/nddata | head -50</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 94,
+            "prompt_tokens": 4868,
+            "total_tokens": 4962,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 0
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.004074,
+        "timestamp": 1788912859.975439
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>0</returncode>\n<output>\nastropy/nddata/mixins/ndarithmetic.py:44:    handle_mask : callable, ``'first_found'`` or ``None``, optional\nastropy/nddata/mixins/ndarithmetic.py:171:        handle_mask=np.logical_or,\nastropy/nddata/mixins/ndarithmetic.py:199:        handle_mask : callable, ``'first_found'`` or ``None``, optional\nastropy/nddata/mixins/ndarithmetic.py:323:        if handle_mask is None:\nastropy/nddata/mixins/ndarithmetic.py:329:        elif handle_mask in [\"ff\", \"first_found\"]:\nastropy/nddata/mixins/ndarithmetic.py:336:                operation, operand, handle_mask, axis=axis, **kwds2[\"mask\"]\nastropy/nddata/mixins/ndarithmetic.py:485:    def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):\nastropy/nddata/mixins/ndarithmetic.py:502:        handle_mask : callable\nastropy/nddata/mixins/ndarithmetic.py:506:            Additional parameters given to ``handle_mask``.\nastropy/nddata/mixins/ndarithmetic.py:513:            ``handle_mask`` must create (and copy) the returned mask.\nastropy/nddata/mixins/ndarithmetic.py:518:        ) or handle_mask is None:\nastropy/nddata/mixins/ndarithmetic.py:527:            return handle_mask(self.mask, operand.mask, **kwds)\nastropy/nddata/mixins/ndarithmetic.py:742:            # for collapse operations, use astropy.utils.masked rather than handle_mask\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1098:        handle_mask=None,\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1111:        handle_mask=use_abbreviation,\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1124:        handle_mask=use_abbreviation,\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1219:    nd3 = nd1.add(nd2, handle_mask=mask_sad_func)\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1222:    nd4 = nd1.add(nd2, handle_mask=mask_sad_func, mask_fun=1)\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1226:        nd1.add(nd2, handle_mask=mask_sad_func, fun=1)\n</output>",
+      "extra": {
+        "raw_output": "astropy/nddata/mixins/ndarithmetic.py:44:    handle_mask : callable, ``'first_found'`` or ``None``, optional\nastropy/nddata/mixins/ndarithmetic.py:171:        handle_mask=np.logical_or,\nastropy/nddata/mixins/ndarithmetic.py:199:        handle_mask : callable, ``'first_found'`` or ``None``, optional\nastropy/nddata/mixins/ndarithmetic.py:323:        if handle_mask is None:\nastropy/nddata/mixins/ndarithmetic.py:329:        elif handle_mask in [\"ff\", \"first_found\"]:\nastropy/nddata/mixins/ndarithmetic.py:336:                operation, operand, handle_mask, axis=axis, **kwds2[\"mask\"]\nastropy/nddata/mixins/ndarithmetic.py:485:    def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):\nastropy/nddata/mixins/ndarithmetic.py:502:        handle_mask : callable\nastropy/nddata/mixins/ndarithmetic.py:506:            Additional parameters given to ``handle_mask``.\nastropy/nddata/mixins/ndarithmetic.py:513:            ``handle_mask`` must create (and copy) the returned mask.\nastropy/nddata/mixins/ndarithmetic.py:518:        ) or handle_mask is None:\nastropy/nddata/mixins/ndarithmetic.py:527:            return handle_mask(self.mask, operand.mask, **kwds)\nastropy/nddata/mixins/ndarithmetic.py:742:            # for collapse operations, use astropy.utils.masked rather than handle_mask\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1098:        handle_mask=None,\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1111:        handle_mask=use_abbreviation,\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1124:        handle_mask=use_abbreviation,\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1219:    nd3 = nd1.add(nd2, handle_mask=mask_sad_func)\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1222:    nd4 = nd1.add(nd2, handle_mask=mask_sad_func, mask_fun=1)\nastropy/nddata/mixins/tests/test_ndarithmetic.py:1226:        nd1.add(nd2, handle_mask=mask_sad_func, fun=1)\n",
+        "returncode": 0,
+        "timestamp": 1788912860.2435431,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The mask-combination logic is likely in `_arithmetic_mask`. I need to inspect that function and nearby code to see how it handles one-sided masks and whether it can short-circuit to return the existing mask instead of calling the binary mask handler with `None`.\n\n<mswea_bash_command>sed -n '470,550p' astropy/nddata/mixins/ndarithmetic.py</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "sed -n '470,550p' astropy/nddata/mixins/ndarithmetic.py"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FA9aMUfJSMMb2U6yTL4MopzSF5",
+          "created": 1788912860,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The mask-combination logic is likely in `_arithmetic_mask`. I need to inspect that function and nearby code to see how it handles one-sided masks and whether it can short-circuit to return the existing mask instead of calling the binary mask handler with `None`.\n\n<mswea_bash_command>sed -n '470,550p' astropy/nddata/mixins/ndarithmetic.py</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 103,
+            "prompt_tokens": 5543,
+            "total_tokens": 5646,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 4864
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.00133755,
+        "timestamp": 1788912861.8785641
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>0</returncode>\n<output>\n            result_uncert = self.uncertainty.propagate(\n                operation, operand, result, correlation\n            )\n            operand.uncertainty = None\n            return result_uncert\n\n        else:\n            # Both have uncertainties so just propagate.\n\n            # only supply the axis kwarg if one has been specified for a collapsing operation\n            axis_kwarg = dict(axis=kwds[\"axis\"]) if \"axis\" in kwds else dict()\n            return self.uncertainty.propagate(\n                operation, operand, result, correlation, **axis_kwarg\n            )\n\n    def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):\n        \"\"\"\n        Calculate the resulting mask.\n\n        This is implemented as the piecewise ``or`` operation if both have a\n        mask.\n\n        Parameters\n        ----------\n        operation : callable\n            see :meth:`NDArithmeticMixin._arithmetic` parameter description.\n            By default, the ``operation`` will be ignored.\n\n        operand : `NDData`-like instance\n            The second operand wrapped in an instance of the same class as\n            self.\n\n        handle_mask : callable\n            see :meth:`NDArithmeticMixin.add`\n\n        kwds :\n            Additional parameters given to ``handle_mask``.\n\n        Returns\n        -------\n        result_mask : any type\n            If only one mask was present this mask is returned.\n            If neither had a mask ``None`` is returned. Otherwise\n            ``handle_mask`` must create (and copy) the returned mask.\n        \"\"\"\n        # If only one mask is present we need not bother about any type checks\n        if (\n            self.mask is None and operand is not None and operand.mask is None\n        ) or handle_mask is None:\n            return None\n        elif self.mask is None and operand is not None:\n            # Make a copy so there is no reference in the result.\n            return deepcopy(operand.mask)\n        elif operand is None:\n            return deepcopy(self.mask)\n        else:\n            # Now lets calculate the resulting mask (operation enforces copy)\n            return handle_mask(self.mask, operand.mask, **kwds)\n\n    def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):\n        \"\"\"\n        Calculate the resulting wcs.\n\n        There is actually no calculation involved but it is a good place to\n        compare wcs information of both operands. This is currently not working\n        properly with `~astropy.wcs.WCS` (which is the suggested class for\n        storing as wcs property) but it will not break it neither.\n\n        Parameters\n        ----------\n        operation : callable\n            see :meth:`NDArithmeticMixin._arithmetic` parameter description.\n            By default, the ``operation`` will be ignored.\n\n        operand : `NDData` instance or subclass\n            The second operand wrapped in an instance of the same class as\n            self.\n\n        compare_wcs : callable\n            see :meth:`NDArithmeticMixin.add` parameter description.\n\n</output>",
+      "extra": {
+        "raw_output": "            result_uncert = self.uncertainty.propagate(\n                operation, operand, result, correlation\n            )\n            operand.uncertainty = None\n            return result_uncert\n\n        else:\n            # Both have uncertainties so just propagate.\n\n            # only supply the axis kwarg if one has been specified for a collapsing operation\n            axis_kwarg = dict(axis=kwds[\"axis\"]) if \"axis\" in kwds else dict()\n            return self.uncertainty.propagate(\n                operation, operand, result, correlation, **axis_kwarg\n            )\n\n    def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):\n        \"\"\"\n        Calculate the resulting mask.\n\n        This is implemented as the piecewise ``or`` operation if both have a\n        mask.\n\n        Parameters\n        ----------\n        operation : callable\n            see :meth:`NDArithmeticMixin._arithmetic` parameter description.\n            By default, the ``operation`` will be ignored.\n\n        operand : `NDData`-like instance\n            The second operand wrapped in an instance of the same class as\n            self.\n\n        handle_mask : callable\n            see :meth:`NDArithmeticMixin.add`\n\n        kwds :\n            Additional parameters given to ``handle_mask``.\n\n        Returns\n        -------\n        result_mask : any type\n            If only one mask was present this mask is returned.\n            If neither had a mask ``None`` is returned. Otherwise\n            ``handle_mask`` must create (and copy) the returned mask.\n        \"\"\"\n        # If only one mask is present we need not bother about any type checks\n        if (\n            self.mask is None and operand is not None and operand.mask is None\n        ) or handle_mask is None:\n            return None\n        elif self.mask is None and operand is not None:\n            # Make a copy so there is no reference in the result.\n            return deepcopy(operand.mask)\n        elif operand is None:\n            return deepcopy(self.mask)\n        else:\n            # Now lets calculate the resulting mask (operation enforces copy)\n            return handle_mask(self.mask, operand.mask, **kwds)\n\n    def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):\n        \"\"\"\n        Calculate the resulting wcs.\n\n        There is actually no calculation involved but it is a good place to\n        compare wcs information of both operands. This is currently not working\n        properly with `~astropy.wcs.WCS` (which is the suggested class for\n        storing as wcs property) but it will not break it neither.\n\n        Parameters\n        ----------\n        operation : callable\n            see :meth:`NDArithmeticMixin._arithmetic` parameter description.\n            By default, the ``operation`` will be ignored.\n\n        operand : `NDData` instance or subclass\n            The second operand wrapped in an instance of the same class as\n            self.\n\n        compare_wcs : callable\n            see :meth:`NDArithmeticMixin.add` parameter description.\n\n",
+        "returncode": 0,
+        "timestamp": 1788912861.997371,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The bug is in `_arithmetic_mask`: it only special-cases `self.mask is None` or `operand is None`, but not the case where the operand exists and its `.mask` is `None`. That causes `handle_mask(self.mask, operand.mask)` to receive `None`. I\u2019m going to inspect the surrounding arithmetic setup to confirm how operands are wrapped and then patch this function so a missing mask on either side just copies the existing mask, matching the expected behavior.\n\n<mswea_bash_command>sed -n '250,360p' astropy/nddata/mixins/ndarithmetic.py && sed -n '1,220p' astropy/nddata/mixins/tests/test_ndarithmetic.py | head -220</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "sed -n '250,360p' astropy/nddata/mixins/ndarithmetic.py && sed -n '1,220p' astropy/nddata/mixins/tests/test_ndarithmetic.py | head -220"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FCR654TXguhqR20wobMpAUeCYQ",
+          "created": 1788912862,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The bug is in `_arithmetic_mask`: it only special-cases `self.mask is None` or `operand is None`, but not the case where the operand exists and its `.mask` is `None`. That causes `handle_mask(self.mask, operand.mask)` to receive `None`. I\u2019m going to inspect the surrounding arithmetic setup to confirm how operands are wrapped and then patch this function so a missing mask on either side just copies the existing mask, matching the expected behavior.\n\n<mswea_bash_command>sed -n '250,360p' astropy/nddata/mixins/ndarithmetic.py && sed -n '1,220p' astropy/nddata/mixins/tests/test_ndarithmetic.py | head -220</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 175,
+            "prompt_tokens": 6285,
+            "total_tokens": 6460,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 5376
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.0018724500000000001,
+        "timestamp": 1788912863.977387
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>0</returncode>\n<warning>\nThe output of your last command was too long.\nPlease try a different command that produces less output.\nIf you're looking at a file you can try use head, tail or sed to view a smaller number of lines selectively.\nIf you're using grep or find and it produced too much output, you can use a more selective search pattern.\nIf you really need to see something from the full command's output, you can redirect output to a file and then search in that file.\n</warning><output_head>\n        if compare_wcs is None:\n            kwargs[\"wcs\"] = None\n        elif compare_wcs in [\"ff\", \"first_found\"]:\n            if self.wcs is None and hasattr(operand, \"wcs\"):\n                kwargs[\"wcs\"] = deepcopy(operand.wcs)\n            else:\n                kwargs[\"wcs\"] = deepcopy(self.wcs)\n        else:\n            kwargs[\"wcs\"] = self._arithmetic_wcs(\n                operation, operand, compare_wcs, **kwds2[\"wcs\"]\n            )\n\n        # collapse operations on masked quantities/arrays which are supported by\n        # the astropy.utils.masked or np.ma modules should use those modules to\n        # do the arithmetic on the data and propagate masks.\n        use_masked_arith = operand is None and self.mask is not None\n        if use_masked_arith:\n            # if we're *including* masked values in the operation,\n            # use the astropy Masked module:\n            if not operation_ignores_mask:\n                # call the numpy operation on a Masked NDDataArray\n                # representation of the nddata, with units when available:\n                if self.unit is not None and not hasattr(self.data, \"unit\"):\n                    masked_input = Masked(self.data << self.unit, mask=self.mask)\n                else:\n                    masked_input = Masked(self.data, mask=self.mask)\n            # if we're *excluding* masked values in the operation,\n            # we use the numpy.ma module:\n            else:\n                masked_input = np.ma.masked_array(self.data, self.mask)\n            result = operation(masked_input, axis=axis)\n            # since result may be e.g. a float if operation is a sum over all axes,\n            # let's ensure that result is a masked array, since we'll assume this later:\n            if not hasattr(result, \"mask\"):\n                result = np.ma.masked_array(\n                    result, mask=np.zeros_like(result, dtype=bool)\n                )\n        else:\n            # Then calculate the resulting data (which can but needs not be a\n            # quantity)\n            result = self._arithmetic_data(\n                operation, operand, axis=axis, **kwds2[\"data\"]\n            )\n\n        # preserve original units\n        if not hasattr(result, \"unit\") and hasattr(self, \"unit\"):\n            kwargs[\"unit\"] = self.unit\n\n        # Determine the other properties\n        if propagate_uncertainties is None:\n            kwargs[\"uncertainty\"] = None\n        elif not propagate_uncertainties:\n            if self.uncertainty is None:\n                kwargs[\"uncertainty\"] = deepcopy(operand.uncertainty)\n            else:\n                kwargs[\"uncertainty\"] = deepcopy(self.uncertainty)\n        else:\n            kwargs[\"uncertainty\"] = self._arithmetic_uncertainty(\n                operation,\n                operand,\n                result,\n                uncertainty_correlation,\n                axis=axis,\n                **kwds2[\"uncertainty\"],\n            )\n\n        # If both are None, there is nothing to do.\n        if self.psf is not None or (operand is not None and operand.psf is not None):\n            warnings.warn(\n                f\"Not setting psf attribute during {operation.__name__}.\",\n                AstropyUserWarning,\n            )\n\n        if handle_mask is None:\n            pass\n        elif hasattr(result, \"mask\"):\n            # if numpy.ma or astropy.utils.masked is being used, the constructor\n            # will pick up the mask from the masked object:\n            kwargs[\"mask\"] = None\n        elif handle_mask in [\"ff\", \"first_found\"]:\n            if self.mask is None:\n                kwargs[\"mask\"] = deepcopy(operand.mask)\n            else:\n                kwargs[\"mask\"] = deepcopy(self.mask)\n        else:\n            kwargs[\"mask\"] = self._arithmetic_mask(\n                operation, operand, handle_mask, axis=axis, **kwds2[\"mask\"]\n            )\n\n        if handle_meta is None:\n            kwargs[\"meta\"] = None\n        elif handle_meta in [\"ff\", \"first_found\"]:\n            if not self.meta:\n                kwargs[\"meta\"] = deepcopy(operand.meta)\n            else:\n                kwargs[\"meta\"] = deepcopy(self.meta)\n        else:\n            kwargs[\"meta\"] = self._arithmetic_meta(\n                operation, operand, handle_meta, **kwds2[\"meta\"]\n            )\n\n        # Wrap the individual results into a new instance of the same class.\n        return result, kwargs\n\n    def _arithmetic_data(self, operation, operand, **kwds):\n        \"\"\"\n        Calculate the resulting data.\n\n        Parameters\n        ----------\n        operation : callable\n# Licensed under a 3-clause BSD style license - see LICENSE.rst\n\nimport numpy as np\nimport pytest\nfrom numpy.testing import assert_array_almost_equal, assert_array_equal\n\nfrom astropy import units as u\nfrom astropy.nddata import NDDataRef\nfrom astropy.nddata import _testing as nd_testing\nfrom astropy.nddata.nduncertainty import (\n    IncompatibleUncertaintiesException,\n    InverseVariance,\n    StdDevUncertainty,\n    UnknownUncertainty,\n</output_head>\n<elided_chars>\n1443 characters elided\n</elided_chars>\n<output_tail>\n, nd6]:\n        # Check that broadcasting worked as expected\n        if data1.ndim > data2.ndim:\n            assert data1.shape == nd.data.shape\n        else:\n            assert data2.shape == nd.data.shape\n        # Check all other attributes are not set\n        assert nd.unit is None\n        assert nd.uncertainty is None\n        assert nd.mask is None\n        assert len(nd.meta) == 0\n        assert nd.wcs is None\n\n\n# Invalid arithmetic operations for data covering:\n# not broadcastable data\ndef test_arithmetics_data_invalid():\n    nd1 = NDDataArithmetic([1, 2, 3])\n    nd2 = NDDataArithmetic([1, 2])\n    with pytest.raises(ValueError):\n        nd1.add(nd2)\n\n\n# Test with Data and unit and covers:\n# identical units (even dimensionless unscaled vs. no unit),\n# equivalent units (such as meter and kilometer)\n# equivalent composite units (such as m/s and km/h)\n@pytest.mark.filterwarnings(\"ignore:divide by zero encountered.*\")\n@pytest.mark.parametrize(\n    (\"data1\", \"data2\"),\n    [\n        (np.array(5) * u.s, np.array(10) * u.s),\n        (np.array(5) * u.s, np.arange(10) * u.h),\n        (np.array(5) * u.s, np.arange(10).reshape(2, 5) * u.min),\n        (np.arange(10) * u.m / u.s, np.ones(10) * 2 * u.km / u.s),\n        (np.arange(10) * u.m / u.s, np.ones((10, 10)) * 2 * u.m / u.h),\n        (np.arange(10).reshape(2, 5) * u.m / u.s, np.ones((2, 5)) * 3 * u.km / u.h),\n        (\n            np.arange(1000).reshape(20, 5, 10),\n            np.ones((20, 5, 10)) * 3 * u.dimensionless_unscaled,\n        ),\n        (np.array(5), np.array(10) * u.s / u.h),\n    ],\n)\ndef test_arithmetics_data_unit_identical(data1, data2):\n    nd1 = NDDataArithmetic(data1)\n    nd2 = NDDataArithmetic(data2)\n\n    # Addition\n    nd3 = nd1.add(nd2)\n    ref = data1 + data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd3.data)\n    assert nd3.unit == ref_unit\n    # Subtraction\n    nd4 = nd1.subtract(nd2)\n    ref = data1 - data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd4.data)\n    assert nd4.unit == ref_unit\n    # Multiplication\n    nd5 = nd1.multiply(nd2)\n    ref = data1 * data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd5.data)\n    assert nd5.unit == ref_unit\n    # Division\n    nd6 = nd1.divide(nd2)\n    ref = data1 / data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd6.data)\n    assert nd6.unit == ref_unit\n    for nd in [nd3, nd4, nd5, nd6]:\n        # Check that broadcasting worked as expected\n        if data1.ndim > data2.ndim:\n            assert data1.shape == nd.data.shape\n        else:\n            assert data2.shape == nd.data.shape\n        # Check all other attributes are not set\n        assert nd.uncertainty is None\n        assert nd.mask is None\n        assert len(nd.meta) == 0\n        assert nd.wcs is None\n\n\n# Test with Data and unit and covers:\n# not identical not convertible units\n# one with unit (which is not dimensionless) and one without\n@pytest.mark.parametrize(\n    (\"data1\", \"data2\"),\n    [\n        (np.array(5) * u.s, np.array(10) * u.m),\n        (np.array(5) * u.Mpc, np.array(10) * u.km / u.s),\n        (np.array(5) * u.Mpc, np.array(10)),\n        (np.array(5), np.array(10) * u.s),\n    ],\n)\ndef test_arithmetics_data_unit_not_identical(data1, data2):\n    nd1 = NDDataArithmetic(data1)\n    nd2 = NDDataArithmetic(data2)\n\n    # Addition should not be possible\n    with pytest.raises(UnitsError):\n        nd1.add(nd2)\n    # Subtraction should not be possible\n    with pytest.raises(UnitsError):\n        nd1.subtract(nd2)\n    # Multiplication is possible\n    nd3 = nd1.multiply(nd2)\n    ref = data1 * data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd3.data)\n    assert nd3.unit == ref_unit\n    # Division is possible\n    nd4 = nd1.divide(nd2)\n    ref = data1 / data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd4.data)\n    assert nd4.unit == ref_unit\n    for nd in [nd3, nd4]:\n        # Check all other attributes are not set\n        assert nd.uncertainty is None\n        assert nd.mask is None\n        assert len(nd.meta) == 0\n        assert nd.wcs is None\n\n\n# Tests with wcs (not very sensible because there is no operation between them\n# covering:\n# both set and identical/not identical\n# one set\n# None set\n@pytest.mark.parametrize(\n    (\"wcs1\", \"wcs2\"),\n    [\n        (None, None),\n        (None, WCS(naxis=2)),\n        (WCS(naxis=2), None),\n        nd_testing.create_two_equal_wcs(naxis=2),\n        nd_testing.create_two_unequal_wcs(naxis=2),\n    ],\n)\ndef test_arithmetics_data_wcs(wcs1, wcs2):\n    nd1 = NDDataArithmetic(1, wcs=wcs1)\n    nd2 = NDDataArithmetic(1, wcs=wcs2)\n\n    if wcs1 is None and wcs2 is None:\n        ref_wcs = None\n    elif wcs1 is None:\n        ref_wcs = wcs2\n    elif wcs2 is None:\n        ref_wcs = wcs1\n    else:\n        ref_wcs = wcs1\n\n    # Addition\n    nd3 = nd1.add(nd2)\n    nd_testing.assert_wcs_seem_equal(ref_wcs, nd3.wcs)\n\n</output_tail>",
+      "extra": {
+        "raw_output": "        if compare_wcs is None:\n            kwargs[\"wcs\"] = None\n        elif compare_wcs in [\"ff\", \"first_found\"]:\n            if self.wcs is None and hasattr(operand, \"wcs\"):\n                kwargs[\"wcs\"] = deepcopy(operand.wcs)\n            else:\n                kwargs[\"wcs\"] = deepcopy(self.wcs)\n        else:\n            kwargs[\"wcs\"] = self._arithmetic_wcs(\n                operation, operand, compare_wcs, **kwds2[\"wcs\"]\n            )\n\n        # collapse operations on masked quantities/arrays which are supported by\n        # the astropy.utils.masked or np.ma modules should use those modules to\n        # do the arithmetic on the data and propagate masks.\n        use_masked_arith = operand is None and self.mask is not None\n        if use_masked_arith:\n            # if we're *including* masked values in the operation,\n            # use the astropy Masked module:\n            if not operation_ignores_mask:\n                # call the numpy operation on a Masked NDDataArray\n                # representation of the nddata, with units when available:\n                if self.unit is not None and not hasattr(self.data, \"unit\"):\n                    masked_input = Masked(self.data << self.unit, mask=self.mask)\n                else:\n                    masked_input = Masked(self.data, mask=self.mask)\n            # if we're *excluding* masked values in the operation,\n            # we use the numpy.ma module:\n            else:\n                masked_input = np.ma.masked_array(self.data, self.mask)\n            result = operation(masked_input, axis=axis)\n            # since result may be e.g. a float if operation is a sum over all axes,\n            # let's ensure that result is a masked array, since we'll assume this later:\n            if not hasattr(result, \"mask\"):\n                result = np.ma.masked_array(\n                    result, mask=np.zeros_like(result, dtype=bool)\n                )\n        else:\n            # Then calculate the resulting data (which can but needs not be a\n            # quantity)\n            result = self._arithmetic_data(\n                operation, operand, axis=axis, **kwds2[\"data\"]\n            )\n\n        # preserve original units\n        if not hasattr(result, \"unit\") and hasattr(self, \"unit\"):\n            kwargs[\"unit\"] = self.unit\n\n        # Determine the other properties\n        if propagate_uncertainties is None:\n            kwargs[\"uncertainty\"] = None\n        elif not propagate_uncertainties:\n            if self.uncertainty is None:\n                kwargs[\"uncertainty\"] = deepcopy(operand.uncertainty)\n            else:\n                kwargs[\"uncertainty\"] = deepcopy(self.uncertainty)\n        else:\n            kwargs[\"uncertainty\"] = self._arithmetic_uncertainty(\n                operation,\n                operand,\n                result,\n                uncertainty_correlation,\n                axis=axis,\n                **kwds2[\"uncertainty\"],\n            )\n\n        # If both are None, there is nothing to do.\n        if self.psf is not None or (operand is not None and operand.psf is not None):\n            warnings.warn(\n                f\"Not setting psf attribute during {operation.__name__}.\",\n                AstropyUserWarning,\n            )\n\n        if handle_mask is None:\n            pass\n        elif hasattr(result, \"mask\"):\n            # if numpy.ma or astropy.utils.masked is being used, the constructor\n            # will pick up the mask from the masked object:\n            kwargs[\"mask\"] = None\n        elif handle_mask in [\"ff\", \"first_found\"]:\n            if self.mask is None:\n                kwargs[\"mask\"] = deepcopy(operand.mask)\n            else:\n                kwargs[\"mask\"] = deepcopy(self.mask)\n        else:\n            kwargs[\"mask\"] = self._arithmetic_mask(\n                operation, operand, handle_mask, axis=axis, **kwds2[\"mask\"]\n            )\n\n        if handle_meta is None:\n            kwargs[\"meta\"] = None\n        elif handle_meta in [\"ff\", \"first_found\"]:\n            if not self.meta:\n                kwargs[\"meta\"] = deepcopy(operand.meta)\n            else:\n                kwargs[\"meta\"] = deepcopy(self.meta)\n        else:\n            kwargs[\"meta\"] = self._arithmetic_meta(\n                operation, operand, handle_meta, **kwds2[\"meta\"]\n            )\n\n        # Wrap the individual results into a new instance of the same class.\n        return result, kwargs\n\n    def _arithmetic_data(self, operation, operand, **kwds):\n        \"\"\"\n        Calculate the resulting data.\n\n        Parameters\n        ----------\n        operation : callable\n# Licensed under a 3-clause BSD style license - see LICENSE.rst\n\nimport numpy as np\nimport pytest\nfrom numpy.testing import assert_array_almost_equal, assert_array_equal\n\nfrom astropy import units as u\nfrom astropy.nddata import NDDataRef\nfrom astropy.nddata import _testing as nd_testing\nfrom astropy.nddata.nduncertainty import (\n    IncompatibleUncertaintiesException,\n    InverseVariance,\n    StdDevUncertainty,\n    UnknownUncertainty,\n    VarianceUncertainty,\n)\nfrom astropy.units import Quantity, UnitsError\nfrom astropy.utils.exceptions import AstropyUserWarning\nfrom astropy.wcs import WCS\n\n# Alias NDDataAllMixins in case this will be renamed ... :-)\nNDDataArithmetic = NDDataRef\n\n\nclass StdDevUncertaintyUncorrelated(StdDevUncertainty):\n    @property\n    def supports_correlated(self):\n        return False\n\n\n# Test with Data covers:\n# scalars, 1D, 2D and 3D\n# broadcasting between them\n@pytest.mark.filterwarnings(\"ignore:divide by zero encountered.*\")\n@pytest.mark.parametrize(\n    (\"data1\", \"data2\"),\n    [\n        (np.array(5), np.array(10)),\n        (np.array(5), np.arange(10)),\n        (np.array(5), np.arange(10).reshape(2, 5)),\n        (np.arange(10), np.ones(10) * 2),\n        (np.arange(10), np.ones((10, 10)) * 2),\n        (np.arange(10).reshape(2, 5), np.ones((2, 5)) * 3),\n        (np.arange(1000).reshape(20, 5, 10), np.ones((20, 5, 10)) * 3),\n    ],\n)\ndef test_arithmetics_data(data1, data2):\n    nd1 = NDDataArithmetic(data1)\n    nd2 = NDDataArithmetic(data2)\n\n    # Addition\n    nd3 = nd1.add(nd2)\n    assert_array_equal(data1 + data2, nd3.data)\n    # Subtraction\n    nd4 = nd1.subtract(nd2)\n    assert_array_equal(data1 - data2, nd4.data)\n    # Multiplication\n    nd5 = nd1.multiply(nd2)\n    assert_array_equal(data1 * data2, nd5.data)\n    # Division\n    nd6 = nd1.divide(nd2)\n    assert_array_equal(data1 / data2, nd6.data)\n    for nd in [nd3, nd4, nd5, nd6]:\n        # Check that broadcasting worked as expected\n        if data1.ndim > data2.ndim:\n            assert data1.shape == nd.data.shape\n        else:\n            assert data2.shape == nd.data.shape\n        # Check all other attributes are not set\n        assert nd.unit is None\n        assert nd.uncertainty is None\n        assert nd.mask is None\n        assert len(nd.meta) == 0\n        assert nd.wcs is None\n\n\n# Invalid arithmetic operations for data covering:\n# not broadcastable data\ndef test_arithmetics_data_invalid():\n    nd1 = NDDataArithmetic([1, 2, 3])\n    nd2 = NDDataArithmetic([1, 2])\n    with pytest.raises(ValueError):\n        nd1.add(nd2)\n\n\n# Test with Data and unit and covers:\n# identical units (even dimensionless unscaled vs. no unit),\n# equivalent units (such as meter and kilometer)\n# equivalent composite units (such as m/s and km/h)\n@pytest.mark.filterwarnings(\"ignore:divide by zero encountered.*\")\n@pytest.mark.parametrize(\n    (\"data1\", \"data2\"),\n    [\n        (np.array(5) * u.s, np.array(10) * u.s),\n        (np.array(5) * u.s, np.arange(10) * u.h),\n        (np.array(5) * u.s, np.arange(10).reshape(2, 5) * u.min),\n        (np.arange(10) * u.m / u.s, np.ones(10) * 2 * u.km / u.s),\n        (np.arange(10) * u.m / u.s, np.ones((10, 10)) * 2 * u.m / u.h),\n        (np.arange(10).reshape(2, 5) * u.m / u.s, np.ones((2, 5)) * 3 * u.km / u.h),\n        (\n            np.arange(1000).reshape(20, 5, 10),\n            np.ones((20, 5, 10)) * 3 * u.dimensionless_unscaled,\n        ),\n        (np.array(5), np.array(10) * u.s / u.h),\n    ],\n)\ndef test_arithmetics_data_unit_identical(data1, data2):\n    nd1 = NDDataArithmetic(data1)\n    nd2 = NDDataArithmetic(data2)\n\n    # Addition\n    nd3 = nd1.add(nd2)\n    ref = data1 + data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd3.data)\n    assert nd3.unit == ref_unit\n    # Subtraction\n    nd4 = nd1.subtract(nd2)\n    ref = data1 - data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd4.data)\n    assert nd4.unit == ref_unit\n    # Multiplication\n    nd5 = nd1.multiply(nd2)\n    ref = data1 * data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd5.data)\n    assert nd5.unit == ref_unit\n    # Division\n    nd6 = nd1.divide(nd2)\n    ref = data1 / data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd6.data)\n    assert nd6.unit == ref_unit\n    for nd in [nd3, nd4, nd5, nd6]:\n        # Check that broadcasting worked as expected\n        if data1.ndim > data2.ndim:\n            assert data1.shape == nd.data.shape\n        else:\n            assert data2.shape == nd.data.shape\n        # Check all other attributes are not set\n        assert nd.uncertainty is None\n        assert nd.mask is None\n        assert len(nd.meta) == 0\n        assert nd.wcs is None\n\n\n# Test with Data and unit and covers:\n# not identical not convertible units\n# one with unit (which is not dimensionless) and one without\n@pytest.mark.parametrize(\n    (\"data1\", \"data2\"),\n    [\n        (np.array(5) * u.s, np.array(10) * u.m),\n        (np.array(5) * u.Mpc, np.array(10) * u.km / u.s),\n        (np.array(5) * u.Mpc, np.array(10)),\n        (np.array(5), np.array(10) * u.s),\n    ],\n)\ndef test_arithmetics_data_unit_not_identical(data1, data2):\n    nd1 = NDDataArithmetic(data1)\n    nd2 = NDDataArithmetic(data2)\n\n    # Addition should not be possible\n    with pytest.raises(UnitsError):\n        nd1.add(nd2)\n    # Subtraction should not be possible\n    with pytest.raises(UnitsError):\n        nd1.subtract(nd2)\n    # Multiplication is possible\n    nd3 = nd1.multiply(nd2)\n    ref = data1 * data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd3.data)\n    assert nd3.unit == ref_unit\n    # Division is possible\n    nd4 = nd1.divide(nd2)\n    ref = data1 / data2\n    ref_unit, ref_data = ref.unit, ref.value\n    assert_array_equal(ref_data, nd4.data)\n    assert nd4.unit == ref_unit\n    for nd in [nd3, nd4]:\n        # Check all other attributes are not set\n        assert nd.uncertainty is None\n        assert nd.mask is None\n        assert len(nd.meta) == 0\n        assert nd.wcs is None\n\n\n# Tests with wcs (not very sensible because there is no operation between them\n# covering:\n# both set and identical/not identical\n# one set\n# None set\n@pytest.mark.parametrize(\n    (\"wcs1\", \"wcs2\"),\n    [\n        (None, None),\n        (None, WCS(naxis=2)),\n        (WCS(naxis=2), None),\n        nd_testing.create_two_equal_wcs(naxis=2),\n        nd_testing.create_two_unequal_wcs(naxis=2),\n    ],\n)\ndef test_arithmetics_data_wcs(wcs1, wcs2):\n    nd1 = NDDataArithmetic(1, wcs=wcs1)\n    nd2 = NDDataArithmetic(1, wcs=wcs2)\n\n    if wcs1 is None and wcs2 is None:\n        ref_wcs = None\n    elif wcs1 is None:\n        ref_wcs = wcs2\n    elif wcs2 is None:\n        ref_wcs = wcs1\n    else:\n        ref_wcs = wcs1\n\n    # Addition\n    nd3 = nd1.add(nd2)\n    nd_testing.assert_wcs_seem_equal(ref_wcs, nd3.wcs)\n",
+        "returncode": 0,
+        "timestamp": 1788912864.105568,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: I\u2019ve confirmed the relevant logic. The next step is to patch `_arithmetic_mask` so it treats `operand.mask is None` the same way as no mask on that side: return a deepcopy of the other mask, and only invoke `handle_mask` when both masks are present. After that I\u2019ll verify with the specific reproducer behavior.\n\n<mswea_bash_command>python - <<'PY'\nfrom pathlib import Path\np = Path('astropy/nddata/mixins/ndarithmetic.py')\ns = p.read_text()\nold = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nnew = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nif old not in s: raise SystemExit('pattern not found')\np.write_text(s.replace(old, new))\nPY && python - <<'PY'\nimport numpy as np\nfrom astropy.nddata import NDDataRef\narray = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\nmask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\nnref_nomask = NDDataRef(array)\nnref_mask = NDDataRef(array, mask=mask)\nprint(nref_mask.multiply(1., handle_mask=np.bitwise_or).mask)\nprint(nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask)\nPY</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "python - <<'PY'\nfrom pathlib import Path\np = Path('astropy/nddata/mixins/ndarithmetic.py')\ns = p.read_text()\nold = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nnew = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nif old not in s: raise SystemExit('pattern not found')\np.write_text(s.replace(old, new))\nPY && python - <<'PY'\nimport numpy as np\nfrom astropy.nddata import NDDataRef\narray = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\nmask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\nnref_nomask = NDDataRef(array)\nnref_mask = NDDataRef(array, mask=mask)\nprint(nref_mask.multiply(1., handle_mask=np.bitwise_or).mask)\nprint(nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask)\nPY"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FFpmCVNWRHaY6lFtbbL4W2aSvo",
+          "created": 1788912865,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: I\u2019ve confirmed the relevant logic. The next step is to patch `_arithmetic_mask` so it treats `operand.mask is None` the same way as no mask on that side: return a deepcopy of the other mask, and only invoke `handle_mask` when both masks are present. After that I\u2019ll verify with the specific reproducer behavior.\n\n<mswea_bash_command>python - <<'PY'\nfrom pathlib import Path\np = Path('astropy/nddata/mixins/ndarithmetic.py')\ns = p.read_text()\nold = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nnew = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nif old not in s: raise SystemExit('pattern not found')\np.write_text(s.replace(old, new))\nPY && python - <<'PY'\nimport numpy as np\nfrom astropy.nddata import NDDataRef\narray = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\nmask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\nnref_nomask = NDDataRef(array)\nnref_mask = NDDataRef(array, mask=mask)\nprint(nref_mask.multiply(1., handle_mask=np.bitwise_or).mask)\nprint(nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask)\nPY</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 583,
+            "prompt_tokens": 9146,
+            "total_tokens": 9729,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 5888
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.0055086,
+        "timestamp": 1788912868.861223
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>1</returncode>\n<output>\n  File \"<stdin>\", line 8\n    PY && python - <<'PY'\n        ^\nSyntaxError: invalid syntax\n</output>",
+      "extra": {
+        "raw_output": "  File \"<stdin>\", line 8\n    PY && python - <<'PY'\n        ^\nSyntaxError: invalid syntax\n",
+        "returncode": 1,
+        "timestamp": 1788912869.042921,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The edit likely succeeded, but I combined two heredoc Python snippets in a way that broke the shell command. I need to re-run a clean verification command separately to confirm the fix and inspect the function if necessary.\n\n<mswea_bash_command>python - <<'PY'\nimport numpy as np\nfrom astropy.nddata import NDDataRef\narray = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\nmask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\nnref_nomask = NDDataRef(array)\nnref_mask = NDDataRef(array, mask=mask)\nprint(nref_mask.multiply(1., handle_mask=np.bitwise_or).mask)\nprint(nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask)\nPY</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "python - <<'PY'\nimport numpy as np\nfrom astropy.nddata import NDDataRef\narray = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\nmask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\nnref_nomask = NDDataRef(array)\nnref_mask = NDDataRef(array, mask=mask)\nprint(nref_mask.multiply(1., handle_mask=np.bitwise_or).mask)\nprint(nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask)\nPY"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FJHh6sl7HbHbtew2v8bMRo6DcY",
+          "created": 1788912869,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The edit likely succeeded, but I combined two heredoc Python snippets in a way that broke the shell command. I need to re-run a clean verification command separately to confirm the fix and inspect the function if necessary.\n\n<mswea_bash_command>python - <<'PY'\nimport numpy as np\nfrom astropy.nddata import NDDataRef\narray = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])\nmask = np.array([[0, 1, 64], [8, 0, 1], [2, 1, 0]])\nnref_nomask = NDDataRef(array)\nnref_mask = NDDataRef(array, mask=mask)\nprint(nref_mask.multiply(1., handle_mask=np.bitwise_or).mask)\nprint(nref_mask.multiply(nref_nomask, handle_mask=np.bitwise_or).mask)\nPY</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 209,
+            "prompt_tokens": 9777,
+            "total_tokens": 9986,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 9472
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.00187965,
+        "timestamp": 1788912871.399225
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>1</returncode>\n<output>\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nModuleNotFoundError: No module named 'numpy'\n</output>",
+      "extra": {
+        "raw_output": "Traceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nModuleNotFoundError: No module named 'numpy'\n",
+        "returncode": 1,
+        "timestamp": 1788912871.602567,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The environment for direct Python execution doesn\u2019t have the expected runtime path, so I\u2019ll inspect the edited source file directly and then generate the required patch. Since the fix is localized, I can validate it by checking the modified function text and then create the git diff patch for submission.\n\n<mswea_bash_command>sed -n '485,535p' astropy/nddata/mixins/ndarithmetic.py && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,160p' patch.txt</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "sed -n '485,535p' astropy/nddata/mixins/ndarithmetic.py && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,160p' patch.txt"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FMqGO6DyOyT8QZoLnbsDJjzALZ",
+          "created": 1788912872,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The environment for direct Python execution doesn\u2019t have the expected runtime path, so I\u2019ll inspect the edited source file directly and then generate the required patch. Since the fix is localized, I can validate it by checking the modified function text and then create the git diff patch for submission.\n\n<mswea_bash_command>sed -n '485,535p' astropy/nddata/mixins/ndarithmetic.py && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,160p' patch.txt</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 131,
+            "prompt_tokens": 10040,
+            "total_tokens": 10171,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 9472
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.0017258999999999998,
+        "timestamp": 1788912873.234389
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>0</returncode>\n<output>\n    def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):\n        \"\"\"\n        Calculate the resulting mask.\n\n        This is implemented as the piecewise ``or`` operation if both have a\n        mask.\n\n        Parameters\n        ----------\n        operation : callable\n            see :meth:`NDArithmeticMixin._arithmetic` parameter description.\n            By default, the ``operation`` will be ignored.\n\n        operand : `NDData`-like instance\n            The second operand wrapped in an instance of the same class as\n            self.\n\n        handle_mask : callable\n            see :meth:`NDArithmeticMixin.add`\n\n        kwds :\n            Additional parameters given to ``handle_mask``.\n\n        Returns\n        -------\n        result_mask : any type\n            If only one mask was present this mask is returned.\n            If neither had a mask ``None`` is returned. Otherwise\n            ``handle_mask`` must create (and copy) the returned mask.\n        \"\"\"\n        # If only one mask is present we need not bother about any type checks\n        if (\n            self.mask is None and operand is not None and operand.mask is None\n        ) or handle_mask is None:\n            return None\n        elif self.mask is None and operand is not None:\n            # Make a copy so there is no reference in the result.\n            return deepcopy(operand.mask)\n        elif operand is None:\n            return deepcopy(self.mask)\n        else:\n            # Now lets calculate the resulting mask (operation enforces copy)\n            return handle_mask(self.mask, operand.mask, **kwds)\n\n    def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):\n        \"\"\"\n        Calculate the resulting wcs.\n\n        There is actually no calculation involved but it is a good place to\n        compare wcs information of both operands. This is currently not working\n        properly with `~astropy.wcs.WCS` (which is the suggested class for\n</output>",
+      "extra": {
+        "raw_output": "    def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):\n        \"\"\"\n        Calculate the resulting mask.\n\n        This is implemented as the piecewise ``or`` operation if both have a\n        mask.\n\n        Parameters\n        ----------\n        operation : callable\n            see :meth:`NDArithmeticMixin._arithmetic` parameter description.\n            By default, the ``operation`` will be ignored.\n\n        operand : `NDData`-like instance\n            The second operand wrapped in an instance of the same class as\n            self.\n\n        handle_mask : callable\n            see :meth:`NDArithmeticMixin.add`\n\n        kwds :\n            Additional parameters given to ``handle_mask``.\n\n        Returns\n        -------\n        result_mask : any type\n            If only one mask was present this mask is returned.\n            If neither had a mask ``None`` is returned. Otherwise\n            ``handle_mask`` must create (and copy) the returned mask.\n        \"\"\"\n        # If only one mask is present we need not bother about any type checks\n        if (\n            self.mask is None and operand is not None and operand.mask is None\n        ) or handle_mask is None:\n            return None\n        elif self.mask is None and operand is not None:\n            # Make a copy so there is no reference in the result.\n            return deepcopy(operand.mask)\n        elif operand is None:\n            return deepcopy(self.mask)\n        else:\n            # Now lets calculate the resulting mask (operation enforces copy)\n            return handle_mask(self.mask, operand.mask, **kwds)\n\n    def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):\n        \"\"\"\n        Calculate the resulting wcs.\n\n        There is actually no calculation involved but it is a good place to\n        compare wcs information of both operands. This is currently not working\n        properly with `~astropy.wcs.WCS` (which is the suggested class for\n",
+        "returncode": 0,
+        "timestamp": 1788912873.698603,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The source file still shows the old logic, so my previous edit didn\u2019t persist. I need to apply the fix again, then generate and inspect the patch as required. I\u2019ll keep the change minimal: explicitly short-circuit when either side has no mask, copying the existing mask instead of calling the binary mask handler with `None`.\n\n<mswea_bash_command>python - <<'PY'\nfrom pathlib import Path\np = Path('astropy/nddata/mixins/ndarithmetic.py')\ns = p.read_text()\nold = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nnew = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nif old not in s:\n    raise SystemExit('pattern not found')\np.write_text(s.replace(old, new))\nPY && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "python - <<'PY'\nfrom pathlib import Path\np = Path('astropy/nddata/mixins/ndarithmetic.py')\ns = p.read_text()\nold = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nnew = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nif old not in s:\n    raise SystemExit('pattern not found')\np.write_text(s.replace(old, new))\nPY && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FOIBockPgGc1uWBiD03ZX2nZX2",
+          "created": 1788912874,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The source file still shows the old logic, so my previous edit didn\u2019t persist. I need to apply the fix again, then generate and inspect the patch as required. I\u2019ll keep the change minimal: explicitly short-circuit when either side has no mask, copying the existing mask instead of calling the binary mask handler with `None`.\n\n<mswea_bash_command>python - <<'PY'\nfrom pathlib import Path\np = Path('astropy/nddata/mixins/ndarithmetic.py')\ns = p.read_text()\nold = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nnew = \"\"\"        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n\"\"\"\nif old not in s:\n    raise SystemExit('pattern not found')\np.write_text(s.replace(old, new))\nPY && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 474,
+            "prompt_tokens": 10596,
+            "total_tokens": 11070,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 9984
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.0033407999999999997,
+        "timestamp": 1788912876.9879181
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>1</returncode>\n<output>\nbash: line 10: warning: here-document at line 1 delimited by end-of-file (wanted `PY')\n  File \"<stdin>\", line 9\n    PY && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt\n        ^\nSyntaxError: invalid syntax\n</output>",
+      "extra": {
+        "raw_output": "bash: line 10: warning: here-document at line 1 delimited by end-of-file (wanted `PY')\n  File \"<stdin>\", line 9\n    PY && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt\n        ^\nSyntaxError: invalid syntax\n",
+        "returncode": 1,
+        "timestamp": 1788912877.563186,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The shell wrapper is still breaking because the heredoc must be the only part of that command chunk. I\u2019ll use a safer single-command approach with `python -c` so the command remains valid, then immediately create and show the patch.\n\n<mswea_bash_command>python -c \"from pathlib import Path; p=Path('astropy/nddata/mixins/ndarithmetic.py'); s=p.read_text(); old='''        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n'''; new='''        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n'''; assert old in s, 'pattern not found'; p.write_text(s.replace(old, new))\" && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "python -c \"from pathlib import Path; p=Path('astropy/nddata/mixins/ndarithmetic.py'); s=p.read_text(); old='''        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n'''; new='''        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n'''; assert old in s, 'pattern not found'; p.write_text(s.replace(old, new))\" && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FSehCzhel4dOyxS36HvBiPzX82",
+          "created": 1788912878,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The shell wrapper is still breaking because the heredoc must be the only part of that command chunk. I\u2019ll use a safer single-command approach with `python -c` so the command remains valid, then immediately create and show the patch.\n\n<mswea_bash_command>python -c \"from pathlib import Path; p=Path('astropy/nddata/mixins/ndarithmetic.py'); s=p.read_text(); old='''        # If only one mask is present we need not bother about any type checks\\n        if (\\n            self.mask is None and operand is not None and operand.mask is None\\n        ) or handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None:\\n            return deepcopy(self.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n'''; new='''        # If only one mask is present we need not bother about any type checks\\n        if handle_mask is None:\\n            return None\\n        elif self.mask is None and operand is not None:\\n            if operand.mask is None:\\n                return None\\n            # Make a copy so there is no reference in the result.\\n            return deepcopy(operand.mask)\\n        elif operand is None or operand.mask is None:\\n            return deepcopy(self.mask)\\n        elif self.mask is None:\\n            return deepcopy(operand.mask)\\n        else:\\n            # Now lets calculate the resulting mask (operation enforces copy)\\n            return handle_mask(self.mask, operand.mask, **kwds)\\n'''; assert old in s, 'pattern not found'; p.write_text(s.replace(old, new))\" && git diff -- astropy/nddata/mixins/ndarithmetic.py > patch.txt && sed -n '1,200p' patch.txt</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 443,
+            "prompt_tokens": 11162,
+            "total_tokens": 11605,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 10496
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.0032802,
+        "timestamp": 1788912882.7026
+      }
+    },
+    {
+      "role": "user",
+      "content": "<returncode>0</returncode>\n<output>\ndiff --git a/astropy/nddata/mixins/ndarithmetic.py b/astropy/nddata/mixins/ndarithmetic.py\nindex 4153dfccb..4104aa6eb 100755\n--- a/astropy/nddata/mixins/ndarithmetic.py\n+++ b/astropy/nddata/mixins/ndarithmetic.py\n@@ -513,15 +513,17 @@ class NDArithmeticMixin:\n             ``handle_mask`` must create (and copy) the returned mask.\n         \"\"\"\n         # If only one mask is present we need not bother about any type checks\n-        if (\n-            self.mask is None and operand is not None and operand.mask is None\n-        ) or handle_mask is None:\n+        if handle_mask is None:\n             return None\n         elif self.mask is None and operand is not None:\n+            if operand.mask is None:\n+                return None\n             # Make a copy so there is no reference in the result.\n             return deepcopy(operand.mask)\n-        elif operand is None:\n+        elif operand is None or operand.mask is None:\n             return deepcopy(self.mask)\n+        elif self.mask is None:\n+            return deepcopy(operand.mask)\n         else:\n             # Now lets calculate the resulting mask (operation enforces copy)\n             return handle_mask(self.mask, operand.mask, **kwds)\n</output>",
+      "extra": {
+        "raw_output": "diff --git a/astropy/nddata/mixins/ndarithmetic.py b/astropy/nddata/mixins/ndarithmetic.py\nindex 4153dfccb..4104aa6eb 100755\n--- a/astropy/nddata/mixins/ndarithmetic.py\n+++ b/astropy/nddata/mixins/ndarithmetic.py\n@@ -513,15 +513,17 @@ class NDArithmeticMixin:\n             ``handle_mask`` must create (and copy) the returned mask.\n         \"\"\"\n         # If only one mask is present we need not bother about any type checks\n-        if (\n-            self.mask is None and operand is not None and operand.mask is None\n-        ) or handle_mask is None:\n+        if handle_mask is None:\n             return None\n         elif self.mask is None and operand is not None:\n+            if operand.mask is None:\n+                return None\n             # Make a copy so there is no reference in the result.\n             return deepcopy(operand.mask)\n-        elif operand is None:\n+        elif operand is None or operand.mask is None:\n             return deepcopy(self.mask)\n+        elif self.mask is None:\n+            return deepcopy(operand.mask)\n         else:\n             # Now lets calculate the resulting mask (operation enforces copy)\n             return handle_mask(self.mask, operand.mask, **kwds)\n",
+        "returncode": 0,
+        "timestamp": 1788912882.966787,
+        "exception_info": ""
+      }
+    },
+    {
+      "content": "THOUGHT: The patch is created and appears to contain only the intended source change. The final step is to submit exactly as required by printing the completion marker and the patch contents.\n\n<mswea_bash_command>echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT && cat patch.txt</mswea_bash_command>",
+      "role": "assistant",
+      "tool_calls": null,
+      "function_call": null,
+      "provider_specific_fields": {
+        "refusal": null
+      },
+      "annotations": [],
+      "extra": {
+        "actions": [
+          {
+            "command": "echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT && cat patch.txt"
+          }
+        ],
+        "response": {
+          "id": "chatcmpl-EM0FXXoLLtG4ryMcd1kUpk9znDu7S",
+          "created": 1788912883,
+          "model": "gpt-5.4-mini-2026-03-17",
+          "object": "chat.completion",
+          "system_fingerprint": null,
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "content": "THOUGHT: The patch is created and appears to contain only the intended source change. The final step is to submit exactly as required by printing the completion marker and the patch contents.\n\n<mswea_bash_command>echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT && cat patch.txt</mswea_bash_command>",
+                "role": "assistant",
+                "tool_calls": null,
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "annotations": []
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "usage": {
+            "completion_tokens": 68,
+            "prompt_tokens": 11916,
+            "total_tokens": 11984,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 11008
+            }
+          },
+          "moderation": null,
+          "service_tier": "default"
+        },
+        "cost": 0.0018126,
+        "timestamp": 1788912884.197475
+      }
+    },
+    {
+      "role": "exit",
+      "content": "diff --git a/astropy/nddata/mixins/ndarithmetic.py b/astropy/nddata/mixins/ndarithmetic.py\nindex 4153dfccb..4104aa6eb 100755\n--- a/astropy/nddata/mixins/ndarithmetic.py\n+++ b/astropy/nddata/mixins/ndarithmetic.py\n@@ -513,15 +513,17 @@ class NDArithmeticMixin:\n             ``handle_mask`` must create (and copy) the returned mask.\n         \"\"\"\n         # If only one mask is present we need not bother about any type checks\n-        if (\n-            self.mask is None and operand is not None and operand.mask is None\n-        ) or handle_mask is None:\n+        if handle_mask is None:\n             return None\n         elif self.mask is None and operand is not None:\n+            if operand.mask is None:\n+                return None\n             # Make a copy so there is no reference in the result.\n             return deepcopy(operand.mask)\n-        elif operand is None:\n+        elif operand is None or operand.mask is None:\n             return deepcopy(self.mask)\n+        elif self.mask is None:\n+            return deepcopy(operand.mask)\n         else:\n             # Now lets calculate the resulting mask (operation enforces copy)\n             return handle_mask(self.mask, operand.mask, **kwds)\n",
+      "extra": {
+        "exit_status": "Submitted",
+        "submission": "diff --git a/astropy/nddata/mixins/ndarithmetic.py b/astropy/nddata/mixins/ndarithmetic.py\nindex 4153dfccb..4104aa6eb 100755\n--- a/astropy/nddata/mixins/ndarithmetic.py\n+++ b/astropy/nddata/mixins/ndarithmetic.py\n@@ -513,15 +513,17 @@ class NDArithmeticMixin:\n             ``handle_mask`` must create (and copy) the returned mask.\n         \"\"\"\n         # If only one mask is present we need not bother about any type checks\n-        if (\n-            self.mask is None and operand is not None and operand.mask is None\n-        ) or handle_mask is None:\n+        if handle_mask is None:\n             return None\n         elif self.mask is None and operand is not None:\n+            if operand.mask is None:\n+                return None\n             # Make a copy so there is no reference in the result.\n             return deepcopy(operand.mask)\n-        elif operand is None:\n+        elif operand is None or operand.mask is None:\n             return deepcopy(self.mask)\n+        elif self.mask is None:\n+            return deepcopy(operand.mask)\n         else:\n             # Now lets calculate the resulting mask (operation enforces copy)\n             return handle_mask(self.mask, operand.mask, **kwds)\n"
+      }
+    }
+  ],
+  "trajectory_format": "mini-swe-agent-1.1",
+  "instance_id": "astropy__astropy-14995"
+}

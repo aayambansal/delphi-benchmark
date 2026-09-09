@@ -1,0 +1,22 @@
+diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
+index e0c7d56f8..125d2fa4d 100644
+--- a/sphinx/writers/latex.py
++++ b/sphinx/writers/latex.py
+@@ -721,7 +721,7 @@ class LaTeXTranslator(SphinxTranslator):
+         pass
+ 
+     def visit_desc_inline(self, node: Element) -> None:
+-        self.body.append(r'\sphinxcode{\sphinxupquote{')
++        self.body.append(r'\sphinxcode{\sphinxupquote{%')
+ 
+     def depart_desc_inline(self, node: Element) -> None:
+         self.body.append('}}')
+@@ -1714,7 +1714,7 @@ class LaTeXTranslator(SphinxTranslator):
+         # get consistent trailer
+         hlcode = hlcode.rstrip()[:-14]  # strip \end{Verbatim}
+         self.body.append(hlcode)
+-        self.body.append('}}')
++        self.body.append('%\n}}')
+         raise nodes.SkipNode
+ 
+     def depart_literal(self, node: Element) -> None:

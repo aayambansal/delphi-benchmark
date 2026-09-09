@@ -1,0 +1,48 @@
+diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py
+index 1b3285ddc..fab6a7223 100644
+--- a/astropy/io/fits/card.py
++++ b/astropy/io/fits/card.py
+@@ -748,6 +748,25 @@ class Card(_Verify):
+                 self._invalid = True
+                 return keyword
+ 
++
++    @staticmethod
++    def _decode_fits_string(value):
++        """Decode a FITS quoted string value preserving escaped quotes."""
++        if not value:
++            return value
++        out = []
++        i = 0
++        n = len(value)
++        while i < n:
++            ch = value[i]
++            if ch == "'" and i + 1 < n and value[i + 1] == "'":
++                out.append("'")
++                i += 2
++            else:
++                out.append(ch)
++                i += 1
++        return "".join(out)
++
+     def _parse_value(self):
+         """Extract the keyword value from the card image."""
+         # for commentary cards, no need to parse further
+@@ -768,7 +787,7 @@ class Card(_Verify):
+         if m.group("bool") is not None:
+             value = m.group("bool") == "T"
+         elif m.group("strg") is not None:
+-            value = re.sub("''", "'", m.group("strg"))
++            value = self._decode_fits_string(m.group("strg").rstrip())
+         elif m.group("numr") is not None:
+             #  Check for numbers with leading 0s.
+             numr = self._number_NFSC_RE.match(m.group("numr"))
+@@ -859,7 +878,7 @@ class Card(_Verify):
+                     return kw, vc
+ 
+                 value = m.group("strg") or ""
+-                value = value.rstrip().replace("''", "'")
++                value = self._decode_fits_string(value.rstrip())
+                 if value and value[-1] == "&":
+                     value = value[:-1]
+                 values.append(value)

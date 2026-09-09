@@ -1,0 +1,13 @@
+diff --git a/sympy/core/exprtools.py b/sympy/core/exprtools.py
+index 4e0de9ec1..e5c84910b 100644
+--- a/sympy/core/exprtools.py
++++ b/sympy/core/exprtools.py
+@@ -1198,6 +1198,8 @@ def do(expr):
+         rv = _keep_coeff(cont, p, clear=clear, sign=sign)
+         return rv
+     expr = sympify(expr)
++    if expr is S.NaN:
++        return expr
+     return do(expr)
+ 
+ 

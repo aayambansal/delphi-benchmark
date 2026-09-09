@@ -1,0 +1,44 @@
+2026-09-09 05:23:36,445 - INFO - Creating container for astropy__astropy-13453...
+2026-09-09 05:23:36,493 - INFO - Container for astropy__astropy-13453 created: c11a8b13fd2c4478c90ed36f873a62caf6ca503bf042669cc04530a77ee4afba
+2026-09-09 05:23:36,573 - INFO - Container for astropy__astropy-13453 started: c11a8b13fd2c4478c90ed36f873a62caf6ca503bf042669cc04530a77ee4afba
+2026-09-09 05:23:36,573 - INFO - Intermediate patch for astropy__astropy-13453 written to logs/run_evaluation/delphi-s50/gpt-5.4-mini/astropy__astropy-13453/patch.diff, now applying to container...
+2026-09-09 05:23:36,696 - INFO - >>>>> Applied Patch:
+Checking patch astropy/io/ascii/html.py...
+Applied patch astropy/io/ascii/html.py cleanly.
+
+2026-09-09 05:23:37,031 - INFO - Git diff before:
+diff --git a/astropy/io/ascii/html.py b/astropy/io/ascii/html.py
+index 266cf229c..7da21a49a 100644
+--- a/astropy/io/ascii/html.py
++++ b/astropy/io/ascii/html.py
+@@ -429,6 +429,7 @@ class HTML(core.BaseReader):
+                                 for i in range(span):
+                                     # Split up multicolumns into separate columns
+                                     new_col = Column([el[i] for el in col])
++                                    new_col.info.format = col.info.format
+ 
+                                     new_col_iter_str_vals = self.fill_values(
+                                         col, new_col.info.iter_str_vals())
+2026-09-09 05:23:37,031 - INFO - Eval script for astropy__astropy-13453 written to logs/run_evaluation/delphi-s50/gpt-5.4-mini/astropy__astropy-13453/eval.sh; copying to container...
+2026-09-09 05:25:39,903 - INFO - Test runtime: 122.82 seconds
+2026-09-09 05:25:39,904 - INFO - Test output for astropy__astropy-13453 written to logs/run_evaluation/delphi-s50/gpt-5.4-mini/astropy__astropy-13453/test_output.txt
+2026-09-09 05:25:39,997 - INFO - Git diff after:
+diff --git a/astropy/io/ascii/html.py b/astropy/io/ascii/html.py
+index 266cf229c..7da21a49a 100644
+--- a/astropy/io/ascii/html.py
++++ b/astropy/io/ascii/html.py
+@@ -429,6 +429,7 @@ class HTML(core.BaseReader):
+                                 for i in range(span):
+                                     # Split up multicolumns into separate columns
+                                     new_col = Column([el[i] for el in col])
++                                    new_col.info.format = col.info.format
+ 
+                                     new_col_iter_str_vals = self.fill_values(
+                                         col, new_col.info.iter_str_vals())
+2026-09-09 05:25:39,997 - INFO - Grading answer for astropy__astropy-13453...
+2026-09-09 05:25:39,999 - INFO - report: {'astropy__astropy-13453': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'infra_failure': False, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': ['astropy/io/ascii/tests/test_html.py::test_write_table_formatted_columns']}, 'PASS_TO_PASS': {'success': ['astropy/io/ascii/tests/test_html.py::test_listwriter', 'astropy/io/ascii/tests/test_html.py::test_htmlinputter_no_bs4', 'astropy/io/ascii/tests/test_html.py::test_multicolumn_write', 'astropy/io/ascii/tests/test_html.py::test_write_no_multicols', 'astropy/io/ascii/tests/test_html.py::test_write_table_html_fill_values', 'astropy/io/ascii/tests/test_html.py::test_write_table_html_fill_values_optional_columns', 'astropy/io/ascii/tests/test_html.py::test_write_table_html_fill_values_masked', 'astropy/io/ascii/tests/test_html.py::test_multicolumn_table_html_fill_values', 'astropy/io/ascii/tests/test_html.py::test_multi_column_write_table_html_fill_values_masked'], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for astropy__astropy-13453: resolved: False
+2026-09-09 05:25:39,999 - INFO - Attempting to stop container sweb.eval.astropy__astropy-13453.delphi-s50...
+2026-09-09 05:25:55,192 - INFO - Container sweb.eval.astropy__astropy-13453.delphi-s50 stopped successfully.
+2026-09-09 05:25:55,192 - INFO - Attempting to remove container sweb.eval.astropy__astropy-13453.delphi-s50...
+2026-09-09 05:25:55,229 - INFO - Container sweb.eval.astropy__astropy-13453.delphi-s50 removed successfully.
