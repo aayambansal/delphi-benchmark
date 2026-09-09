@@ -1,0 +1,17 @@
+diff --git a/astropy/io/fits/util.py b/astropy/io/fits/util.py
+index 8561684a0..10ed94f32 100644
+--- a/astropy/io/fits/util.py
++++ b/astropy/io/fits/util.py
+@@ -769,6 +769,12 @@ def _words_group(s, width):
+         if offset <= xoffset:
+             offset = min(xoffset + width, slen)
+ 
++        # Avoid splitting FITS escaped quotes (``''``) across words.  If the
++        # proposed split would land between the two quotes, move it back by one
++        # character so the pair stays together and round-trips correctly.
++        if offset < slen and s[offset - 1] == "'" and s[offset] == "'":
++            offset -= 1
++
+         # collect the pieces in a list
+         words.append(s[xoffset:offset])
+         if offset >= slen:

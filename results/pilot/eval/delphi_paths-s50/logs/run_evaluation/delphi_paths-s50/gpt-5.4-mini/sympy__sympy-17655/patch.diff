@@ -1,0 +1,13 @@
+diff --git a/sympy/geometry/point.py b/sympy/geometry/point.py
+index 7c978c47be..2a6e1c70ae 100755
+--- a/sympy/geometry/point.py
++++ b/sympy/geometry/point.py
+@@ -224,6 +224,8 @@ def __add__(self, other):
+     def __contains__(self, item):
+         return item in self.args
+ 
++    __rmul__ = __mul__
++
+     def __div__(self, divisor):
+         """Divide point's coordinates by a factor."""
+         divisor = sympify(divisor)

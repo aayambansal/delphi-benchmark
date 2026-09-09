@@ -460,8 +460,128 @@ def exposure_table() -> str:
     return "\n".join(lines) + "\n"
 
 
+def factorial_cells_table() -> str:
+    """Candidate generator x reranking head: cell means per set (results/factorial-r4-v1.json)."""
+    f = json.load((RESULTS / "factorial-r4-v1.json").open())
+    labels = {
+        "conv_norerank": ("conventional", "none"),
+        "conv_rerank": ("conventional", "Delphi's"),
+        "delphi_norerank": ("Delphi", "none"),
+        "delphi_rerank": ("Delphi", "Delphi's"),
+        "delphi_rerank_confirmatory": ("Delphi, confirmatory index", "Delphi's"),
+    }
+    lines = ["\\begin{tabular}{llcccc}", "\\toprule",
+             "Set / candidates & Rerankers & MRR $\\uparrow$ & R@5 $\\uparrow$ & R@20 $\\uparrow$ & BCY@8k $\\uparrow$ \\\\", "\\midrule"]
+    for key in ("independent", "swebench", "expansion", "arb"):
+        entry = f["sets"].get(key)
+        if not entry:
+            continue
+        cells = entry["cells"]
+        present = [c for c in ("conv_norerank", "conv_rerank", "delphi_norerank", "delphi_rerank", "delphi_rerank_confirmatory") if c in cells]
+        if not present:
+            continue
+        best = {m: max(cells[c][m] for c in present) for m in ("MRR", "Recall@5", "Recall@20", "BCY@8k")}
+        lines.append(f"\\multicolumn{{6}}{{l}}{{\\emph{{{entry['label']}}}}} \\\\")
+        for c in present:
+            cand, rer = labels[c]
+            vals = []
+            for m in ("MRR", "Recall@5", "Recall@20", "BCY@8k"):
+                v = cells[c][m]
+                cell = f"{v:.3f}"
+                if abs(v - best[m]) < 1e-9:
+                    cell = f"\\textbf{{{cell}}}"
+                vals.append(cell)
+            lines.append(f"\\quad {cand} & {rer} & " + " & ".join(vals) + " \\\\")
+        lines.append("\\addlinespace")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def factorial_contrasts_table() -> str:
+    f = json.load((RESULTS / "factorial-r4-v1.json").open())
+    names = {
+        "rerank_effect_conventional": "rerankers, conventional candidates",
+        "rerank_effect_delphi": "rerankers, Delphi candidates",
+        "candidate_effect_norerank": "Delphi $-$ conventional candidates, no rerankers",
+        "candidate_effect_rerank": "Delphi $-$ conventional candidates, with rerankers",
+        "candidate_effect_rerank_confirmatory": "Delphi (confirmatory index) $-$ conventional, with rerankers",
+        "replication": "Delphi re-indexed $-$ confirmatory index (same configuration)",
+    }
+
+    def cell(c: dict, m: str) -> str:
+        if m not in c["metrics"]:
+            return "---"
+        d = c["metrics"][m]["mean_delta"]
+        lo, hi = c["metrics"][m]["ci95"]
+        star = "$^{*}$" if (lo > 0 or hi < 0) else ""
+        return f"${d:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}}"
+
+    lines = ["\\begin{tabular}{llccc}", "\\toprule",
+             "Set & Contrast & $\\Delta$MRR & $\\Delta$R@20 & $\\Delta$BCY@8k \\\\", "\\midrule"]
+    for key in ("independent", "swebench", "expansion", "arb"):
+        entry = f["sets"].get(key)
+        if not entry or not entry["contrasts"]:
+            continue
+        first = True
+        for name in ("rerank_effect_conventional", "rerank_effect_delphi", "candidate_effect_norerank", "candidate_effect_rerank", "candidate_effect_rerank_confirmatory", "replication"):
+            c = entry["contrasts"].get(name)
+            if not c:
+                continue
+            label = entry["label"].split(" (")[0] if first else ""
+            first = False
+            lines.append(f"{label} & {names[name]} & {cell(c, 'MRR')} & {cell(c, 'Recall@20')} & {cell(c, 'BCY@8k')} \\\\")
+        lines.append("\\addlinespace")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def seed_interface_table() -> str:
+    path = RESULTS / "pilot" / "analysis-seed-interface.json"
+    if not path.exists():
+        return "\\begin{tabular}{l}\\emph{pending}\\end{tabular}"
+    a = json.load(path.open())
+    labels = {
+        "none": "No seed",
+        "delphi_paths": "Delphi top-5, paths only",
+        "delphi": "Delphi top-5, paths + file heads (pilot design)",
+        "delphi_chunks": "Delphi top-5, paths + best-matching chunk",
+    }
+    n = a["instances_common"]
+    lines = ["\\begin{tabular}{lcccc}", "\\toprule", f"Seed interface (one trajectory per instance, {n} instances) & Resolved & Rate & Mean cost (USD) & Mean steps \\\\", "\\midrule"]
+    for key in ("none", "delphi_paths", "delphi", "delphi_chunks"):
+        c = a["conditions"].get(key)
+        if not c:
+            continue
+        lines.append(f"{labels[key]} & {c['resolved']:.0f} & {c['resolved_rate']:.3f} & {c['mean_cost_usd']:.4f} & {c['mean_steps']:.1f} \\\\")
+    lines.append("\\midrule")
+    lines.append("\\multicolumn{5}{l}{\\emph{Paired differences in resolved rate: instance-cluster 95\\% CI [repository-cluster CI]; instances favouring a/b}} \\\\")
+    pair_labels = {
+        "delphi_paths_minus_none": "Paths only $-$ no seed",
+        "delphi_minus_none": "Paths + heads $-$ no seed",
+        "delphi_chunks_minus_none": "Paths + chunks $-$ no seed",
+        "delphi_chunks_minus_delphi": "Paths + chunks $-$ paths + heads",
+        "delphi_paths_minus_delphi": "Paths only $-$ paths + heads",
+    }
+    for key, label in pair_labels.items():
+        pr = a["pairs"].get(key)
+        if not pr:
+            continue
+        r = pr["resolved"]
+        lo, hi = r["instance_cluster_95_ci"]
+        rlo, rhi = r["repository_cluster_95_ci"]
+        star = "$^{*}$" if (lo > 0 or hi < 0) else ""
+        lines.append(
+            f"{label} & \\multicolumn{{4}}{{l}}{{${r['mean_delta']:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}} [\\ci{{{rlo:+.3f}}}{{{rhi:+.3f}}}]; {r['a_only']}/{r['b_only']}}} \\\\"
+        )
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "factorial_cells.tex").write_text(factorial_cells_table().rstrip("\n") + "%")
+    (OUT / "factorial_contrasts.tex").write_text(factorial_contrasts_table().rstrip("\n") + "%")
+    (OUT / "seed_interface.tex").write_text(seed_interface_table().rstrip("\n") + "%")
     (OUT / "pilot_s50_r2.tex").write_text(pilot_table("s50-r2").rstrip("\n") + "%")
     (OUT / "arb_workflows.tex").write_text(arb_workflow_table().rstrip("\n") + "%")
     (OUT / "per_repo_swebench.tex").write_text(per_repo_table().rstrip("\n") + "%")

@@ -288,6 +288,38 @@ def fig_exposure_timeline() -> None:
     save(fig, "exposure_timeline.pdf")
 
 
+# --------------------------------------------------------------------- 12
+def fig_factorial() -> None:
+    """Candidate generator x reranking head interaction plot (sets with the Delphi no-reranker cell)."""
+    f = json.load((RESULTS / "factorial-r4-v1.json").open())
+    sets = [k for k in ("independent", "swebench", "expansion", "arb") if "delphi_norerank" in f["sets"].get(k, {}).get("cells", {})]
+    if not sets:
+        return
+    metrics = [("MRR", "MRR"), ("Recall@20", "Recall@20"), ("BCY@8k", "BCY@8k")]
+    fig, axes = plt.subplots(len(sets), len(metrics), figsize=(7.0, 2.1 * len(sets)), squeeze=False)
+    for i, key in enumerate(sets):
+        cells = f["sets"][key]["cells"]
+        for j, (metric, label) in enumerate(metrics):
+            ax = axes[i, j]
+            for cand, color, marker, name in (("conv", LADDER[3], "s", "conventional candidates"), ("delphi", DELPHI, "o", "Delphi candidates")):
+                ys = [cells[f"{cand}_norerank"][metric], cells[f"{cand}_rerank"][metric]]
+                ax.plot([0, 1], ys, marker=marker, markersize=4.5, color=color, linewidth=1.3, label=name)
+                for x, y in zip((0, 1), ys):
+                    ax.text(x + (-0.06 if x == 0 else 0.06), y, f"{y:.3f}", fontsize=6.3, color=color, ha="right" if x == 0 else "left", va="center")
+            ax.set_xticks([0, 1])
+            ax.set_xticklabels(["no learned\nreranking", "+ Delphi's\nrerankers"])
+            ax.set_xlim(-0.35, 1.35)
+            ax.set_ylim(0, 1)
+            ax.set_ylabel(label)
+            ax.grid(axis="y", color="#eeeeee", linewidth=0.5)
+            ax.set_axisbelow(True)
+            if j == 0:
+                ax.set_title(f["sets"][key]["label"], loc="left")
+    axes[0, 0].legend(frameon=False, loc="lower right", fontsize=6.5)
+    fig.tight_layout(w_pad=1.0, h_pad=0.8)
+    save(fig, "factorial.pdf")
+
+
 # --------------------------------------------------------------------- 3
 def fig_component_attribution() -> None:
     steps = ["dense", "hybrid", "hybrid_rerank", "hybrid_rerank_expand", "delphi"]
@@ -298,7 +330,7 @@ def fig_component_attribution() -> None:
         "expansion": ("SWE-bench expansion (C0, n=98)", "#08519c", "D"),
         "arb": ("ARB round-3 (C2, n=220)", "#969696", "^"),
     }
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.5))
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.2))
     for ax, metric in zip(axes, ["MRR", "Recall@20"]):
         for key, (label, color, marker) in styles.items():
             ys = []
@@ -337,7 +369,7 @@ def fig_docs_matched() -> None:
         p = RESULTS / f"{run}-summary.json"
         if p.exists():
             raw.append((label, json.load(p.open()).get("identifier_hit_rate")))
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.5), gridspec_kw={"width_ratios": [1.4, 1]})
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.3), gridspec_kw={"width_ratios": [1.4, 1]})
     ax = axes[0]
     y = np.arange(len(rows))
     for yi, (label, arm, color) in zip(y, rows):
@@ -410,7 +442,7 @@ def fig_pilot() -> None:
         if p.exists():
             reps[lab] = json.load(p.open())
     pooled = json.load((RESULTS / "pilot" / "analysis-s50_s50-r2.json").open())
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.5), gridspec_kw={"width_ratios": [1, 1.3]})
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.3), gridspec_kw={"width_ratios": [1, 1.3]})
     ax = axes[0]
     x = np.arange(len(conds))
     for i, (lab, marker) in enumerate(zip(reps, ["o", "s"])):
@@ -568,6 +600,7 @@ def main() -> None:
     fig_deltas_forest()
     fig_deltas_forest([("MRR", "MRR"), ("Recall@20", "Recall@20")], "deltas_forest_compact.pdf", 3.3)
     fig_exposure_timeline()
+    fig_factorial()
     fig_component_attribution()
     fig_docs_matched()
     fig_determinism()

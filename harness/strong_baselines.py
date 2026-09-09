@@ -72,7 +72,11 @@ RRF_K = 60
 OPENAI_EMBEDDINGS = "https://api.openai.com/v1/embeddings"
 OPENAI_CHAT = "https://api.openai.com/v1/chat/completions"
 
-MODES = ("dense", "hybrid", "hybrid_rerank", "hybrid_rerank_expand")
+MODES = ("dense", "hybrid", "hybrid_expand", "hybrid_rerank", "hybrid_rerank_expand")
+# hybrid_expand (round-4 factorial): conventional candidates with Delphi's
+# expansion feeding the dense query and no learned reranking, so that the
+# candidate generator and the reranking head can be varied independently
+# with expansion held constant.
 
 
 def _openai_key() -> str:
@@ -309,7 +313,7 @@ class StrongBaselineEngine:
         self.mode = mode
         self.label = mode
         self.embedder = Embedder()
-        self.chat = ChatModel() if mode.startswith("hybrid_rerank") else None
+        self.chat = ChatModel() if (mode.startswith("hybrid_rerank") or mode == "hybrid_expand") else None
         self.transient_snapshots = transient_snapshots
         self._cross_encoder: Any = None
         self._snapshot_vectors: dict[tuple[str, str], np.ndarray] = {}
@@ -456,7 +460,7 @@ class StrongBaselineEngine:
             self.stats["embedding_tokens"] = self.embedder.tokens
             started = time.perf_counter()
             dense_query = query
-            if self.mode == "hybrid_rerank_expand":
+            if self.mode in ("hybrid_rerank_expand", "hybrid_expand"):
                 expansion = self._expansion(query)
                 if expansion:
                     dense_query = f"{query}\n\n{expansion}"
@@ -468,7 +472,7 @@ class StrongBaselineEngine:
             else:
                 bm25_paths = self._bm25_files(query, chunks)
                 fused = rrf_fuse([(1.0, dense_paths), (1.0, bm25_paths)])
-                if self.mode == "hybrid":
+                if self.mode in ("hybrid", "hybrid_expand"):
                     paths = [path for path, _ in fused[:limit]]
                 else:
                     for path, _ in fused[:HYBRID_CANDIDATES]:
@@ -511,8 +515,8 @@ class StrongBaselineEngine:
                     "llm_seed": LLM_SEED,
                 }
             )
-        config["query_expansion_enabled"] = self.mode == "hybrid_rerank_expand"
-        if self.mode == "hybrid_rerank_expand":
+        config["query_expansion_enabled"] = self.mode in ("hybrid_rerank_expand", "hybrid_expand")
+        if self.mode in ("hybrid_rerank_expand", "hybrid_expand"):
             config["query_expansion_model"] = EXPANSION_MODEL
         return config
 

@@ -1,0 +1,31 @@
+diff --git a/sphinx/ext/napoleon/docstring.py b/sphinx/ext/napoleon/docstring.py
+index d36fdd17a..f0d4020c6 100644
+--- a/sphinx/ext/napoleon/docstring.py
++++ b/sphinx/ext/napoleon/docstring.py
+@@ -1091,7 +1091,25 @@ class NumpyDocstring(GoogleDocstring):
+         func = super()._escape_args_and_kwargs
+ 
+         if ", " in name:
+-            return ", ".join(func(param) for param in name.split(", "))
++            params = []
++            current = []
++            depth = 0
++            for ch in name:
++                if ch == ',' and depth == 0:
++                    param = ''.join(current).strip()
++                    if param:
++                        params.append(param)
++                    current = []
++                    continue
++                if ch in '([{' :
++                    depth += 1
++                elif ch in ')]}' and depth:
++                    depth -= 1
++                current.append(ch)
++            param = ''.join(current).strip()
++            if param:
++                params.append(param)
++            return ", ".join(func(param) for param in params)
+         else:
+             return func(name)
+ 

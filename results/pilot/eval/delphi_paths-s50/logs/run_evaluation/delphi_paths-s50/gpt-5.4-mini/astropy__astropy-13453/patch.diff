@@ -1,0 +1,50 @@
+diff --git a/astropy/io/ascii/html.py b/astropy/io/ascii/html.py
+index 266cf229c..2fe09b9c2 100644
+--- a/astropy/io/ascii/html.py
++++ b/astropy/io/ascii/html.py
+@@ -369,6 +369,10 @@ class HTML(core.BaseReader):
+         # Use XMLWriter to output HTML to lines
+         w = writer.XMLWriter(ListWriter(lines))
+ 
++        # Apply format directives in the same way as the generic ASCII writer.
++        self.data._set_col_formats()
++        col_str_vals = [list(col.info.iter_str_vals()) for col in cols]
++
+         with w.tag('html'):
+             with w.tag('head'):
+                 # Declare encoding and set CSS style for table
+@@ -416,30 +420,16 @@ class HTML(core.BaseReader):
+                         col_str_iters = []
+                         new_cols_escaped = []
+ 
+-                        # Make a container to hold any new_col objects created
+-                        # below for multicolumn elements.  This is purely to
+-                        # maintain a reference for these objects during
+-                        # subsequent iteration to format column values.  This
+-                        # requires that the weakref info._parent be maintained.
+-                        new_cols = []
+-
+-                        for col, col_escaped in zip(cols, cols_escaped):
++                        for col, col_escaped, col_str_val in zip(cols, cols_escaped, col_str_vals):
+                             if len(col.shape) > 1 and self.html['multicol']:
+                                 span = col.shape[1]
+                                 for i in range(span):
+                                     # Split up multicolumns into separate columns
+-                                    new_col = Column([el[i] for el in col])
+-
+-                                    new_col_iter_str_vals = self.fill_values(
+-                                        col, new_col.info.iter_str_vals())
+-                                    col_str_iters.append(new_col_iter_str_vals)
++                                    split_vals = [el[i] for el in col_str_val]
++                                    col_str_iters.append(self.fill_values(col, split_vals))
+                                     new_cols_escaped.append(col_escaped)
+-                                    new_cols.append(new_col)
+                             else:
+-
+-                                col_iter_str_vals = self.fill_values(col, col.info.iter_str_vals())
+-                                col_str_iters.append(col_iter_str_vals)
+-
++                                col_str_iters.append(self.fill_values(col, col_str_val))
+                                 new_cols_escaped.append(col_escaped)
+ 
+                     for row in zip(*col_str_iters):

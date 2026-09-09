@@ -106,6 +106,8 @@ def main() -> None:
     parser.add_argument("--cases", type=Path, default=ROOT / "samples" / "swebench" / "cases.jsonl")
     parser.add_argument("--samples", type=int, default=20000)
     parser.add_argument("--seed", type=int, default=1042)
+    parser.add_argument("--pairs", default=None, help="comma-separated a:b pairs to analyse (overrides the default pair set)")
+    parser.add_argument("--out-label", default=None, help="output file suffix (default: the budget label)")
     args = parser.parse_args()
 
     cases = {str(r["id"]): r for r in (json.loads(l) for l in args.cases.open() if l.strip())}
@@ -163,20 +165,24 @@ def main() -> None:
         for r in sub.values():
             s = str(r["exit_status"])
             summary["conditions"][c]["exit_statuses"][s] = summary["conditions"][c]["exit_statuses"].get(s, 0) + 1
-    order = [c for c in ("delphi", "hybrid_rerank_expand", "random", "none") if c in conds]
-    for a in order:
-        for b in order:
-            if a == b or (a, b) in (("none", "random"),):
-                continue
-            if b in ("none", "random") or (a == "delphi" and b == "hybrid_rerank_expand"):
-                sa = {i: conds[a][i] for i in common}
-                sb = {i: conds[b][i] for i in common}
-                summary["pairs"][f"{a}_minus_{b}"] = {
-                    "resolved": paired(sa, sb, "resolved", cases, samples=args.samples, seed=args.seed),
-                    "cost_usd": paired(sa, sb, "cost_usd", cases, samples=args.samples, seed=args.seed),
-                    "steps": paired(sa, sb, "steps", cases, samples=args.samples, seed=args.seed),
-                }
-    out = PILOT / f"analysis-{budget_label.replace('+', '_')}.json"
+    if args.pairs:
+        wanted = [tuple(p.split(":")) for p in args.pairs.split(",")]
+    else:
+        order = [c for c in ("delphi", "hybrid_rerank_expand", "random", "none") if c in conds]
+        wanted = [(a, b) for a in order for b in order
+                  if a != b and (a, b) not in (("none", "random"),)
+                  and (b in ("none", "random") or (a == "delphi" and b == "hybrid_rerank_expand"))]
+    for a, b in wanted:
+        if a not in conds or b not in conds:
+            continue
+        sa = {i: conds[a][i] for i in common}
+        sb = {i: conds[b][i] for i in common}
+        summary["pairs"][f"{a}_minus_{b}"] = {
+            "resolved": paired(sa, sb, "resolved", cases, samples=args.samples, seed=args.seed),
+            "cost_usd": paired(sa, sb, "cost_usd", cases, samples=args.samples, seed=args.seed),
+            "steps": paired(sa, sb, "steps", cases, samples=args.samples, seed=args.seed),
+        }
+    out = PILOT / f"analysis-{(args.out_label or budget_label).replace('+', '_')}.json"
     out.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(json.dumps({k: v for k, v in summary["conditions"].items()}, indent=1))
     for name, p in summary["pairs"].items():

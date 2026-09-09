@@ -57,6 +57,7 @@ SETS = [
             "Corpus built in round 3 from repositories disjoint from ARB (harness/build_independent_corpus.py); final split locked before any scoring (corpus/independent/v1/LOCK.json).",
             "Scored once by the frozen stack (results/I-final-delphi-generated-source-exact-top20-v1-*) and by comparators.",
             "Caveat shared by every set: the foundation models inside the stack (embeddings, gpt-4o, gpt-4o-mini) may have seen these public repositories during training; the ledger controls author exposure, not model contamination.",
+            "Post-hoc explanatory use (2026-09-09): the corpus was re-indexed into a fresh database for the candidate x reranker factorial (I-factorial-delphi-full-v1 replication, I-ablation-delphi-norerank-v1, I-final-hybrid_expand-r4-v1). Confirmatory numbers remain those of the original index.",
         ],
         "supports": "confirmatory",
     },
@@ -76,6 +77,7 @@ SETS = [
         "evidence": [
             "Drawn deterministically (harness/prep_swebench.py, salt delphi-round3-swebench-v1); leakage audit 0/62 patch markers; scored once from frozen code (results/D-final-delphi-generated-source-exact-top20-v1-*).",
             "Same model-contamination caveat as every set.",
+            "Post-hoc explanatory use (2026-09-09): D-final-hybrid_expand-r4-v1 factorial cell; executable-pilot seed-interface check (delphi_paths-s50, delphi_chunks-s50) on the same 62 instances, one trajectory each, not preregistered.",
         ],
         "supports": "confirmatory",
     },
@@ -88,6 +90,7 @@ SETS = [
             "Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-expansion-v1) from the 438 Verified instances never used in any round; excludes round-3 instance ids and base commits (100 drawn).",
             "Two engine-agnostic preprocessing rules applied before any scoring (samples/swebench/cases-r4-expansion-manifest.json): a gold file must exist at the base commit (one file created by the patch removed from astropy__astropy-13398's gold set; no case dropped), and ARB's query_has_leakage excludes instances whose issue text carries patch or fix-commit markers (django__django-16256, scikit-learn__scikit-learn-14710). 98 cases remain.",
             "Scored once per system on 2026-09-09 from the frozen commit after the index audit (results/native-delphi-swebench-r4-expansion-index-audit-v2.json) and gold-searchability preflight; no system was re-run.",
+            "Post-hoc explanatory use (2026-09-09, after the confirmatory runs): candidate x reranker factorial cells D2-ablation-delphi-norerank-v1 and D2-final-hybrid_expand-r4-v1 (results/factorial-r4-v1.json). No configuration was chosen on them; the set becomes C1 for any future change they inform.",
         ],
         "supports": "confirmatory",
     },

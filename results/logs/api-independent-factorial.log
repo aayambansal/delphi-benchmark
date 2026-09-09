@@ -1,0 +1,984 @@
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=index_paper
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=list_papers
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=get_paper
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=search_papers
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=get_citations
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=get_equations
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=get_code_snippets
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=generate_report
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=compare_papers
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=extract_quoted_evidence
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=joint_retrieval
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('papers',) tool=delete_paper
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('datasets',) tool=index_dataset
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('datasets',) tool=list_datasets
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('datasets',) tool=get_dataset
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('datasets',) tool=search_datasets
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('datasets',) tool=delete_dataset
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research_start
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research_list
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research_status
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research_events
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research_followup
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research_cancel
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('research',) tool=research
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('docs',) tool=grep_source
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_register_workspace
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_ingest_node
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_ingest_edge
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_ingest_artifact
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_ingest_execution
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_ingest_tool_contract
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=build_atlas_context
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=summarize_relevant_subgraph
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=find_related_nodes
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=find_relevant_artifacts
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_retrieve_tool_contract
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_what_was_tried
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_what_not_to_repeat
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_active_work_context
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_find_decisions
+2026-09-09 10:54:27 [debug    ] mcp: skipping tool by profile  groups=('atlas',) tool=atlas_search_nodes
+INFO:     Started server process [87833]
+INFO:     Waiting for application startup.
+{"url": "postgresql://aayambansal@127.0.0.1:5432/delphi_r4_independent_factorial_20260909", "event": "Connecting to PostgreSQL", "logger": "synsc.database.connection", "level": "info", "timestamp": "2026-09-09T05:24:27.598162Z"}
+{"event": "PostgreSQL connected with pgvector extension", "logger": "synsc.database.connection", "level": "info", "timestamp": "2026-09-09T05:24:27.636683Z"}
+{"tables": ["users", "api_keys", "repositories", "chunk_embeddings", "user_repositories", "code_chunks"], "event": "Database verified", "logger": "synsc.database.connection", "level": "info", "timestamp": "2026-09-09T05:24:27.637796Z"}
+{"version": "018_context_sessions", "event": "Alembic migration version", "logger": "synsc.database.connection", "level": "info", "timestamp": "2026-09-09T05:24:27.638095Z"}
+{"event": "MCP session manager task group initialized", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:24:27.784984Z"}
+Initializing embedding provider: openai-embeddings
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:28744 (Press CTRL+C to quit)
+{"event": "Paper embedding model loaded and warmed up", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:24:29.297065Z"}
+Loading cross-encoder reranker: cross-encoder/ms-marco-MiniLM-L-6-v2
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/105 [00:00<?, ?it/s]Loading weights: 100%|██████████| 105/105 [00:00<00:00, 6838.65it/s]
+Reranker ready: cross-encoder/ms-marco-MiniLM-L-6-v2
+Reranker warm-up complete
+INFO:     127.0.0.1:59915 - "GET /health HTTP/1.1" 200 OK
+{"user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Created admin user for SYSTEM_PASSWORD", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.897053Z"}
+{"path": "/bench/corpus/aio-libs__aiohttp/0b6c9170e0099768987cb22e5aeabdb4fba34f41", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.897535Z"}
+{"path": "/bench/corpus/aio-libs__aiohttp/3f726162517dc7a0a44bd37c834b663a26deada8", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.898865Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/aio-libs__aiohttp/bcfe363831f3360e2dbb59bffbd2721f2dbe063e", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.904386Z"}
+{"path": "/bench/corpus/gorilla__mux/815b8c6a2641cd336000b3fb159b5741d0dc0113", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.905378Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/gorilla__mux/d83b6ffe499a29cc05fc977988d0392851779620", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.909759Z"}
+{"path": "/bench/corpus/gorilla__mux/3d80bc801bb034e17cae38591335b3b1110f1c47", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.910764Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/helix-editor__helix/afadf91f4c0bdd7b63b0cab5d08d0448539225c7", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.914320Z"}
+{"path": "/bench/corpus/helix-editor__helix/9fa976f3b2f84e223880a40dcf6a606dba294fe5", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.915337Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/helix-editor__helix/a8f85a5a638853de9c702756759aa532c2c1b3db", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.918031Z"}
+{"path": "/bench/corpus/junit-team__junit5/c8198685bd2abe25a27aa200b57c1151040a5506", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.918950Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/junit-team__junit5/b2284a5ab4a0b3f66be5ee7e732ca7ec7ffbd5c6", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.921422Z"}
+{"path": "/bench/corpus/junit-team__junit5/e47b9bb4d3c1a03fe6b4c2df4c53540d14875b06", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.922236Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/preactjs__preact/cf6942dc229dcb16d8257a6aa01e7d4d673da58f", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.925065Z"}
+{"path": "/bench/corpus/preactjs__preact/2b82799e3d4dbd6c9a791e4b319ac85cd1c99ea6", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.925969Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/preactjs__preact/2a788d638ecfe97fd88c52609c7d426bc50aa1c0", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.935227Z"}
+{"path": "/bench/corpus/rs__zerolog/6d6350a51143b5c0d0a6a3b736ee2b41315f7269", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.936750Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/bench/corpus/rs__zerolog/1170ccfb07953ca67a1d4754e43a9ce9f7b54738", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.940190Z"}
+{"path": "/bench/corpus/rs__zerolog/3543e9d94bc5ed088dd2d9ad1d19c7ccd0fa65f5", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:25:07.943230Z"}
+INFO:     127.0.0.1:59916 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59917 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/aio-libs__aiohttp/0b6c9170e0099768987cb22e5aeabdb4fba34f41", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:26:08.663821Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/aio-libs__aiohttp/3f726162517dc7a0a44bd37c834b663a26deada8", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:26:08.666840Z"}
+{"count": 376, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:26:08.770676Z"}
+{"count": 362, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:26:08.771122Z"}
+{"owner": "local", "name": "ARB aio-libs/aiohttp@0b6c9170e009", "files": 376, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.802321Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.802775Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.803476Z"}
+{"repo_id": "105e4442-ba26-4e94-aaa9-e053cfbfca32", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.806110Z"}
+{"owner": "local", "name": "ARB aio-libs/aiohttp@3f726162517d", "files": 362, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.818132Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.818564Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.819152Z"}
+{"repo_id": "4460623a-98e4-49e9-836c-5d881a55c3ad", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.820024Z"}
+{"event": "Python parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.831079Z"}
+{"event": "Python parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.831155Z"}
+{"event": "JavaScript parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.850622Z"}
+{"event": "JavaScript parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.850833Z"}
+{"event": "TypeScript parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.851053Z"}
+{"event": "TypeScript parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.851102Z"}
+{"language": "go", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.862144Z"}
+{"language": "go", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.862230Z"}
+{"language": "rust", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.871967Z"}
+{"language": "rust", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.872058Z"}
+{"language": "java", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.881523Z"}
+{"language": "java", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.881624Z"}
+{"language": "c", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.893708Z"}
+{"language": "c", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.893829Z"}
+{"language": "cpp", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.903444Z"}
+{"language": "cpp", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.904430Z"}
+{"language": "csharp", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.914551Z"}
+{"language": "csharp", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.914633Z"}
+{"language": "ruby", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.924030Z"}
+{"language": "ruby", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.924117Z"}
+{"language": "php", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.934394Z"}
+{"language": "php", "event": "Generic parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.934474Z"}
+{"language": "kotlin", "event": "Regex parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.936490Z"}
+{"language": "swift", "event": "Regex parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.936542Z"}
+{"language": "scala", "event": "Regex parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.936581Z"}
+{"language": "lua", "event": "Regex parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.936619Z"}
+{"language": "elixir", "event": "Regex parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.936651Z"}
+{"language": "shell", "event": "Regex parser registered", "logger": "synsc.parsing.registry", "level": "info", "timestamp": "2026-09-09T05:26:08.936679Z"}
+{"progress": "18/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.945899Z"}
+{"progress": "18/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.947012Z"}
+{"progress": "36/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.991007Z"}
+{"progress": "36/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:08.992778Z"}
+{"progress": "54/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.024896Z"}
+{"progress": "54/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.025048Z"}
+{"progress": "72/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.052491Z"}
+{"progress": "72/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.056563Z"}
+{"progress": "90/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.070915Z"}
+{"progress": "108/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.071817Z"}
+{"progress": "126/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.072469Z"}
+{"progress": "144/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.073366Z"}
+{"progress": "162/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.074213Z"}
+{"progress": "90/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.074714Z"}
+{"progress": "180/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.075760Z"}
+{"progress": "108/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.075968Z"}
+{"progress": "126/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.076854Z"}
+{"progress": "144/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.077529Z"}
+{"progress": "162/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.078228Z"}
+{"progress": "180/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.079392Z"}
+{"progress": "198/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.093781Z"}
+{"progress": "198/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.107497Z"}
+{"progress": "216/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.138599Z"}
+{"progress": "216/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.169512Z"}
+{"progress": "234/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.186474Z"}
+{"progress": "234/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.198813Z"}
+{"progress": "252/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.224756Z"}
+{"progress": "252/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.256931Z"}
+{"progress": "270/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.268951Z"}
+{"progress": "270/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.280427Z"}
+{"progress": "288/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.289893Z"}
+{"progress": "288/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.295893Z"}
+{"progress": "306/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.316408Z"}
+{"progress": "306/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.318645Z"}
+{"progress": "324/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.329254Z"}
+{"progress": "324/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.333965Z"}
+{"progress": "342/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.339340Z"}
+{"progress": "360/362", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.344714Z"}
+{"progress": "342/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.345333Z"}
+{"batch": "1/1", "files_in_batch": 362, "files_done": 362, "total_files": 362, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.345533Z"}
+{"progress": "360/376", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.357640Z"}
+{"batch": "1/1", "files_in_batch": 376, "files_done": 376, "total_files": 376, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.363080Z"}
+{"batch": "1/1", "flush_ms": 28, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.374017Z"}
+{"batch": "1/1", "flush_ms": 33, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:09.396075Z"}
+{"batch": "1/1", "chunks_so_far": 4090, "symbols_so_far": 6782, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:17.317131Z"}
+{"batch": "1/1", "chunks_so_far": 4144, "symbols_so_far": 6845, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:17.601238Z"}
+{"batch": "1/1", "flush_ms": 3788, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:21.105154Z"}
+{"new_chunks": 4090, "embed_batches_queued": 64, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:21.106832Z"}
+{"batch": "1/1", "flush_ms": 3659, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:21.260088Z"}
+{"new_chunks": 4144, "embed_batches_queued": 65, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:26:21.261640Z"}
+{"event": "Vector store initialized (pgvector)", "logger": "synsc.indexing.vector_store", "level": "info", "timestamp": "2026-09-09T05:30:07.150118Z"}
+{"total_chunks": 4144, "embed_batches_produced": 65, "embed_batches_written": 65, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:12.215410Z"}
+{"repo_id": "105e4442-ba26-4e94-aaa9-e053cfbfca32", "files": 376, "chunks": 4144, "symbols": 6845, "lines": 130755, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:12.215554Z"}
+{"repo_id": "105e4442-ba26-4e94-aaa9-e053cfbfca32", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:12.225883Z"}
+{"repo_id": "105e4442-ba26-4e94-aaa9-e053cfbfca32", "total": 3843, "adjacent": 3773, "same_class": 70, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:12.676766Z"}
+{"total_chunks": 4090, "embed_batches_produced": 64, "embed_batches_written": 64, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:14.172744Z"}
+{"repo_id": "4460623a-98e4-49e9-836c-5d881a55c3ad", "files": 362, "chunks": 4090, "symbols": 6782, "lines": 129561, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:14.172937Z"}
+{"repo_id": "4460623a-98e4-49e9-836c-5d881a55c3ad", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:14.179918Z"}
+{"repo_id": "4460623a-98e4-49e9-836c-5d881a55c3ad", "total": 3798, "adjacent": 3733, "same_class": 65, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:14.637709Z"}
+{"repo_id": "105e4442-ba26-4e94-aaa9-e053cfbfca32", "edges": 34497, "resolved": 19741, "unresolved": 14756, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:30:17.924546Z"}
+{"repo_id": "105e4442-ba26-4e94-aaa9-e053cfbfca32", "edges": 34497, "resolved": 19741, "unresolved": 14756, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:17.941355Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/aio-libs__aiohttp/0b6c9170e0099768987cb22e5aeabdb4fba34f41", "files": 376, "chunks": 4144, "symbols": 6845, "time_ms": 249277, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:17.941502Z"}
+INFO:     127.0.0.1:60256 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/aio-libs__aiohttp/bcfe363831f3360e2dbb59bffbd2721f2dbe063e", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:30:17.953283Z"}
+{"count": 371, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:30:18.044818Z"}
+{"owner": "local", "name": "ARB aio-libs/aiohttp@bcfe363831f3", "files": 371, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.051351Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.051590Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.052063Z"}
+{"repo_id": "81644797-924b-4bce-8cc3-0b56d7829170", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.052553Z"}
+{"progress": "18/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.057602Z"}
+{"progress": "36/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.113344Z"}
+{"repo_id": "4460623a-98e4-49e9-836c-5d881a55c3ad", "edges": 32989, "resolved": 18295, "unresolved": 14694, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:30:18.137419Z"}
+{"repo_id": "4460623a-98e4-49e9-836c-5d881a55c3ad", "edges": 32989, "resolved": 18295, "unresolved": 14694, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.151835Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/aio-libs__aiohttp/3f726162517dc7a0a44bd37c834b663a26deada8", "files": 362, "chunks": 4090, "symbols": 6782, "time_ms": 249485, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.151914Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/gorilla__mux/815b8c6a2641cd336000b3fb159b5741d0dc0113", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:30:18.157049Z"}
+{"count": 22, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:30:18.161597Z"}
+{"progress": "54/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.161912Z"}
+{"owner": "local", "name": "ARB gorilla/mux@815b8c6a2641", "files": 22, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.162597Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.162800Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.163199Z"}
+{"repo_id": "9760b1a9-d917-4d65-89dc-6995c4aa14b8", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.163770Z"}
+{"progress": "1/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.163897Z"}
+{"progress": "2/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.164024Z"}
+{"progress": "3/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.164143Z"}
+{"progress": "4/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.164308Z"}
+{"progress": "5/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.164448Z"}
+{"progress": "6/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.166063Z"}
+{"progress": "7/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.168134Z"}
+{"progress": "8/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.169141Z"}
+{"progress": "9/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.169268Z"}
+{"progress": "10/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.169348Z"}
+{"progress": "11/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.169423Z"}
+{"progress": "12/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.169576Z"}
+{"progress": "13/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.171356Z"}
+{"progress": "14/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.172291Z"}
+{"progress": "15/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.172482Z"}
+{"progress": "16/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.181036Z"}
+{"progress": "17/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.181260Z"}
+{"progress": "18/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.181340Z"}
+{"progress": "19/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.182376Z"}
+{"progress": "20/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.182547Z"}
+{"progress": "21/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.182662Z"}
+{"progress": "22/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.182909Z"}
+{"batch": "1/1", "files_in_batch": 22, "files_done": 22, "total_files": 22, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.184995Z"}
+{"progress": "72/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.189435Z"}
+{"batch": "1/1", "flush_ms": 5, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.189707Z"}
+{"progress": "90/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.210740Z"}
+{"progress": "108/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.214853Z"}
+{"progress": "126/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.217943Z"}
+{"progress": "144/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.222989Z"}
+{"progress": "162/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.224945Z"}
+{"progress": "180/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.227090Z"}
+{"progress": "198/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.228296Z"}
+{"batch": "1/1", "chunks_so_far": 216, "symbols_so_far": 223, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.304799Z"}
+{"progress": "216/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.318850Z"}
+{"progress": "234/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.367265Z"}
+{"batch": "1/1", "flush_ms": 69, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.373663Z"}
+{"new_chunks": 216, "embed_batches_queued": 4, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.373904Z"}
+{"progress": "252/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.410620Z"}
+{"progress": "270/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.449159Z"}
+{"progress": "288/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.471923Z"}
+{"progress": "306/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.497424Z"}
+{"progress": "324/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.507460Z"}
+{"progress": "342/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.523334Z"}
+{"progress": "360/371", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.526477Z"}
+{"batch": "1/1", "files_in_batch": 371, "files_done": 371, "total_files": 371, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.531395Z"}
+{"batch": "1/1", "flush_ms": 24, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:18.555861Z"}
+{"batch": "1/1", "chunks_so_far": 4072, "symbols_so_far": 6731, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:22.882430Z"}
+{"batch": "1/1", "flush_ms": 2668, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:25.550438Z"}
+{"new_chunks": 4072, "embed_batches_queued": 64, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:25.552113Z"}
+{"total_chunks": 216, "embed_batches_produced": 4, "embed_batches_written": 4, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.314914Z"}
+{"repo_id": "9760b1a9-d917-4d65-89dc-6995c4aa14b8", "files": 22, "chunks": 216, "symbols": 223, "lines": 6534, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.315048Z"}
+{"repo_id": "9760b1a9-d917-4d65-89dc-6995c4aa14b8", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.316450Z"}
+{"repo_id": "9760b1a9-d917-4d65-89dc-6995c4aa14b8", "total": 195, "adjacent": 195, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.347761Z"}
+{"repo_id": "9760b1a9-d917-4d65-89dc-6995c4aa14b8", "edges": 962, "resolved": 662, "unresolved": 300, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:30:31.468112Z"}
+{"repo_id": "9760b1a9-d917-4d65-89dc-6995c4aa14b8", "edges": 962, "resolved": 662, "unresolved": 300, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.469337Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/gorilla__mux/815b8c6a2641cd336000b3fb159b5741d0dc0113", "files": 22, "chunks": 216, "symbols": 223, "time_ms": 13312, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.469395Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/gorilla__mux/3d80bc801bb034e17cae38591335b3b1110f1c47", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:30:31.473797Z"}
+{"count": 21, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:30:31.477849Z"}
+{"owner": "local", "name": "ARB gorilla/mux@3d80bc801bb0", "files": 21, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.478628Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.478821Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.479142Z"}
+{"repo_id": "dff35cf0-21e2-4837-a8f9-159158af916b", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.479623Z"}
+{"progress": "1/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.479713Z"}
+{"progress": "2/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.479960Z"}
+{"progress": "3/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.480021Z"}
+{"progress": "4/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.481666Z"}
+{"progress": "5/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.481831Z"}
+{"progress": "6/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.481901Z"}
+{"progress": "7/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.482013Z"}
+{"progress": "8/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.482915Z"}
+{"progress": "9/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.485317Z"}
+{"progress": "10/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.487598Z"}
+{"progress": "11/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.487715Z"}
+{"progress": "12/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.488874Z"}
+{"progress": "13/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.490060Z"}
+{"progress": "14/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.490269Z"}
+{"progress": "15/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.490352Z"}
+{"progress": "16/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.492138Z"}
+{"progress": "17/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.492329Z"}
+{"progress": "18/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.501731Z"}
+{"progress": "19/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.502075Z"}
+{"progress": "20/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.502209Z"}
+{"progress": "21/21", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.502276Z"}
+{"batch": "1/1", "files_in_batch": 21, "files_done": 21, "total_files": 21, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.502394Z"}
+{"batch": "1/1", "flush_ms": 4, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.505969Z"}
+{"batch": "1/1", "chunks_so_far": 212, "symbols_so_far": 220, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.729729Z"}
+{"batch": "1/1", "flush_ms": 92, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.821555Z"}
+{"new_chunks": 212, "embed_batches_queued": 4, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:31.821719Z"}
+{"total_chunks": 212, "embed_batches_produced": 4, "embed_batches_written": 4, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.143541Z"}
+{"repo_id": "dff35cf0-21e2-4837-a8f9-159158af916b", "files": 21, "chunks": 212, "symbols": 220, "lines": 6516, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.143655Z"}
+{"repo_id": "dff35cf0-21e2-4837-a8f9-159158af916b", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.144732Z"}
+{"repo_id": "dff35cf0-21e2-4837-a8f9-159158af916b", "total": 192, "adjacent": 192, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.166181Z"}
+{"repo_id": "dff35cf0-21e2-4837-a8f9-159158af916b", "edges": 967, "resolved": 659, "unresolved": 308, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:30:44.480388Z"}
+{"repo_id": "dff35cf0-21e2-4837-a8f9-159158af916b", "edges": 967, "resolved": 659, "unresolved": 308, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.481335Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/gorilla__mux/3d80bc801bb034e17cae38591335b3b1110f1c47", "files": 21, "chunks": 212, "symbols": 220, "time_ms": 13007, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.481377Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/gorilla__mux/d83b6ffe499a29cc05fc977988d0392851779620", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:30:44.485489Z"}
+{"count": 22, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:30:44.489984Z"}
+{"owner": "local", "name": "ARB gorilla/mux@d83b6ffe499a", "files": 22, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.491189Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.491437Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.491856Z"}
+{"repo_id": "33bd73ba-012c-4aaa-aeeb-04a3091a634c", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.492415Z"}
+{"progress": "1/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.492523Z"}
+{"progress": "2/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.492783Z"}
+{"progress": "3/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.492843Z"}
+{"progress": "4/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.493021Z"}
+{"progress": "5/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.493102Z"}
+{"progress": "6/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.493271Z"}
+{"progress": "7/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.494954Z"}
+{"progress": "8/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.496492Z"}
+{"progress": "9/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.498838Z"}
+{"progress": "10/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.500845Z"}
+{"progress": "11/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.500974Z"}
+{"progress": "12/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.502004Z"}
+{"progress": "13/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.502077Z"}
+{"progress": "14/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.502266Z"}
+{"progress": "15/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.503326Z"}
+{"progress": "16/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.503459Z"}
+{"progress": "17/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.503728Z"}
+{"progress": "18/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.505650Z"}
+{"progress": "19/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.505846Z"}
+{"progress": "20/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.505908Z"}
+{"progress": "21/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.506238Z"}
+{"progress": "22/22", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.506368Z"}
+{"batch": "1/1", "files_in_batch": 22, "files_done": 22, "total_files": 22, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.516439Z"}
+{"batch": "1/1", "flush_ms": 5, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.521464Z"}
+{"batch": "1/1", "chunks_so_far": 217, "symbols_so_far": 225, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.649514Z"}
+{"batch": "1/1", "flush_ms": 70, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.719719Z"}
+{"new_chunks": 217, "embed_batches_queued": 4, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:44.719880Z"}
+{"total_chunks": 217, "embed_batches_produced": 4, "embed_batches_written": 4, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:56.657594Z"}
+{"repo_id": "33bd73ba-012c-4aaa-aeeb-04a3091a634c", "files": 22, "chunks": 217, "symbols": 225, "lines": 7275, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:56.657714Z"}
+{"repo_id": "33bd73ba-012c-4aaa-aeeb-04a3091a634c", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:56.658943Z"}
+{"repo_id": "33bd73ba-012c-4aaa-aeeb-04a3091a634c", "total": 196, "adjacent": 196, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:56.684128Z"}
+{"repo_id": "33bd73ba-012c-4aaa-aeeb-04a3091a634c", "edges": 1084, "resolved": 745, "unresolved": 339, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:30:56.819694Z"}
+{"repo_id": "33bd73ba-012c-4aaa-aeeb-04a3091a634c", "edges": 1084, "resolved": 745, "unresolved": 339, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:56.820943Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/gorilla__mux/d83b6ffe499a29cc05fc977988d0392851779620", "files": 22, "chunks": 217, "symbols": 225, "time_ms": 12335, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:56.820996Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/helix-editor__helix/afadf91f4c0bdd7b63b0cab5d08d0448539225c7", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:30:56.825034Z"}
+{"count": 551, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:30:57.015946Z"}
+{"owner": "local", "name": "ARB helix-editor/helix@afadf91f4c0b", "files": 551, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.020401Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.023457Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.024269Z"}
+{"repo_id": "c9073e54-94f2-49a6-85ec-2970b83f1363", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.024845Z"}
+{"progress": "27/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.079749Z"}
+{"progress": "54/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.129544Z"}
+{"progress": "81/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.160509Z"}
+{"progress": "108/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.178503Z"}
+{"progress": "135/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.194722Z"}
+{"progress": "162/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.205766Z"}
+{"progress": "189/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.216900Z"}
+{"progress": "216/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.228297Z"}
+{"progress": "243/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.239776Z"}
+{"progress": "270/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.250729Z"}
+{"progress": "297/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.268028Z"}
+{"progress": "324/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.281744Z"}
+{"progress": "351/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.314954Z"}
+{"progress": "378/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.358830Z"}
+{"progress": "405/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.373124Z"}
+{"progress": "432/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.394482Z"}
+{"progress": "459/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.417890Z"}
+{"progress": "486/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.447767Z"}
+{"batch": "1/2", "files_in_batch": 500, "files_done": 501, "total_files": 551, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.496466Z"}
+{"batch": "1/2", "flush_ms": 40, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:30:57.537043Z"}
+{"batch": "1/2", "chunks_so_far": 2867, "symbols_so_far": 4371, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:01.133681Z"}
+{"batch": "1/2", "flush_ms": 1667, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:02.800637Z"}
+{"new_chunks": 2867, "embed_batches_queued": 45, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:02.802043Z"}
+{"progress": "513/551", "chunks_so_far": 2867, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:02.817670Z"}
+{"progress": "540/551", "chunks_so_far": 2867, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:02.853243Z"}
+{"batch": "1/2", "files_in_batch": 50, "files_done": 551, "total_files": 551, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:02.870632Z"}
+{"batch": "1/2", "flush_ms": 3, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:02.873824Z"}
+{"batch": "1/2", "chunks_so_far": 3309, "symbols_so_far": 5135, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:03.365433Z"}
+{"batch": "1/2", "flush_ms": 204, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:03.569202Z"}
+{"new_chunks": 442, "embed_batches_queued": 52, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:31:03.569438Z"}
+{"total_chunks": 3309, "embed_batches_produced": 52, "embed_batches_written": 52, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:07.684892Z"}
+{"repo_id": "c9073e54-94f2-49a6-85ec-2970b83f1363", "files": 551, "chunks": 3309, "symbols": 5135, "lines": 143431, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:07.685354Z"}
+{"repo_id": "c9073e54-94f2-49a6-85ec-2970b83f1363", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:07.692898Z"}
+{"repo_id": "c9073e54-94f2-49a6-85ec-2970b83f1363", "total": 2763, "adjacent": 2763, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:07.943111Z"}
+{"total_chunks": 4072, "embed_batches_produced": 64, "embed_batches_written": 64, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:11.116539Z"}
+{"repo_id": "81644797-924b-4bce-8cc3-0b56d7829170", "files": 371, "chunks": 4072, "symbols": 6731, "lines": 128511, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:11.116656Z"}
+{"repo_id": "81644797-924b-4bce-8cc3-0b56d7829170", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:11.122484Z"}
+{"repo_id": "81644797-924b-4bce-8cc3-0b56d7829170", "total": 3771, "adjacent": 3706, "same_class": 65, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:11.801726Z"}
+{"repo_id": "c9073e54-94f2-49a6-85ec-2970b83f1363", "edges": 20179, "resolved": 15236, "unresolved": 4943, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:34:12.742374Z"}
+{"repo_id": "c9073e54-94f2-49a6-85ec-2970b83f1363", "edges": 20179, "resolved": 15236, "unresolved": 4943, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:12.772742Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/helix-editor__helix/afadf91f4c0bdd7b63b0cab5d08d0448539225c7", "files": 551, "chunks": 3309, "symbols": 5135, "time_ms": 195948, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:12.772878Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/helix-editor__helix/9fa976f3b2f84e223880a40dcf6a606dba294fe5", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:34:12.794911Z"}
+{"count": 551, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:34:12.988004Z"}
+{"owner": "local", "name": "ARB helix-editor/helix@9fa976f3b2f8", "files": 551, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:12.993378Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:12.993686Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:12.994224Z"}
+{"repo_id": "560cb63a-7070-4ffa-a4f5-0864a5dd8669", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:12.994909Z"}
+{"progress": "27/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.049525Z"}
+{"progress": "54/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.098482Z"}
+{"progress": "81/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.129816Z"}
+{"progress": "108/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.149535Z"}
+{"progress": "135/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.165829Z"}
+{"progress": "162/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.178988Z"}
+{"progress": "189/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.189102Z"}
+{"progress": "216/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.202745Z"}
+{"progress": "243/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.216134Z"}
+{"progress": "270/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.228510Z"}
+{"progress": "297/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.245942Z"}
+{"progress": "324/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.260936Z"}
+{"progress": "351/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.289380Z"}
+{"progress": "378/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.331525Z"}
+{"progress": "405/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.345213Z"}
+{"progress": "432/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.368984Z"}
+{"progress": "459/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.394166Z"}
+{"progress": "486/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.429141Z"}
+{"batch": "1/2", "files_in_batch": 500, "files_done": 501, "total_files": 551, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.475252Z"}
+{"batch": "1/2", "flush_ms": 26, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:13.501233Z"}
+{"batch": "1/2", "chunks_so_far": 2859, "symbols_so_far": 4346, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:17.454708Z"}
+{"repo_id": "81644797-924b-4bce-8cc3-0b56d7829170", "edges": 32708, "resolved": 18121, "unresolved": 14587, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:34:19.240027Z"}
+{"repo_id": "81644797-924b-4bce-8cc3-0b56d7829170", "edges": 32708, "resolved": 18121, "unresolved": 14587, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.253010Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/aio-libs__aiohttp/bcfe363831f3360e2dbb59bffbd2721f2dbe063e", "files": 371, "chunks": 4072, "symbols": 6731, "time_ms": 241299, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.253107Z"}
+INFO:     127.0.0.1:60256 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/helix-editor__helix/a8f85a5a638853de9c702756759aa532c2c1b3db", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:34:19.263128Z"}
+{"count": 551, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:34:19.488343Z"}
+{"owner": "local", "name": "ARB helix-editor/helix@a8f85a5a6388", "files": 551, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.503798Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.504660Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.505369Z"}
+{"repo_id": "d1831211-f8e5-4cba-9a65-907742a7b971", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.510842Z"}
+{"progress": "27/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.565681Z"}
+{"batch": "1/2", "flush_ms": 2146, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.601105Z"}
+{"new_chunks": 2859, "embed_batches_queued": 45, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.602250Z"}
+{"progress": "513/551", "chunks_so_far": 2859, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.622548Z"}
+{"progress": "54/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.648401Z"}
+{"progress": "540/551", "chunks_so_far": 2859, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.658290Z"}
+{"batch": "1/2", "files_in_batch": 50, "files_done": 551, "total_files": 551, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.674601Z"}
+{"progress": "81/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.677094Z"}
+{"batch": "1/2", "flush_ms": 4, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.678427Z"}
+{"progress": "108/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.731111Z"}
+{"progress": "135/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.782619Z"}
+{"progress": "162/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.817562Z"}
+{"progress": "189/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.847857Z"}
+{"progress": "216/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.879916Z"}
+{"progress": "243/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.907239Z"}
+{"progress": "270/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:19.938056Z"}
+{"progress": "297/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.090105Z"}
+{"progress": "324/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.118157Z"}
+{"progress": "351/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.197726Z"}
+{"batch": "1/2", "chunks_so_far": 3309, "symbols_so_far": 5133, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.208244Z"}
+{"progress": "378/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.252717Z"}
+{"progress": "405/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.265382Z"}
+{"progress": "432/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.285412Z"}
+{"progress": "459/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.311239Z"}
+{"progress": "486/551", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.343647Z"}
+{"batch": "1/2", "files_in_batch": 500, "files_done": 501, "total_files": 551, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.397263Z"}
+{"batch": "1/2", "flush_ms": 241, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.449029Z"}
+{"batch": "1/2", "flush_ms": 54, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.451616Z"}
+{"new_chunks": 450, "embed_batches_queued": 53, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:20.451829Z"}
+{"batch": "1/2", "chunks_so_far": 2866, "symbols_so_far": 4387, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:24.097807Z"}
+{"batch": "1/2", "flush_ms": 1926, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.024288Z"}
+{"new_chunks": 2866, "embed_batches_queued": 45, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.025341Z"}
+{"progress": "513/551", "chunks_so_far": 2866, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.040609Z"}
+{"progress": "540/551", "chunks_so_far": 2866, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.078107Z"}
+{"batch": "1/2", "files_in_batch": 50, "files_done": 551, "total_files": 551, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.094463Z"}
+{"batch": "1/2", "flush_ms": 4, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.098968Z"}
+{"batch": "1/2", "chunks_so_far": 3308, "symbols_so_far": 5132, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.461624Z"}
+{"batch": "1/2", "flush_ms": 134, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.595654Z"}
+{"new_chunks": 442, "embed_batches_queued": 52, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:34:26.595963Z"}
+{"total_chunks": 3308, "embed_batches_produced": 52, "embed_batches_written": 52, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:31.762445Z"}
+{"repo_id": "d1831211-f8e5-4cba-9a65-907742a7b971", "files": 551, "chunks": 3308, "symbols": 5132, "lines": 143319, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:31.763005Z"}
+{"repo_id": "d1831211-f8e5-4cba-9a65-907742a7b971", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:31.768561Z"}
+{"repo_id": "d1831211-f8e5-4cba-9a65-907742a7b971", "total": 2762, "adjacent": 2762, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:32.217854Z"}
+{"total_chunks": 3309, "embed_batches_produced": 53, "embed_batches_written": 53, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:32.710757Z"}
+{"repo_id": "560cb63a-7070-4ffa-a4f5-0864a5dd8669", "files": 551, "chunks": 3309, "symbols": 5133, "lines": 143373, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:32.717299Z"}
+{"repo_id": "560cb63a-7070-4ffa-a4f5-0864a5dd8669", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:32.741443Z"}
+{"repo_id": "560cb63a-7070-4ffa-a4f5-0864a5dd8669", "total": 2763, "adjacent": 2763, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:33.260181Z"}
+{"repo_id": "d1831211-f8e5-4cba-9a65-907742a7b971", "edges": 20146, "resolved": 15214, "unresolved": 4932, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:37:36.121230Z"}
+{"repo_id": "d1831211-f8e5-4cba-9a65-907742a7b971", "edges": 20146, "resolved": 15214, "unresolved": 4932, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.132081Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/helix-editor__helix/a8f85a5a638853de9c702756759aa532c2c1b3db", "files": 551, "chunks": 3308, "symbols": 5132, "time_ms": 196869, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.132213Z"}
+INFO:     127.0.0.1:60256 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/junit-team__junit5/c8198685bd2abe25a27aa200b57c1151040a5506", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:37:36.141376Z"}
+{"repo_id": "560cb63a-7070-4ffa-a4f5-0864a5dd8669", "edges": 20162, "resolved": 15227, "unresolved": 4935, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:37:36.201038Z"}
+{"repo_id": "560cb63a-7070-4ffa-a4f5-0864a5dd8669", "edges": 20162, "resolved": 15227, "unresolved": 4935, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.210209Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/helix-editor__helix/9fa976f3b2f84e223880a40dcf6a606dba294fe5", "files": 551, "chunks": 3309, "symbols": 5133, "time_ms": 203415, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.210295Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/junit-team__junit5/b2284a5ab4a0b3f66be5ee7e732ca7ec7ffbd5c6", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:37:36.214764Z"}
+{"count": 1980, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:37:36.818392Z"}
+{"owner": "local", "name": "ARB junit-team/junit5@c8198685bd2a", "files": 1980, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.848337Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.848779Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.849423Z"}
+{"repo_id": "257e46ed-ed4c-4676-a3d0-731668b84f9b", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.850421Z"}
+{"progress": "99/1980", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.895238Z"}
+{"count": 2003, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:37:36.910241Z"}
+{"owner": "local", "name": "ARB junit-team/junit5@b2284a5ab4a0", "files": 2003, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.919362Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.919755Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.920407Z"}
+{"repo_id": "f94f55be-57d5-4daa-ab03-0122799df39a", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.921161Z"}
+{"progress": "198/1980", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.937556Z"}
+{"progress": "297/1980", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.955951Z"}
+{"progress": "100/2003", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.958227Z"}
+{"progress": "396/1980", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.982084Z"}
+{"progress": "200/2003", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:36.998579Z"}
+{"progress": "495/1980", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.004312Z"}
+{"batch": "1/4", "files_in_batch": 500, "files_done": 500, "total_files": 1980, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.007055Z"}
+{"progress": "300/2003", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.027767Z"}
+{"batch": "1/4", "flush_ms": 47, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.054407Z"}
+{"progress": "400/2003", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.057641Z"}
+{"progress": "500/2003", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.092286Z"}
+{"batch": "1/5", "files_in_batch": 500, "files_done": 500, "total_files": 2003, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.092891Z"}
+{"batch": "1/5", "flush_ms": 42, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.135122Z"}
+{"batch": "1/4", "chunks_so_far": 1175, "symbols_so_far": 3408, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:37.979489Z"}
+{"batch": "1/5", "chunks_so_far": 1193, "symbols_so_far": 3369, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.054944Z"}
+{"batch": "1/5", "flush_ms": 741, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.795935Z"}
+{"new_chunks": 1193, "embed_batches_queued": 19, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.796544Z"}
+{"progress": "600/2003", "chunks_so_far": 1193, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.822806Z"}
+{"progress": "700/2003", "chunks_so_far": 1193, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.870112Z"}
+{"progress": "800/2003", "chunks_so_far": 1193, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.902050Z"}
+{"progress": "900/2003", "chunks_so_far": 1193, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.947526Z"}
+{"batch": "1/4", "flush_ms": 1004, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.983509Z"}
+{"new_chunks": 1175, "embed_batches_queued": 19, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.984290Z"}
+{"progress": "1000/2003", "chunks_so_far": 1193, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.997102Z"}
+{"batch": "2/5", "files_in_batch": 500, "files_done": 1000, "total_files": 2003, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:38.997462Z"}
+{"progress": "594/1980", "chunks_so_far": 1175, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.018750Z"}
+{"batch": "2/5", "flush_ms": 29, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.026553Z"}
+{"progress": "693/1980", "chunks_so_far": 1175, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.085002Z"}
+{"progress": "792/1980", "chunks_so_far": 1175, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.261864Z"}
+{"progress": "891/1980", "chunks_so_far": 1175, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.355119Z"}
+{"progress": "990/1980", "chunks_so_far": 1175, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.386897Z"}
+{"batch": "2/4", "files_in_batch": 500, "files_done": 1000, "total_files": 1980, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.389611Z"}
+{"batch": "2/4", "flush_ms": 45, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.434840Z"}
+{"batch": "2/5", "chunks_so_far": 2199, "symbols_so_far": 6046, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:39.918776Z"}
+{"batch": "2/4", "chunks_so_far": 2166, "symbols_so_far": 6004, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.364237Z"}
+{"batch": "2/5", "flush_ms": 489, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.408356Z"}
+{"new_chunks": 1006, "embed_batches_queued": 35, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.411253Z"}
+{"progress": "1100/2003", "chunks_so_far": 2199, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.473022Z"}
+{"progress": "1200/2003", "chunks_so_far": 2199, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.536556Z"}
+{"progress": "1300/2003", "chunks_so_far": 2199, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.620156Z"}
+{"progress": "1400/2003", "chunks_so_far": 2199, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.662444Z"}
+{"progress": "1500/2003", "chunks_so_far": 2199, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.712103Z"}
+{"batch": "3/5", "files_in_batch": 500, "files_done": 1500, "total_files": 2003, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.712306Z"}
+{"batch": "3/5", "flush_ms": 71, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:40.782949Z"}
+{"batch": "2/4", "flush_ms": 834, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.197847Z"}
+{"new_chunks": 991, "embed_batches_queued": 35, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.198289Z"}
+{"progress": "1089/1980", "chunks_so_far": 2166, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.385881Z"}
+{"progress": "1188/1980", "chunks_so_far": 2166, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.507790Z"}
+{"progress": "1287/1980", "chunks_so_far": 2166, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.665234Z"}
+{"progress": "1386/1980", "chunks_so_far": 2166, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.746801Z"}
+{"progress": "1485/1980", "chunks_so_far": 2166, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.847627Z"}
+{"batch": "3/4", "files_in_batch": 500, "files_done": 1500, "total_files": 1980, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.849577Z"}
+{"batch": "3/4", "flush_ms": 38, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:41.887503Z"}
+{"batch": "3/5", "chunks_so_far": 3407, "symbols_so_far": 15073, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:43.112215Z"}
+{"batch": "3/4", "chunks_so_far": 3376, "symbols_so_far": 15015, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:44.348995Z"}
+{"batch": "3/5", "flush_ms": 1972, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:45.084274Z"}
+{"new_chunks": 1208, "embed_batches_queued": 54, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:45.084938Z"}
+{"progress": "1600/2003", "chunks_so_far": 3407, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.358793Z"}
+{"progress": "1700/2003", "chunks_so_far": 3407, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.393844Z"}
+{"progress": "1800/2003", "chunks_so_far": 3407, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.438746Z"}
+{"progress": "1900/2003", "chunks_so_far": 3407, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.471170Z"}
+{"progress": "2000/2003", "chunks_so_far": 3407, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.503326Z"}
+{"batch": "4/5", "files_in_batch": 500, "files_done": 2000, "total_files": 2003, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.503515Z"}
+{"batch": "4/5", "flush_ms": 218, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:46.721083Z"}
+{"batch": "3/4", "flush_ms": 2761, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.110198Z"}
+{"new_chunks": 1210, "embed_batches_queued": 54, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.111565Z"}
+{"progress": "1584/1980", "chunks_so_far": 3376, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.363557Z"}
+{"progress": "1683/1980", "chunks_so_far": 3376, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.439080Z"}
+{"progress": "1782/1980", "chunks_so_far": 3376, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.502429Z"}
+{"batch": "4/5", "chunks_so_far": 4395, "symbols_so_far": 19345, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.510111Z"}
+{"progress": "1881/1980", "chunks_so_far": 3376, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.727346Z"}
+{"progress": "1980/1980", "chunks_so_far": 3376, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.761100Z"}
+{"batch": "3/4", "files_in_batch": 480, "files_done": 1980, "total_files": 1980, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.761276Z"}
+{"batch": "3/4", "flush_ms": 23, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:47.784754Z"}
+{"batch": "3/4", "chunks_so_far": 4324, "symbols_so_far": 19251, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:48.481626Z"}
+{"batch": "4/5", "flush_ms": 1603, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.113405Z"}
+{"new_chunks": 988, "embed_batches_queued": 70, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.113858Z"}
+{"batch": "4/5", "files_in_batch": 3, "files_done": 2003, "total_files": 2003, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.115678Z"}
+{"batch": "4/5", "flush_ms": 1, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.116588Z"}
+{"batch": "4/5", "chunks_so_far": 4400, "symbols_so_far": 19378, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.120885Z"}
+{"batch": "4/5", "flush_ms": 16, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.136899Z"}
+{"new_chunks": 5, "embed_batches_queued": 71, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.137156Z"}
+{"batch": "3/4", "flush_ms": 1477, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.958350Z"}
+{"new_chunks": 948, "embed_batches_queued": 69, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:37:49.958911Z"}
+{"total_chunks": 4324, "embed_batches_produced": 69, "embed_batches_written": 69, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:19.072602Z"}
+{"repo_id": "257e46ed-ed4c-4676-a3d0-731668b84f9b", "files": 1980, "chunks": 4324, "symbols": 19251, "lines": 238665, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:19.073123Z"}
+{"total_chunks": 4400, "embed_batches_produced": 71, "embed_batches_written": 71, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:19.080433Z"}
+{"repo_id": "f94f55be-57d5-4daa-ab03-0122799df39a", "files": 2003, "chunks": 4400, "symbols": 19378, "lines": 240772, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:19.080570Z"}
+{"repo_id": "257e46ed-ed4c-4676-a3d0-731668b84f9b", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:19.088446Z"}
+{"repo_id": "f94f55be-57d5-4daa-ab03-0122799df39a", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:19.089050Z"}
+{"repo_id": "257e46ed-ed4c-4676-a3d0-731668b84f9b", "total": 4091, "adjacent": 2348, "same_class": 1743, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:20.072760Z"}
+{"repo_id": "f94f55be-57d5-4daa-ab03-0122799df39a", "total": 4207, "adjacent": 2401, "same_class": 1806, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:20.074661Z"}
+{"repo_id": "257e46ed-ed4c-4676-a3d0-731668b84f9b", "edges": 92440, "resolved": 70095, "unresolved": 22345, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:44:31.834604Z"}
+{"repo_id": "257e46ed-ed4c-4676-a3d0-731668b84f9b", "edges": 92440, "resolved": 70095, "unresolved": 22345, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:31.865437Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/junit-team__junit5/c8198685bd2abe25a27aa200b57c1151040a5506", "files": 1980, "chunks": 4324, "symbols": 19251, "time_ms": 415724, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:31.865946Z"}
+INFO:     127.0.0.1:60256 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/junit-team__junit5/e47b9bb4d3c1a03fe6b4c2df4c53540d14875b06", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:44:31.879165Z"}
+{"repo_id": "f94f55be-57d5-4daa-ab03-0122799df39a", "edges": 93758, "resolved": 71413, "unresolved": 22345, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:44:31.940966Z"}
+{"repo_id": "f94f55be-57d5-4daa-ab03-0122799df39a", "edges": 93758, "resolved": 71413, "unresolved": 22345, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:31.992056Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/junit-team__junit5/b2284a5ab4a0b3f66be5ee7e732ca7ec7ffbd5c6", "files": 2003, "chunks": 4400, "symbols": 19378, "time_ms": 415777, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:31.992175Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/preactjs__preact/2b82799e3d4dbd6c9a791e4b319ac85cd1c99ea6", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:44:31.998796Z"}
+{"count": 298, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:44:32.062369Z"}
+{"owner": "local", "name": "ARB preactjs/preact@2b82799e3d4d", "files": 298, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.064715Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.065205Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.065874Z"}
+{"repo_id": "529896af-b664-4340-9594-086af04612bc", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.066831Z"}
+{"progress": "14/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.072734Z"}
+{"progress": "28/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.077166Z"}
+{"progress": "42/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.080758Z"}
+{"progress": "56/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.082941Z"}
+{"progress": "70/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.087771Z"}
+{"progress": "84/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.089997Z"}
+{"progress": "98/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.094708Z"}
+{"progress": "112/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.108280Z"}
+{"progress": "126/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.116823Z"}
+{"progress": "140/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.120587Z"}
+{"progress": "154/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.125025Z"}
+{"progress": "168/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.157786Z"}
+{"progress": "182/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.172834Z"}
+{"progress": "196/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.184732Z"}
+{"progress": "210/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.188046Z"}
+{"progress": "224/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.192856Z"}
+{"progress": "238/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.202055Z"}
+{"progress": "252/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.207534Z"}
+{"progress": "266/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.211338Z"}
+{"progress": "280/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.224128Z"}
+{"progress": "294/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.238474Z"}
+{"batch": "1/1", "files_in_batch": 298, "files_done": 298, "total_files": 298, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.244331Z"}
+{"count": 1993, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:44:32.354134Z"}
+{"owner": "local", "name": "ARB junit-team/junit5@e47b9bb4d3c1", "files": 1993, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.361957Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.362304Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.362926Z"}
+{"repo_id": "e923562b-b663-4cca-9c49-c42f2d438315", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.363702Z"}
+{"batch": "1/1", "flush_ms": 121, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.365912Z"}
+{"progress": "99/1993", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.418938Z"}
+{"progress": "198/1993", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.551550Z"}
+{"progress": "297/1993", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.858203Z"}
+{"progress": "396/1993", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.938841Z"}
+{"progress": "495/1993", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.978618Z"}
+{"batch": "1/4", "files_in_batch": 500, "files_done": 500, "total_files": 1993, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:32.987726Z"}
+{"batch": "1/4", "flush_ms": 43, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:33.031238Z"}
+{"batch": "1/1", "chunks_so_far": 1104, "symbols_so_far": 2877, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:33.146121Z"}
+{"batch": "1/4", "chunks_so_far": 1181, "symbols_so_far": 3404, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:33.729386Z"}
+{"batch": "1/1", "flush_ms": 1243, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:34.389521Z"}
+{"new_chunks": 1104, "embed_batches_queued": 18, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:34.389977Z"}
+{"batch": "1/4", "flush_ms": 1220, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:34.949574Z"}
+{"new_chunks": 1181, "embed_batches_queued": 19, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:34.950076Z"}
+{"progress": "594/1993", "chunks_so_far": 1181, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:34.973385Z"}
+{"progress": "693/1993", "chunks_so_far": 1181, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.021235Z"}
+{"progress": "792/1993", "chunks_so_far": 1181, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.054405Z"}
+{"progress": "891/1993", "chunks_so_far": 1181, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.099075Z"}
+{"progress": "990/1993", "chunks_so_far": 1181, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.119612Z"}
+{"batch": "2/4", "files_in_batch": 500, "files_done": 1000, "total_files": 1993, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.121527Z"}
+{"batch": "2/4", "flush_ms": 37, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.158528Z"}
+{"batch": "2/4", "chunks_so_far": 2173, "symbols_so_far": 6031, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:35.689549Z"}
+{"batch": "2/4", "flush_ms": 713, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.402380Z"}
+{"new_chunks": 992, "embed_batches_queued": 35, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.402765Z"}
+{"progress": "1089/1993", "chunks_so_far": 2173, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.446195Z"}
+{"progress": "1188/1993", "chunks_so_far": 2173, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.500871Z"}
+{"progress": "1287/1993", "chunks_so_far": 2173, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.589007Z"}
+{"progress": "1386/1993", "chunks_so_far": 2173, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.630127Z"}
+{"progress": "1485/1993", "chunks_so_far": 2173, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.677417Z"}
+{"batch": "3/4", "files_in_batch": 500, "files_done": 1500, "total_files": 1993, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.679077Z"}
+{"batch": "3/4", "flush_ms": 36, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:36.715621Z"}
+{"batch": "3/4", "chunks_so_far": 3384, "symbols_so_far": 15050, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:38.300004Z"}
+{"batch": "3/4", "flush_ms": 2300, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.599966Z"}
+{"new_chunks": 1211, "embed_batches_queued": 54, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.600476Z"}
+{"progress": "1584/1993", "chunks_so_far": 3384, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.753440Z"}
+{"progress": "1683/1993", "chunks_so_far": 3384, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.784006Z"}
+{"progress": "1782/1993", "chunks_so_far": 3384, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.812639Z"}
+{"progress": "1881/1993", "chunks_so_far": 3384, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.844277Z"}
+{"progress": "1980/1993", "chunks_so_far": 3384, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.880345Z"}
+{"batch": "3/4", "files_in_batch": 493, "files_done": 1993, "total_files": 1993, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.885710Z"}
+{"batch": "3/4", "flush_ms": 35, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:40.921014Z"}
+{"batch": "3/4", "chunks_so_far": 4358, "symbols_so_far": 19331, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:41.522584Z"}
+{"batch": "3/4", "flush_ms": 950, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:42.472854Z"}
+{"new_chunks": 974, "embed_batches_queued": 70, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:44:42.473311Z"}
+{"total_chunks": 1104, "embed_batches_produced": 18, "embed_batches_written": 18, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.013935Z"}
+{"repo_id": "529896af-b664-4340-9594-086af04612bc", "files": 298, "chunks": 1104, "symbols": 2877, "lines": 53685, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.014295Z"}
+{"repo_id": "529896af-b664-4340-9594-086af04612bc", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.018266Z"}
+{"repo_id": "529896af-b664-4340-9594-086af04612bc", "total": 806, "adjacent": 806, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.221779Z"}
+{"repo_id": "529896af-b664-4340-9594-086af04612bc", "edges": 941, "resolved": 384, "unresolved": 557, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:45:31.464542Z"}
+{"repo_id": "529896af-b664-4340-9594-086af04612bc", "edges": 941, "resolved": 384, "unresolved": 557, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.469011Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/preactjs__preact/2b82799e3d4dbd6c9a791e4b319ac85cd1c99ea6", "files": 298, "chunks": 1104, "symbols": 2877, "time_ms": 59470, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.469102Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/preactjs__preact/cf6942dc229dcb16d8257a6aa01e7d4d673da58f", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:45:31.473404Z"}
+{"count": 338, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:45:31.526540Z"}
+{"owner": "local", "name": "ARB preactjs/preact@cf6942dc229d", "files": 338, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.528538Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.528792Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.529125Z"}
+{"repo_id": "b0cd2f7b-6750-4298-a58f-213090e9f3c8", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.529627Z"}
+{"progress": "16/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.534676Z"}
+{"progress": "32/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.538186Z"}
+{"progress": "48/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.540890Z"}
+{"progress": "64/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.543550Z"}
+{"progress": "80/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.546684Z"}
+{"progress": "96/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.549527Z"}
+{"progress": "112/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.562723Z"}
+{"progress": "128/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.570238Z"}
+{"progress": "144/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.574401Z"}
+{"progress": "160/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.582367Z"}
+{"progress": "176/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.612216Z"}
+{"progress": "192/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.630185Z"}
+{"progress": "208/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.636624Z"}
+{"progress": "224/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.640829Z"}
+{"progress": "240/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.649909Z"}
+{"progress": "256/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.653786Z"}
+{"progress": "272/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.655043Z"}
+{"progress": "288/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.661754Z"}
+{"progress": "304/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.666840Z"}
+{"progress": "320/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.671195Z"}
+{"progress": "336/338", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.689001Z"}
+{"batch": "1/1", "files_in_batch": 338, "files_done": 338, "total_files": 338, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.691439Z"}
+{"batch": "1/1", "flush_ms": 24, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:31.715207Z"}
+{"batch": "1/1", "chunks_so_far": 1238, "symbols_so_far": 3024, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:32.453719Z"}
+{"batch": "1/1", "flush_ms": 483, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:32.936861Z"}
+{"new_chunks": 1238, "embed_batches_queued": 20, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:45:32.937322Z"}
+{"total_chunks": 1238, "embed_batches_produced": 20, "embed_batches_written": 20, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.197173Z"}
+{"repo_id": "b0cd2f7b-6750-4298-a58f-213090e9f3c8", "files": 338, "chunks": 1238, "symbols": 3024, "lines": 57320, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.197311Z"}
+{"repo_id": "b0cd2f7b-6750-4298-a58f-213090e9f3c8", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.199595Z"}
+{"repo_id": "b0cd2f7b-6750-4298-a58f-213090e9f3c8", "total": 900, "adjacent": 900, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.399483Z"}
+{"repo_id": "b0cd2f7b-6750-4298-a58f-213090e9f3c8", "edges": 1280, "resolved": 529, "unresolved": 751, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:46:36.673940Z"}
+{"repo_id": "b0cd2f7b-6750-4298-a58f-213090e9f3c8", "edges": 1280, "resolved": 529, "unresolved": 751, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.679031Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/preactjs__preact/cf6942dc229dcb16d8257a6aa01e7d4d673da58f", "files": 338, "chunks": 1238, "symbols": 3024, "time_ms": 65206, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.679128Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/preactjs__preact/2a788d638ecfe97fd88c52609c7d426bc50aa1c0", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:46:36.683368Z"}
+{"count": 298, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:46:36.724953Z"}
+{"owner": "local", "name": "ARB preactjs/preact@2a788d638ecf", "files": 298, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.727028Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.727240Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.727547Z"}
+{"repo_id": "df7954c2-53f6-4cac-a9ac-957fbba8aae7", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.728004Z"}
+{"progress": "14/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.731705Z"}
+{"progress": "28/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.736147Z"}
+{"progress": "42/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.739557Z"}
+{"progress": "56/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.740976Z"}
+{"progress": "70/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.745225Z"}
+{"progress": "84/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.746426Z"}
+{"progress": "98/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.750728Z"}
+{"progress": "112/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.764023Z"}
+{"progress": "126/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.771471Z"}
+{"progress": "140/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.774833Z"}
+{"progress": "154/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.778678Z"}
+{"progress": "168/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.808713Z"}
+{"progress": "182/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.823124Z"}
+{"progress": "196/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.831368Z"}
+{"progress": "210/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.836327Z"}
+{"progress": "224/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.840700Z"}
+{"progress": "238/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.850026Z"}
+{"progress": "252/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.853086Z"}
+{"progress": "266/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.856111Z"}
+{"progress": "280/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.860427Z"}
+{"progress": "294/298", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.875598Z"}
+{"batch": "1/1", "files_in_batch": 298, "files_done": 298, "total_files": 298, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.879648Z"}
+{"batch": "1/1", "flush_ms": 23, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:36.902534Z"}
+{"batch": "1/1", "chunks_so_far": 1108, "symbols_so_far": 2890, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:37.582750Z"}
+{"batch": "1/1", "flush_ms": 559, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:38.141562Z"}
+{"new_chunks": 1108, "embed_batches_queued": 18, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:46:38.141959Z"}
+{"total_chunks": 1108, "embed_batches_produced": 18, "embed_batches_written": 18, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:32.685301Z"}
+{"repo_id": "df7954c2-53f6-4cac-a9ac-957fbba8aae7", "files": 298, "chunks": 1108, "symbols": 2890, "lines": 54014, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:32.685422Z"}
+{"repo_id": "df7954c2-53f6-4cac-a9ac-957fbba8aae7", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:32.687678Z"}
+{"repo_id": "df7954c2-53f6-4cac-a9ac-957fbba8aae7", "total": 810, "adjacent": 810, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:32.881594Z"}
+{"repo_id": "df7954c2-53f6-4cac-a9ac-957fbba8aae7", "edges": 956, "resolved": 389, "unresolved": 567, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:47:33.117461Z"}
+{"repo_id": "df7954c2-53f6-4cac-a9ac-957fbba8aae7", "edges": 956, "resolved": 389, "unresolved": 567, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.121359Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/preactjs__preact/2a788d638ecfe97fd88c52609c7d426bc50aa1c0", "files": 298, "chunks": 1108, "symbols": 2890, "time_ms": 56438, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.121430Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/rs__zerolog/6d6350a51143b5c0d0a6a3b736ee2b41315f7269", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:47:33.125108Z"}
+{"count": 73, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:47:33.135836Z"}
+{"owner": "local", "name": "ARB rs/zerolog@6d6350a51143", "files": 73, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.136853Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.137065Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.137468Z"}
+{"repo_id": "a3249c3f-b995-48ec-a904-3901c5c8946d", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.138091Z"}
+{"progress": "3/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.140229Z"}
+{"progress": "6/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.143085Z"}
+{"progress": "9/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.143389Z"}
+{"progress": "12/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.144614Z"}
+{"progress": "15/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.148652Z"}
+{"progress": "18/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.149883Z"}
+{"progress": "21/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.150383Z"}
+{"progress": "24/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.152669Z"}
+{"progress": "27/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.153983Z"}
+{"progress": "30/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.155791Z"}
+{"progress": "33/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.156862Z"}
+{"progress": "36/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.157508Z"}
+{"progress": "39/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.158532Z"}
+{"progress": "42/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.160482Z"}
+{"progress": "45/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.162324Z"}
+{"progress": "48/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.165769Z"}
+{"progress": "51/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.166982Z"}
+{"progress": "54/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.168462Z"}
+{"progress": "57/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.168911Z"}
+{"progress": "60/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.170826Z"}
+{"progress": "63/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.171552Z"}
+{"progress": "66/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.172413Z"}
+{"progress": "69/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.173148Z"}
+{"progress": "72/73", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.173741Z"}
+{"batch": "1/1", "files_in_batch": 73, "files_done": 73, "total_files": 73, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.174266Z"}
+{"batch": "1/1", "flush_ms": 8, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.181857Z"}
+{"batch": "1/1", "chunks_so_far": 685, "symbols_so_far": 686, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.361321Z"}
+{"batch": "1/1", "flush_ms": 127, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.488003Z"}
+{"new_chunks": 685, "embed_batches_queued": 11, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:47:33.488315Z"}
+{"total_chunks": 685, "embed_batches_produced": 11, "embed_batches_written": 11, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.107769Z"}
+{"repo_id": "a3249c3f-b995-48ec-a904-3901c5c8946d", "files": 73, "chunks": 685, "symbols": 686, "lines": 11520, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.107923Z"}
+{"repo_id": "a3249c3f-b995-48ec-a904-3901c5c8946d", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.109580Z"}
+{"repo_id": "a3249c3f-b995-48ec-a904-3901c5c8946d", "total": 614, "adjacent": 614, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.166300Z"}
+{"repo_id": "a3249c3f-b995-48ec-a904-3901c5c8946d", "edges": 4368, "resolved": 3305, "unresolved": 1063, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:48:08.693883Z"}
+{"repo_id": "a3249c3f-b995-48ec-a904-3901c5c8946d", "edges": 4368, "resolved": 3305, "unresolved": 1063, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.696663Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/rs__zerolog/6d6350a51143b5c0d0a6a3b736ee2b41315f7269", "files": 73, "chunks": 685, "symbols": 686, "time_ms": 35572, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.696734Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/rs__zerolog/1170ccfb07953ca67a1d4754e43a9ce9f7b54738", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:48:08.700497Z"}
+{"count": 96, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:48:08.715447Z"}
+{"owner": "local", "name": "ARB rs/zerolog@1170ccfb0795", "files": 96, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.716560Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.716753Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.717065Z"}
+{"repo_id": "b4607849-c32b-4db3-87a0-557d8a7bbeb0", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.717507Z"}
+{"progress": "4/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.720392Z"}
+{"progress": "8/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.723987Z"}
+{"progress": "12/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.728021Z"}
+{"progress": "16/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.730224Z"}
+{"progress": "20/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.738268Z"}
+{"progress": "24/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.740894Z"}
+{"progress": "28/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.744224Z"}
+{"progress": "32/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.749815Z"}
+{"progress": "36/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.752569Z"}
+{"progress": "40/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.754432Z"}
+{"progress": "44/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.756174Z"}
+{"progress": "48/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.757082Z"}
+{"progress": "52/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.760238Z"}
+{"progress": "56/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.761462Z"}
+{"progress": "60/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.764956Z"}
+{"progress": "64/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.770230Z"}
+{"progress": "68/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.774858Z"}
+{"progress": "72/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.777875Z"}
+{"progress": "76/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.780461Z"}
+{"progress": "80/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.784022Z"}
+{"progress": "84/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.785242Z"}
+{"progress": "88/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.786792Z"}
+{"progress": "92/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.787943Z"}
+{"progress": "96/96", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.789097Z"}
+{"batch": "1/1", "files_in_batch": 96, "files_done": 96, "total_files": 96, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.789425Z"}
+{"batch": "1/1", "flush_ms": 9, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:08.797999Z"}
+{"batch": "1/1", "chunks_so_far": 1144, "symbols_so_far": 1158, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:09.185113Z"}
+{"batch": "1/1", "flush_ms": 453, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:09.638625Z"}
+{"new_chunks": 1144, "embed_batches_queued": 18, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:48:09.639072Z"}
+{"total_chunks": 1144, "embed_batches_produced": 18, "embed_batches_written": 18, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:07.700486Z"}
+{"repo_id": "b4607849-c32b-4db3-87a0-557d8a7bbeb0", "files": 96, "chunks": 1144, "symbols": 1158, "lines": 22684, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:07.700630Z"}
+{"repo_id": "b4607849-c32b-4db3-87a0-557d8a7bbeb0", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:07.703287Z"}
+{"repo_id": "b4607849-c32b-4db3-87a0-557d8a7bbeb0", "total": 1048, "adjacent": 1048, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:08.019254Z"}
+{"repo_id": "b4607849-c32b-4db3-87a0-557d8a7bbeb0", "edges": 9210, "resolved": 7148, "unresolved": 2062, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:49:09.479314Z"}
+{"repo_id": "b4607849-c32b-4db3-87a0-557d8a7bbeb0", "edges": 9210, "resolved": 7148, "unresolved": 2062, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.483707Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/rs__zerolog/1170ccfb07953ca67a1d4754e43a9ce9f7b54738", "files": 96, "chunks": 1144, "symbols": 1158, "time_ms": 60783, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.483795Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/rs__zerolog/3543e9d94bc5ed088dd2d9ad1d19c7ccd0fa65f5", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Indexing local folder", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:49:09.487936Z"}
+{"count": 84, "event": "Listed files with content (parallel)", "logger": "synsc.core.git_client", "level": "info", "timestamp": "2026-09-09T05:49:09.517258Z"}
+{"owner": "local", "name": "ARB rs/zerolog@3543e9d94bc5", "files": 84, "event": "Starting _index_files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.518330Z"}
+{"event": "Statement and idle-in-transaction timeouts disabled for indexing", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.518576Z"}
+{"event": "Flushing repository record to get repo_id", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.518973Z"}
+{"repo_id": "a0738f31-00e2-45eb-a72a-d5c9504534a3", "event": "Repository record created", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.519469Z"}
+{"progress": "4/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.524085Z"}
+{"progress": "8/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.526495Z"}
+{"progress": "12/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.527388Z"}
+{"progress": "16/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.532594Z"}
+{"progress": "20/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.535019Z"}
+{"progress": "24/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.535987Z"}
+{"progress": "28/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.539347Z"}
+{"progress": "32/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.542196Z"}
+{"progress": "36/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.543846Z"}
+{"progress": "40/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.544977Z"}
+{"progress": "44/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.546411Z"}
+{"progress": "48/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.547502Z"}
+{"progress": "52/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.549723Z"}
+{"progress": "56/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.553389Z"}
+{"progress": "60/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.554481Z"}
+{"progress": "64/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.557511Z"}
+{"progress": "68/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.559492Z"}
+{"progress": "72/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.560349Z"}
+{"progress": "76/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.561389Z"}
+{"progress": "80/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.577743Z"}
+{"progress": "84/84", "chunks_so_far": 0, "event": "Processing files", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.579150Z"}
+{"batch": "1/1", "files_in_batch": 84, "files_done": 84, "total_files": 84, "event": "Flushing file batch to DB", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.579244Z"}
+{"batch": "1/1", "flush_ms": 6, "event": "File batch flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.584897Z"}
+{"batch": "1/1", "chunks_so_far": 800, "symbols_so_far": 798, "event": "Flushing chunks/symbols for batch", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:09.896698Z"}
+{"batch": "1/1", "flush_ms": 241, "event": "Chunks/symbols flushed", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:10.137465Z"}
+{"new_chunks": 800, "embed_batches_queued": 13, "event": "Enqueued chunks for embedding", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:10.137889Z"}
+{"total_chunks": 4358, "embed_batches_produced": 70, "embed_batches_written": 70, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:10.998470Z"}
+{"repo_id": "e923562b-b663-4cca-9c49-c42f2d438315", "files": 1993, "chunks": 4358, "symbols": 19331, "lines": 240128, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:10.998588Z"}
+{"repo_id": "e923562b-b663-4cca-9c49-c42f2d438315", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:11.006185Z"}
+{"repo_id": "e923562b-b663-4cca-9c49-c42f2d438315", "total": 4119, "adjacent": 2369, "same_class": 1750, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:11.989785Z"}
+{"repo_id": "e923562b-b663-4cca-9c49-c42f2d438315", "edges": 93029, "resolved": 70601, "unresolved": 22428, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:49:22.753123Z"}
+{"repo_id": "e923562b-b663-4cca-9c49-c42f2d438315", "edges": 93029, "resolved": 70601, "unresolved": 22428, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:22.780899Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/junit-team__junit5/e47b9bb4d3c1a03fe6b4c2df4c53540d14875b06", "files": 1993, "chunks": 4358, "symbols": 19331, "time_ms": 290902, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:22.780999Z"}
+INFO:     127.0.0.1:60256 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+{"total_chunks": 800, "embed_batches_produced": 13, "embed_batches_written": 13, "event": "All embeddings written to pgvector", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:52.402545Z"}
+{"repo_id": "a0738f31-00e2-45eb-a72a-d5c9504534a3", "files": 84, "chunks": 800, "symbols": 798, "lines": 13785, "event": "Indexed repository", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:52.402724Z"}
+{"repo_id": "a0738f31-00e2-45eb-a72a-d5c9504534a3", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "Added repo to user collection", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:52.404885Z"}
+{"repo_id": "a0738f31-00e2-45eb-a72a-d5c9504534a3", "total": 717, "adjacent": 717, "same_class": 0, "event": "Built chunk relationships", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:52.573220Z"}
+{"repo_id": "a0738f31-00e2-45eb-a72a-d5c9504534a3", "edges": 5485, "resolved": 4322, "unresolved": 1163, "event": "Built code graph", "logger": "synsc.services.code_graph_service", "level": "info", "timestamp": "2026-09-09T05:49:53.032109Z"}
+{"repo_id": "a0738f31-00e2-45eb-a72a-d5c9504534a3", "edges": 5485, "resolved": 4322, "unresolved": 1163, "event": "Built code graph", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:53.034844Z"}
+{"path": "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/corpus/snapshots/rs__zerolog/3543e9d94bc5ed088dd2d9ad1d19c7ccd0fa65f5", "files": 84, "chunks": 800, "symbols": 798, "time_ms": 43547, "event": "Local folder indexing complete", "logger": "synsc.services.indexing_service", "level": "info", "timestamp": "2026-09-09T05:49:53.034934Z"}
+INFO:     127.0.0.1:60257 - "POST /v1/repositories/index/local HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /v1/files/get HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Drop the mock protocol from the multipart benchmarks (#13515)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:52:23.745666Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Fix a flaky test (#13389)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:52:30.465552Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Fix a flaky test on Windows (#13194)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:52:35.002220Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Improve subroute configuration propagation #422\\n\\n* Pull out common shared `routeConf` so that config is pushed on to child\\nrouters and routes.\\n* Removes obsolete usages of `parentRoute`\\n* Add tests defining compositional behavior\\n* Exercise `copyRouteConf` for posterity\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:52:41.283666Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Add test for multiple calls to Name().\\nFixes #394\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:52:47.975878Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Avoid unnecessary conversion (#502)\\n\\nNo need to convert here.\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:52:54.421176Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"fix: drop overlapping LSP text edits instead of panicking\\n\\nA language server may send overlapping text edits (the LSP spec forbids it,\\nbut some servers do it anyway). `generate_transaction_from_edits` sorted the\\nedits but `ChangeSet::from_changes`, will panic on overlapping ranges.\\n\\nFixes: #15514\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:01.389392Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"fix: :reload-all, sync all views of a reloaded document\\n\\n`:reload-all` reloads each document by re-reading it from disk and\\ncommitting the diff to history through `view_ids[0]` only. With a split\\nshowing the same document in more than one window, the other views are left\\npointing at the pre-reload revision: their `doc_revisions` and jumplist\\nentries still describe the old (e.g. larger) buffer.\\n\\nA subsequent edit committed through such a stale view runs\\n`append_changes_to_history -> View::apply -> JumpList::apply`, which maps the\\nview's jumplist through a changeset whose pre-image no longer contains those\\npositions, panicking in `ChangeSet::update_positions`:\\n\\n    Positions [(N, ..)] are out of range for changeset len M!\\n\\nSync every view that points at the reloaded document, not just the first, so\\nall of them advance to the post-reload revision and their jumplists are\\nmapped through the reload changeset.\\n\\nFixes: #9830\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:07.211730Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"fix: track previous mode in insert_at_line_end\\n\\nwe immediately enter insert mode, so that condition always evaluated false.\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:13.594986Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Pass directory names rather than parsing the settings script\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:18.722641Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Document inheritance support (#5708)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:24.294561Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Update plugin org.graalvm.buildtools.native to v1.1.5 (#5880)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:27.601689Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Keyed nullish placeholders cause re-mounts (#4700)\\n\\n* Should handle swapping insertion\\n\\n* Optimize further\\n\\n* Handle more edge cases\\n\\n* Correctness\\n\\n* Add explanatory comment\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:31.417941Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"fix: Wrap hydration debug message vars in quotes (#4609)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:38.042024Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"fix: Add missing SVG `type` attribute (#4582)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:43.709898Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"fix: ParseLevel accepts \\\\\\\"warning\\\\\\\" as warn (#784)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:48.853650Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Add Any field function (#515)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:52.984841Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+{"query": "{\"intent\": \"Allow using custom level field format (#136)\"}", "user_id": "85b2e5e0-7745-43f3-8dfe-cff70ebd97f3", "event": "API: Searching code", "logger": "synsc.api.http_server", "level": "info", "timestamp": "2026-09-09T05:53:56.501980Z"}
+INFO:     127.0.0.1:50718 - "POST /v1/search/code HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [87833]
+/opt/anaconda3/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

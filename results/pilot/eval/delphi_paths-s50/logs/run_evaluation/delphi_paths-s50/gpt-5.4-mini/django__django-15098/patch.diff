@@ -1,0 +1,27 @@
+diff --git a/django/utils/translation/trans_real.py b/django/utils/translation/trans_real.py
+index 7dcc77b46c..4dc016f3a9 100644
+--- a/django/utils/translation/trans_real.py
++++ b/django/utils/translation/trans_real.py
+@@ -486,14 +486,19 @@ def get_supported_language_variant(lang_code, strict=False):
+             possible_lang_codes.append(lang_code[:i])
+         generic_lang_code = possible_lang_codes[-1]
+         supported_lang_codes = get_languages()
++        supported_lang_codes_lower = {
++            supported_code.lower(): supported_code for supported_code in supported_lang_codes
++        }
+ 
+         for code in possible_lang_codes:
+-            if code in supported_lang_codes and check_for_language(code):
+-                return code
++            supported_code = supported_lang_codes_lower.get(code.lower())
++            if supported_code and check_for_language(supported_code):
++                return supported_code
+         if not strict:
+             # if fr-fr is not supported, try fr-ca.
++            generic_lang_code = generic_lang_code.lower()
+             for supported_code in supported_lang_codes:
+-                if supported_code.startswith(generic_lang_code + '-'):
++                if supported_code.lower().startswith(generic_lang_code + '-'):
+                     return supported_code
+     raise LookupError(lang_code)
+ 

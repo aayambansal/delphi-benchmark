@@ -1,0 +1,24 @@
+diff --git a/django/db/backends/base/schema.py b/django/db/backends/base/schema.py
+index 61f88401ab..2e61ac89ec 100755
+--- a/django/db/backends/base/schema.py
++++ b/django/db/backends/base/schema.py
+@@ -407,6 +407,19 @@ class BaseDatabaseSchemaEditor:
+             model, columns, exclude=meta_constraint_names | meta_index_names,
+             **constraint_kwargs
+         )
++        if len(constraint_names) != 1:
++            # The same columns may be covered by both a unique_together and an
++            # index_together. Retry with the explicit kind requested so the
++            # database constraint can still be found deterministically.
++            type_kwargs = constraint_kwargs.copy()
++            if 'unique' in constraint_kwargs:
++                type_kwargs.update({'unique': True, 'index': False})
++            else:
++                type_kwargs.update({'index': True, 'unique': False})
++            constraint_names = self._constraint_names(
++                model, columns, exclude=meta_constraint_names | meta_index_names,
++                **type_kwargs
++            )
+         if len(constraint_names) != 1:
+             raise ValueError("Found wrong number (%s) of constraints for %s(%s)" % (
+                 len(constraint_names),

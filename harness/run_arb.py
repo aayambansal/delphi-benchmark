@@ -728,6 +728,7 @@ def main() -> None:
             "lexical_bm25",
             "dense",
             "hybrid",
+            "hybrid_expand",
             "hybrid_rerank",
             "hybrid_rerank_expand",
         ),
@@ -832,7 +833,7 @@ def main() -> None:
     elif args.engine == "nia":
         source_map = load_sources(args.sources)
         engine = NiaEngine(source_map, fast_mode=args.nia_fast_mode)
-    elif args.engine in ("dense", "hybrid", "hybrid_rerank", "hybrid_rerank_expand"):
+    elif args.engine in ("dense", "hybrid", "hybrid_expand", "hybrid_rerank", "hybrid_rerank_expand"):
         from harness.strong_baselines import StrongBaselineEngine
 
         engine = StrongBaselineEngine(

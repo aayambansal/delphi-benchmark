@@ -1,0 +1,15 @@
+diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
+index e0c7d56f8..209db479b 100644
+--- a/sphinx/writers/latex.py
++++ b/sphinx/writers/latex.py
+@@ -1713,8 +1713,10 @@ class LaTeXTranslator(SphinxTranslator):
+                                 r'\sphinxcode{\sphinxupquote{')
+         # get consistent trailer
+         hlcode = hlcode.rstrip()[:-14]  # strip \end{Verbatim}
++        self.literal_whitespace += 1
+         self.body.append(hlcode)
+         self.body.append('}}')
++        self.literal_whitespace -= 1
+         raise nodes.SkipNode
+ 
+     def depart_literal(self, node: Element) -> None:

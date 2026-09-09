@@ -1,0 +1,52 @@
+2026-09-09 12:05:50,140 - INFO - Creating container for sphinx-doc__sphinx-8475...
+2026-09-09 12:05:50,170 - INFO - Container for sphinx-doc__sphinx-8475 created: 1f490f7e19a7598934286683359ade611f796648652e53388926b1a0350f543a
+2026-09-09 12:05:50,235 - INFO - Container for sphinx-doc__sphinx-8475 started: 1f490f7e19a7598934286683359ade611f796648652e53388926b1a0350f543a
+2026-09-09 12:05:50,236 - INFO - Intermediate patch for sphinx-doc__sphinx-8475 written to logs/run_evaluation/delphi_chunks-s50/gpt-5.4-mini/sphinx-doc__sphinx-8475/patch.diff, now applying to container...
+2026-09-09 12:05:50,367 - INFO - >>>>> Applied Patch:
+Checking patch sphinx/builders/linkcheck.py...
+Applied patch sphinx/builders/linkcheck.py cleanly.
+
+2026-09-09 12:05:50,558 - INFO - Git diff before:
+diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py
+index 1dc0337c3..badc786a7 100644
+--- a/sphinx/builders/linkcheck.py
++++ b/sphinx/builders/linkcheck.py
+@@ -172,9 +172,9 @@ class CheckExternalLinksBuilder(Builder):
+                                                  config=self.app.config, auth=auth_info,
+                                                  **kwargs)
+                         response.raise_for_status()
+-                    except HTTPError:
++                    except (HTTPError, TooManyRedirects):
+                         # retry with GET request if that fails, some servers
+-                        # don't like HEAD requests.
++                        # don't like HEAD requests or cause redirect loops.
+                         response = requests.get(req_url, stream=True, config=self.app.config,
+                                                 auth=auth_info, **kwargs)
+                         response.raise_for_status()
+2026-09-09 12:05:50,561 - INFO - Eval script for sphinx-doc__sphinx-8475 written to logs/run_evaluation/delphi_chunks-s50/gpt-5.4-mini/sphinx-doc__sphinx-8475/eval.sh; copying to container...
+2026-09-09 12:06:02,977 - INFO - Test runtime: 12.37 seconds
+2026-09-09 12:06:02,978 - INFO - Test output for sphinx-doc__sphinx-8475 written to logs/run_evaluation/delphi_chunks-s50/gpt-5.4-mini/sphinx-doc__sphinx-8475/test_output.txt
+2026-09-09 12:06:03,061 - INFO - Git diff after:
+diff --git a/sphinx/builders/linkcheck.py b/sphinx/builders/linkcheck.py
+index 1dc0337c3..badc786a7 100644
+--- a/sphinx/builders/linkcheck.py
++++ b/sphinx/builders/linkcheck.py
+@@ -172,9 +172,9 @@ class CheckExternalLinksBuilder(Builder):
+                                                  config=self.app.config, auth=auth_info,
+                                                  **kwargs)
+                         response.raise_for_status()
+-                    except HTTPError:
++                    except (HTTPError, TooManyRedirects):
+                         # retry with GET request if that fails, some servers
+-                        # don't like HEAD requests.
++                        # don't like HEAD requests or cause redirect loops.
+                         response = requests.get(req_url, stream=True, config=self.app.config,
+                                                 auth=auth_info, **kwargs)
+                         response.raise_for_status()
+2026-09-09 12:06:03,061 - INFO - Grading answer for sphinx-doc__sphinx-8475...
+2026-09-09 12:06:03,073 - INFO - report: {'sphinx-doc__sphinx-8475': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'infra_failure': False, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': ['tests/test_build_linkcheck.py::test_TooManyRedirects_on_HEAD']}, 'PASS_TO_PASS': {'success': ['tests/test_build_linkcheck.py::test_anchors_ignored', 'tests/test_build_linkcheck.py::test_raises_for_invalid_status', 'tests/test_build_linkcheck.py::test_auth_header_uses_first_match', 'tests/test_build_linkcheck.py::test_auth_header_no_match', 'tests/test_build_linkcheck.py::test_linkcheck_request_headers', 'tests/test_build_linkcheck.py::test_linkcheck_request_headers_no_slash', 'tests/test_build_linkcheck.py::test_linkcheck_request_headers_default', 'tests/test_build_linkcheck.py::test_follows_redirects_on_HEAD', 'tests/test_build_linkcheck.py::test_connect_to_selfsigned_with_tls_verify_false', 'tests/test_build_linkcheck.py::test_connect_to_selfsigned_with_tls_cacerts', 'tests/test_build_linkcheck.py::test_connect_to_selfsigned_with_requests_env_var'], 'failure': ['tests/test_build_linkcheck.py::test_defaults', 'tests/test_build_linkcheck.py::test_defaults_json', 'tests/test_build_linkcheck.py::test_follows_redirects_on_GET', 'tests/test_build_linkcheck.py::test_invalid_ssl', 'tests/test_build_linkcheck.py::test_connect_to_selfsigned_fails', 'tests/test_build_linkcheck.py::test_connect_to_selfsigned_nonexistent_cert_file']}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for sphinx-doc__sphinx-8475: resolved: False
+2026-09-09 12:06:03,074 - INFO - Attempting to stop container sweb.eval.sphinx-doc__sphinx-8475.delphi_chunks-s50...
+2026-09-09 12:06:18,237 - INFO - Container sweb.eval.sphinx-doc__sphinx-8475.delphi_chunks-s50 stopped successfully.
+2026-09-09 12:06:18,238 - INFO - Attempting to remove container sweb.eval.sphinx-doc__sphinx-8475.delphi_chunks-s50...
+2026-09-09 12:06:18,282 - INFO - Container sweb.eval.sphinx-doc__sphinx-8475.delphi_chunks-s50 removed successfully.

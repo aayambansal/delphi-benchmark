@@ -1,0 +1,64 @@
+2026-09-09 11:10:07,753 - INFO - Creating container for pylint-dev__pylint-4551...
+2026-09-09 11:10:07,809 - INFO - Container for pylint-dev__pylint-4551 created: a95f940c2a258d20582f181a8960b700c3ed2793222be8dc85b635dc0b3cdb23
+2026-09-09 11:10:07,896 - INFO - Container for pylint-dev__pylint-4551 started: a95f940c2a258d20582f181a8960b700c3ed2793222be8dc85b635dc0b3cdb23
+2026-09-09 11:10:07,897 - INFO - Intermediate patch for pylint-dev__pylint-4551 written to logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/pylint-dev__pylint-4551/patch.diff, now applying to container...
+2026-09-09 11:10:08,027 - INFO - >>>>> Applied Patch:
+Checking patch pylint/pyreverse/inspector.py...
+Applied patch pylint/pyreverse/inspector.py cleanly.
+
+2026-09-09 11:10:08,214 - INFO - Git diff before:
+diff --git a/pylint/pyreverse/inspector.py b/pylint/pyreverse/inspector.py
+index 8fa12202..602c594d 100644
+--- a/pylint/pyreverse/inspector.py
++++ b/pylint/pyreverse/inspector.py
+@@ -231,6 +231,17 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
+         """
+         try:
+             values = set(node.infer())
++            if len(values) == 1:
++                value = next(iter(values))
++                if isinstance(value, astroid.AssignName):
++                    inferred = value.lookup(value.name)[1]
++                    if isinstance(inferred, astroid.Arguments):
++                        args = list(inferred.posonlyargs) + list(inferred.args) + list(inferred.kwonlyargs)
++                        annotations = list(inferred.posonlyargs_annotations or []) + list(inferred.annotations) + list(inferred.kwonlyargs_annotations or [])
++                        for index, arg in enumerate(args):
++                            if arg is value and index < len(annotations) and annotations[index] is not None:
++                                values = {annotations[index]}
++                                break
+             current = set(parent.instance_attrs_type[node.attrname])
+             parent.instance_attrs_type[node.attrname] = list(current | values)
+         except astroid.InferenceError:
+2026-09-09 11:10:08,214 - INFO - Eval script for pylint-dev__pylint-4551 written to logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/pylint-dev__pylint-4551/eval.sh; copying to container...
+2026-09-09 11:10:13,360 - INFO - Test runtime: 5.08 seconds
+2026-09-09 11:10:13,360 - INFO - Test output for pylint-dev__pylint-4551 written to logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/pylint-dev__pylint-4551/test_output.txt
+2026-09-09 11:10:13,452 - INFO - Git diff after:
+diff --git a/pylint/pyreverse/inspector.py b/pylint/pyreverse/inspector.py
+index 8fa12202..602c594d 100644
+--- a/pylint/pyreverse/inspector.py
++++ b/pylint/pyreverse/inspector.py
+@@ -231,6 +231,17 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
+         """
+         try:
+             values = set(node.infer())
++            if len(values) == 1:
++                value = next(iter(values))
++                if isinstance(value, astroid.AssignName):
++                    inferred = value.lookup(value.name)[1]
++                    if isinstance(inferred, astroid.Arguments):
++                        args = list(inferred.posonlyargs) + list(inferred.args) + list(inferred.kwonlyargs)
++                        annotations = list(inferred.posonlyargs_annotations or []) + list(inferred.annotations) + list(inferred.kwonlyargs_annotations or [])
++                        for index, arg in enumerate(args):
++                            if arg is value and index < len(annotations) and annotations[index] is not None:
++                                values = {annotations[index]}
++                                break
+             current = set(parent.instance_attrs_type[node.attrname])
+             parent.instance_attrs_type[node.attrname] = list(current | values)
+         except astroid.InferenceError:
+2026-09-09 11:10:13,452 - INFO - Grading answer for pylint-dev__pylint-4551...
+2026-09-09 11:10:13,453 - INFO - report: {'pylint-dev__pylint-4551': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'infra_failure': False, 'tests_status': {'FAIL_TO_PASS': {'success': [], 'failure': ['tests/unittest_pyreverse_writer.py::test_dot_files[packages_No_Name.dot]', 'tests/unittest_pyreverse_writer.py::test_dot_files[classes_No_Name.dot]', 'tests/unittest_pyreverse_writer.py::test_get_visibility[names0-special]', 'tests/unittest_pyreverse_writer.py::test_get_visibility[names1-private]', 'tests/unittest_pyreverse_writer.py::test_get_visibility[names2-public]', 'tests/unittest_pyreverse_writer.py::test_get_visibility[names3-protected]', 'tests/unittest_pyreverse_writer.py::test_get_annotation_annassign[a:', 'tests/unittest_pyreverse_writer.py::test_get_annotation_assignattr[def', 'tests/unittest_pyreverse_writer.py::test_infer_node_1', 'tests/unittest_pyreverse_writer.py::test_infer_node_2']}, 'PASS_TO_PASS': {'success': [], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for pylint-dev__pylint-4551: resolved: False
+2026-09-09 11:10:13,454 - INFO - Attempting to stop container sweb.eval.pylint-dev__pylint-4551.delphi_paths-s50...
+2026-09-09 11:10:28,594 - INFO - Container sweb.eval.pylint-dev__pylint-4551.delphi_paths-s50 stopped successfully.
+2026-09-09 11:10:28,595 - INFO - Attempting to remove container sweb.eval.pylint-dev__pylint-4551.delphi_paths-s50...
+2026-09-09 11:10:28,627 - INFO - Container sweb.eval.pylint-dev__pylint-4551.delphi_paths-s50 removed successfully.

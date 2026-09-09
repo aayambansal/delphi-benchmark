@@ -239,3 +239,52 @@ column and carry direction arrows. Main text ends on page 9; 25 pages total.
 Terminology fixed: "matched ladder" (the four conventional systems) and "full
 conventional stack" (its last rung).
 
+## Review round 2 (2026-09-09, midday): explanatory experiments
+
+Second external review (borderline ICLR; claims contradicted by tables; seed
+interface; measurement wording). Actions:
+
+### Candidate x reranker factorial (declared post-hoc explanatory analysis)
+- New ladder mode `hybrid_expand` (conventional candidates + expansion, no
+  learned reranking): `{I,D,D2,A}-final-hybrid_expand-r4-v1`.
+- Frozen build served with `DELPHI_R4_NO_RERANK=1` (cross-encoder and listwise
+  off, attested per response): `D2-ablation-delphi-norerank-v1` on the retained
+  expansion database; `I-ablation-delphi-norerank-v1` and the full-config
+  replication `I-factorial-delphi-full-v1` on a re-indexed independent corpus
+  (`delphi_r4_independent_factorial_20260909`, 18 snapshots).
+- `harness/analyze_factorial.py` -> `results/factorial-r4-v1.json`; tables
+  `factorial_cells.tex`, `factorial_contrasts.tex`; figure `factorial.pdf`.
+- Expansion (98): candidates alone +0.188 MRR [+0.036,+0.317], +0.073 R@20
+  [+0.005,+0.159]; rerankers +0.341 on conventional, +0.193 on Delphi
+  candidates; with rerankers +0.041 MRR (tie), +0.087 R@20.
+- Independent (18): Delphi candidates -0.099 MRR [-0.190,-0.028], -0.102 R@20
+  before reranking; rerankers +0.004 (conventional), +0.065 [-0.044,+0.176]
+  (Delphi, same index). ARB: rerankers +0.008 on conventional candidates.
+- Re-indexing shift: frozen configuration on the fresh independent index with an
+  empty stage cache reproduced 1/18 ordered top-20 lists and 7/18 top-20 sets;
+  R@20 and BCY identical per case; MRR +0.072 [+0.005,+0.159]. Reported in
+  Section 5 and Appendix F as the quantified "two clean installations" caveat.
+
+### Pilot seed audit and seed-interface check
+- `harness/analyze_seed_content.py` -> `results/pilot/seed-content-analysis.json`:
+  Delphi heads covered an edited region in 9/50 seeded gold files (median first
+  edited line 200; 48% beyond 200); conventional heads 9/44; random block 310
+  files = 93 tests / 77 py / 47 docs / 93 other, 1.3% same directory as gold.
+- `build_pilot_dataset.py --seed-style {heads,paths,chunks}`; datasets
+  `delphi_paths`, `delphi_chunks` (BM25 best ARB chunk per seeded file, <=60
+  lines; 13/50 seeded gold files covered). Arms run once each on the 62
+  instances (exploratory, not preregistered): `delphi_paths-s50`,
+  `delphi_chunks-s50`; `analyze_pilot.py --pairs/--out-label` ->
+  `analysis-seed-interface.json`; table `seed_interface.tex`.
+- Precision target for the confirmatory study from the pilot's paired-difference
+  SDs (0.23-0.30 pooled; 0.34-0.37 single): 200 instances x 2 trajectories ->
+  expected 95% half-width ~0.04.
+
+### Paper
+- Abstract/intro/discussion: reranking-head claim scoped to issue queries;
+  ladder increments described as conditional; factorial added as the
+  explanatory result; determinism wording separates cited-URL sets from chunks
+  and makes no cross-engine ordering claim; "80% parametric" and "added
+  nothing" removed; seed audit and seed-interface check added; pilot power
+  design stated; ledger records post-hoc explanatory uses of C0 sets.
+

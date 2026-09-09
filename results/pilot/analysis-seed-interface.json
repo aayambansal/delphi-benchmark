@@ -1,0 +1,292 @@
+{
+  "budget": "s50",
+  "conditions": {
+    "delphi": {
+      "exit_statuses": {
+        "Submitted": 62
+      },
+      "mean_cost_usd": 0.020751309677419356,
+      "mean_steps": 7.306451612903226,
+      "n": 62,
+      "resolved": 31.0,
+      "resolved_rate": 0.5,
+      "submitted_rate": 1.0,
+      "total_cost_usd": 1.2865811999999996
+    },
+    "delphi_chunks": {
+      "exit_statuses": {
+        "Submitted": 62
+      },
+      "mean_cost_usd": 0.024223882258064516,
+      "mean_steps": 7.741935483870968,
+      "n": 62,
+      "resolved": 24.0,
+      "resolved_rate": 0.3870967741935484,
+      "submitted_rate": 1.0,
+      "total_cost_usd": 1.5018806999999998
+    },
+    "delphi_paths": {
+      "exit_statuses": {
+        "Submitted": 62
+      },
+      "mean_cost_usd": 0.020921332258064515,
+      "mean_steps": 7.048387096774194,
+      "n": 62,
+      "resolved": 26.0,
+      "resolved_rate": 0.41935483870967744,
+      "submitted_rate": 1.0,
+      "total_cost_usd": 1.2971226
+    },
+    "none": {
+      "exit_statuses": {
+        "Submitted": 62
+      },
+      "mean_cost_usd": 0.01616207177419355,
+      "mean_steps": 7.693548387096774,
+      "n": 62,
+      "resolved": 25.0,
+      "resolved_rate": 0.4032258064516129,
+      "submitted_rate": 1.0,
+      "total_cost_usd": 1.00204845
+    }
+  },
+  "instances_common": 62,
+  "model": "gpt-5.4-mini",
+  "pairs": {
+    "delphi_chunks_minus_delphi": {
+      "cost_usd": {
+        "instance_cluster_95_ci": [
+          0.00024302661290322668,
+          0.006859899193548389
+        ],
+        "mean_a": 0.024223882258064516,
+        "mean_b": 0.020751309677419356,
+        "mean_delta": 0.003472572580645162,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -1.2749999999999343e-05,
+          0.0081006075
+        ]
+      },
+      "resolved": {
+        "a_only": 2,
+        "b_only": 9,
+        "instance_cluster_95_ci": [
+          -0.20967741935483872,
+          -0.016129032258064516
+        ],
+        "mcnemar_exact_p": 0.0654296875,
+        "mean_a": 0.3870967741935484,
+        "mean_b": 0.5,
+        "mean_delta": -0.11290322580645161,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -0.26,
+          -0.02631578947368421
+        ]
+      },
+      "steps": {
+        "instance_cluster_95_ci": [
+          -0.41935483870967744,
+          1.3225806451612903
+        ],
+        "mean_a": 7.741935483870968,
+        "mean_b": 7.306451612903226,
+        "mean_delta": 0.43548387096774194,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -1.0285714285714285,
+          1.1368421052631579
+        ]
+      }
+    },
+    "delphi_chunks_minus_none": {
+      "cost_usd": {
+        "instance_cluster_95_ci": [
+          0.005083296774193549,
+          0.011294378225806452
+        ],
+        "mean_a": 0.024223882258064516,
+        "mean_b": 0.01616207177419355,
+        "mean_delta": 0.008061810483870968,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          0.004490364285714287,
+          0.012890626666666667
+        ]
+      },
+      "resolved": {
+        "a_only": 3,
+        "b_only": 4,
+        "instance_cluster_95_ci": [
+          -0.0967741935483871,
+          0.06451612903225806
+        ],
+        "mcnemar_exact_p": 1.0,
+        "mean_a": 0.3870967741935484,
+        "mean_b": 0.4032258064516129,
+        "mean_delta": -0.016129032258064516,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -0.08695652173913043,
+          0.05263157894736842
+        ]
+      },
+      "steps": {
+        "instance_cluster_95_ci": [
+          -0.7419354838709677,
+          0.9032258064516129
+        ],
+        "mean_a": 7.741935483870968,
+        "mean_b": 7.693548387096774,
+        "mean_delta": 0.04838709677419355,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -1.3571428571428572,
+          0.8823529411764706
+        ]
+      }
+    },
+    "delphi_minus_none": {
+      "cost_usd": {
+        "instance_cluster_95_ci": [
+          0.002359231451612903,
+          0.006691966935483871
+        ],
+        "mean_a": 0.020751309677419356,
+        "mean_b": 0.01616207177419355,
+        "mean_delta": 0.004589237903225806,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          0.0017579556818181816,
+          0.007059666666666666
+        ]
+      },
+      "resolved": {
+        "a_only": 7,
+        "b_only": 1,
+        "instance_cluster_95_ci": [
+          0.016129032258064516,
+          0.1935483870967742
+        ],
+        "mcnemar_exact_p": 0.0703125,
+        "mean_a": 0.5,
+        "mean_b": 0.4032258064516129,
+        "mean_delta": 0.0967741935483871,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          0.018867924528301886,
+          0.24390243902439024
+        ]
+      },
+      "steps": {
+        "instance_cluster_95_ci": [
+          -1.0483870967741935,
+          0.22580645161290322
+        ],
+        "mean_a": 7.306451612903226,
+        "mean_b": 7.693548387096774,
+        "mean_delta": -0.3870967741935484,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -1.2173913043478262,
+          0.4897959183673469
+        ]
+      }
+    },
+    "delphi_paths_minus_delphi": {
+      "cost_usd": {
+        "instance_cluster_95_ci": [
+          -0.002789968548387096,
+          0.0032573008064516133
+        ],
+        "mean_a": 0.020921332258064515,
+        "mean_b": 0.020751309677419356,
+        "mean_delta": 0.0001700225806451611,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -0.0036223650000000002,
+          0.0024325617647058817
+        ]
+      },
+      "resolved": {
+        "a_only": 4,
+        "b_only": 9,
+        "instance_cluster_95_ci": [
+          -0.1935483870967742,
+          0.03225806451612903
+        ],
+        "mcnemar_exact_p": 0.266845703125,
+        "mean_a": 0.41935483870967744,
+        "mean_b": 0.5,
+        "mean_delta": -0.08064516129032258,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -0.20454545454545456,
+          -0.02531645569620253
+        ]
+      },
+      "steps": {
+        "instance_cluster_95_ci": [
+          -1.0,
+          0.46774193548387094
+        ],
+        "mean_a": 7.048387096774194,
+        "mean_b": 7.306451612903226,
+        "mean_delta": -0.25806451612903225,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -1.7173913043478262,
+          0.5
+        ]
+      }
+    },
+    "delphi_paths_minus_none": {
+      "cost_usd": {
+        "instance_cluster_95_ci": [
+          0.0024510314516129044,
+          0.007106692741935483
+        ],
+        "mean_a": 0.020921332258064515,
+        "mean_b": 0.01616207177419355,
+        "mean_delta": 0.004759260483870967,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          0.0023147666666666657,
+          0.005719238709677419
+        ]
+      },
+      "resolved": {
+        "a_only": 7,
+        "b_only": 6,
+        "instance_cluster_95_ci": [
+          -0.0967741935483871,
+          0.12903225806451613
+        ],
+        "mcnemar_exact_p": 1.0,
+        "mean_a": 0.41935483870967744,
+        "mean_b": 0.4032258064516129,
+        "mean_delta": 0.016129032258064516,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -0.08333333333333333,
+          0.14285714285714285
+        ]
+      },
+      "steps": {
+        "instance_cluster_95_ci": [
+          -1.2419354838709677,
+          -0.06451612903225806
+        ],
+        "mean_a": 7.048387096774194,
+        "mean_b": 7.693548387096774,
+        "mean_delta": -0.6451612903225806,
+        "n": 62,
+        "repository_cluster_95_ci": [
+          -1.7419354838709677,
+          -0.25
+        ]
+      }
+    }
+  }
+}

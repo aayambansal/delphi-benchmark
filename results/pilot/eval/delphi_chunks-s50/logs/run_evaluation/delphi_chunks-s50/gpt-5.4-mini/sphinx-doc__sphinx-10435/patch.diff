@@ -1,0 +1,13 @@
+diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
+index e0c7d56f8..9af72fe88 100644
+--- a/sphinx/writers/latex.py
++++ b/sphinx/writers/latex.py
+@@ -1714,7 +1714,7 @@ class LaTeXTranslator(SphinxTranslator):
+         # get consistent trailer
+         hlcode = hlcode.rstrip()[:-14]  # strip \end{Verbatim}
+         self.body.append(hlcode)
+-        self.body.append('}}')
++        self.body.append('%}}')
+         raise nodes.SkipNode
+ 
+     def depart_literal(self, node: Element) -> None:

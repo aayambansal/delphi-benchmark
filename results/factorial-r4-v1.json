@@ -1,0 +1,961 @@
+{
+  "bootstrap": {
+    "samples": 20000,
+    "seed": 1042,
+    "unit": "repository"
+  },
+  "schema": "factorial_r4_v1",
+  "sets": {
+    "arb": {
+      "cells": {
+        "conv_norerank": {
+          "BCY@8k": 0.1587121212121212,
+          "MRR": 0.2213128587138227,
+          "Recall@20": 0.5961363636363637,
+          "Recall@5": 0.29015151515151516,
+          "n": 220,
+          "run": "A-final-hybrid_expand-r4-v1"
+        },
+        "conv_rerank": {
+          "BCY@8k": 0.2196969696969697,
+          "MRR": 0.22924726222115752,
+          "Recall@20": 0.5947727272727272,
+          "Recall@5": 0.3893939393939394,
+          "n": 220,
+          "run": "A-final-hybrid_rerank_expand-r4-v1"
+        },
+        "delphi_rerank": {
+          "BCY@8k": 0.29583333333333334,
+          "MRR": 0.3318967891413712,
+          "Recall@20": 0.6478030303030303,
+          "Recall@5": 0.47613636363636364,
+          "n": 220,
+          "run": "A-final-delphi-generated-source-exact-top20-v1"
+        }
+      },
+      "contrasts": {
+        "candidate_effect_rerank": {
+          "any_gold_at_20": {
+            "baseline_cases": 148,
+            "both": 123,
+            "candidate_cases": 163,
+            "lost": 25,
+            "mcnemar_exact_p": 0.08168153394154005,
+            "metric": "Recall@20",
+            "neither": 32,
+            "recovered": 40
+          },
+          "baseline_run": "A-final-hybrid_rerank_expand-r4-v1",
+          "candidate_run": "A-final-delphi-generated-source-exact-top20-v1",
+          "description": "Delphi vs conventional candidates, with rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.018796992481203006,
+                0.15712851405622488
+              ],
+              "losses": 21,
+              "mean_delta": 0.07613636363636364,
+              "wins": 38
+            },
+            "MRR": {
+              "ci95": [
+                -0.008182905554946003,
+                0.18910934864965756
+              ],
+              "losses": 64,
+              "mean_delta": 0.10264952692021366,
+              "wins": 91
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.11666666666666665,
+                0.1951219512195122
+              ],
+              "losses": 39,
+              "mean_delta": 0.053030303030303025,
+              "wins": 47
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.10049019607843136,
+                0.23819163292847503
+              ],
+              "losses": 41,
+              "mean_delta": 0.08674242424242423,
+              "wins": 54
+            }
+          }
+        },
+        "rerank_effect_conventional": {
+          "any_gold_at_20": {
+            "baseline_cases": 148,
+            "both": 147,
+            "candidate_cases": 148,
+            "lost": 1,
+            "lost_case_ids": [
+              "19c290f5b37ff6d5a93db942"
+            ],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 71,
+            "recovered": 1,
+            "recovered_case_ids": [
+              "aab82f381a4ad9fca153446a"
+            ]
+          },
+          "baseline_run": "A-final-hybrid_expand-r4-v1",
+          "candidate_run": "A-final-hybrid_rerank_expand-r4-v1",
+          "description": "rerankers on conventional candidates",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.041666666666666664,
+                0.09427624788026247
+              ],
+              "losses": 20,
+              "mean_delta": 0.06098484848484848,
+              "wins": 33
+            },
+            "MRR": {
+              "ci95": [
+                -0.01068527885273941,
+                0.0313756874532602
+              ],
+              "losses": 58,
+              "mean_delta": 0.007934403507334833,
+              "wins": 63
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.014084743359485773,
+                0.010494086523498265
+              ],
+              "losses": 3,
+              "mean_delta": -0.0013636363636363637,
+              "wins": 2
+            },
+            "Recall@5": {
+              "ci95": [
+                0.05759803921568627,
+                0.14583521359807444
+              ],
+              "losses": 18,
+              "mean_delta": 0.09924242424242424,
+              "wins": 43
+            }
+          }
+        }
+      },
+      "label": "ARB round-3 partition (C2, n=220)"
+    },
+    "expansion": {
+      "cells": {
+        "conv_norerank": {
+          "BCY@8k": 0.24829931972789115,
+          "MRR": 0.3191410294860886,
+          "Recall@20": 0.7329931972789115,
+          "Recall@5": 0.5034013605442177,
+          "n": 98,
+          "run": "D2-final-hybrid_expand-r4-v1"
+        },
+        "conv_rerank": {
+          "BCY@8k": 0.6028911564625851,
+          "MRR": 0.6596578025149454,
+          "Recall@20": 0.7329931972789115,
+          "Recall@5": 0.6836734693877551,
+          "n": 98,
+          "run": "D2-final-hybrid_rerank_expand-r4-v1"
+        },
+        "delphi_norerank": {
+          "BCY@8k": 0.40816326530612246,
+          "MRR": 0.5068062223224289,
+          "Recall@20": 0.8061224489795918,
+          "Recall@5": 0.6445578231292517,
+          "n": 98,
+          "run": "D2-ablation-delphi-norerank-v1"
+        },
+        "delphi_rerank": {
+          "BCY@8k": 0.685374149659864,
+          "MRR": 0.7003030699459272,
+          "Recall@20": 0.8197278911564625,
+          "Recall@5": 0.7448979591836735,
+          "n": 98,
+          "run": "D2-final-delphi-generated-source-exact-top20-v1"
+        }
+      },
+      "contrasts": {
+        "candidate_effect_norerank": {
+          "any_gold_at_20": {
+            "baseline_cases": 76,
+            "both": 69,
+            "candidate_cases": 82,
+            "lost": 7,
+            "lost_case_ids": [
+              "django__django-11555",
+              "django__django-13033",
+              "django__django-14404",
+              "django__django-16662",
+              "django__django-16938",
+              "matplotlib__matplotlib-23314",
+              "sympy__sympy-22456"
+            ],
+            "mcnemar_exact_p": 0.26317596435546875,
+            "metric": "Recall@20",
+            "neither": 9,
+            "recovered": 13,
+            "recovered_case_ids": [
+              "django__django-11138",
+              "django__django-11211",
+              "django__django-12143",
+              "django__django-13158",
+              "django__django-13670",
+              "django__django-14017",
+              "django__django-14238",
+              "django__django-15375",
+              "matplotlib__matplotlib-23412",
+              "matplotlib__matplotlib-24637",
+              "scikit-learn__scikit-learn-10844",
+              "scikit-learn__scikit-learn-25931",
+              "sphinx-doc__sphinx-8120"
+            ]
+          },
+          "baseline_run": "D2-final-hybrid_expand-r4-v1",
+          "candidate_run": "D2-ablation-delphi-norerank-v1",
+          "description": "Delphi vs conventional candidates, no rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.0717948717948718,
+                0.30952380952380953
+              ],
+              "losses": 10,
+              "mean_delta": 0.15986394557823128,
+              "wins": 26
+            },
+            "MRR": {
+              "ci95": [
+                0.03552826716441719,
+                0.31658978761829876
+              ],
+              "losses": 27,
+              "mean_delta": 0.18766519283634026,
+              "wins": 54
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0047602280348759225,
+                0.15885568071705414
+              ],
+              "losses": 9,
+              "mean_delta": 0.07312925170068027,
+              "wins": 17
+            },
+            "Recall@5": {
+              "ci95": [
+                0.0,
+                0.32471629651276024
+              ],
+              "losses": 11,
+              "mean_delta": 0.14115646258503403,
+              "wins": 26
+            }
+          }
+        },
+        "candidate_effect_rerank": {
+          "any_gold_at_20": {
+            "baseline_cases": 76,
+            "both": 70,
+            "candidate_cases": 83,
+            "lost": 6,
+            "mcnemar_exact_p": 0.1670684814453125,
+            "metric": "Recall@20",
+            "neither": 9,
+            "recovered": 13
+          },
+          "baseline_run": "D2-final-hybrid_rerank_expand-r4-v1",
+          "candidate_run": "D2-final-delphi-generated-source-exact-top20-v1",
+          "description": "Delphi vs conventional candidates, with rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.029962546816479398,
+                0.15238095238095237
+              ],
+              "losses": 10,
+              "mean_delta": 0.08248299319727892,
+              "wins": 20
+            },
+            "MRR": {
+              "ci95": [
+                -0.028455284552845534,
+                0.11163522012578617
+              ],
+              "losses": 17,
+              "mean_delta": 0.040645267430981714,
+              "wins": 22
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0423728813559322,
+                0.16666666666666666
+              ],
+              "losses": 7,
+              "mean_delta": 0.08673469387755102,
+              "wins": 17
+            },
+            "Recall@5": {
+              "ci95": [
+                0.022727272727272728,
+                0.14772727272727273
+              ],
+              "losses": 9,
+              "mean_delta": 0.061224489795918366,
+              "wins": 15
+            }
+          }
+        },
+        "rerank_effect_conventional": {
+          "any_gold_at_20": {
+            "baseline_cases": 76,
+            "both": 75,
+            "candidate_cases": 76,
+            "lost": 1,
+            "lost_case_ids": [
+              "django__django-11119"
+            ],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 21,
+            "recovered": 1,
+            "recovered_case_ids": [
+              "django__django-14238"
+            ]
+          },
+          "baseline_run": "D2-final-hybrid_expand-r4-v1",
+          "candidate_run": "D2-final-hybrid_rerank_expand-r4-v1",
+          "description": "rerankers on conventional candidates",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.2896034447194719,
+                0.5
+              ],
+              "losses": 2,
+              "mean_delta": 0.35459183673469385,
+              "wins": 40
+            },
+            "MRR": {
+              "ci95": [
+                0.2559937789351852,
+                0.46797118909033575
+              ],
+              "losses": 7,
+              "mean_delta": 0.3405167730288568,
+              "wins": 56
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "losses": 1,
+              "mean_delta": 0.0,
+              "wins": 1
+            },
+            "Recall@5": {
+              "ci95": [
+                0.09050693787448753,
+                0.4017900910364142
+              ],
+              "losses": 2,
+              "mean_delta": 0.18027210884353742,
+              "wins": 23
+            }
+          }
+        },
+        "rerank_effect_delphi": {
+          "any_gold_at_20": {
+            "baseline_cases": 82,
+            "both": 82,
+            "candidate_cases": 83,
+            "lost": 0,
+            "lost_case_ids": [],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 15,
+            "recovered": 1,
+            "recovered_case_ids": [
+              "sympy__sympy-22456"
+            ]
+          },
+          "baseline_run": "D2-ablation-delphi-norerank-v1",
+          "candidate_run": "D2-final-delphi-generated-source-exact-top20-v1",
+          "description": "rerankers on Delphi candidates (same index)",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.22083333333333335,
+                0.37288471885929486
+              ],
+              "losses": 2,
+              "mean_delta": 0.2772108843537415,
+              "wins": 31
+            },
+            "MRR": {
+              "ci95": [
+                0.16054994876983075,
+                0.28458762291440115
+              ],
+              "losses": 7,
+              "mean_delta": 0.19349684762349828,
+              "wins": 38
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0,
+                0.043010752688172046
+              ],
+              "losses": 0,
+              "mean_delta": 0.01360544217687075,
+              "wins": 2
+            },
+            "Recall@5": {
+              "ci95": [
+                0.0470490748622812,
+                0.24468627876682542
+              ],
+              "losses": 2,
+              "mean_delta": 0.10034013605442177,
+              "wins": 15
+            }
+          }
+        }
+      },
+      "label": "SWE-bench Verified expansion (C0, n=98)"
+    },
+    "independent": {
+      "cells": {
+        "conv_norerank": {
+          "BCY@8k": 0.45370370370370366,
+          "MRR": 0.6149691358024691,
+          "Recall@20": 0.8518518518518519,
+          "Recall@5": 0.6944444444444444,
+          "n": 18,
+          "run": "I-final-hybrid_expand-r4-v1"
+        },
+        "conv_rerank": {
+          "BCY@8k": 0.5462962962962963,
+          "MRR": 0.6190476190476191,
+          "Recall@20": 0.8518518518518519,
+          "Recall@5": 0.662037037037037,
+          "n": 18,
+          "run": "I-final-hybrid_rerank_expand-r4-v1"
+        },
+        "delphi_norerank": {
+          "BCY@8k": 0.5046296296296297,
+          "MRR": 0.5156986531986533,
+          "Recall@20": 0.75,
+          "Recall@5": 0.587962962962963,
+          "n": 18,
+          "run": "I-ablation-delphi-norerank-v1"
+        },
+        "delphi_rerank": {
+          "BCY@8k": 0.45370370370370366,
+          "MRR": 0.5802469135802469,
+          "Recall@20": 0.75,
+          "Recall@5": 0.5509259259259259,
+          "n": 18,
+          "run": "I-factorial-delphi-full-v1"
+        },
+        "delphi_rerank_confirmatory": {
+          "BCY@8k": 0.45370370370370366,
+          "MRR": 0.5083333333333333,
+          "Recall@20": 0.75,
+          "Recall@5": 0.5509259259259259,
+          "n": 18,
+          "run": "I-final-delphi-generated-source-exact-top20-v1"
+        }
+      },
+      "contrasts": {
+        "candidate_effect_norerank": {
+          "any_gold_at_20": {
+            "baseline_cases": 16,
+            "both": 15,
+            "candidate_cases": 15,
+            "lost": 1,
+            "lost_case_ids": [
+              "88609952f86b5e229d3b8f1c"
+            ],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 2,
+            "recovered": 0,
+            "recovered_case_ids": []
+          },
+          "baseline_run": "I-final-hybrid_expand-r4-v1",
+          "candidate_run": "I-ablation-delphi-norerank-v1",
+          "description": "Delphi vs conventional candidates, no rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.06018518518518518,
+                0.17592592592592593
+              ],
+              "losses": 3,
+              "mean_delta": 0.05092592592592593,
+              "wins": 3
+            },
+            "MRR": {
+              "ci95": [
+                -0.18985690235690236,
+                -0.027777777777777776
+              ],
+              "losses": 6,
+              "mean_delta": -0.09927048260381593,
+              "wins": 2
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.21296296296296297,
+                0.0
+              ],
+              "losses": 3,
+              "mean_delta": -0.10185185185185185,
+              "wins": 0
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.22685185185185183,
+                0.018518518518518524
+              ],
+              "losses": 6,
+              "mean_delta": -0.10648148148148147,
+              "wins": 2
+            }
+          }
+        },
+        "candidate_effect_rerank": {
+          "any_gold_at_20": {
+            "baseline_cases": 16,
+            "both": 15,
+            "candidate_cases": 15,
+            "lost": 1,
+            "lost_case_ids": [
+              "88609952f86b5e229d3b8f1c"
+            ],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 2,
+            "recovered": 0,
+            "recovered_case_ids": []
+          },
+          "baseline_run": "I-final-hybrid_rerank_expand-r4-v1",
+          "candidate_run": "I-factorial-delphi-full-v1",
+          "description": "Delphi vs conventional candidates, with rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.2777777777777778,
+                0.07407407407407408
+              ],
+              "losses": 5,
+              "mean_delta": -0.09259259259259259,
+              "wins": 2
+            },
+            "MRR": {
+              "ci95": [
+                -0.15145502645502645,
+                0.0462962962962963
+              ],
+              "losses": 6,
+              "mean_delta": -0.03880070546737213,
+              "wins": 4
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.21296296296296297,
+                0.0
+              ],
+              "losses": 3,
+              "mean_delta": -0.10185185185185185,
+              "wins": 0
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.32407407407407407,
+                0.0462962962962963
+              ],
+              "losses": 5,
+              "mean_delta": -0.1111111111111111,
+              "wins": 1
+            }
+          }
+        },
+        "candidate_effect_rerank_confirmatory": {
+          "any_gold_at_20": {
+            "baseline_cases": 16,
+            "both": 15,
+            "candidate_cases": 15,
+            "lost": 1,
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 2,
+            "recovered": 0
+          },
+          "baseline_run": "I-final-hybrid_rerank_expand-r4-v1",
+          "candidate_run": "I-final-delphi-generated-source-exact-top20-v1",
+          "description": "Delphi (confirmatory index) vs conventional candidates, with rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.2777777777777778,
+                0.07407407407407408
+              ],
+              "losses": 5,
+              "mean_delta": -0.09259259259259259,
+              "wins": 2
+            },
+            "MRR": {
+              "ci95": [
+                -0.2,
+                -0.033994708994708994
+              ],
+              "losses": 7,
+              "mean_delta": -0.11071428571428571,
+              "wins": 3
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.21296296296296297,
+                0.0
+              ],
+              "losses": 3,
+              "mean_delta": -0.10185185185185185,
+              "wins": 0
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.32407407407407407,
+                0.0462962962962963
+              ],
+              "losses": 5,
+              "mean_delta": -0.1111111111111111,
+              "wins": 1
+            }
+          }
+        },
+        "replication": {
+          "any_gold_at_20": {
+            "baseline_cases": 15,
+            "both": 15,
+            "candidate_cases": 15,
+            "lost": 0,
+            "lost_case_ids": [],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 3,
+            "recovered": 0,
+            "recovered_case_ids": []
+          },
+          "baseline_run": "I-final-delphi-generated-source-exact-top20-v1",
+          "candidate_run": "I-factorial-delphi-full-v1",
+          "description": "Delphi frozen build re-indexed vs confirmatory run",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "losses": 0,
+              "mean_delta": 0.0,
+              "wins": 0
+            },
+            "MRR": {
+              "ci95": [
+                0.004629629629629629,
+                0.15925925925925927
+              ],
+              "losses": 1,
+              "mean_delta": 0.07191358024691358,
+              "wins": 4
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "losses": 0,
+              "mean_delta": 0.0,
+              "wins": 0
+            },
+            "Recall@5": {
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "losses": 0,
+              "mean_delta": 0.0,
+              "wins": 0
+            }
+          }
+        },
+        "rerank_effect_conventional": {
+          "any_gold_at_20": {
+            "baseline_cases": 16,
+            "both": 16,
+            "candidate_cases": 16,
+            "lost": 0,
+            "lost_case_ids": [],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 2,
+            "recovered": 0,
+            "recovered_case_ids": []
+          },
+          "baseline_run": "I-final-hybrid_expand-r4-v1",
+          "candidate_run": "I-final-hybrid_rerank_expand-r4-v1",
+          "description": "rerankers on conventional candidates",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.1111111111111111,
+                0.3055555555555556
+              ],
+              "losses": 2,
+              "mean_delta": 0.09259259259259259,
+              "wins": 5
+            },
+            "MRR": {
+              "ci95": [
+                -0.0925925925925926,
+                0.11871693121693122
+              ],
+              "losses": 4,
+              "mean_delta": 0.00407848324514991,
+              "wins": 5
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "losses": 0,
+              "mean_delta": 0.0,
+              "wins": 0
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.20833333333333334,
+                0.14814814814814814
+              ],
+              "losses": 3,
+              "mean_delta": -0.032407407407407406,
+              "wins": 1
+            }
+          }
+        },
+        "rerank_effect_delphi": {
+          "any_gold_at_20": {
+            "baseline_cases": 15,
+            "both": 15,
+            "candidate_cases": 15,
+            "lost": 0,
+            "lost_case_ids": [],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 3,
+            "recovered": 0,
+            "recovered_case_ids": []
+          },
+          "baseline_run": "I-ablation-delphi-norerank-v1",
+          "candidate_run": "I-factorial-delphi-full-v1",
+          "description": "rerankers on Delphi candidates (same index)",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.1898148148148148,
+                0.125
+              ],
+              "losses": 3,
+              "mean_delta": -0.05092592592592593,
+              "wins": 4
+            },
+            "MRR": {
+              "ci95": [
+                -0.044360269360269364,
+                0.17592592592592593
+              ],
+              "losses": 5,
+              "mean_delta": 0.06454826038159373,
+              "wins": 6
+            },
+            "Recall@20": {
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "losses": 0,
+              "mean_delta": 0.0,
+              "wins": 0
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.2037037037037037,
+                0.12962962962962965
+              ],
+              "losses": 2,
+              "mean_delta": -0.03703703703703704,
+              "wins": 2
+            }
+          }
+        }
+      },
+      "label": "Independent commit-to-files (C0, n=18)"
+    },
+    "swebench": {
+      "cells": {
+        "conv_norerank": {
+          "BCY@8k": 0.23387096774193547,
+          "MRR": 0.30733943309594963,
+          "Recall@20": 0.6731950844854071,
+          "Recall@5": 0.44431643625192013,
+          "n": 62,
+          "run": "D-final-hybrid_expand-r4-v1"
+        },
+        "conv_rerank": {
+          "BCY@8k": 0.5733486943164363,
+          "MRR": 0.5968269028041324,
+          "Recall@20": 0.6570660522273426,
+          "Recall@5": 0.6225038402457758,
+          "n": 62,
+          "run": "D-final-hybrid_rerank_expand-r4-v1"
+        },
+        "delphi_rerank": {
+          "BCY@8k": 0.6378648233486943,
+          "MRR": 0.6797122074636306,
+          "Recall@20": 0.7369431643625192,
+          "Recall@5": 0.7039170506912443,
+          "n": 62,
+          "run": "D-final-delphi-generated-source-exact-top20-v1"
+        }
+      },
+      "contrasts": {
+        "candidate_effect_rerank": {
+          "any_gold_at_20": {
+            "baseline_cases": 44,
+            "both": 39,
+            "candidate_cases": 48,
+            "lost": 5,
+            "mcnemar_exact_p": 0.4239501953125,
+            "metric": "Recall@20",
+            "neither": 9,
+            "recovered": 9
+          },
+          "baseline_run": "D-final-hybrid_rerank_expand-r4-v1",
+          "candidate_run": "D-final-delphi-generated-source-exact-top20-v1",
+          "description": "Delphi vs conventional candidates, with rerankers",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                -0.0625,
+                0.17142857142857143
+              ],
+              "losses": 4,
+              "mean_delta": 0.06451612903225806,
+              "wins": 8
+            },
+            "MRR": {
+              "ci95": [
+                -0.10727969348659004,
+                0.202659767610748
+              ],
+              "losses": 8,
+              "mean_delta": 0.08288530465949821,
+              "wins": 15
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.10526315789473684,
+                0.21697388632872505
+              ],
+              "losses": 6,
+              "mean_delta": 0.07987711213517665,
+              "wins": 10
+            },
+            "Recall@5": {
+              "ci95": [
+                -0.055782312925170066,
+                0.25132275132275134
+              ],
+              "losses": 4,
+              "mean_delta": 0.08141321044546851,
+              "wins": 10
+            }
+          }
+        },
+        "rerank_effect_conventional": {
+          "any_gold_at_20": {
+            "baseline_cases": 45,
+            "both": 43,
+            "candidate_cases": 44,
+            "lost": 2,
+            "lost_case_ids": [
+              "django__django-15741",
+              "django__django-16333"
+            ],
+            "mcnemar_exact_p": 1.0,
+            "metric": "Recall@20",
+            "neither": 16,
+            "recovered": 1,
+            "recovered_case_ids": [
+              "astropy__astropy-13453"
+            ]
+          },
+          "baseline_run": "D-final-hybrid_expand-r4-v1",
+          "candidate_run": "D-final-hybrid_rerank_expand-r4-v1",
+          "description": "rerankers on conventional candidates",
+          "metrics": {
+            "BCY@8k": {
+              "ci95": [
+                0.245501443001443,
+                0.5171130952380952
+              ],
+              "losses": 1,
+              "mean_delta": 0.33947772657450076,
+              "wins": 24
+            },
+            "MRR": {
+              "ci95": [
+                0.21883422113074225,
+                0.4708735377163686
+              ],
+              "losses": 6,
+              "mean_delta": 0.2894874697081828,
+              "wins": 31
+            },
+            "Recall@20": {
+              "ci95": [
+                -0.05333333333333334,
+                0.07894736842105263
+              ],
+              "losses": 2,
+              "mean_delta": -0.016129032258064516,
+              "wins": 1
+            },
+            "Recall@5": {
+              "ci95": [
+                0.10705819352368189,
+                0.3888888888888889
+              ],
+              "losses": 2,
+              "mean_delta": 0.1781874039938556,
+              "wins": 15
+            }
+          }
+        }
+      },
+      "label": "SWE-bench Verified round 3 (C0, n=62)"
+    }
+  }
+}

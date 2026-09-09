@@ -1,0 +1,47 @@
+2026-09-09 11:15:23,269 - INFO - Creating container for sympy__sympy-18698...
+2026-09-09 11:15:23,301 - INFO - Container for sympy__sympy-18698 created: 1440edabac03c1028ce2e51ff82d12b6ea3b15733f826be9ddeb0fc88eee9864
+2026-09-09 11:15:23,368 - INFO - Container for sympy__sympy-18698 started: 1440edabac03c1028ce2e51ff82d12b6ea3b15733f826be9ddeb0fc88eee9864
+2026-09-09 11:15:23,368 - INFO - Intermediate patch for sympy__sympy-18698 written to logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/sympy__sympy-18698/patch.diff, now applying to container...
+2026-09-09 11:15:23,503 - INFO - >>>>> Applied Patch:
+Checking patch sympy/polys/sqfreetools.py...
+Applied patch sympy/polys/sqfreetools.py cleanly.
+
+2026-09-09 11:15:23,991 - INFO - Git diff before:
+diff --git a/sympy/polys/sqfreetools.py b/sympy/polys/sqfreetools.py
+index 1783a7744a..27519934e0 100755
+--- a/sympy/polys/sqfreetools.py
++++ b/sympy/polys/sqfreetools.py
+@@ -327,8 +327,8 @@ def dup_sqf_list(f, K, all=False):
+ 
+         g, p, q = dup_inner_gcd(p, h, K)
+ 
+-        if all or dup_degree(g) > 0:
+-            result.append((g, i))
++        if all or dup_degree(p) > 0:
++            result.append((p, i))
+ 
+         i += 1
+ 
+@@ -415,8 +415,8 @@ def dmp_sqf_list(f, u, K, all=False):
+ 
+         g, p, q = dmp_inner_gcd(p, h, u, K)
+ 
+-        if all or dmp_degree(g, u) > 0:
+-            result.append((g, i))
++        if all or dmp_degree(p, u) > 0:
++            result.append((p, i))
+ 
+         i += 1
+2026-09-09 11:15:23,991 - INFO - Eval script for sympy__sympy-18698 written to logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/sympy__sympy-18698/eval.sh; copying to container...
+2026-09-09 11:45:24,117 - INFO - Test runtime: 1_800.06 seconds
+2026-09-09 11:45:24,118 - INFO - Test output for sympy__sympy-18698 written to logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/sympy__sympy-18698/test_output.txt
+2026-09-09 11:45:24,123 - INFO - Traceback (most recent call last):
+  File "/Users/aayambansal/Desktop/syntheticsciences/delphi/benchmark-paper/.venv-agent/lib/python3.12/site-packages/swebench/harness/run_evaluation.py", line 377, in run_instance
+    raise EvaluationError(
+swebench.harness.utils.EvaluationError: Error in evaluation for sympy__sympy-18698: Test timed out after 1800 seconds.
+Check (logs/run_evaluation/delphi_paths-s50/gpt-5.4-mini/sympy__sympy-18698/run_instance.log) for more information.
+
+2026-09-09 11:45:24,123 - INFO - Attempting to stop container sweb.eval.sympy__sympy-18698.delphi_paths-s50...
+2026-09-09 11:45:39,274 - INFO - Container sweb.eval.sympy__sympy-18698.delphi_paths-s50 stopped successfully.
+2026-09-09 11:45:39,274 - INFO - Attempting to remove container sweb.eval.sympy__sympy-18698.delphi_paths-s50...
+2026-09-09 11:45:39,318 - INFO - Container sweb.eval.sympy__sympy-18698.delphi_paths-s50 removed successfully.

@@ -43,9 +43,22 @@ export SYNSC_HNSW_EF_SEARCH=100
 export SYNSC_VECTOR_EXACT_SCAN=true
 export SYNSC_FILE_DIVERSE_BM25=false
 export SYNSC_WORKER_THREADS=4
-export SYNSC_TEMP_DIR=/tmp/native-delphi-r4
+export SYNSC_TEMP_DIR=${DELPHI_R4_TEMP:-/tmp/native-delphi-r4}
 export PYTHONUNBUFFERED=1
 mkdir -p "$SYNSC_TEMP_DIR"
+
+# Optional overrides for declared ablations (round-4 factorial, 2026-09-09).
+# The frozen configuration above is the confirmatory one; these switches exist
+# so that the same build can serve the no-reranker cell of the candidate x
+# reranker factorial without editing the file. Every response still attests
+# the configuration actually served.
+if [[ -n ${DELPHI_R4_CACHE:-} ]]; then
+  export SYNSC_LLM_CACHE_DB="$DELPHI_R4_CACHE"
+fi
+if [[ ${DELPHI_R4_NO_RERANK:-0} == 1 ]]; then
+  export SYNSC_ENABLE_RERANKER=false
+  export SYNSC_LISTWISE_RERANK=false
+fi
 
 case ${1:-} in
   initdb)

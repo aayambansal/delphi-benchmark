@@ -1,0 +1,27 @@
+diff --git a/sympy/logic/boolalg.py b/sympy/logic/boolalg.py
+index fbcba1f8d4..d6577b3c5a 100644
+--- a/sympy/logic/boolalg.py
++++ b/sympy/logic/boolalg.py
+@@ -393,6 +393,22 @@ class when they evaluate to false.
+     def __bool__(self):
+         return False
+ 
++    def __eq__(self, other):
++        from sympy.core.sympify import _sympify
++        from sympy.core.numbers import Number
++        if other is S.false:
++            return True
++        try:
++            other = _sympify(other)
++        except Exception:
++            return False
++        if isinstance(other, Number):
++            return other.is_zero is True
++        return False
++
++    def __ne__(self, other):
++        return not self.__eq__(other)
++
+     def __hash__(self):
+         return hash(False)
+ 

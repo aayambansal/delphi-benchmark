@@ -17,6 +17,13 @@ Conditions:
 
 The agent keeps its ordinary tools in every condition; the seed is a hint, not
 a restriction. Gold files are used only to exclude them from the random arm.
+
+Seed styles (``--seed-style``), added for the round-4 seed-interface check:
+  heads       path plus the first ``--head-lines`` lines of the file (pilot default)
+  paths       path only, no file content
+  chunks      path plus the file's best-matching ARB chunk for the issue text
+              under BM25 (a symbol chunk where one exists), capped at
+              ``--chunk-lines`` lines; the same total token budget applies
 """
 from __future__ import annotations
 
@@ -58,6 +65,34 @@ def file_head(corpus: GitCorpus, repo: str, commit: str, path: str, lines: int) 
     return "\n".join(text.splitlines()[:lines])
 
 
+def best_chunk(
+    chunks_by_path: dict[str, list[dict]],
+    path: str,
+    query: str,
+    *,
+    max_lines: int,
+) -> tuple[str, int, int] | None:
+    """The file's best-matching ARB chunk for the query under BM25.
+
+    Symbol chunks are preferred over the whole-file chunk so that the seed
+    carries the query-relevant region rather than the file header. Returns
+    (text, start_line, end_line) or None when the file has no chunks.
+    """
+    from agent_retrieval_bench.baseline import rank_chunks_bm25_with_scores
+
+    chunks = chunks_by_path.get(path) or []
+    if not chunks:
+        return None
+    symbols = [c for c in chunks if c.get("kind") == "symbol"] or chunks
+    ranked = rank_chunks_bm25_with_scores(query, symbols)
+    _, chunk = ranked[0]
+    lines = str(chunk.get("text") or "").splitlines()
+    start = int(chunk.get("start_line") or 1)
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+    return "\n".join(lines), start, start + max(0, len(lines) - 1)
+
+
 def seed_block(
     corpus: GitCorpus,
     repo: str,
@@ -66,13 +101,28 @@ def seed_block(
     *,
     head_lines: int,
     token_budget: int,
+    style: str = "heads",
+    query: str = "",
+    chunks_by_path: dict[str, list[dict]] | None = None,
+    chunk_lines: int = 60,
 ) -> tuple[str, list[str]]:
     parts = [f"<retrieved_context>\n{INTRO}\n"]
     used: list[str] = []
     tokens = len(_ENC.encode(parts[0]))
     for path in paths:
-        head = file_head(corpus, repo, commit, path, head_lines)
-        section = f"\n### {path} (lines 1-{min(head_lines, len(head.splitlines()) or 1)})\n{head}\n"
+        if style == "paths":
+            section = f"\n### {path}\n"
+        elif style == "chunks":
+            found = best_chunk(chunks_by_path or {}, path, query, max_lines=chunk_lines)
+            if found is None:
+                head = file_head(corpus, repo, commit, path, head_lines)
+                section = f"\n### {path} (lines 1-{min(head_lines, len(head.splitlines()) or 1)})\n{head}\n"
+            else:
+                text, start, end = found
+                section = f"\n### {path} (lines {start}-{end})\n{text}\n"
+        else:
+            head = file_head(corpus, repo, commit, path, head_lines)
+            section = f"\n### {path} (lines 1-{min(head_lines, len(head.splitlines()) or 1)})\n{head}\n"
         cost = len(_ENC.encode(section))
         if tokens + cost > token_budget:
             section = f"\n### {path}\n"
@@ -94,6 +144,8 @@ def main() -> None:
     parser.add_argument("--label", default=None, help="output directory name (default: condition)")
     parser.add_argument("--k", type=int, default=5)
     parser.add_argument("--head-lines", type=int, default=40)
+    parser.add_argument("--seed-style", choices=("heads", "paths", "chunks"), default="heads")
+    parser.add_argument("--chunk-lines", type=int, default=60)
     parser.add_argument("--token-budget", type=int, default=3000)
     parser.add_argument("--seed", type=int, default=1042)
     parser.add_argument("--out", type=Path, default=ROOT / "results" / "pilot" / "datasets")
@@ -125,17 +177,33 @@ def main() -> None:
             gold = set((case.get("gold") or {}).get("files") or [])
             statement = str(base["problem_statement"])
             used: list[str] = []
+            chunks_by_path: dict[str, list[dict]] = {}
+            if args.seed_style == "chunks" and args.condition != "none":
+                from harness.run_arb import ChunkCache
+
+                if not hasattr(main, "_chunk_cache"):
+                    main._chunk_cache = ChunkCache(corpus, max_snapshots=1)  # type: ignore[attr-defined]
+                for chunk in main._chunk_cache.get(repo, commit):  # type: ignore[attr-defined]
+                    chunks_by_path.setdefault(str(chunk.get("path")), []).append(chunk)
+            seed_kwargs = dict(
+                head_lines=args.head_lines,
+                token_budget=args.token_budget,
+                style=args.seed_style,
+                query=statement,
+                chunks_by_path=chunks_by_path,
+                chunk_lines=args.chunk_lines,
+            )
             if args.condition == "random":
                 from agent_retrieval_bench.corpus import is_candidate_path
 
                 candidates = [p for p in corpus.list_files(repo, commit) if is_candidate_path(p) and p not in gold]
                 rng = random.Random(int(hashlib.sha256(f"{args.seed}|{iid}".encode()).hexdigest(), 16))
                 paths = rng.sample(candidates, min(args.k, len(candidates)))
-                block, used = seed_block(corpus, repo, commit, paths, head_lines=args.head_lines, token_budget=args.token_budget)
+                block, used = seed_block(corpus, repo, commit, paths, **seed_kwargs)
                 statement = f"{statement}\n\n{block}"
             elif args.condition != "none":
                 paths = ranked.get(iid, [])[: args.k]
-                block, used = seed_block(corpus, repo, commit, paths, head_lines=args.head_lines, token_budget=args.token_budget)
+                block, used = seed_block(corpus, repo, commit, paths, **seed_kwargs)
                 statement = f"{statement}\n\n{block}"
             row = dict(base)
             row["problem_statement"] = statement
@@ -144,6 +212,7 @@ def main() -> None:
                 {
                     "instance_id": iid,
                     "condition": label,
+                    "seed_style": args.seed_style,
                     "seed_files": used,
                     "seed_hits_gold": sorted(gold & set(used)),
                     "gold_files": sorted(gold),
