@@ -60,6 +60,13 @@ SETS = {
         "delphi_norerank": "D2-ablation-delphi-norerank-v1",
         "delphi_rerank": "D2-final-delphi-generated-source-exact-top20-v1",
     },
+    "fresh": {
+        "label": "SWE-bench Verified fresh draw (C0, n=60)",
+        "conv_norerank": "D3-final-hybrid_expand-r5-v1",
+        "conv_rerank": "D3-final-hybrid_rerank_expand-r5-v1",
+        "delphi_norerank": "D3-ablation-delphi-norerank-all-v1",
+        "delphi_rerank": "D3-final-delphi-generated-source-exact-top20-v1",
+    },
     "arb": {
         "label": "ARB round-3 partition (C2, n=220)",
         "conv_norerank": "A-final-hybrid_expand-r4-v1",
@@ -73,6 +80,7 @@ EXISTING_PAIRS = {
     ("independent", "candidate_effect_rerank_confirmatory"): "independent_final_delphi_vs_hybrid_rerank_expand_r4_v1.json",
     ("swebench", "candidate_effect_rerank"): "trackd_final_delphi_vs_hybrid_rerank_expand_r4_v1.json",
     ("expansion", "candidate_effect_rerank"): "swebench_expansion_delphi_vs_hybrid_rerank_expand_r4_v1.json",
+    ("fresh", "candidate_effect_rerank"): "swebench_fresh_delphi_vs_hybrid_rerank_expand_r5_v1.json",
     ("arb", "candidate_effect_rerank"): "arb_final_delphi_vs_hybrid_rerank_expand_r4_v1.json",
 }
 
@@ -108,6 +116,8 @@ def means(run: str | None) -> dict | None:
 def main() -> None:
     out = {"schema": "factorial_r4_v1", "bootstrap": {"samples": 20000, "seed": 1042, "unit": "repository"}, "sets": {}}
     for key, spec in SETS.items():
+        if key == "swebench" and False:
+            pass
         entry = {"label": spec["label"], "cells": {}, "contrasts": {}}
         for cell in ("conv_norerank", "conv_rerank", "delphi_norerank", "delphi_rerank", "delphi_rerank_confirmatory"):
             run = spec.get(cell)

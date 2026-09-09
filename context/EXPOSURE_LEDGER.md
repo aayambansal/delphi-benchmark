@@ -13,6 +13,7 @@ results gated shipped components.
 | `independent_commit2files_development` | 48 | C1 | development |
 | `swebench_verified_round3` | 62 | C0 | confirmatory |
 | `swebench_verified_round4_expansion` | 98 | C0 | confirmatory |
+| `swebench_verified_round4_fresh_branch_ablation` | 60 | C0 | confirmatory (third SWE-bench draw); branch ablation |
 | `ds1000_documentation_development` | 40 | C1 | development |
 
 ## Evidence per set
@@ -51,6 +52,12 @@ results gated shipped components.
 - Two engine-agnostic preprocessing rules applied before any scoring (samples/swebench/cases-r4-expansion-manifest.json): a gold file must exist at the base commit (one file created by the patch removed from astropy__astropy-13398's gold set; no case dropped), and ARB's query_has_leakage excludes instances whose issue text carries patch or fix-commit markers (django__django-16256, scikit-learn__scikit-learn-14710). 98 cases remain.
 - Scored once per system on 2026-09-09 from the frozen commit after the index audit (results/native-delphi-swebench-r4-expansion-index-audit-v2.json) and gold-searchability preflight; no system was re-run.
 - Post-hoc explanatory use (2026-09-09, after the confirmatory runs): candidate x reranker factorial cells D2-ablation-delphi-norerank-v1 and D2-final-hybrid_expand-r4-v1 (results/factorial-r4-v1.json). No configuration was chosen on them; the set becomes C1 for any future change they inform.
+
+### `swebench_verified_round4_fresh_branch_ablation` (60 cases, C0)
+
+- Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-fresh-branch-ablation-v1, n=60) from the 338 Verified instances never used in any round; excludes every round-3 and round-4 instance id and base commit (samples/swebench/cases-r5-fresh-manifest.json).
+- The two engine-agnostic preprocessing rules (gold file must exist at the base commit; ARB query_has_leakage) were applied before any scoring; 0 files affected, 0 cases excluded.
+- Purpose fixed before scoring: branch-level ablation of the frozen build's candidate generator (rerankers off) plus one confirmatory pass of the frozen configuration and the matched ladder; every configuration scored once.
 
 ### `ds1000_documentation_development` (40 cases, C1)
 

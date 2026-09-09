@@ -105,6 +105,17 @@ TRACKS = {
         "pairs": {k: f"swebench_expansion_delphi_vs_{k}_r4_v1.json" for k in
                   ("dense", "hybrid", "hybrid_rerank", "hybrid_rerank_expand", "bm25", "lexical", "lexical_bm25")},
     },
+    "fresh": {
+        "title": "SWE-bench fresh draw (C0, n=60)",
+        "runs": {
+            "delphi": "D3-final-delphi-generated-source-exact-top20-v1",
+            "dense": "D3-final-dense-r5-v1", "hybrid": "D3-final-hybrid-r5-v1",
+            "hybrid_rerank": "D3-final-hybrid_rerank-r5-v1", "hybrid_rerank_expand": "D3-final-hybrid_rerank_expand-r5-v1",
+            "bm25": "D3-final-bm25-r5-v1", "lexical": "D3-final-lexical-r5-v1", "lexical_bm25": "D3-final-lexical_bm25-r5-v1",
+        },
+        "pairs": {k: f"swebench_fresh_delphi_vs_{k}_r5_v1.json" for k in
+                  ("dense", "hybrid", "hybrid_rerank", "hybrid_rerank_expand", "bm25", "lexical", "lexical_bm25")},
+    },
     "arb": {
         "title": "ARB round-3 (C2, n=220)",
         "runs": {
@@ -152,8 +163,9 @@ def save(fig, name: str) -> None:
 
 # --------------------------------------------------------------------- 1
 def fig_ladder_c0() -> None:
-    tracks = ["independent", "swebench", "expansion"]
-    fig, axes = plt.subplots(1, 3, figsize=(7.0, 2.6), sharey=True)
+    tracks = ["independent", "swebench", "expansion", "fresh"]
+    tracks = [t for t in tracks if summary(TRACKS[t]["runs"]["delphi"]) is not None]
+    fig, axes = plt.subplots(1, len(tracks), figsize=(7.0, 2.6), sharey=True)
     for ax, key in zip(axes, tracks):
         spec = TRACKS[key]
         labels, mrr, r20, colors = [], [], [], []
@@ -177,7 +189,7 @@ def fig_ladder_c0() -> None:
         ax.grid(axis="x", color="#eeeeee", linewidth=0.5)
         ax.set_axisbelow(True)
     axes[0].legend(loc="lower right", frameon=False)
-    axes[1].set_xlabel("score (dark bar: MRR; light bar: Recall@20)")
+    axes[len(axes) // 2].set_xlabel("score (dark bar: MRR; light bar: Recall@20)")
     save(fig, "ladder_c0.pdf")
 
 
@@ -290,33 +302,35 @@ def fig_exposure_timeline() -> None:
 
 # --------------------------------------------------------------------- 12
 def fig_factorial() -> None:
-    """Candidate generator x reranking head interaction plot (sets with the Delphi no-reranker cell)."""
+    """Candidate generator x reranking head interaction plot: columns are sets with the Delphi no-reranker cell, rows are metrics."""
     f = json.load((RESULTS / "factorial-r4-v1.json").open())
-    sets = [k for k in ("independent", "swebench", "expansion", "arb") if "delphi_norerank" in f["sets"].get(k, {}).get("cells", {})]
+    sets = [k for k in ("independent", "expansion", "fresh") if "delphi_norerank" in f["sets"].get(k, {}).get("cells", {})]
     if not sets:
         return
-    metrics = [("MRR", "MRR"), ("Recall@20", "Recall@20"), ("BCY@8k", "BCY@8k")]
-    fig, axes = plt.subplots(len(sets), len(metrics), figsize=(7.0, 2.1 * len(sets)), squeeze=False)
-    for i, key in enumerate(sets):
+    metrics = [("MRR", "MRR"), ("Recall@20", "Recall@20")]
+    fig, axes = plt.subplots(len(metrics), len(sets), figsize=(7.0, 1.9 * len(metrics)), squeeze=False, sharey="row")
+    for j, key in enumerate(sets):
         cells = f["sets"][key]["cells"]
-        for j, (metric, label) in enumerate(metrics):
+        for i, (metric, label) in enumerate(metrics):
             ax = axes[i, j]
             for cand, color, marker, name in (("conv", LADDER[3], "s", "conventional candidates"), ("delphi", DELPHI, "o", "Delphi candidates")):
                 ys = [cells[f"{cand}_norerank"][metric], cells[f"{cand}_rerank"][metric]]
                 ax.plot([0, 1], ys, marker=marker, markersize=4.5, color=color, linewidth=1.3, label=name)
                 for x, y in zip((0, 1), ys):
-                    ax.text(x + (-0.06 if x == 0 else 0.06), y, f"{y:.3f}", fontsize=6.3, color=color, ha="right" if x == 0 else "left", va="center")
+                    ax.text(x + (-0.07 if x == 0 else 0.07), y, f"{y:.3f}", fontsize=6.2, color=color, ha="right" if x == 0 else "left", va="center")
             ax.set_xticks([0, 1])
-            ax.set_xticklabels(["no learned\nreranking", "+ Delphi's\nrerankers"])
-            ax.set_xlim(-0.35, 1.35)
+            ax.set_xticklabels(["no learned\nreranking", "+ Delphi's\nrerankers"] if i == len(metrics) - 1 else ["", ""])
+            ax.set_xlim(-0.45, 1.45)
             ax.set_ylim(0, 1)
-            ax.set_ylabel(label)
+            if j == 0:
+                ax.set_ylabel(label)
             ax.grid(axis="y", color="#eeeeee", linewidth=0.5)
             ax.set_axisbelow(True)
-            if j == 0:
-                ax.set_title(f["sets"][key]["label"], loc="left")
-    axes[0, 0].legend(frameon=False, loc="lower right", fontsize=6.5)
-    fig.tight_layout(w_pad=1.0, h_pad=0.8)
+            if i == 0:
+                title = f["sets"][key]["label"].replace("Independent commit-to-files", "Independent commit-to-files").replace("SWE-bench Verified ", "SWE-bench ")
+                ax.set_title(title, loc="left", fontsize=8)
+    axes[0, 0].legend(frameon=False, loc="lower right", fontsize=6.3)
+    fig.tight_layout(w_pad=0.8, h_pad=0.5)
     save(fig, "factorial.pdf")
 
 
@@ -328,8 +342,10 @@ def fig_component_attribution() -> None:
         "independent": ("Independent (C0, n=18)", "#e6550d", "o"),
         "swebench": ("SWE-bench r3 (C0, n=62)", "#3182bd", "s"),
         "expansion": ("SWE-bench expansion (C0, n=98)", "#08519c", "D"),
+        "fresh": ("SWE-bench fresh draw (C0, n=60)", "#6baed6", "v"),
         "arb": ("ARB round-3 (C2, n=220)", "#969696", "^"),
     }
+    styles = {k: v for k, v in styles.items() if summary(TRACKS[k]["runs"]["delphi"]) is not None}
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.2))
     for ax, metric in zip(axes, ["MRR", "Recall@20"]):
         for key, (label, color, marker) in styles.items():
@@ -346,7 +362,7 @@ def fig_component_attribution() -> None:
         ax.grid(axis="y", color="#eeeeee", linewidth=0.5)
         ax.set_axisbelow(True)
         ax.axvspan(3.5, 4.5, color=DELPHI, alpha=0.06, linewidth=0)
-    axes[0].legend(frameon=False, loc="upper left")
+    axes[1].legend(frameon=False, loc="lower right", fontsize=6.3)
     save(fig, "component_attribution.pdf")
 
 

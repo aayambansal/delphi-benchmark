@@ -48,14 +48,19 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--n", type=int, default=100)
     parser.add_argument("--salt", default="delphi-round4-swebench-expansion-v1")
-    parser.add_argument("--existing", type=Path, default=OUT_DIR / "cases.jsonl")
+    parser.add_argument("--existing", type=Path, nargs="+", default=[OUT_DIR / "cases.jsonl"],
+                        help="previously used case files; their ids and base commits are excluded")
     parser.add_argument("--output", type=Path, default=OUT_DIR / "cases-r4-expansion.jsonl")
     parser.add_argument("--manifest", type=Path, default=OUT_DIR / "cases-r4-expansion-manifest.json")
     parser.add_argument("--cache", type=Path, default=ROOT / "cache" / "swebench_verified.parquet")
+    parser.add_argument("--apply-rules", action="store_true",
+                        help="apply the two engine-agnostic preprocessing rules before writing: gold files must exist "
+                             "at the base commit (bare clone required), and ARB's query_has_leakage excludes the case")
+    parser.add_argument("--bare-root", type=Path, default=ROOT / "corpus" / "bare")
     args = parser.parse_args()
 
     rows = load_rows(args.cache)
-    existing = [json.loads(line) for line in args.existing.open() if line.strip()]
+    existing = [json.loads(line) for path in args.existing for line in path.open() if line.strip()]
     used_ids = {str(r["id"]) for r in existing}
     used_commits = {str(r["base_commit"]) for r in existing}
 
@@ -95,6 +100,40 @@ def main() -> None:
         }
         for r in picked
     ]
+    rules: dict = {}
+    if args.apply_rules:
+        import subprocess
+
+        for _arb_src in (ROOT / "external" / "arb-src" / "src",):
+            if _arb_src.is_dir() and str(_arb_src.resolve()) not in sys.path:
+                sys.path.insert(0, str(_arb_src.resolve()))
+        from harness.run_arb import query_has_leakage, query_text_for_eval
+
+        affected, dropped_gold, kept = [], [], []
+        for case in cases:
+            bare = args.bare_root / f"{case['repo'].replace('/', '__')}.git"
+            files = set(subprocess.run(["git", "-C", str(bare), "ls-tree", "-r", "--name-only", case["base_commit"]],
+                                       capture_output=True, text=True).stdout.splitlines())
+            gold = case["gold"]["files"]
+            present = [g for g in gold if g in files]
+            if present != gold:
+                affected.append({"id": case["id"], "absent": [g for g in gold if g not in files]})
+            if not present:
+                dropped_gold.append(case["id"])
+                continue
+            if present != gold:
+                case = dict(case, gold={"files": present}, metadata={"gold_files_absent_at_base_commit": [g for g in gold if g not in files]})
+            kept.append(case)
+        flagged = [c["id"] for c in kept if query_has_leakage(c, query_text_for_eval(c))]
+        kept = [c for c in kept if c["id"] not in flagged]
+        rules = {
+            "gold_rule": {"rule": "a gold file must exist at the base commit; absent files are removed from the gold set, cases with no remaining gold file are dropped",
+                          "affected": affected, "dropped": dropped_gold},
+            "leakage_rule": {"rule": "ARB query_has_leakage over the serialized query excludes the case before any engine is scored",
+                             "excluded": flagged},
+            "kept": len(kept),
+        }
+        cases = kept
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w") as fh:
         for case in cases:
@@ -113,6 +152,8 @@ def main() -> None:
         "repo_counts": dict(Counter(c["repo"] for c in cases)),
         "unique_snapshots": len({(c["repo"], c["base_commit"]) for c in cases}),
         "instance_ids": [c["id"] for c in cases],
+        "excluded_files": [str(p) for p in args.existing],
+        **rules,
     }
     args.manifest.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     print(json.dumps({k: v for k, v in manifest.items() if k != "instance_ids"}, sort_keys=True))

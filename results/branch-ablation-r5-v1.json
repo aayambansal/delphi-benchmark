@@ -1,0 +1,591 @@
+{
+  "ablations": {
+    "no_bm25": {
+      "BCY@8k": 0.5138888888888888,
+      "MRR": 0.5681799202116539,
+      "Recall@20": 0.8597222222222223,
+      "Recall@5": 0.6847222222222222,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 53,
+        "candidate_cases": 54,
+        "lost": 0,
+        "lost_case_ids": [],
+        "mcnemar_exact_p": 1.0,
+        "metric": "Recall@20",
+        "neither": 6,
+        "recovered": 1,
+        "recovered_case_ids": [
+          "django__django-13297"
+        ]
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            0.0,
+            0.14583333333333334
+          ],
+          "losses": 2,
+          "mean_delta": 0.04444444444444444,
+          "wins": 4
+        },
+        "MRR": {
+          "ci95": [
+            -0.04756254003564375,
+            0.07732960169039713
+          ],
+          "losses": 12,
+          "mean_delta": -0.0017727659910322464,
+          "wins": 16
+        },
+        "Recall@20": {
+          "ci95": [
+            0.0,
+            0.03571428571428571
+          ],
+          "losses": 0,
+          "mean_delta": 0.020833333333333332,
+          "wins": 2
+        },
+        "Recall@5": {
+          "ci95": [
+            -0.008333333333333333,
+            0.13333333333333333
+          ],
+          "losses": 3,
+          "mean_delta": 0.03194444444444445,
+          "wins": 5
+        }
+      },
+      "description": "BM25 branch removed",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-no_bm25-v1"
+    },
+    "no_path": {
+      "BCY@8k": 0.46944444444444444,
+      "MRR": 0.5693524531024531,
+      "Recall@20": 0.8388888888888889,
+      "Recall@5": 0.6527777777777778,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 53,
+        "candidate_cases": 53,
+        "lost": 0,
+        "lost_case_ids": [],
+        "mcnemar_exact_p": 1.0,
+        "metric": "Recall@20",
+        "neither": 7,
+        "recovered": 0,
+        "recovered_case_ids": []
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        },
+        "MRR": {
+          "ci95": [
+            -0.0034847270784770785,
+            0.0004100991098683187
+          ],
+          "losses": 4,
+          "mean_delta": -0.0006002331002331003,
+          "wins": 1
+        },
+        "Recall@20": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        },
+        "Recall@5": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        }
+      },
+      "description": "exact-path branch removed",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-no_path-v1"
+    },
+    "no_path_affinity": {
+      "BCY@8k": 0.46944444444444444,
+      "MRR": 0.5685191197691197,
+      "Recall@20": 0.8305555555555556,
+      "Recall@5": 0.6527777777777778,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 52,
+        "candidate_cases": 52,
+        "lost": 1,
+        "lost_case_ids": [
+          "sphinx-doc__sphinx-7462"
+        ],
+        "mcnemar_exact_p": 1.0,
+        "metric": "Recall@20",
+        "neither": 7,
+        "recovered": 0,
+        "recovered_case_ids": []
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        },
+        "MRR": {
+          "ci95": [
+            -0.006582306582306583,
+            0.0003614424037500936
+          ],
+          "losses": 5,
+          "mean_delta": -0.0014335664335664337,
+          "wins": 1
+        },
+        "Recall@20": {
+          "ci95": [
+            -0.0375,
+            0.0
+          ],
+          "losses": 1,
+          "mean_delta": -0.008333333333333333,
+          "wins": 0
+        },
+        "Recall@5": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        }
+      },
+      "description": "path-affinity branch removed",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-no_path_affinity-v1"
+    },
+    "no_symbol": {
+      "BCY@8k": 0.4527777777777778,
+      "MRR": 0.5445813881107998,
+      "Recall@20": 0.8055555555555556,
+      "Recall@5": 0.6444444444444444,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 50,
+        "candidate_cases": 51,
+        "lost": 3,
+        "lost_case_ids": [
+          "pytest-dev__pytest-7236",
+          "pytest-dev__pytest-7324",
+          "sphinx-doc__sphinx-10614"
+        ],
+        "mcnemar_exact_p": 0.625,
+        "metric": "Recall@20",
+        "neither": 6,
+        "recovered": 1,
+        "recovered_case_ids": [
+          "django__django-13297"
+        ]
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            -0.08,
+            0.0
+          ],
+          "losses": 5,
+          "mean_delta": -0.016666666666666666,
+          "wins": 4
+        },
+        "MRR": {
+          "ci95": [
+            -0.07184265972533363,
+            0.014507836628241039
+          ],
+          "losses": 11,
+          "mean_delta": -0.02537129809188633,
+          "wins": 12
+        },
+        "Recall@20": {
+          "ci95": [
+            -0.21428571428571427,
+            0.024096385542168676
+          ],
+          "losses": 3,
+          "mean_delta": -0.03333333333333333,
+          "wins": 1
+        },
+        "Recall@5": {
+          "ci95": [
+            -0.061224489795918366,
+            0.014084507042253521
+          ],
+          "losses": 1,
+          "mean_delta": -0.008333333333333333,
+          "wins": 1
+        }
+      },
+      "description": "exact-symbol branch removed",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-no_symbol-v1"
+    },
+    "no_trigram": {
+      "BCY@8k": 0.4527777777777778,
+      "MRR": 0.5611820270372901,
+      "Recall@20": 0.8388888888888889,
+      "Recall@5": 0.6527777777777778,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 53,
+        "candidate_cases": 53,
+        "lost": 0,
+        "lost_case_ids": [],
+        "mcnemar_exact_p": 1.0,
+        "metric": "Recall@20",
+        "neither": 7,
+        "recovered": 0,
+        "recovered_case_ids": []
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            -0.02857142857142857,
+            0.0
+          ],
+          "losses": 1,
+          "mean_delta": -0.016666666666666666,
+          "wins": 0
+        },
+        "MRR": {
+          "ci95": [
+            -0.014020992558418079,
+            -0.0003417508417508532
+          ],
+          "losses": 4,
+          "mean_delta": -0.008770659165396008,
+          "wins": 1
+        },
+        "Recall@20": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        },
+        "Recall@5": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "losses": 0,
+          "mean_delta": 0.0,
+          "wins": 0
+        }
+      },
+      "description": "trigram branch removed",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-no_trigram-v1"
+    },
+    "no_vector": {
+      "BCY@8k": 0.2638888888888889,
+      "MRR": 0.38177316248136683,
+      "Recall@20": 0.7125,
+      "Recall@5": 0.5013888888888889,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 45,
+        "candidate_cases": 45,
+        "lost": 8,
+        "lost_case_ids": [
+          "astropy__astropy-13033",
+          "django__django-12193",
+          "django__django-14855",
+          "django__django-15503",
+          "django__django-16667",
+          "pylint-dev__pylint-8898",
+          "sympy__sympy-12419",
+          "sympy__sympy-19495"
+        ],
+        "mcnemar_exact_p": 0.0078125,
+        "metric": "Recall@20",
+        "neither": 7,
+        "recovered": 0,
+        "recovered_case_ids": []
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            -0.3218576195773081,
+            -0.07050438596491301
+          ],
+          "losses": 15,
+          "mean_delta": -0.20555555555555557,
+          "wins": 2
+        },
+        "MRR": {
+          "ci95": [
+            -0.2648406145789364,
+            -0.09039307111733606
+          ],
+          "losses": 31,
+          "mean_delta": -0.1881795237213194,
+          "wins": 7
+        },
+        "Recall@20": {
+          "ci95": [
+            -0.1763888888888889,
+            -0.02857142857142857
+          ],
+          "losses": 9,
+          "mean_delta": -0.12638888888888888,
+          "wins": 1
+        },
+        "Recall@5": {
+          "ci95": [
+            -0.21666666666666667,
+            0.02777777777777778
+          ],
+          "losses": 15,
+          "mean_delta": -0.1513888888888889,
+          "wins": 6
+        }
+      },
+      "description": "vector branch removed",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-no_vector-v1"
+    },
+    "vector_bm25_equal": {
+      "BCY@8k": 0.33611111111111114,
+      "MRR": 0.44852971102971106,
+      "Recall@20": 0.775,
+      "Recall@5": 0.6194444444444444,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 48,
+        "candidate_cases": 48,
+        "lost": 5,
+        "lost_case_ids": [
+          "pylint-dev__pylint-8898",
+          "pytest-dev__pytest-7236",
+          "pytest-dev__pytest-7324",
+          "sphinx-doc__sphinx-10614",
+          "sphinx-doc__sphinx-7462"
+        ],
+        "mcnemar_exact_p": 0.0625,
+        "metric": "Recall@20",
+        "neither": 7,
+        "recovered": 0,
+        "recovered_case_ids": []
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            -0.20833333333333334,
+            -0.0625
+          ],
+          "losses": 9,
+          "mean_delta": -0.13333333333333333,
+          "wins": 1
+        },
+        "MRR": {
+          "ci95": [
+            -0.16029962326811067,
+            -0.06962524654832349
+          ],
+          "losses": 28,
+          "mean_delta": -0.12142297517297518,
+          "wins": 6
+        },
+        "Recall@20": {
+          "ci95": [
+            -0.2525293255131965,
+            0.0
+          ],
+          "losses": 5,
+          "mean_delta": -0.0638888888888889,
+          "wins": 0
+        },
+        "Recall@5": {
+          "ci95": [
+            -0.1,
+            0.0
+          ],
+          "losses": 4,
+          "mean_delta": -0.03333333333333333,
+          "wins": 2
+        }
+      },
+      "description": "vector and BM25 only, equal weights (conventional fusion inside Delphi's index)",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-vector_bm25_equal-v1"
+    },
+    "vector_bm25_tuned": {
+      "BCY@8k": 0.4027777777777778,
+      "MRR": 0.5100280112044818,
+      "Recall@20": 0.775,
+      "Recall@5": 0.6277777777777778,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 47,
+        "candidate_cases": 48,
+        "lost": 6,
+        "lost_case_ids": [
+          "matplotlib__matplotlib-20826",
+          "pylint-dev__pylint-8898",
+          "pytest-dev__pytest-7236",
+          "pytest-dev__pytest-7324",
+          "sphinx-doc__sphinx-10614",
+          "sphinx-doc__sphinx-7462"
+        ],
+        "mcnemar_exact_p": 0.125,
+        "metric": "Recall@20",
+        "neither": 6,
+        "recovered": 1,
+        "recovered_case_ids": [
+          "django__django-13297"
+        ]
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            -0.10714285714285714,
+            0.0
+          ],
+          "losses": 6,
+          "mean_delta": -0.06666666666666667,
+          "wins": 2
+        },
+        "MRR": {
+          "ci95": [
+            -0.09636711793691835,
+            -0.005066351248049917
+          ],
+          "losses": 18,
+          "mean_delta": -0.05992467499820441,
+          "wins": 12
+        },
+        "Recall@20": {
+          "ci95": [
+            -0.2870450191570881,
+            0.011363636363636364
+          ],
+          "losses": 6,
+          "mean_delta": -0.0638888888888889,
+          "wins": 1
+        },
+        "Recall@5": {
+          "ci95": [
+            -0.061224489795918366,
+            0.0
+          ],
+          "losses": 2,
+          "mean_delta": -0.025,
+          "wins": 1
+        }
+      },
+      "description": "vector and BM25 only, Delphi's relative weights (0.5/0.25)",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-vector_bm25_tuned-v1"
+    },
+    "vector_only": {
+      "BCY@8k": 0.3888888888888889,
+      "MRR": 0.4502147525676937,
+      "Recall@20": 0.7916666666666666,
+      "Recall@5": 0.5347222222222222,
+      "any_gold_at_20": {
+        "baseline_cases": 53,
+        "both": 48,
+        "candidate_cases": 49,
+        "lost": 5,
+        "lost_case_ids": [
+          "pylint-dev__pylint-8898",
+          "pytest-dev__pytest-7236",
+          "pytest-dev__pytest-7324",
+          "sphinx-doc__sphinx-10614",
+          "sphinx-doc__sphinx-7462"
+        ],
+        "mcnemar_exact_p": 0.21875,
+        "metric": "Recall@20",
+        "neither": 6,
+        "recovered": 1,
+        "recovered_case_ids": [
+          "django__django-13297"
+        ]
+      },
+      "delta": {
+        "BCY@8k": {
+          "ci95": [
+            -0.1590909090909091,
+            0.13580246913580246
+          ],
+          "losses": 12,
+          "mean_delta": -0.08055555555555555,
+          "wins": 6
+        },
+        "MRR": {
+          "ci95": [
+            -0.16997753386949946,
+            -0.027017513736263737
+          ],
+          "losses": 27,
+          "mean_delta": -0.11973793363499247,
+          "wins": 12
+        },
+        "Recall@20": {
+          "ci95": [
+            -0.2525293255131965,
+            0.019845238095237753
+          ],
+          "losses": 5,
+          "mean_delta": -0.04722222222222223,
+          "wins": 1
+        },
+        "Recall@5": {
+          "ci95": [
+            -0.19444444444444445,
+            0.0
+          ],
+          "losses": 11,
+          "mean_delta": -0.11805555555555555,
+          "wins": 4
+        }
+      },
+      "description": "vector branch only",
+      "n": 60,
+      "run": "D3-ablation-delphi-norerank-vector_only-v1"
+    }
+  },
+  "baseline": {
+    "BCY@8k": 0.46944444444444444,
+    "MRR": 0.5699526862026862,
+    "Recall@20": 0.8388888888888889,
+    "Recall@5": 0.6527777777777778,
+    "n": 60,
+    "run": "D3-ablation-delphi-norerank-all-v1"
+  },
+  "bootstrap": {
+    "samples": 20000,
+    "seed": 1042,
+    "unit": "repository"
+  },
+  "schema": "branch_ablation_r5_v1"
+}

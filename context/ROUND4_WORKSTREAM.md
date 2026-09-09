@@ -288,3 +288,47 @@ interface; measurement wording). Actions:
   nothing" removed; seed audit and seed-interface check added; pilot power
   design stated; ledger records post-hoc explanatory uses of C0 sets.
 
+## Review round 3 (2026-09-09, evening): decomposition reframing + fresh draw
+
+- Fresh C0 draw: `samples/swebench/cases-r5-fresh.jsonl` (n=60, salt
+  delphi-round4-swebench-fresh-branch-ablation-v1, excludes all 162 prior
+  SWE-bench ids/commits; gold-exists + leakage rules applied: 0 affected,
+  0 excluded; manifest `cases-r5-fresh-manifest.json`). Provisioned into
+  `delphi_r5_swebench_fresh_20260909` (3 shards x 2 workers, ~2 h); audit
+  `results/native-delphi-swebench-r5-fresh-index-audit-v1.json`: 60 snapshots,
+  111,367 files, 666,837 chunks = embeddings, zero mismatches.
+- Confirmatory frozen run `D3-final-delphi-generated-source-exact-top20-v1`:
+  MRR 0.782, R@5 0.796, R@20 0.839, BCY 0.746. Ladder `D3-final-*-r5-v1`
+  (dense 0.330, hybrid 0.299, hybrid_expand 0.295, hybrid_rerank 0.663,
+  hybrid_rerank_expand 0.696; bm25 0.142, lexical 0.432, lexical_bm25 0.336).
+  Pairs `swebench_fresh_delphi_vs_*_r5_v1.json`: vs full stack +0.086 MRR
+  [-0.017,+0.323], +0.053 R@20 [-0.020,+0.226], +0.119 BCY [+0.026,+0.295].
+- Factorial on the fresh draw (`analyze_factorial.py`): candidates +0.275 MRR
+  [+0.195,+0.402] before reranking; rerankers +0.401 (conventional) vs +0.212
+  (Delphi); after +0.086 MRR.
+- Branch ablation (`stack/run_branch_ablation.sh`, `analyze_branch_ablation.py`
+  -> `results/branch-ablation-r5-v1.json`; rerankers off, weights via
+  SYNSC_FUSION_WEIGHTS, attested): baseline 0.570 MRR / 0.839 R@20; leave-one-
+  out: symbol -0.025, trigram -0.009, path -0.001, path_affinity -0.001, bm25
+  -0.002 (R@20 +0.021), vector -0.188; vector+bm25 equal -0.121 (0.449 vs the
+  ladder's 0.295 for the same design over ARB chunks); vector+bm25 tuned
+  -0.060; vector only -0.120. Decomposition of the +0.275 candidate effect:
+  chunking/index/implementation +0.154, vector-heavy weights +0.061, structural
+  branches jointly +0.060 (none individually > 0.03).
+- Sequential analysis (`analyze_sequential.py` ->
+  `results/sequential-swebench-r4-v1.json`): per draw, pooled after each draw,
+  95% and 1-0.05/3 intervals. Pooled 220 vs full stack: MRR +0.065 [+0.007,
+  +0.132] (adj [-0.019,+0.152]); R@5 +0.059 adj [+0.008,+0.182]; R@20 +0.076 adj
+  [+0.025,+0.160]; BCY +0.087 adj [+0.037,+0.162]. Yield metrics survive the
+  three-look adjustment; MRR does not.
+- Paper retitled "Where Do Context-Engine Gains Come From? A Component-Level
+  Decomposition of Repository Retrieval Under Matched Baselines and Audited
+  Exposure"; Figure 1 = factorial (independent, 98, fresh 60); RQ1 =
+  decomposition; protocol states the three-draw sequence and pooling rule;
+  new sections 4 "Which branch carries it", Appendix F (branch ablation),
+  Appendix G (sequential). Main text ends on page 9; 31 pages total. Pilot
+  figure and pooled-160 table moved to the appendix.
+- Ledger: new set `swebench_verified_round4_fresh_branch_ablation` (C0, 60).
+- Databases retained for audit: expansion (98), independent factorial (18),
+  fresh (60). All servers stopped.
+

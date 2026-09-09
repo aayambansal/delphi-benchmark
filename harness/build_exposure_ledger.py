@@ -95,6 +95,18 @@ SETS = [
         "supports": "confirmatory",
     },
     {
+        "set": "swebench_verified_round4_fresh_branch_ablation",
+        "files": ["samples/swebench/cases-r5-fresh.jsonl"],
+        "positive_only": False,
+        "exposure_class": "C0",
+        "evidence": [
+            "Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-fresh-branch-ablation-v1, n=60) from the 338 Verified instances never used in any round; excludes every round-3 and round-4 instance id and base commit (samples/swebench/cases-r5-fresh-manifest.json).",
+            "The two engine-agnostic preprocessing rules (gold file must exist at the base commit; ARB query_has_leakage) were applied before any scoring; 0 files affected, 0 cases excluded.",
+            "Purpose fixed before scoring: branch-level ablation of the frozen build's candidate generator (rerankers off) plus one confirmatory pass of the frozen configuration and the matched ladder; every configuration scored once.",
+        ],
+        "supports": "confirmatory (third SWE-bench draw); branch ablation",
+    },
+    {
         "set": "ds1000_documentation_development",
         "files": ["samples-ds1000/development.jsonl"],
         "positive_only": False,

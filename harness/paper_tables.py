@@ -73,6 +73,21 @@ TRACKS = {
             "bm25": "swebench_expansion_delphi_vs_bm25_r4_v1.json",
         },
     },
+    "swebench_fresh": {
+        "delphi": "D3-final-delphi-generated-source-exact-top20-v1",
+        "ladder": "D3-final-{eng}-r5-v1",
+        "lexical": {
+            "lexical_bm25": "D3-final-lexical_bm25-r5-v1",
+            "lexical": "D3-final-lexical-r5-v1",
+            "bm25": "D3-final-bm25-r5-v1",
+        },
+        "pair_ladder": "swebench_fresh_delphi_vs_{eng}_r5_v1.json",
+        "pair_lexical": {
+            "lexical_bm25": "swebench_fresh_delphi_vs_lexical_bm25_r5_v1.json",
+            "lexical": "swebench_fresh_delphi_vs_lexical_r5_v1.json",
+            "bm25": "swebench_fresh_delphi_vs_bm25_r5_v1.json",
+        },
+    },
     "arb": {
         "delphi": "A-final-delphi-generated-source-exact-top20-v1",
         "ladder": "A-final-{eng}-r4-v1",
@@ -448,7 +463,8 @@ def exposure_table() -> str:
         "independent_commit2files_final": "Independent commit-to-files final",
         "independent_commit2files_development": "Independent commit-to-files development",
         "swebench_verified_round3": "SWE-bench Verified, round 3",
-        "swebench_verified_round4_expansion": "SWE-bench Verified, round-4 expansion",
+        "swebench_verified_round4_expansion": "SWE-bench Verified, round-4 draw",
+        "swebench_verified_round4_fresh_branch_ablation": "SWE-bench Verified, fresh draw (branch ablation)",
         "ds1000_documentation_development": "DS-1000 documentation subset",
     }
     lines = ["\\begin{tabular}{lrlp{5.4cm}}", "\\toprule", "Set & Cases & Class & Supports \\\\", "\\midrule"]
@@ -472,7 +488,7 @@ def factorial_cells_table() -> str:
     }
     lines = ["\\begin{tabular}{llcccc}", "\\toprule",
              "Set / candidates & Rerankers & MRR $\\uparrow$ & R@5 $\\uparrow$ & R@20 $\\uparrow$ & BCY@8k $\\uparrow$ \\\\", "\\midrule"]
-    for key in ("independent", "swebench", "expansion", "arb"):
+    for key in ("independent", "swebench", "expansion", "fresh", "arb"):
         entry = f["sets"].get(key)
         if not entry:
             continue
@@ -518,7 +534,7 @@ def factorial_contrasts_table() -> str:
 
     lines = ["\\begin{tabular}{llccc}", "\\toprule",
              "Set & Contrast & $\\Delta$MRR & $\\Delta$R@20 & $\\Delta$BCY@8k \\\\", "\\midrule"]
-    for key in ("independent", "swebench", "expansion", "arb"):
+    for key in ("independent", "swebench", "expansion", "fresh", "arb"):
         entry = f["sets"].get(key)
         if not entry or not entry["contrasts"]:
             continue
@@ -577,8 +593,89 @@ def seed_interface_table() -> str:
     return "\n".join(lines) + "\n"
 
 
+def branch_ablation_tables() -> tuple[str, str]:
+    path = RESULTS / "branch-ablation-r5-v1.json"
+    if not path.exists():
+        return "\\begin{tabular}{l}\\emph{pending}\\end{tabular}", "\\begin{tabular}{l}\\emph{pending}\\end{tabular}"
+    a = json.load(path.open())
+    labels = {
+        "no_symbol": "$-$ exact symbol", "no_path": "$-$ exact path", "no_path_affinity": "$-$ path affinity",
+        "no_trigram": "$-$ trigram", "no_bm25": "$-$ BM25", "no_vector": "$-$ vector",
+        "vector_bm25_equal": "vector + BM25 only, equal weights",
+        "vector_bm25_tuned": "vector + BM25 only, Delphi's weights (0.50/0.25)",
+        "vector_only": "vector only",
+    }
+    b = a["baseline"]
+    # contrasts table
+    lines = ["\\begin{tabular}{lccc}", "\\toprule",
+             "Configuration (rerankers off) & $\\Delta$MRR & $\\Delta$R@20 & $\\Delta$BCY@8k \\\\", "\\midrule",
+             f"All six branches, tuned weights (absolute) & {b['MRR']:.3f} & {b['Recall@20']:.3f} & {b['BCY@8k']:.3f} \\\\", "\\midrule"]
+
+    def cell(d: dict) -> str:
+        lo, hi = d["ci95"]
+        star = "$^{*}$" if (lo > 0 or hi < 0) else ""
+        return f"${d['mean_delta']:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}}"
+
+    for key in ("no_symbol", "no_path", "no_path_affinity", "no_trigram", "no_bm25", "no_vector", "vector_bm25_equal", "vector_bm25_tuned", "vector_only"):
+        ab = a["ablations"].get(key)
+        if not ab:
+            continue
+        d = ab["delta"]
+        lines.append(f"{labels[key]} & " + " & ".join(cell(d[m]) for m in ("MRR", "Recall@20", "BCY@8k")) + " \\\\")
+    lines.append(TAIL)
+    contrasts = "\n".join(lines) + "\n"
+    # cells table
+    rows = [("All six branches, tuned weights", b)] + [(labels[k], a["ablations"][k]) for k in ("no_symbol", "no_path", "no_path_affinity", "no_trigram", "no_bm25", "no_vector", "vector_bm25_equal", "vector_bm25_tuned", "vector_only") if k in a["ablations"]]
+    best = {m: max(r[m] for _, r in rows) for m in ("MRR", "Recall@5", "Recall@20", "BCY@8k")}
+    lines = ["\\begin{tabular}{lcccc}", "\\toprule", "Configuration (rerankers off) & MRR $\\uparrow$ & R@5 $\\uparrow$ & R@20 $\\uparrow$ & BCY@8k $\\uparrow$ \\\\", "\\midrule"]
+    for label, r in rows:
+        vals = []
+        for m in ("MRR", "Recall@5", "Recall@20", "BCY@8k"):
+            c = f"{r[m]:.3f}"
+            if abs(r[m] - best[m]) < 1e-9:
+                c = f"\\textbf{{{c}}}"
+            vals.append(c)
+        lines.append(f"{label} & " + " & ".join(vals) + " \\\\")
+    lines.append(TAIL)
+    cells = "\n".join(lines) + "\n"
+    return contrasts, cells
+
+
+def sequential_table() -> str:
+    path = RESULTS / "sequential-swebench-r4-v1.json"
+    if not path.exists():
+        return "\\begin{tabular}{l}\\emph{pending}\\end{tabular}"
+    a = json.load(path.open())
+    adj_key = f"ci_{100 * (1 - a['alphas'][1]):.1f}"
+    names = {"round3_62": "Round-3 draw (62)", "expansion_98": "Round-4 draw (98)", "fresh_60": "Fresh draw (60)",
+             "pooled_after_round3_62": "", "pooled_after_expansion_98": "Pooled after two draws (160)", "pooled_after_fresh_60": "Pooled after three draws (220)"}
+    lines = ["\\begin{tabular}{llcccc}", "\\toprule", "Comparator & Draw & MRR & R@5 & R@20 & BCY@8k \\\\", "\\midrule"]
+    for comp, label in (("full_conventional_stack", "Full conventional stack"), ("lexical_ranker", "Lexical ranker")):
+        entry = a["comparators"][comp]
+        first = True
+        for key in ("round3_62", "expansion_98", "fresh_60", "pooled_after_expansion_98", "pooled_after_fresh_60"):
+            per = entry.get(key)
+            if not per or not names.get(key):
+                continue
+            cells = []
+            for m in ("MRR", "Recall@5", "Recall@20", "BCY@8k"):
+                v = per[m]
+                lo, hi = v[adj_key]
+                star = "$^{*}$" if (lo > 0 or hi < 0) else ""
+                cells.append(f"${v['mean_delta']:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}}")
+            lines.append(f"{label if first else ''} & {names[key]} & " + " & ".join(cells) + " \\\\")
+            first = False
+        lines.append("\\addlinespace")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    contrasts, cells = branch_ablation_tables()
+    (OUT / "branch_ablation.tex").write_text(contrasts.rstrip("\n") + "%")
+    (OUT / "branch_ablation_cells.tex").write_text(cells.rstrip("\n") + "%")
+    (OUT / "sequential.tex").write_text(sequential_table().rstrip("\n") + "%")
     (OUT / "factorial_cells.tex").write_text(factorial_cells_table().rstrip("\n") + "%")
     (OUT / "factorial_contrasts.tex").write_text(factorial_contrasts_table().rstrip("\n") + "%")
     (OUT / "seed_interface.tex").write_text(seed_interface_table().rstrip("\n") + "%")

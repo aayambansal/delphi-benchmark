@@ -1,0 +1,128 @@
+{
+  "any_gold_at_20": {
+    "baseline_cases": 48,
+    "both": 45,
+    "candidate_cases": 53,
+    "lost": 3,
+    "lost_case_ids": [
+      "django__django-11179",
+      "django__django-14122",
+      "matplotlib__matplotlib-24026"
+    ],
+    "mcnemar_exact_p": 0.2265625,
+    "metric": "Recall@20",
+    "neither": 4,
+    "recovered": 8,
+    "recovered_case_ids": [
+      "django__django-11790",
+      "matplotlib__matplotlib-20826",
+      "pylint-dev__pylint-8898",
+      "pytest-dev__pytest-7324",
+      "sphinx-doc__sphinx-10614",
+      "sphinx-doc__sphinx-7462",
+      "sphinx-doc__sphinx-9461",
+      "sympy__sympy-12419"
+    ]
+  },
+  "baseline_run": "D3-final-hybrid_rerank_expand-r5-v1",
+  "bootstrap_samples": 20000,
+  "bootstrap_seed": 1042,
+  "bootstrap_unit": "repository",
+  "by_workflow": {
+    "swebench_localization": {
+      "BCY@8k": {
+        "baseline_mean": 0.6263888888888889,
+        "candidate_mean": 0.7458333333333333,
+        "losses": 4,
+        "mean_delta": 0.11944444444444445,
+        "n": 60,
+        "ties": 43,
+        "wins": 13
+      },
+      "MRR": {
+        "baseline_mean": 0.6963888888888888,
+        "candidate_mean": 0.7821296296296296,
+        "losses": 7,
+        "mean_delta": 0.08574074074074074,
+        "n": 60,
+        "ties": 37,
+        "wins": 16
+      },
+      "Recall@20": {
+        "baseline_mean": 0.7861111111111111,
+        "candidate_mean": 0.8388888888888889,
+        "losses": 4,
+        "mean_delta": 0.05277777777777778,
+        "n": 60,
+        "ties": 48,
+        "wins": 8
+      },
+      "Recall@5": {
+        "baseline_mean": 0.7652777777777777,
+        "candidate_mean": 0.7958333333333333,
+        "losses": 5,
+        "mean_delta": 0.030555555555555555,
+        "n": 60,
+        "ties": 47,
+        "wins": 8
+      }
+    }
+  },
+  "candidate_run": "D3-final-delphi-generated-source-exact-top20-v1",
+  "cases": 60,
+  "metrics": {
+    "BCY@8k": {
+      "baseline_mean": 0.6263888888888889,
+      "candidate_mean": 0.7458333333333333,
+      "losses": 4,
+      "mean_delta": 0.11944444444444445,
+      "repo_cluster_bootstrap_95_ci": [
+        0.02631578947368421,
+        0.29524961597542143
+      ],
+      "ties": 43,
+      "wins": 13
+    },
+    "MRR": {
+      "baseline_mean": 0.6963888888888888,
+      "candidate_mean": 0.7821296296296296,
+      "losses": 7,
+      "mean_delta": 0.08574074074074074,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.016757741347905284,
+        0.32267291666666614
+      ],
+      "ties": 37,
+      "wins": 16
+    },
+    "Recall@20": {
+      "baseline_mean": 0.7861111111111111,
+      "candidate_mean": 0.8388888888888889,
+      "losses": 4,
+      "mean_delta": 0.05277777777777778,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.0196078431372549,
+        0.2261904761904762
+      ],
+      "ties": 48,
+      "wins": 8
+    },
+    "Recall@5": {
+      "baseline_mean": 0.7652777777777777,
+      "candidate_mean": 0.7958333333333333,
+      "losses": 5,
+      "mean_delta": 0.030555555555555555,
+      "repo_cluster_bootstrap_95_ci": [
+        -0.06845238095238096,
+        0.2571428571428571
+      ],
+      "ties": 47,
+      "wins": 8
+    }
+  },
+  "ranking_agreement": {
+    "exact_top20_rate": 0.0,
+    "mean_top20_set_jaccard": 0.23981039169741306
+  },
+  "repositories": 10
+}
