@@ -1,0 +1,20 @@
+diff --git a/sympy/logic/boolalg.py b/sympy/logic/boolalg.py
+index fbcba1f8d4..1248619e31 100644
+--- a/sympy/logic/boolalg.py
++++ b/sympy/logic/boolalg.py
+@@ -201,6 +201,15 @@ def canonical(self):
+     def _noop(self, other=None):
+         raise TypeError('BooleanAtom not allowed in this context.')
+ 
++    def __eq__(self, other):
++        try:
++            other = _sympify(other)
++        except SympifyError:
++            return NotImplemented
++        if other.is_Number:
++            return not other
++        return super().__eq__(other)
++
+     __add__ = _noop
+     __radd__ = _noop
+     __sub__ = _noop

@@ -1,0 +1,13 @@
+diff --git a/sympy/solvers/solveset.py b/sympy/solvers/solveset.py
+index 445be3e0e8..53fef0a30f 100644
+--- a/sympy/solvers/solveset.py
++++ b/sympy/solvers/solveset.py
+@@ -567,7 +567,7 @@ def _solve_trig1(f, symbol, domain):
+ 
+     solns = solveset_complex(g, y) - solveset_complex(h, y)
+     if isinstance(solns, ConditionSet):
+-        raise NotImplementedError
++        return ConditionSet(symbol, Eq(f_original, 0), domain)
+ 
+     if isinstance(solns, FiniteSet):
+         if any(isinstance(s, RootOf) for s in solns):

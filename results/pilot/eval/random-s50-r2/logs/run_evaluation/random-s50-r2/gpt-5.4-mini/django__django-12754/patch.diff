@@ -1,0 +1,35 @@
+diff --git a/django/db/migrations/autodetector.py b/django/db/migrations/autodetector.py
+index 30616c0172..5972892cb8 100644
+--- a/django/db/migrations/autodetector.py
++++ b/django/db/migrations/autodetector.py
+@@ -888,6 +888,18 @@ class MigrationAutodetector:
+             self._generate_removed_field(app_label, model_name, field_name)
+ 
+     def _generate_removed_field(self, app_label, model_name, field_name):
++        dependencies = [
++            (app_label, model_name, field_name, "order_wrt_unset"),
++            (app_label, model_name, field_name, "foo_together_change"),
++        ]
++        old_model_state = self.from_state.models[app_label, model_name]
++        old_field = old_model_state.fields[field_name]
++        for new_app_label, new_model_name in sorted(self.new_model_keys):
++            new_model_state = self.to_state.models[new_app_label, new_model_name]
++            if model_name not in new_model_state.get_base_fields():
++                continue
++            if field_name in new_model_state.fields and new_model_state.fields[field_name].deconstruct()[1:] == old_field.deconstruct()[1:]:
++                dependencies.append((new_app_label, new_model_name, None, True))
+         self.add_operation(
+             app_label,
+             operations.RemoveField(
+@@ -897,10 +909,7 @@ class MigrationAutodetector:
+             # We might need to depend on the removal of an
+             # order_with_respect_to or index/unique_together operation;
+             # this is safely ignored if there isn't one
+-            dependencies=[
+-                (app_label, model_name, field_name, "order_wrt_unset"),
+-                (app_label, model_name, field_name, "foo_together_change"),
+-            ],
++            dependencies=dependencies,
+         )
+ 
+     def generate_altered_fields(self):

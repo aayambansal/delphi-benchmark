@@ -1,0 +1,19 @@
+diff --git a/src/_pytest/capture.py b/src/_pytest/capture.py
+index 3f9c60fb9..063235d2f 100644
+--- a/src/_pytest/capture.py
++++ b/src/_pytest/capture.py
+@@ -136,10 +136,10 @@ def _py36_windowsconsoleio_workaround(stream: TextIO) -> None:
+ 
+         return io.TextIOWrapper(
+             open(os.dup(f.fileno()), mode, buffering),  # type: ignore[arg-type]
+-            f.encoding,
+-            f.errors,
+-            f.newlines,
+-            f.line_buffering,
++            encoding=f.encoding,
++            errors=f.errors,
++            newline="",
++            line_buffering=f.line_buffering,
+         )
+ 
+     sys.stdin = _reopen_stdio(sys.stdin, "rb")

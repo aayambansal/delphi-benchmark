@@ -118,6 +118,16 @@
     "sympy__sympy-24443",
     "sympy__sympy-24562"
   ],
+  "leakage_rule": {
+    "applied_at": "2026-09-09T01:18Z",
+    "applied_to": "samples/swebench/cases-r4-expansion-v3.jsonl",
+    "excluded": [
+      "django__django-16256",
+      "scikit-learn__scikit-learn-14710"
+    ],
+    "kept": 98,
+    "rule": "ARB query_has_leakage over the serialized query (patch markers, fix-commit or gold-path shortcuts) excludes an instance before any engine is scored; the round-3 set had 0/62 flagged"
+  },
   "repo_counts": {
     "astropy/astropy": 4,
     "django/django": 46,

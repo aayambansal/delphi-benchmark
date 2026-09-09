@@ -1,0 +1,20 @@
+2026-09-09 08:27:44,748 - INFO - Creating container for pydata__xarray-4687...
+2026-09-09 08:27:44,780 - INFO - Container for pydata__xarray-4687 created: 9529d29befbba70c910d87783d0c6adf94e5175b657b56ed8eeb2305c4a3fac7
+2026-09-09 08:27:44,854 - INFO - Container for pydata__xarray-4687 started: 9529d29befbba70c910d87783d0c6adf94e5175b657b56ed8eeb2305c4a3fac7
+2026-09-09 08:27:44,854 - INFO - Intermediate patch for pydata__xarray-4687 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/pydata__xarray-4687/patch.diff, now applying to container...
+2026-09-09 08:27:44,990 - INFO - >>>>> Applied Patch:
+Checking patch xarray/core/computation.py...
+Applied patch xarray/core/computation.py cleanly.
+
+2026-09-09 08:27:45,132 - INFO - Git diff before:
+diff --git a/xarray/core/computation.py b/xarray/core/computation.py
+index 9fe93c88..0066f196 100644
+--- a/xarray/core/computation.py
++++ b/xarray/core/computation.py
+@@ -1817,6 +1817,7 @@ def where(cond, x, y):
+         join="exact",
+         dataset_join="exact",
+         dask="allowed",
++        keep_attrs=True,
+     )
+2026-09-09 08:27:45,133 - INFO - Eval script for pydata__xarray-4687 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/pydata__xarray-4687/eval.sh; copying to container...

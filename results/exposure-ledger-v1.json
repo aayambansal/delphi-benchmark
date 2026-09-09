@@ -549,7 +549,6 @@
         "django__django-15572",
         "django__django-15814",
         "django__django-16255",
-        "django__django-16256",
         "django__django-16263",
         "django__django-16493",
         "django__django-16527",
@@ -582,7 +581,6 @@
         "scikit-learn__scikit-learn-10844",
         "scikit-learn__scikit-learn-10908",
         "scikit-learn__scikit-learn-12682",
-        "scikit-learn__scikit-learn-14710",
         "scikit-learn__scikit-learn-15100",
         "scikit-learn__scikit-learn-25931",
         "sphinx-doc__sphinx-10449",
@@ -610,13 +608,14 @@
         "sympy__sympy-24443",
         "sympy__sympy-24562"
       ],
-      "cases": 100,
+      "cases": 98,
       "evidence": [
-        "Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-expansion-v1) from the 438 Verified instances never used in any round; excludes round-3 instance ids and base commits."
+        "Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-expansion-v1) from the 438 Verified instances never used in any round; excludes round-3 instance ids and base commits (100 drawn).",
+        "Two engine-agnostic preprocessing rules applied before any scoring (samples/swebench/cases-r4-expansion-manifest.json): a gold file must exist at the base commit (one file created by the patch removed from astropy__astropy-13398's gold set; no case dropped), and ARB's query_has_leakage excludes instances whose issue text carries patch or fix-commit markers (django__django-16256, scikit-learn__scikit-learn-14710). 98 cases remain."
       ],
       "exposure_class": "C0",
       "files": [
-        "samples/swebench/cases-r4-expansion.jsonl"
+        "samples/swebench/cases-r4-expansion-v3.jsonl"
       ],
       "set": "swebench_verified_round4_expansion",
       "supports": "confirmatory (pending scoring)"

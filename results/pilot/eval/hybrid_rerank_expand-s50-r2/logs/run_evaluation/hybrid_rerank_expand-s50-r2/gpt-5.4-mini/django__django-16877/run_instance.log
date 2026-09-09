@@ -1,0 +1,120 @@
+2026-09-09 08:24:35,144 - INFO - Creating container for django__django-16877...
+2026-09-09 08:24:35,182 - INFO - Container for django__django-16877 created: 758d9b878f37046e0f884617ee77e37048a01c6b4d557f86efc9390905124d09
+2026-09-09 08:24:35,252 - INFO - Container for django__django-16877 started: 758d9b878f37046e0f884617ee77e37048a01c6b4d557f86efc9390905124d09
+2026-09-09 08:24:35,253 - INFO - Intermediate patch for django__django-16877 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/django__django-16877/patch.diff, now applying to container...
+2026-09-09 08:24:35,378 - INFO - >>>>> Applied Patch:
+Checking patch django/template/defaultfilters.py...
+Checking patch docs/ref/templates/builtins.txt...
+Applied patch django/template/defaultfilters.py cleanly.
+Applied patch docs/ref/templates/builtins.txt cleanly.
+
+2026-09-09 08:24:36,235 - INFO - Git diff before:
+diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py
+index 5289ef34a0..7de962a229 100644
+--- a/django/template/defaultfilters.py
++++ b/django/template/defaultfilters.py
+@@ -498,6 +498,16 @@ def safeseq(value):
+     return [mark_safe(obj) for obj in value]
+ 
+ 
++@register.filter(is_safe=True)
++def escapeseq(value):
++    """
++    An "escape" filter for sequences. Escape each element in the sequence,
++    individually, after converting them to strings. Return a list with the
++    results.
++    """
++    return [escape(obj) for obj in value]
++
++
+ @register.filter(is_safe=True)
+ @stringfilter
+ def striptags(value):
+diff --git a/docs/ref/templates/builtins.txt b/docs/ref/templates/builtins.txt
+index 3aa20dfc71..37269507bc 100644
+--- a/docs/ref/templates/builtins.txt
++++ b/docs/ref/templates/builtins.txt
+@@ -2375,6 +2375,23 @@ You couldn't use the :tfilter:`safe` filter directly in this case, as it would
+ first convert the variable into a string, rather than working with the
+ individual elements of the sequence.
+ 
++.. templatefilter:: escapeseq
++
++``escapeseq``
++------------
++
++Applies the :tfilter:`escape` filter to each element of a sequence. Useful in
++conjunction with other filters that operate on sequences, such as
++:tfilter:`join`. For example:
++
++.. code-block:: html+django
++
++    {{ some_list|escapeseq|join:", " }}
++
++You couldn't use the :tfilter:`escape` filter directly in this case, as it would
++first convert the variable into a string, rather than working with the
++individual elements of the sequence.
++
+ .. templatefilter:: slice
+ 
+ ``slice``
+2026-09-09 08:24:36,236 - INFO - Eval script for django__django-16877 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/django__django-16877/eval.sh; copying to container...
+2026-09-09 08:24:43,392 - INFO - Test runtime: 7.09 seconds
+2026-09-09 08:24:43,393 - INFO - Test output for django__django-16877 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/django__django-16877/test_output.txt
+2026-09-09 08:24:43,497 - INFO - Git diff after:
+diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py
+index 5289ef34a0..7de962a229 100644
+--- a/django/template/defaultfilters.py
++++ b/django/template/defaultfilters.py
+@@ -498,6 +498,16 @@ def safeseq(value):
+     return [mark_safe(obj) for obj in value]
+ 
+ 
++@register.filter(is_safe=True)
++def escapeseq(value):
++    """
++    An "escape" filter for sequences. Escape each element in the sequence,
++    individually, after converting them to strings. Return a list with the
++    results.
++    """
++    return [escape(obj) for obj in value]
++
++
+ @register.filter(is_safe=True)
+ @stringfilter
+ def striptags(value):
+diff --git a/docs/ref/templates/builtins.txt b/docs/ref/templates/builtins.txt
+index 3aa20dfc71..37269507bc 100644
+--- a/docs/ref/templates/builtins.txt
++++ b/docs/ref/templates/builtins.txt
+@@ -2375,6 +2375,23 @@ You couldn't use the :tfilter:`safe` filter directly in this case, as it would
+ first convert the variable into a string, rather than working with the
+ individual elements of the sequence.
+ 
++.. templatefilter:: escapeseq
++
++``escapeseq``
++------------
++
++Applies the :tfilter:`escape` filter to each element of a sequence. Useful in
++conjunction with other filters that operate on sequences, such as
++:tfilter:`join`. For example:
++
++.. code-block:: html+django
++
++    {{ some_list|escapeseq|join:", " }}
++
++You couldn't use the :tfilter:`escape` filter directly in this case, as it would
++first convert the variable into a string, rather than working with the
++individual elements of the sequence.
++
+ .. templatefilter:: slice
+ 
+ ``slice``
+2026-09-09 08:24:43,497 - INFO - Grading answer for django__django-16877...
+2026-09-09 08:24:43,497 - INFO - report: {'django__django-16877': {'patch_is_None': False, 'patch_exists': True, 'patch_successfully_applied': True, 'resolved': False, 'infra_failure': False, 'tests_status': {'FAIL_TO_PASS': {'success': ['test_chain_join (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_chain_join)', 'test_chain_join_autoescape_off (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_chain_join_autoescape_off)'], 'failure': ['test_autoescape_off (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_autoescape_off)', 'test_basic (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_basic)']}, 'PASS_TO_PASS': {'success': [], 'failure': []}, 'FAIL_TO_FAIL': {'success': [], 'failure': []}, 'PASS_TO_FAIL': {'success': [], 'failure': []}}}}
+Result for django__django-16877: resolved: False
+2026-09-09 08:24:43,498 - INFO - Attempting to stop container sweb.eval.django__django-16877.hybrid_rerank_expand-s50-r2...
+2026-09-09 08:24:58,645 - INFO - Container sweb.eval.django__django-16877.hybrid_rerank_expand-s50-r2 stopped successfully.
+2026-09-09 08:24:58,645 - INFO - Attempting to remove container sweb.eval.django__django-16877.hybrid_rerank_expand-s50-r2...
+2026-09-09 08:24:58,684 - INFO - Container sweb.eval.django__django-16877.hybrid_rerank_expand-s50-r2 removed successfully.

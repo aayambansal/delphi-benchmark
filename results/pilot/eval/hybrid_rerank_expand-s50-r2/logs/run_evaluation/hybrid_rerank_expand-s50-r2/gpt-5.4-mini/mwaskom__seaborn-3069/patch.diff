@@ -1,0 +1,39 @@
+diff --git a/seaborn/_core/plot.py b/seaborn/_core/plot.py
+index 4f0290a4..d59b2082 100644
+--- a/seaborn/_core/plot.py
++++ b/seaborn/_core/plot.py
+@@ -1627,14 +1627,20 @@ class Plotter:
+ 
+     def _finalize_figure(self, p: Plot) -> None:
+ 
++        def _is_nominal(scale_key):
++            scale = p._scales.get(scale_key)
++            from seaborn._core.scales import Nominal
++            return isinstance(scale, Nominal)
++
+         for sub in self._subplots:
+             ax = sub["ax"]
+             for axis in "xy":
+                 axis_key = sub[axis]
++                axis_obj = getattr(ax, f"{axis}axis")
+ 
+                 # Axis limits
+                 if axis_key in p._limits:
+-                    convert_units = getattr(ax, f"{axis}axis").convert_units
++                    convert_units = axis_obj.convert_units
+                     a, b = p._limits[axis_key]
+                     lo = a if a is None else convert_units(a)
+                     hi = b if b is None else convert_units(b)
+@@ -1644,6 +1650,12 @@ class Plotter:
+                         hi = cast(float, hi) + 0.5
+                     ax.set(**{f"{axis}lim": (lo, hi)})
+ 
++                if _is_nominal(axis_key):
++                    ax.grid(False, axis=axis)
++                    ax.margins(x=0 if axis == "x" else None, y=0 if axis == "y" else None)
++                    if axis == "y":
++                        ax.invert_yaxis()
++
+         engine_default = None if p._target is not None else "tight"
+         layout_engine = p._layout_spec.get("engine", engine_default)
+         set_layout_engine(self._figure, layout_engine)

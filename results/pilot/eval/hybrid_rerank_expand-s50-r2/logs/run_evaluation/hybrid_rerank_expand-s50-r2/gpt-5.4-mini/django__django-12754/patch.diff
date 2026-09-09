@@ -1,0 +1,27 @@
+diff --git a/django/db/migrations/autodetector.py b/django/db/migrations/autodetector.py
+index 30616c0172..ee74b829a0 100644
+--- a/django/db/migrations/autodetector.py
++++ b/django/db/migrations/autodetector.py
+@@ -558,6 +558,22 @@ class MigrationAutodetector:
+             dependencies = [
+                 (app_label, model_name, None, False),
+             ]
++            # If a field was moved from a base model to this newly-created
++            # subclass in the same migration, make sure the field is removed
++            # from the base before creating the subclass. This avoids local
++            # field clashes when the model is rendered during migration state
++            # construction.
++            for field_name, field in model_state.fields.items():
++                if field_name in related_fields:
++                    continue
++                field_related_model = getattr(getattr(field, 'remote_field', None), 'model', None)
++                if field_related_model is not None:
++                    continue
++                for base in model_state.bases:
++                    if isinstance(base, str) and "." in base:
++                        base_app_label, base_name = base.split(".", 1)
++                        if (base_app_label, base_name, field_name) in self.old_field_keys:
++                            dependencies.append((base_app_label, base_name, field_name, False))
+             # Depend on all bases
+             for base in model_state.bases:
+                 if isinstance(base, str) and "." in base:

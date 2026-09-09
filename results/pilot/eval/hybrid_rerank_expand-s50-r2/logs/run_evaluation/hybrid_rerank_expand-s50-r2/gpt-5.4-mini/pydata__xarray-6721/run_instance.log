@@ -1,0 +1,37 @@
+2026-09-09 08:28:11,894 - INFO - Creating container for pydata__xarray-6721...
+2026-09-09 08:28:11,927 - INFO - Container for pydata__xarray-6721 created: e4b1ef4f4d931786b2275edafafeceaa5e38d6ead2334f97279abba69d9f414b
+2026-09-09 08:28:11,992 - INFO - Container for pydata__xarray-6721 started: e4b1ef4f4d931786b2275edafafeceaa5e38d6ead2334f97279abba69d9f414b
+2026-09-09 08:28:11,992 - INFO - Intermediate patch for pydata__xarray-6721 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/pydata__xarray-6721/patch.diff, now applying to container...
+2026-09-09 08:28:12,119 - INFO - >>>>> Applied Patch:
+Checking patch xarray/core/common.py...
+Checking patch xarray/core/variable.py...
+Applied patch xarray/core/common.py cleanly.
+Applied patch xarray/core/variable.py cleanly.
+
+2026-09-09 08:28:12,263 - INFO - Git diff before:
+diff --git a/xarray/core/common.py b/xarray/core/common.py
+index 3c328f42..a3636cba 100644
+--- a/xarray/core/common.py
++++ b/xarray/core/common.py
+@@ -2023,7 +2023,7 @@ def get_chunksizes(
+ 
+     chunks: dict[Any, tuple[int, ...]] = {}
+     for v in variables:
+-        if hasattr(v.data, "chunks"):
++        if hasattr(v._data, "chunks"):
+             for dim, c in v.chunksizes.items():
+                 if dim in chunks and c != chunks[dim]:
+                     raise ValueError(
+diff --git a/xarray/core/variable.py b/xarray/core/variable.py
+index 2d115ff0..cfb07166 100644
+--- a/xarray/core/variable.py
++++ b/xarray/core/variable.py
+@@ -1015,7 +1015,7 @@ class Variable(AbstractArray, NdimSizeLenMixin, VariableArithmetic):
+         xarray.unify_chunks
+         """
+         if hasattr(self._data, "chunks"):
+-            return Frozen({dim: c for dim, c in zip(self.dims, self.data.chunks)})
++            return Frozen({dim: c for dim, c in zip(self.dims, self._data.chunks)})
+         else:
+             return {}
+2026-09-09 08:28:12,264 - INFO - Eval script for pydata__xarray-6721 written to logs/run_evaluation/hybrid_rerank_expand-s50-r2/gpt-5.4-mini/pydata__xarray-6721/eval.sh; copying to container...

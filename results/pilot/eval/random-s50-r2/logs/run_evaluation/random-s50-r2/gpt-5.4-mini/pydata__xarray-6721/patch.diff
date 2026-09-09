@@ -1,0 +1,40 @@
+diff --git a/xarray/core/dataset.py b/xarray/core/dataset.py
+index 71646f50..79e73a45 100644
+--- a/xarray/core/dataset.py
++++ b/xarray/core/dataset.py
+@@ -2135,7 +2135,16 @@ class Dataset(
+         Dataset.chunksizes
+         xarray.unify_chunks
+         """
+-        return get_chunksizes(self.variables.values())
++        chunks: dict[Hashable, tuple[int, ...]] = {}
++        for v in self.variables.values():
++            for dim, c in v.chunksizes.items():
++                if dim in chunks and c != chunks[dim]:
++                    raise ValueError(
++                        f"Object has inconsistent chunks along dimension {dim}. "
++                        f"This can be fixed by calling unify_chunks()."
++                    )
++                chunks[dim] = c
++        return Frozen(chunks)
+ 
+     @property
+     def chunksizes(self) -> Mapping[Hashable, tuple[int, ...]]:
+@@ -2152,7 +2161,16 @@ class Dataset(
+         Dataset.chunks
+         xarray.unify_chunks
+         """
+-        return get_chunksizes(self.variables.values())
++        chunks: dict[Hashable, tuple[int, ...]] = {}
++        for v in self.variables.values():
++            for dim, c in v.chunksizes.items():
++                if dim in chunks and c != chunks[dim]:
++                    raise ValueError(
++                        f"Object has inconsistent chunks along dimension {dim}. "
++                        f"This can be fixed by calling unify_chunks()."
++                    )
++                chunks[dim] = c
++        return Frozen(chunks)
+ 
+     def chunk(
+         self: T_Dataset,

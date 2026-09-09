@@ -54,7 +54,58 @@ vs hybrid R@20 -0.120 [-0.231, -0.019]; vs hybrid_rerank_expand MRR -0.111
 [-0.200, -0.034]. No Delphi lead over any rung has an interval excluding zero.
 Artifacts: `results/independent_final_delphi_vs_<engine>_r4_v1.json`.
 
-### SWE-bench (C0, 62) and ARB (C2, 220) — running at time of writing
+### SWE-bench (C0, 62) — complete
+
+| system | MRR | R@5 | R@20 | BCY | any-gold |
+|---|---|---|---|---|---|
+| Delphi (frozen) | 0.680 | 0.704 | 0.737 | 0.638 | 48/62 |
+| dense | 0.254 | 0.324 | 0.591 | 0.210 | 39/62 |
+| hybrid | 0.296 | 0.452 | 0.648 | 0.234 | 43/62 |
+| hybrid_rerank | 0.575 | 0.598 | 0.616 | 0.533 | 41/62 |
+| hybrid_rerank_expand | 0.597 | 0.623 | 0.657 | 0.573 | 44/62 |
+
+Delphi minus hybrid_rerank_expand: MRR +0.083 [-0.107, +0.203]; R@20 +0.080
+[-0.105, +0.217]; BCY +0.065 [-0.062, +0.171]; any-gold 48 vs 44 (p=0.42).
+Artifacts: `results/trackd_final_delphi_vs_<engine>_r4_v1.json`.
+
+### ARB round-3 partition (C2, 220) — complete, validation evidence only
+
+Delphi 0.332 / 0.476 / 0.648 / 0.296 vs hybrid_rerank_expand 0.229 / 0.389 /
+0.595 / 0.220; Delphi minus final rung MRR +0.103 [-0.008, +0.189], BCY +0.076
+[-0.019, +0.157], R@5 and R@20 tied, any-gold 163 vs 148 (p=0.08). Workflow
+split: Delphi's lead sits in trace2code (MRR 0.579 vs 0.149) and edit2ripple;
+code2test and comment2context are equal or favour the conventional rung. An
+exploratory traceback/path split of the 62 SWE-bench issues does not reproduce
+the pattern. Artifacts: `results/arb_final_delphi_vs_<engine>_r4_v1.json`.
+
+### SWE-bench expansion (C0, 98) — complete
+
+Provisioned 100 snapshots into the frozen stack (three API instances, sharded;
+one orphaned django snapshot reconciled from the database into the manifest);
+strict audit `results/native-delphi-swebench-r4-expansion-index-audit-v2.json`
+complete (100 repositories, 182,415 files, 1,079,743 chunks = embeddings).
+Two engine-agnostic rules before scoring: gold must exist at base commit
+(one patch-created file removed from astropy__astropy-13398's gold set), and
+ARB `query_has_leakage` (excluded django__django-16256 and
+scikit-learn__scikit-learn-14710). Sample: `samples/swebench/cases-r4-expansion-v3.jsonl`.
+
+| system | MRR | R@5 | R@20 | BCY | any-gold |
+|---|---|---|---|---|---|
+| Delphi (frozen, one shot, attested) | 0.700 | 0.745 | 0.820 | 0.685 | 83/98 |
+| dense | 0.214 | 0.389 | 0.673 | 0.156 | 69/98 |
+| hybrid | 0.306 | 0.509 | 0.651 | 0.223 | 67/98 |
+| hybrid_rerank | 0.611 | 0.622 | 0.667 | 0.576 | 69/98 |
+| hybrid_rerank_expand | 0.660 | 0.684 | 0.733 | 0.603 | 76/98 |
+| lexical | 0.487 | 0.603 | 0.793 | 0.445 | 82/98 |
+| lexical+bm25 rrf | 0.383 | 0.521 | 0.789 | 0.350 | 81/98 |
+| bm25 | 0.168 | 0.238 | 0.457 | 0.146 | 48/98 |
+
+Delphi minus hybrid_rerank_expand: MRR +0.041 [-0.028, +0.112]; R@5 +0.061
+[+0.023, +0.148]; R@20 +0.087 [+0.042, +0.167]; BCY +0.082 [+0.030, +0.152].
+Pooled 160 SWE-bench instances (`results/swebench_pooled160_*`): MRR +0.057
+[-0.036, +0.114]; R@5 +0.069 [+0.015, +0.160]; R@20 +0.084 [+0.013, +0.154];
+BCY +0.076 [+0.017, +0.128]; any-gold 131 vs 120 (p=0.08). Versus the lexical
+ranker pooled: MRR +0.237 [+0.174, +0.391], R@20 +0.030 [-0.019, +0.117].
 
 ## Documentation contract, fully matched
 
@@ -101,7 +152,17 @@ into the frozen stack is in progress
 Delphi run, the ladder, and the lexical comparators follow, then paired
 analysis.
 
-## Executable pilot
+## Executable pilot — repeat 1 complete, repeat 2 running
+
+Repeat 1 (step budget 50, one trajectory per cell, 62 instances):
+none 25/62, random 30/62, delphi 31/62, hybrid_rerank_expand 23/62.
+Delphi - none +0.097 [+0.016, +0.194] (7/1, p=0.07); Delphi - random +0.016
+[-0.065, +0.097]; Delphi - conventional +0.129 [+0.032, +0.242] (10/2,
+p=0.04); conventional - random -0.113 [-0.210, -0.032]. Agents used 7-9 steps
+and 1.6-2.6 cents per instance; seeds raised cost 30-60%. Four eval reports
+initially flagged as infrastructure failures were re-run and confirmed as
+genuine unresolved outcomes. `results/pilot/analysis-s50.json`.
+
 
 Preregistered in `context/PILOT_PROTOCOL.md` before any scored run. Pipeline
 validated end to end on `psf__requests-1142` (mini-SWE-agent 2.4.6, text-based
@@ -111,6 +172,12 @@ actions, `gpt-5.4-mini`, `linux/amd64` emulation; official harness `swebench`
 hits gold in 47/62 instances); the `hybrid_rerank_expand` seed waits for that
 ladder run. Runner: `stack/run_pilot.sh <condition> <steps>`; outputs under
 `results/pilot/`.
+
+## Nia repository arm
+
+Fresh single-shard smoke with the new credential (same account):
+`gin-gonic/gin@28e57f58` shard stayed `syncing` past the 40-minute deadline
+(`results/nia-sharded-sources-r4.jsonl`). Still externally blocked.
 
 ## Paper
 

@@ -1,0 +1,16 @@
+diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py
+index 1b3285ddc..305a1808f 100644
+--- a/astropy/io/fits/card.py
++++ b/astropy/io/fits/card.py
+@@ -1057,9 +1057,9 @@ class Card(_Verify):
+         output = []
+ 
+         # do the value string
+-        value = self._value.replace("'", "''")
+-        words = _words_group(value, value_length)
++        words = _words_group(self._value, value_length)
+         for idx, word in enumerate(words):
++            word = word.replace("'", "''")
+             if idx == 0:
+                 headstr = "{:{len}}= ".format(self.keyword, len=KEYWORD_LENGTH)
+             else:

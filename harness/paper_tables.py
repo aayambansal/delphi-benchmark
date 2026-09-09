@@ -58,6 +58,21 @@ TRACKS = {
             "bm25": "trackd_final_delphi_vs_bm25_v1.json",
         },
     },
+    "swebench_expansion": {
+        "delphi": "D2-final-delphi-generated-source-exact-top20-v1",
+        "ladder": "D2-final-{eng}-r4-v1",
+        "lexical": {
+            "lexical_bm25": "D2-final-lexical_bm25-r4-v1",
+            "lexical": "D2-final-lexical-r4-v1",
+            "bm25": "D2-final-bm25-r4-v1",
+        },
+        "pair_ladder": "swebench_expansion_delphi_vs_{eng}_r4_v1.json",
+        "pair_lexical": {
+            "lexical_bm25": "swebench_expansion_delphi_vs_lexical_bm25_r4_v1.json",
+            "lexical": "swebench_expansion_delphi_vs_lexical_r4_v1.json",
+            "bm25": "swebench_expansion_delphi_vs_bm25_r4_v1.json",
+        },
+    },
     "arb": {
         "delphi": "A-final-delphi-generated-source-exact-top20-v1",
         "ladder": "A-final-{eng}-r4-v1",
@@ -254,6 +269,33 @@ def determinism_table() -> str:
     return "\n".join(lines) + "\n"
 
 
+def pooled_table() -> str:
+    """Delta-only table for the pooled 160-instance SWE-bench analysis."""
+    labels = [
+        ("dense", "Dense (same embedding)"),
+        ("hybrid", "Dense+BM25 RRF"),
+        ("hybrid_rerank", "+ Delphi's rerankers"),
+        ("hybrid_rerank_expand", "+ expansion"),
+        ("lexical_bm25", "Lexical+BM25 RRF"),
+        ("lexical", "Lexical ranker"),
+        ("bm25", "BM25"),
+    ]
+    lines = ["\\begin{tabular}{lccccc}", "\\toprule",
+             "Delphi $-$ system & MRR & R@5 & R@20 & BCY@8k & any-gold ($p$) \\\\", "\\midrule"]
+    for eng, label in labels:
+        path = RESULTS / f"swebench_pooled160_delphi_vs_{eng}_r4_v1.json"
+        if not path.exists():
+            continue
+        pair = json.load(path.open())
+        ag = pair["any_gold_at_20"]
+        lines.append(
+            f"{label} & " + " & ".join(delta_cell(pair, k) for k, _ in METRICS)
+            + f" & {ag['candidate_cases']} vs {ag['baseline_cases']} ($p{{=}}{ag['mcnemar_exact_p']:.2g}$) \\\\"
+        )
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
 def pilot_table(budget: str = "s50") -> str:
     path = RESULTS / "pilot" / f"analysis-{budget}.json"
     if not path.exists():
@@ -309,6 +351,7 @@ def main() -> None:
     (OUT / "docs_pairs.tex").write_text(docs_pairs_table().rstrip("\n") + "%")
     (OUT / "determinism_like_for_like.tex").write_text(determinism_table().rstrip("\n") + "%")
     (OUT / "pilot_s50.tex").write_text(pilot_table("s50").rstrip("\n") + "%")
+    (OUT / "swebench_pooled.tex").write_text(pooled_table().rstrip("\n") + "%")
     for path in sorted(OUT.glob("*.tex")):
         print(path.name, path.stat().st_size, "bytes")
 
