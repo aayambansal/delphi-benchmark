@@ -1,13 +1,13 @@
 \begin{tabular}{lcccccc}
 \toprule
-System & MRR & R@5 & R@20 & BCY@8k & any-gold & s \\
+System & MRR $\uparrow$ & R@5 $\uparrow$ & R@20 $\uparrow$ & BCY@8k $\uparrow$ & any-gold $\uparrow$ & latency (s) $\downarrow$ \\
 \midrule
-\textbf{Delphi (frozen)} & \textbf{0.508} & \textbf{0.551} & \textbf{0.750} & \textbf{0.454} & 15/18 & 3.7 \\
+Delphi (frozen) & 0.508 & 0.551 & 0.750 & 0.454 & 15/18 & 3.7 \\
 \midrule
 Dense (same embedding) & 0.455 & 0.523 & 0.796 & 0.347 & 15/18 & 0.5 \\
-Dense+BM25 RRF & 0.579 & 0.639 & 0.870 & 0.403 & 16/18 & 0.2 \\
-\quad + Delphi's rerankers & 0.545 & 0.644 & 0.870 & 0.454 & 16/18 & 2.3 \\
-\quad + expansion & 0.619 & 0.662 & 0.852 & 0.546 & 16/18 & 4.1 \\
+Dense+BM25 RRF & 0.579 & 0.639 & \textbf{0.870} & 0.403 & 16/18 & 0.2 \\
+\quad + Delphi's rerankers & 0.545 & 0.644 & \textbf{0.870} & 0.454 & 16/18 & 2.3 \\
+\quad + expansion & \textbf{0.619} & \textbf{0.662} & 0.852 & \textbf{0.546} & 16/18 & 4.1 \\
 \midrule
 Lexical+BM25 RRF & 0.473 & 0.500 & 0.759 & 0.287 & 15/18 & 1.6 \\
 Lexical ranker & 0.438 & 0.403 & 0.704 & 0.259 & 14/18 & 1.1 \\

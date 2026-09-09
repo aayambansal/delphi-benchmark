@@ -121,25 +121,41 @@ def delta_cell(pair: dict | None, metric: str) -> str:
     return f"${d:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}}"
 
 
-def system_row(label: str, run_id: str, *, bold: bool = False) -> str | None:
+def system_row(label: str, run_id: str, *, best: dict[str, float] | None = None) -> str | None:
+    """One system row; a metric cell is bold when it is the best value in its column."""
     s = summary(run_id)
     if s is None:
         return None
     m = s["sample_weighted"]
     ag = any_gold(run_id)
-    cells = [fmt(m.get(k)) for k, _ in METRICS]
-    if bold:
-        cells = [f"\\textbf{{{c}}}" for c in cells]
-        label = f"\\textbf{{{label}}}"
+    cells = []
+    for k, _ in METRICS:
+        cell = fmt(m.get(k))
+        if best and m.get(k) is not None and abs(m[k] - best[k]) < 1e-9:
+            cell = f"\\textbf{{{cell}}}"
+        cells.append(cell)
     agc = f"{ag[0]}/{ag[1]}" if ag else "---"
     lat = s.get("latency_ms", {}).get("median")
     latc = f"{lat / 1000:.1f}" if lat else "---"
     return f"{label} & " + " & ".join(cells) + f" & {agc} & {latc} \\\\"
 
 
+def column_best(run_ids: list[str]) -> dict[str, float]:
+    best: dict[str, float] = {}
+    for run_id in run_ids:
+        s = summary(run_id)
+        if s is None:
+            continue
+        for k, _ in METRICS:
+            v = s["sample_weighted"].get(k)
+            if v is not None and (k not in best or v > best[k]):
+                best[k] = v
+    return best
+
+
 LADDER_HEAD = (
     "\\begin{tabular}{lcccccc}\n\\toprule\n"
-    "System & MRR & R@5 & R@20 & BCY@8k & any-gold & s \\\\\n\\midrule"
+    "System & MRR $\\uparrow$ & R@5 $\\uparrow$ & R@20 $\\uparrow$ & BCY@8k $\\uparrow$ & any-gold $\\uparrow$ & latency (s) $\\downarrow$ \\\\\n\\midrule"
 )
 TAIL = "\\bottomrule\n\\end{tabular}"
 
@@ -147,16 +163,18 @@ TAIL = "\\bottomrule\n\\end{tabular}"
 def ladder_table(track: str) -> str:
     spec = TRACKS[track]
     lines = [LADDER_HEAD]
-    row = system_row("Delphi (frozen)", spec["delphi"], bold=True)
+    best = column_best([spec["delphi"]] + [spec["ladder"].format(eng=eng) for eng, _ in LADDER]
+                       + [spec["lexical"][eng] for eng, _ in LEXICAL])
+    row = system_row("Delphi (frozen)", spec["delphi"], best=best)
     if row:
         lines.append(row)
     lines.append("\\midrule")
     for eng, label in LADDER:
-        row = system_row(label, spec["ladder"].format(eng=eng))
+        row = system_row(label, spec["ladder"].format(eng=eng), best=best)
         lines.append(row or f"{label} & \\multicolumn{{6}}{{l}}{{\\emph{{pending}}}} \\\\")
     lines.append("\\midrule")
     for eng, label in LEXICAL:
-        row = system_row(label, spec["lexical"][eng])
+        row = system_row(label, spec["lexical"][eng], best=best)
         if row:
             lines.append(row)
     # paired deltas

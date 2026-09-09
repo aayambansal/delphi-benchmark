@@ -244,7 +244,7 @@ def fig_exposure_timeline() -> None:
             ("Independent commit-to-files\nfinal, 18 cases (corpus locked)", "C0"),
             ("SWE-bench Verified, 62 cases", "C0"),
             ("DS-1000 documentation, 40 cases", "C1"),
-            ("frozen commit 91d76c1", ""),
+            ("Delphi build frozen", ""),
         ]),
         ("Round 4 (Sep 9, 2026)", [
             ("SWE-bench Verified expansion,\n98 cases (fresh salt)", "C0"),

@@ -222,3 +222,20 @@ rates 0.619 / 0.575 / 0.344 and top-20 miss rates 0.181 / 0.250 / 0.200
 random, repeat 1); File-Okapi gate thresholds (-0.01, -0.01, 1.20); ladder
 constants (200k-token batches, 8k truncation, ARB BM25); PostgreSQL 14.
 
+### Publication-style pass (2026-09-09, later still)
+
+`paper/context.tex` rewritten in the register of an accepted ICLR paper while
+keeping every number: five-sentence abstract; introduction with the three
+research questions (renumbered RQ1 ranking, RQ2 determinism, RQ3 utility) and a
+four-item contribution list; standard section titles; a "Discussion and
+limitations" section; references to prior reviews, earlier drafts, and
+"withdrawn" claims removed (the corrections crosswalk appendix is dropped; the
+hosted repository arm moved to Appendix I). All internal code references
+removed from the text: module paths, environment-variable names, script and
+directory names, the branch name, and the commit hash (the frozen revision is
+described as "recorded in the archive"); the configuration appendix is now a
+plain-language settings table. Ladder tables bold the best value per metric
+column and carry direction arrows. Main text ends on page 9; 25 pages total.
+Terminology fixed: "matched ladder" (the four conventional systems) and "full
+conventional stack" (its last rung).
+
