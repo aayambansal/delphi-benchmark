@@ -1,0 +1,74 @@
+diff --git a/sklearn/utils/_set_output.py b/sklearn/utils/_set_output.py
+index 335773c6a..e4e2efe86 100644
+--- a/sklearn/utils/_set_output.py
++++ b/sklearn/utils/_set_output.py
+@@ -12,6 +12,7 @@ def _wrap_in_pandas_container(
+     *,
+     columns,
+     index=None,
++    dtypes=None,
+ ):
+     """Create a Pandas DataFrame.
+ 
+@@ -36,6 +37,10 @@ def _wrap_in_pandas_container(
+     index : array-like, default=None
+         Index for data.
+ 
++    dtypes : pandas Series, default=None
++        Dtypes to preserve in the output DataFrame. If provided, the resulting
++        DataFrame is cast back to these dtypes after construction.
++
+     Returns
+     -------
+     dataframe : DataFrame
+@@ -57,9 +62,14 @@ def _wrap_in_pandas_container(
+             data_to_wrap.columns = columns
+         if index is not None:
+             data_to_wrap.index = index
++        if dtypes is not None:
++            data_to_wrap = data_to_wrap.astype(dtypes)
+         return data_to_wrap
+ 
+-    return pd.DataFrame(data_to_wrap, index=index, columns=columns)
++    output = pd.DataFrame(data_to_wrap, index=index, columns=columns)
++    if dtypes is not None:
++        output = output.astype(dtypes)
++    return output
+ 
+ 
+ def _get_output_config(method, estimator=None):
+@@ -96,7 +106,9 @@ def _get_output_config(method, estimator=None):
+     return {"dense": dense_config}
+ 
+ 
+-def _wrap_data_with_container(method, data_to_wrap, original_input, estimator):
++def _wrap_data_with_container(
++    method, data_to_wrap, original_input, estimator, preserve_dtypes=False
++):
+     """Wrap output with container based on an estimator's or global config.
+ 
+     Parameters
+@@ -113,6 +125,10 @@ def _wrap_data_with_container(method, data_to_wrap, original_input, estimator):
+     estimator : estimator instance
+         Estimator with to get the output configuration from.
+ 
++    preserve_dtypes : bool, default=False
++        If True and available, preserve dtypes from `original_input` in the
++        pandas output.
++
+     Returns
+     -------
+     output : {ndarray, dataframe}
+@@ -127,10 +143,12 @@ def _wrap_data_with_container(method, data_to_wrap, original_input, estimator):
+         return data_to_wrap
+ 
+     # dense_config == "pandas"
++    dtypes = getattr(original_input, "dtypes", None) if preserve_dtypes else None
+     return _wrap_in_pandas_container(
+         data_to_wrap=data_to_wrap,
+         index=getattr(original_input, "index", None),
+         columns=estimator.get_feature_names_out,
++        dtypes=dtypes,
+     )
+ 
+ 

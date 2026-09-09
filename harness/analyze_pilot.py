@@ -91,8 +91,8 @@ def paired(a: dict[str, dict], b: dict[str, dict], key: str, cases: dict[str, di
         "repository_cluster_95_ci": list(cluster_bootstrap_ci(by_repo, samples=samples, seed=seed)) if ids else None,
     }
     if key in ("resolved", "submitted"):
-        wins = sum(1 for i in ids if a[i][key] and not b[i][key])
-        losses = sum(1 for i in ids if b[i][key] and not a[i][key])
+        wins = sum(1 for i in ids if float(a[i][key]) > float(b[i][key]))
+        losses = sum(1 for i in ids if float(b[i][key]) > float(a[i][key]))
         out.update({"a_only": wins, "b_only": losses, "mcnemar_exact_p": mcnemar_exact_p(wins, losses)})
     return out
 
@@ -100,6 +100,7 @@ def paired(a: dict[str, dict], b: dict[str, dict], key: str, cases: dict[str, di
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--budget", default="s50")
+    parser.add_argument("--repeats", default=None, help="comma-separated labels to pool per instance (e.g. s50,s50-r2); overrides --budget")
     parser.add_argument("--conditions", default="none,random,delphi,hybrid_rerank_expand")
     parser.add_argument("--model", default="gpt-5.4-mini")
     parser.add_argument("--cases", type=Path, default=ROOT / "samples" / "swebench" / "cases.jsonl")
@@ -109,16 +110,39 @@ def main() -> None:
 
     cases = {str(r["id"]): r for r in (json.loads(l) for l in args.cases.open() if l.strip())}
     conds = {}
+    labels = args.repeats.split(",") if args.repeats else [args.budget]
     for c in args.conditions.split(","):
-        rows = load_condition(f"{c}-{args.budget}", args.model)
-        if rows:
-            conds[c] = rows
+        per_label = [load_condition(f"{c}-{lab}", args.model) for lab in labels]
+        per_label = [r for r in per_label if r]
+        if not per_label:
+            continue
+        if len(per_label) == 1:
+            conds[c] = per_label[0]
+            continue
+        # pool repeats: per-instance means of resolved/cost/steps over repeats present in every label
+        ids = set.intersection(*(set(r) for r in per_label))
+        pooled = {}
+        for i in ids:
+            rows = [r[i] for r in per_label]
+            pooled[i] = {
+                "instance_id": i,
+                "resolved": sum(float(r["resolved"]) for r in rows) / len(rows),
+                "submitted": sum(float(r["submitted"]) for r in rows) / len(rows),
+                "evaluated": all(r["evaluated"] for r in rows),
+                "exit_status": "pooled",
+                "cost_usd": sum(r["cost_usd"] for r in rows) / len(rows),
+                "api_calls": sum(r["api_calls"] for r in rows) / len(rows),
+                "steps": sum(r["steps"] for r in rows) / len(rows),
+                "repeats": len(rows),
+            }
+        conds[c] = pooled
+    budget_label = "+".join(labels)
     if not conds:
         sys.exit("no pilot results found")
 
     common = set.intersection(*(set(r) for r in conds.values()))
     summary = {
-        "budget": args.budget,
+        "budget": budget_label,
         "model": args.model,
         "instances_common": len(common),
         "conditions": {},
@@ -129,7 +153,7 @@ def main() -> None:
         summary["conditions"][c] = {
             "n": len(sub),
             "resolved_rate": fmean(float(r["resolved"]) for r in sub.values()) if sub else None,
-            "resolved": sum(1 for r in sub.values() if r["resolved"]),
+            "resolved": sum(float(r["resolved"]) for r in sub.values()),
             "submitted_rate": fmean(float(r["submitted"]) for r in sub.values()) if sub else None,
             "mean_cost_usd": fmean(r["cost_usd"] for r in sub.values()) if sub else None,
             "total_cost_usd": sum(r["cost_usd"] for r in sub.values()),
@@ -152,7 +176,7 @@ def main() -> None:
                     "cost_usd": paired(sa, sb, "cost_usd", cases, samples=args.samples, seed=args.seed),
                     "steps": paired(sa, sb, "steps", cases, samples=args.samples, seed=args.seed),
                 }
-    out = PILOT / f"analysis-{args.budget}.json"
+    out = PILOT / f"analysis-{budget_label.replace('+', '_')}.json"
     out.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(json.dumps({k: v for k, v in summary["conditions"].items()}, indent=1))
     for name, p in summary["pairs"].items():

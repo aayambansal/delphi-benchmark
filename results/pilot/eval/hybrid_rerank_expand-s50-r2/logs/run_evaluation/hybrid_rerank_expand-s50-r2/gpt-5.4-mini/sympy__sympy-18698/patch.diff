@@ -1,0 +1,14 @@
+diff --git a/sympy/polys/polytools.py b/sympy/polys/polytools.py
+index c9e77a901f..b8d6668a3b 100755
+--- a/sympy/polys/polytools.py
++++ b/sympy/polys/polytools.py
+@@ -3234,7 +3234,8 @@ def sqf_list(f, all=False):
+         else:  # pragma: no cover
+             raise OperationNotSupported(f, 'sqf_list')
+ 
+-        return f.rep.dom.to_sympy(coeff), [(f.per(g), k) for g, k in factors]
++        factors = [(f.per(g), k) for g, k in factors]
++        return f.rep.dom.to_sympy(coeff), _sorted_factors(factors, 'sqf')
+ 
+     def sqf_list_include(f, all=False):
+         """

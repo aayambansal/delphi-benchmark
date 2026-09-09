@@ -1,0 +1,32 @@
+diff --git a/sphinx/ext/napoleon/docstring.py b/sphinx/ext/napoleon/docstring.py
+index d36fdd17a..41778dc4d 100644
+--- a/sphinx/ext/napoleon/docstring.py
++++ b/sphinx/ext/napoleon/docstring.py
+@@ -1090,10 +1090,24 @@ class NumpyDocstring(GoogleDocstring):
+     def _escape_args_and_kwargs(self, name: str) -> str:
+         func = super()._escape_args_and_kwargs
+ 
+-        if ", " in name:
+-            return ", ".join(func(param) for param in name.split(", "))
+-        else:
++        if ", " not in name:
++            return func(name)
++
++        parts = []
++        start = 0
++        depth = 0
++        for i, ch in enumerate(name):
++            if ch in "([{":
++                depth += 1
++            elif ch in ")]}":
++                depth = max(depth - 1, 0)
++            elif ch == "," and depth == 0 and name[i:i + 2] == ", ":
++                parts.append(name[start:i])
++                start = i + 2
++        if not parts:
+             return func(name)
++        parts.append(name[start:])
++        return ", ".join(func(param) for param in parts)
+ 
+     def _consume_field(self, parse_type: bool = True, prefer_type: bool = False
+                        ) -> Tuple[str, str, List[str]]:

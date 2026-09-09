@@ -301,6 +301,7 @@ def pilot_table(budget: str = "s50") -> str:
     if not path.exists():
         return "\\begin{tabular}{l}\\emph{pending}\\end{tabular}"
     a = json.load(path.open())
+    repeats = len(str(a.get("budget", "")).split("+"))
     labels = {
         "none": "No seed",
         "random": "Random files (control)",
@@ -309,14 +310,14 @@ def pilot_table(budget: str = "s50") -> str:
     }
     n = a["instances_common"]
     lines = ["\\begin{tabular}{lcccc}", "\\toprule",
-             f"Condition & Resolved (of {n}) & Rate & Mean cost (USD) & Mean steps \\\\", "\\midrule"]
+             f"Condition & Resolved (mean of {repeats} repeats, of {n}) & Rate & Mean cost (USD) & Mean steps \\\\", "\\midrule"]
     for key in ("none", "random", "delphi", "hybrid_rerank_expand"):
         c = a["conditions"].get(key)
         if not c:
             continue
-        lines.append(f"{labels[key]} & {c['resolved']} & {c['resolved_rate']:.3f} & {c['mean_cost_usd']:.4f} & {c['mean_steps']:.1f} \\\\")
+        lines.append(f"{labels[key]} & {c['resolved']:.1f} & {c['resolved_rate']:.3f} & {c['mean_cost_usd']:.4f} & {c['mean_steps']:.1f} \\\\")
     lines.append("\\midrule")
-    lines.append("\\multicolumn{5}{l}{\\emph{Paired differences in resolved rate: instance-cluster 95\\% CI [repository-cluster CI]; discordant a/b; exact McNemar $p$}} \\\\")
+    lines.append("\\multicolumn{5}{l}{\\emph{Paired differences in per-instance resolved rate: instance-cluster 95\\% CI [repository-cluster CI]; instances favouring a/b}} \\\\")
     pair_labels = {
         "delphi_minus_none": "Delphi $-$ no seed",
         "delphi_minus_random": "Delphi $-$ random",
@@ -335,7 +336,7 @@ def pilot_table(budget: str = "s50") -> str:
         star = "$^{*}$" if (lo > 0 or hi < 0) else ""
         lines.append(
             f"{label} & \\multicolumn{{4}}{{l}}{{${r['mean_delta']:+.3f}${star} \\ci{{{lo:+.3f}}}{{{hi:+.3f}}} [\\ci{{{rlo:+.3f}}}{{{rhi:+.3f}}}]; "
-            f"{r['a_only']}/{r['b_only']}; $p{{=}}{r['mcnemar_exact_p']:.2f}$}} \\\\"
+            f"{r['a_only']}/{r['b_only']}}} \\\\"
         )
     lines.append(TAIL)
     return "\n".join(lines) + "\n"
@@ -351,6 +352,7 @@ def main() -> None:
     (OUT / "docs_pairs.tex").write_text(docs_pairs_table().rstrip("\n") + "%")
     (OUT / "determinism_like_for_like.tex").write_text(determinism_table().rstrip("\n") + "%")
     (OUT / "pilot_s50.tex").write_text(pilot_table("s50").rstrip("\n") + "%")
+    (OUT / "pilot_pooled.tex").write_text(pilot_table("s50_s50-r2").rstrip("\n") + "%")
     (OUT / "swebench_pooled.tex").write_text(pooled_table().rstrip("\n") + "%")
     for path in sorted(OUT.glob("*.tex")):
         print(path.name, path.stat().st_size, "bytes")

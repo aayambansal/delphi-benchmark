@@ -152,7 +152,7 @@ into the frozen stack is in progress
 Delphi run, the ladder, and the lexical comparators follow, then paired
 analysis.
 
-## Executable pilot — repeat 1 complete, repeat 2 running
+## Executable pilot — two repeats complete
 
 Repeat 1 (step budget 50, one trajectory per cell, 62 instances):
 none 25/62, random 30/62, delphi 31/62, hybrid_rerank_expand 23/62.
@@ -162,6 +162,14 @@ p=0.04); conventional - random -0.113 [-0.210, -0.032]. Agents used 7-9 steps
 and 1.6-2.6 cents per instance; seeds raised cost 30-60%. Four eval reports
 initially flagged as infrastructure failures were re-run and confirmed as
 genuine unresolved outcomes. `results/pilot/analysis-s50.json`.
+
+Repeat 2: none 25/62, random 27/62, delphi 25/62, hybrid_rerank_expand 25/62
+(`results/pilot/analysis-s50-r2.json`). Pooled per-instance means over both
+repeats (`results/pilot/analysis-s50_s50-r2.json`): Delphi - none +0.048
+[-0.008, +0.113]; Delphi - random -0.008 [-0.073, +0.056]; random - none
++0.056 [-0.016, +0.137]; conventional - random -0.073 [-0.145, -0.008]. No
+seed effect is resolved; the two repeats disagree by more than the effects
+under study. Total agent spend for all eight condition-repeats: about $11.
 
 
 Preregistered in `context/PILOT_PROTOCOL.md` before any scored run. Pipeline

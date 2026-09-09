@@ -1,0 +1,15 @@
+diff --git a/sphinx/ext/autodoc/__init__.py b/sphinx/ext/autodoc/__init__.py
+index 76265f5be..2708e3c01 100644
+--- a/sphinx/ext/autodoc/__init__.py
++++ b/sphinx/ext/autodoc/__init__.py
+@@ -763,7 +763,9 @@ class Documenter:
+                     else:
+                         keep = membername in self.options.private_members
+                 else:
+-                    # keep documented attributes
++                    # keep documented attributes; module-level attributes with
++                    # :meta public: may be private by name but should still be
++                    # included when autodoc is collecting all members.
+                     keep = True
+                 isattr = True
+             elif want_all and isprivate:
