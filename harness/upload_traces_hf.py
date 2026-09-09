@@ -7,6 +7,10 @@ under ``pilot/`` in the dataset repository, together with a dataset card and a
 flat ``trajectories.jsonl`` index (one row per trajectory, joined with its
 harness verdict) so the Hub viewer can browse the runs.
 
+The trajectories (``results/pilot/runs/``) and per-instance logs are not kept in
+git; restore them from the published dataset first (see results/pilot/README.md)
+or regenerate them with ``stack/run_pilot.sh``.
+
 Authentication, in order of precedence:
 
   HF_TOKEN                                     a user access token with write scope
