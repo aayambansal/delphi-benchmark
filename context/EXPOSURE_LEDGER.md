@@ -12,7 +12,7 @@ results gated shipped components.
 | `independent_commit2files_final` | 18 | C0 | confirmatory |
 | `independent_commit2files_development` | 48 | C1 | development |
 | `swebench_verified_round3` | 62 | C0 | confirmatory |
-| `swebench_verified_round4_expansion` | 98 | C0 | confirmatory (pending scoring) |
+| `swebench_verified_round4_expansion` | 98 | C0 | confirmatory |
 | `ds1000_documentation_development` | 40 | C1 | development |
 
 ## Evidence per set
@@ -47,6 +47,7 @@ results gated shipped components.
 
 - Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-expansion-v1) from the 438 Verified instances never used in any round; excludes round-3 instance ids and base commits (100 drawn).
 - Two engine-agnostic preprocessing rules applied before any scoring (samples/swebench/cases-r4-expansion-manifest.json): a gold file must exist at the base commit (one file created by the patch removed from astropy__astropy-13398's gold set; no case dropped), and ARB's query_has_leakage excludes instances whose issue text carries patch or fix-commit markers (django__django-16256, scikit-learn__scikit-learn-14710). 98 cases remain.
+- Scored once per system on 2026-09-09 from the frozen commit after the index audit (results/native-delphi-swebench-r4-expansion-index-audit-v2.json) and gold-searchability preflight; no system was re-run.
 
 ### `ds1000_documentation_development` (40 cases, C1)
 

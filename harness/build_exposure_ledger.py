@@ -87,8 +87,9 @@ SETS = [
         "evidence": [
             "Drawn 2026-09-09 (harness/prep_swebench_expansion.py, salt delphi-round4-swebench-expansion-v1) from the 438 Verified instances never used in any round; excludes round-3 instance ids and base commits (100 drawn).",
             "Two engine-agnostic preprocessing rules applied before any scoring (samples/swebench/cases-r4-expansion-manifest.json): a gold file must exist at the base commit (one file created by the patch removed from astropy__astropy-13398's gold set; no case dropped), and ARB's query_has_leakage excludes instances whose issue text carries patch or fix-commit markers (django__django-16256, scikit-learn__scikit-learn-14710). 98 cases remain.",
+            "Scored once per system on 2026-09-09 from the frozen commit after the index audit (results/native-delphi-swebench-r4-expansion-index-audit-v2.json) and gold-searchability preflight; no system was re-run.",
         ],
-        "supports": "confirmatory (pending scoring)",
+        "supports": "confirmatory",
     },
     {
         "set": "ds1000_documentation_development",

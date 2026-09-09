@@ -193,3 +193,32 @@ Fresh single-shard smoke with the new credential (same account):
 generated from artifacts by `harness/paper_tables.py` into `paper/tables/`.
 The round-3 source is kept as `paper/context-round3-2026-08-26.tex.bak`.
 Pending markers in the text name exactly which runs they wait for.
+
+### ICLR-format revision (2026-09-09, later)
+
+`paper/context.tex` restructured for ICLR 2027: main text 9 pages (limit 9 at
+submission), statements and references on pages 9-11, appendix A-L on pages
+12-26 (26 pages total). Every figure is generated from artifacts by
+`harness/paper_figures.py` into `paper/figures/` (12 PDFs: component
+attribution, C0 ladder, paired-delta forests (full and compact), exposure
+timeline, documentation matched contract, determinism, pilot, ARB workflows,
+latency-quality, per-repository SWE-bench, rank histogram). New generated
+tables: ARB by workflow, per-repository pooled SWE-bench, latency, exposure
+ledger, pilot repeat 2. Main text keeps the pooled SWE-bench table and the
+determinism table; the four per-set ladder tables, both documentation tables,
+and the pilot tables moved to the appendix. Appendix adds: verbatim prompts
+(listwise, expansion, synthesis, control, pilot seed block), the frozen
+environment, the ladder implementation, the round chronology, the round-2
+measured-and-rejected record, hosted-engine accounting, compute and cost
+(233.5M embedded tokens ~ $4.70; 1.44M cached vectors; 1,051 cached LLM
+replies; 496 trajectories, $10.97), the artifact release statement (code,
+per-case artifacts, all trajectories, ledger; public URL withheld for review,
+released once the de-identification pass is complete), and a crosswalk from
+the earlier report's claims to their corrected form. Exposure ledger
+regenerated: the expansion set is now "confirmatory" (was "pending scoring").
+Numbers newly stated in the text were checked against artifacts: pooled rank-1
+rates 0.619 / 0.575 / 0.344 and top-20 miss rates 0.181 / 0.250 / 0.200
+(Delphi / conventional / lexical); pilot exit statuses (2 LimitsExceeded in
+random, repeat 1); File-Okapi gate thresholds (-0.01, -0.01, 1.20); ladder
+constants (200k-token batches, 8k truncation, ARB BM25); PostgreSQL 14.
+

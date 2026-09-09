@@ -309,8 +309,9 @@ def pilot_table(budget: str = "s50") -> str:
         "hybrid_rerank_expand": "Conventional ladder top-5",
     }
     n = a["instances_common"]
+    resolved_head = f"Resolved (mean of {repeats} repeats, of {n})" if repeats > 1 else f"Resolved (of {n})"
     lines = ["\\begin{tabular}{lcccc}", "\\toprule",
-             f"Condition & Resolved (mean of {repeats} repeats, of {n}) & Rate & Mean cost (USD) & Mean steps \\\\", "\\midrule"]
+             f"Condition & {resolved_head} & Rate & Mean cost (USD) & Mean steps \\\\", "\\midrule"]
     for key in ("none", "random", "delphi", "hybrid_rerank_expand"):
         c = a["conditions"].get(key)
         if not c:
@@ -342,8 +343,112 @@ def pilot_table(budget: str = "s50") -> str:
     return "\n".join(lines) + "\n"
 
 
+def _details(run_id: str) -> list[dict]:
+    path = RESULTS / f"{run_id}-details.jsonl"
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in path.open() if line.strip()]
+
+
+def arb_workflow_table() -> str:
+    """ARB round-3 partition by workflow: Delphi vs the final conventional rung."""
+    sd = summary(TRACKS["arb"]["delphi"])["by_workflow"]
+    sc = summary(TRACKS["arb"]["ladder"].format(eng="hybrid_rerank_expand"))["by_workflow"]
+    sl = summary(TRACKS["arb"]["lexical"]["lexical"])["by_workflow"]
+    lines = ["\\begin{tabular}{lrcccccc}", "\\toprule",
+             "Workflow & $n$ & \\multicolumn{2}{c}{Delphi} & \\multicolumn{2}{c}{Conventional (+ expansion)} & \\multicolumn{2}{c}{Lexical ranker} \\\\",
+             "\\cmidrule(lr){3-4}\\cmidrule(lr){5-6}\\cmidrule(lr){7-8}",
+             " & & MRR & R@20 & MRR & R@20 & MRR & R@20 \\\\", "\\midrule"]
+    for wf in ("trace2code", "edit2ripple", "comment2context", "code2test"):
+        d, c, l = sd[wf]["metrics"], sc[wf]["metrics"], sl[wf]["metrics"]
+        lines.append(
+            f"\\texttt{{{wf}}} & {sd[wf]['n']} & {d['MRR']:.3f} & {d['Recall@20']:.3f} & {c['MRR']:.3f} & {c['Recall@20']:.3f} & {l['MRR']:.3f} & {l['Recall@20']:.3f} \\\\"
+        )
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def per_repo_table() -> str:
+    """Pooled 160 SWE-bench instances by repository: Delphi, conventional final rung, lexical ranker."""
+    systems = {
+        "delphi": [TRACKS["swebench"]["delphi"], TRACKS["swebench_expansion"]["delphi"]],
+        "conv": [TRACKS["swebench"]["ladder"].format(eng="hybrid_rerank_expand"),
+                 TRACKS["swebench_expansion"]["ladder"].format(eng="hybrid_rerank_expand")],
+        "lex": [TRACKS["swebench"]["lexical"]["lexical"], TRACKS["swebench_expansion"]["lexical"]["lexical"]],
+    }
+    rows: dict[str, list[dict]] = {}
+    for key, runs in systems.items():
+        rows[key] = [r for run in runs for r in _details(run)]
+    by_repo: dict[str, dict[str, list[dict]]] = {}
+    for key, rs in rows.items():
+        for r in rs:
+            by_repo.setdefault(r["repo"], {}).setdefault(key, []).append(r)
+    lines = ["\\begin{tabular}{lrcccccc}", "\\toprule",
+             "Repository & $n$ & \\multicolumn{2}{c}{Delphi} & \\multicolumn{2}{c}{Conventional (+ expansion)} & \\multicolumn{2}{c}{Lexical ranker} \\\\",
+             "\\cmidrule(lr){3-4}\\cmidrule(lr){5-6}\\cmidrule(lr){7-8}",
+             " & & MRR & R@20 & MRR & R@20 & MRR & R@20 \\\\", "\\midrule"]
+
+    def mean(rs: list[dict], metric: str) -> float:
+        return sum(r["metrics"][metric] for r in rs) / max(1, len(rs))
+
+    for repo in sorted(by_repo, key=lambda k: -len(by_repo[k].get("delphi", []))):
+        g = by_repo[repo]
+        cells = " & ".join(f"{mean(g.get(k, []), 'MRR'):.3f} & {mean(g.get(k, []), 'Recall@20'):.3f}" for k in ("delphi", "conv", "lex"))
+        lines.append(f"\\texttt{{{repo}}} & {len(g.get('delphi', []))} & {cells} \\\\")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def latency_table() -> str:
+    """Median query latency (seconds) for every system on every set."""
+    order = [
+        ("BM25", "lexical", "bm25"), ("Lexical ranker", "lexical", "lexical"), ("Lexical+BM25 RRF", "lexical", "lexical_bm25"),
+        ("Dense", "ladder", "dense"), ("Dense+BM25 RRF", "ladder", "hybrid"), ("+ Delphi's rerankers", "ladder", "hybrid_rerank"),
+        ("+ expansion", "ladder", "hybrid_rerank_expand"), ("Delphi (frozen)", "delphi", None),
+    ]
+    tracks = [("independent", "Independent"), ("swebench", "SWE-bench r3"), ("swebench_expansion", "SWE-bench exp."), ("arb", "ARB (C2)")]
+    lines = ["\\begin{tabular}{l" + "c" * len(tracks) + "}", "\\toprule",
+             "System & " + " & ".join(t for _, t in tracks) + " \\\\", "\\midrule"]
+    for label, kind, eng in order:
+        cells = []
+        for track, _ in tracks:
+            spec = TRACKS[track]
+            run = spec["delphi"] if kind == "delphi" else spec["ladder"].format(eng=eng) if kind == "ladder" else spec["lexical"][eng]
+            s = summary(run)
+            med = (s or {}).get("latency_ms", {}).get("median")
+            cells.append(f"{med / 1000:.2f}" if med else "--")
+        lines.append(f"{label} & " + " & ".join(cells) + " \\\\")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
+def exposure_table() -> str:
+    ledger = json.load((RESULTS / "exposure-ledger-v1.json").open())
+    names = {
+        "arb_round3_final": "ARB round-3 partition (positive workflows)",
+        "arb_round3_development": "ARB round-3 development",
+        "independent_commit2files_final": "Independent commit-to-files final",
+        "independent_commit2files_development": "Independent commit-to-files development",
+        "swebench_verified_round3": "SWE-bench Verified, round 3",
+        "swebench_verified_round4_expansion": "SWE-bench Verified, round-4 expansion",
+        "ds1000_documentation_development": "DS-1000 documentation subset",
+    }
+    lines = ["\\begin{tabular}{lrlp{5.4cm}}", "\\toprule", "Set & Cases & Class & Supports \\\\", "\\midrule"]
+    for s in ledger["sets"]:
+        label = names.get(s["set"], s["set"].replace("_", "\\_"))
+        n = s["case_ids"] if isinstance(s["case_ids"], int) else len(s["case_ids"])
+        lines.append(f"{label} & {n} & {s['exposure_class']} & {s['supports']} \\\\")
+    lines.append(TAIL)
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "pilot_s50_r2.tex").write_text(pilot_table("s50-r2").rstrip("\n") + "%")
+    (OUT / "arb_workflows.tex").write_text(arb_workflow_table().rstrip("\n") + "%")
+    (OUT / "per_repo_swebench.tex").write_text(per_repo_table().rstrip("\n") + "%")
+    (OUT / "latency.tex").write_text(latency_table().rstrip("\n") + "%")
+    (OUT / "exposure_ledger.tex").write_text(exposure_table().rstrip("\n") + "%")
     # No trailing newline: a blank line after \input inside a tabular is a
     # paragraph break, which LaTeX reports as a misplaced \noalign.
     for track in TRACKS:
