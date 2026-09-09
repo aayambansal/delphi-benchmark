@@ -59,7 +59,7 @@ runstore.db       run registry (SQLite)
 
 The executable-pilot agent trajectories (`results/pilot/`, 620 mini-SWE-agent
 runs with harness verdicts) are also published as a Hugging Face dataset:
-<https://huggingface.co/datasets/aayambansal/delphi-iclr-traces>
+<https://huggingface.co/datasets/aayambansall/delphi-iclr-traces>
 (`harness/upload_traces_hf.py` builds and uploads it).
 
 ## Reading the blog
