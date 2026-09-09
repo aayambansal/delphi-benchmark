@@ -15,7 +15,7 @@ Authentication, in order of precedence:
                                                code to approve in a browser
 
 Usage:
-  .venv-agent/bin/python harness/upload_traces_hf.py --repo-id aayambansall/delphi-iclr-traces
+  .venv-agent/bin/python harness/upload_traces_hf.py --repo-id aayambansall/delphi-benchmark-traces
   .venv-agent/bin/python harness/upload_traces_hf.py --dry-run     # build card + index only
 """
 from __future__ import annotations
@@ -37,7 +37,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEVICE_URL = "https://huggingface.co/oauth/device"
 TOKEN_URL = "https://huggingface.co/oauth/token"
-GITHUB_URL = "https://github.com/aayambansal/delphi-iclr"
+GITHUB_URL = "https://github.com/aayambansal/delphi-benchmark"
 RUN_RE = re.compile(r"^(?P<condition>.+?)-s(?P<steps>\d+)(?:-r(?P<repeat>\d+))?$")
 
 
@@ -237,7 +237,7 @@ analyses themselves are released under CC BY 4.0. Hosted model calls were made w
 # --------------------------------------------------------------------------- main
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--repo-id", default="aayambansall/delphi-iclr-traces")
+    ap.add_argument("--repo-id", default="aayambansall/delphi-benchmark-traces")
     ap.add_argument("--pilot-dir", default=str(ROOT / "results" / "pilot"))
     ap.add_argument("--dry-run", action="store_true", help="build the card and index locally; do not upload")
     ap.add_argument("--stage-dir", help="where to stage the upload (default: a temp dir)")
