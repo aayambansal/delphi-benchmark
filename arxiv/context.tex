@@ -1,5 +1,7 @@
+\pdfoutput=1
 \documentclass{article}
 \usepackage{iclr2027_conference,times}
+\iclrfinalcopy
 \input{math_commands.tex}
 \usepackage{hyperref}
 \usepackage{url}
@@ -11,7 +13,9 @@
 
 \title{Where Do Context-Engine Gains Come From?\\A Component-Level Decomposition of Repository Retrieval\\Under Matched Baselines and Audited Exposure}
 
-\author{Anonymous Authors}
+\author{Aayam Bansal \& Ishaan Gangwani \\
+Synthetic Sciences \\
+\texttt{\{aayam,ishaan\}@syntheticsciences.ai}}
 
 \newcommand{\ci}[2]{{\footnotesize$[#1,\,#2]$}}
 \newcommand{\system}{Delphi}
@@ -20,6 +24,7 @@
 
 \begin{document}
 \maketitle
+\lhead{Preprint. Under review.}
 
 \begin{abstract}
 Context engines that index a repository and return files to a coding agent report large gains over lexical baselines, but the gains are rarely decomposed: how much is a learned reranker that would help any candidate pool, how much is the engine's own candidate generation, and how much was selected on the evaluation data? We answer this for one open-source engine, \system{}, with a protocol that records for every evaluation case whether development could have seen it, builds a ladder of conventional retrievers from the same embedding model with \system{}'s own rerankers and query expansion attached, varies candidate generation and learned reranking factorially, and ablates \system{}'s candidate branches one at a time on a fresh, never-scored draw. On three SWE-bench Verified draws that development never saw (62, 98, and 60 instances; sizes fixed before scoring), \system{}'s advantage over the full conventional stack lies in its candidate pool: before any reranking its candidates lead by $+0.19$ MRR and $+0.07$ Recall@20; the shared rerankers add $+0.34$ MRR to conventional candidates but $+0.19$ to \system{}'s, so after reranking the MRR gap closes to a tie while the recall gap ($+0.09$) persists; pooled over the three draws, \system{}'s yield-metric leads ($+0.06$--$0.09$) exclude zero at a three-look-adjusted level and its MRR lead ($+0.065$) at $95\%$ only. A branch-level ablation on the fresh draw attributes the candidate-pool advantage mostly to \system{}'s chunking and index ($+0.15$ MRR for the same two-branch fusion) and its vector-heavy weighting ($+0.06$), with the four structural branches adding $+0.06$ jointly and no single branch more than $0.03$. On a repository-disjoint commit-to-files set the pattern inverts: \system{}'s pool has lower recall than two-branch fusion and the rerankers add nothing to either pool, so the reading ``the reranker does the work'' holds only for issue queries. Matched output contracts turn an apparent hosted-engine lead on documentation into a four-way tie; re-indexing a corpus from scratch reproduced \system{}'s ordered top-20 on 1 of 18 cases; and a preregistered executable pilot (62 instances, two trajectories each) resolves no seed effect and audits its own seed. We release code, per-case artifacts, agent trajectories, and the exposure ledger.
@@ -172,41 +177,6 @@ The two repeats disagree by more than the effects under study, which is the firs
 \section{Conclusion}
 
 Decomposed against baselines built from its own parts, on cases its development could not see, a context engine's advantage over lexical retrieval on issue-style queries is mostly the part any careful practitioner would assemble; what is \system{}'s own is a better candidate pool, worth $+0.19$--$0.28$ MRR and $+0.07$ Recall@20 before reranking and $+0.06$ to $+0.09$ on yield metrics after it, and that pool owes more to how the repository is chunked, indexed, and weighted than to any structural branch. On commit-to-files queries its candidate pool has lower recall than two-branch fusion and the shared reranker adds nothing to either. Margins measured on the re-partitioned ARB set do not survive the ledger that classifies how that set was used, and margins over hosted engines do not survive matching the quantity being measured. What survives is the protocol, and a pilot whose audited seed and measured variance specify the study that could connect retrieval to repair.
-
-\subsection*{LLM usage statement}
-
-LLMs were used, under the authors' guidance, to search for related work and to
-draft and polish sections of this manuscript; they were not used for research
-ideation or execution. The authors reviewed all LLM-assisted text and take full
-responsibility for the content.
-
-\subsection*{Ethics statement}
-
-The study uses public open-source repositories and public benchmark records.
-Repository contents are processed locally except where a named hosted retrieval
-or model API is itself the evaluated system. We retain commit identifiers and
-public issue or review text for provenance, but do not intentionally collect
-private repository data or credentials. Because benchmark results can be used
-in product marketing, we predeclare the claim rule, preserve failed runs, publish
-the exposure ledger, and give losses the same prominence as wins.
-
-\subsection*{Reproducibility statement}
-
-The archive accompanying this paper (Appendix~\ref{app:release}) contains the
-split manifests and case-level exposure ledger (Appendix~\ref{app:exposure}),
-every per-case artifact (queries, gold paths, ranked outputs, synthesized
-answers, latencies), every paired-analysis result including the factorial,
-branch ablation, and sequential analyses (Appendices~\ref{app:factorial},
-\ref{app:branches}, \ref{app:sequential}), the implementation of every system and
-comparator including the matched ladder (Appendix~\ref{app:ladder}), the frozen
-serving configuration and its declared ablation switches
-(Appendix~\ref{app:system}), the pilot protocol, datasets, seed audit, and all
-agent trajectories with harness verdicts (Appendix~\ref{app:pilot}), the prompts
-used by every LLM stage verbatim (Appendices~\ref{app:ladder}, \ref{app:docs},
-\ref{app:pilot}), and the scripts that regenerate every table and figure in
-this paper from those artifacts. Repository corpora are re-cloned from public
-GitHub at the recorded commits by a provided script; hosted-engine runs require
-the reader's own credentials.
 
 \bibliography{context}
 \bibliographystyle{iclr2027_conference}
@@ -724,13 +694,13 @@ All round-4 experiments ran on one Apple-silicon workstation with a local Postgr
 \section{Artifact release}
 \label{app:release}
 
-Everything below is contained in a single archive and will be released publicly, together with the frozen \system{} source at the recorded revision, once the de-identification pass is complete; an anonymized copy accompanies the submission and the public URL is withheld for review.
+Everything below is released in a single public repository, \url{https://github.com/aayambansal/delphi-iclr}, which also contains the source of this paper. The agent trajectories and harness verdicts are additionally published as a Hugging Face dataset, \url{https://huggingface.co/datasets/aayambansal/delphi-iclr-traces}. The frozen \system{} source is revision \texttt{91d76c1} of the public \system{} repository, \url{https://github.com/synthetic-sciences/delphi}.
 
 \begin{itemize}[leftmargin=1.2em]
 \item \emph{Per-case results} for every system on every set, including development, rejected, factorial, and branch-ablation configurations: one record per case with the query, gold paths, ranked paths, per-case metrics, latency, and the served configuration, together with per-run summaries.
 \item \emph{Paired analyses}: every bootstrap interval and McNemar count reported in the paper, the factorial contrasts, the branch-ablation contrasts, the sequential analysis, the like-for-like determinism analysis, and the documentation synthesis outputs for every arm and repeat.
 \item \emph{The exposure ledger} with every case ID and the evidence for its class, the draw manifests with their salts and preprocessing rules, and the index audits.
-\item \emph{Agent trajectories}: the seeded datasets for every condition and seed interface, all 620 mini-SWE-agent trajectories with every model call and action, the official harness evaluation reports and logs per condition and repeat, the seed audit, and the pooled, per-repeat, and seed-interface analyses.
+\item \emph{Agent trajectories} (mirrored in the Hugging Face dataset above): the seeded datasets for every condition and seed interface, all 620 mini-SWE-agent trajectories with every model call and action, the official harness evaluation reports and logs per condition and repeat, the seed audit, and the pooled, per-repeat, and seed-interface analyses.
 \item \emph{Split manifests and case files} for every set.
 \item \emph{Implementation}: the evaluation runner for every static system (\system{}, the matched ladder including the factorial cell, the lexical comparators), the paired-analysis, factorial, branch-ablation, and sequential code, the exposure-ledger builder, the corpus restorer (bare clones at recorded commits), the draw sampler with its preprocessing rules, the pilot dataset builder with its three seed interfaces, the seed audit and pilot analyzers, the documentation-track runners with the synthesis stage and the synthesis-engine context reconstruction, and the scripts that regenerate every table and figure in this paper.
 \item \emph{Serving}: the frozen \system{} source, the native launch configuration with its declared ablation switches (Appendix~\ref{app:system}), the pilot run configuration, and the configurations of the round-3 ablations.

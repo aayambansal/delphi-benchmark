@@ -33,7 +33,8 @@ rule requires the complete comparable engine set. See
 ## Layout
 
 ```
-paper/            ICLR paper (context.tex → context.pdf, 8 pages)
+paper/            ICLR submission source (anonymous; context.tex → context.pdf)
+arxiv/            camera-ready preprint source (authors, artifact links; arXiv-ready)
 blog/site/        interactive research blog (static, data-driven)
 results/          every run artifact: finals, analyses, docs/GEN arms,
                   accounting ledgers, determinism, ingestion probes
@@ -55,6 +56,11 @@ analysis/         one-off analysis artifacts
 protocol.md       the preregistered round-3 protocol
 runstore.db       run registry (SQLite)
 ```
+
+The executable-pilot agent trajectories (`results/pilot/`, 620 mini-SWE-agent
+runs with harness verdicts) are also published as a Hugging Face dataset:
+<https://huggingface.co/datasets/aayambansal/delphi-iclr-traces>
+(`harness/upload_traces_hf.py` builds and uploads it).
 
 ## Reading the blog
 

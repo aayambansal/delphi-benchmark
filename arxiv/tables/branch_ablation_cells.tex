@@ -1,0 +1,16 @@
+\begin{tabular}{lcccc}
+\toprule
+Configuration (rerankers off) & MRR $\uparrow$ & R@5 $\uparrow$ & R@20 $\uparrow$ & BCY@8k $\uparrow$ \\
+\midrule
+All six branches, tuned weights & \textbf{0.570} & 0.653 & 0.839 & 0.469 \\
+$-$ exact symbol & 0.545 & 0.644 & 0.806 & 0.453 \\
+$-$ exact path & 0.569 & 0.653 & 0.839 & 0.469 \\
+$-$ path affinity & 0.569 & 0.653 & 0.831 & 0.469 \\
+$-$ trigram & 0.561 & 0.653 & 0.839 & 0.453 \\
+$-$ BM25 & 0.568 & \textbf{0.685} & \textbf{0.860} & \textbf{0.514} \\
+$-$ vector & 0.382 & 0.501 & 0.713 & 0.264 \\
+vector + BM25 only, equal weights & 0.449 & 0.619 & 0.775 & 0.336 \\
+vector + BM25 only, Delphi's weights (0.50/0.25) & 0.510 & 0.628 & 0.775 & 0.403 \\
+vector only & 0.450 & 0.535 & 0.792 & 0.389 \\
+\bottomrule
+\end{tabular}%
