@@ -111,7 +111,8 @@ Statistical conventions throughout: paired cluster bootstrap with 20,000 resampl
              Repository Retrieval Under Matched Baselines and Audited Exposure},
   author  = {Bansal, Aayam and Gangwani, Ishaan},
   year    = {2026},
-  note    = {Preprint. Code and artifacts: https://github.com/aayambansal/delphi-benchmark}
+  url     = {https://trydelphi.ai/research},
+  note    = {Preprint}
 }
 ```
 

@@ -42,6 +42,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEVICE_URL = "https://huggingface.co/oauth/device"
 TOKEN_URL = "https://huggingface.co/oauth/token"
 GITHUB_URL = "https://github.com/aayambansal/delphi-benchmark"
+PAPER_URL = "https://trydelphi.ai/research"
 RUN_RE = re.compile(r"^(?P<condition>.+?)-s(?P<steps>\d+)(?:-r(?P<repeat>\d+))?$")
 
 
@@ -169,8 +170,8 @@ All {len(rows)} mini-SWE-agent trajectories from the preregistered executable pi
 *Where Do Context-Engine Gains Come From? A Component-Level Decomposition of Repository
 Retrieval Under Matched Baselines and Audited Exposure* (Bansal and Gangwani, 2026),
 together with the official SWE-bench harness verdicts and logs for every trajectory.
-Code, per-case retrieval results, analyses, and the paper source are at
-[{GITHUB_URL}]({GITHUB_URL}).
+The paper is at [{PAPER_URL}]({PAPER_URL}); code, per-case retrieval results, analyses,
+and the paper source are at [{GITHUB_URL}]({GITHUB_URL}).
 
 ## What was run
 
@@ -232,7 +233,8 @@ analyses themselves are released under CC BY 4.0. Hosted model calls were made w
              Repository Retrieval Under Matched Baselines and Audited Exposure}},
   author  = {{Bansal, Aayam and Gangwani, Ishaan}},
   year    = {{2026}},
-  note    = {{Preprint. Code and artifacts: {GITHUB_URL}}}
+  url     = {{{PAPER_URL}}},
+  note    = {{Preprint}}
 }}
 ```
 """
